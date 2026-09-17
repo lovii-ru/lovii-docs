@@ -1,0 +1,899 @@
+openapi: 3.0.3
+info:
+  title: LOVII API
+  version: 1.1.0
+  description: |
+    REST API платформы LOVII (цифровая платформа локальной экономики).
+    Спецификация смоделирована на основе docs/API_SPEC.md (версия 1.1, 2026-08-25).
+
+    Базовый URL: https://api.lovii.ru/api/v1
+
+    Распределение пула (pool) по транзакциям: 40% компания / 40% представитель / 20% амбассадор.
+    НДС по эквайрингу (с 01.01.2026, ФЗ №425-ФЗ): карта 2,59% + НДС 22% = 3,16% эффективно;
+    T-Pay и СБП — без НДС (VAT-free).
+  contact:
+    name: LOVII (ООО «Аксиома»)
+    email: hello@lovii.ru
+    url: https://lovii.ru
+
+servers:
+  - url: https://api.lovii.ru/api/v1
+    description: Продакшен
+  - url: https://staging.api.lovii.ru/api/v1
+    description: Стейджинг
+
+tags:
+  - name: auth
+    description: Регистрация и аутентификация
+  - name: promo
+    description: Промокоды
+  - name: subscription
+    description: Подписки
+  - name: transactions
+    description: Транзакции и заказы
+  - name: cashback
+    description: Кэшбэк
+  - name: status
+    description: Статусы представителей
+  - name: account
+    description: UDID-счета (переводы и выводы)
+  - name: events
+    description: События (Школа / Академия / Каникулы)
+  - name: ambassador
+    description: Управление амбассадами
+  - name: admin
+    description: Административные операции
+
+paths:
+  /auth/register:
+    post:
+      tags: [auth]
+      summary: Регистрация нового пользователя
+      description: |
+        Регистрирует пользователя, генерирует промокод и UDID-аккаунт.
+        При наличии inviter_code префикс берётся из первых двух символов кода пригласившего,
+        иначе используется префикс "AA".
+      operationId: authRegister
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              phone: "+79991234567"
+              email: "user@example.com"
+              full_name: "Иванов Иван"
+              inviter_code: "BJ3M9K"
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+              example:
+                udid: "usr_abc123def456"
+                promo_code: "BJ7K2P"
+                prefix: "BJ"
+                invited_by: "BJ3M9K"
+        '400':
+          description: Невалидный phone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "INVALID_PHONE"
+                message: "Невалидный номер телефона"
+        '404':
+          description: inviter_code не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "PROMO_NOT_FOUND"
+                message: "Промокод пригласившего не существует"
+        '409':
+          description: Попытка использовать зарезервированный промокод AAAAAA
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "PROMO_RESERVED"
+                message: "Промокод зарезервирован"
+
+  /promo/change:
+    post:
+      tags: [promo]
+      summary: Смена промокода
+      description: Смена промокода пользователя (не чаще 1 раза в 30 дней).
+      operationId: promoChange
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromoChangeRequest'
+            example:
+              udid: "usr_abc123def456"
+      responses:
+        '200':
+          description: Промокод изменён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromoChangeResponse'
+              example:
+                old_promo: "BJ3M9K"
+                new_promo: "BJ9P7L"
+                next_change_available_at: "2026-09-25T10:00:00Z"
+        '429':
+          description: Последняя смена была менее 30 дней назад
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "PROMO_CHANGE_TOO_EARLY"
+                message: "Смена промокода доступна не чаще 1 раза в 30 дней"
+
+  /subscription/activate:
+    post:
+      tags: [subscription]
+      summary: Активация подписки
+      description: Активирует подписку пользователя (проверка баланса или редирект на оплату в Т-Банк).
+      operationId: subscriptionActivate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionActivateRequest'
+            example:
+              udid: "usr_abc123def456"
+              period_months: 12
+              payment_method: "mixed"
+              udid_balance_amount: 1000
+              card_amount: 2000
+      responses:
+        '200':
+          description: Подписка активирована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionActivateResponse'
+              example:
+                subscription_id: "sub_xyz789"
+                started_at: "2026-08-25T10:00:00Z"
+                expires_at: "2027-08-25T10:00:00Z"
+                status: "active"
+
+  /transactions:
+    post:
+      tags: [transactions]
+      summary: Создание транзакции (заказа)
+      description: |
+        Создаёт транзакцию заказа. promo_code в запросе не передаётся — сервер сам
+        определяет rep_udid/ambassador_prefix по регистрационному промокоду МСП через msp_id.
+        Пул = 10% − эффективная ставка банка, распределяется 40/40/20.
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+            example:
+              msp_id: "msp_123"
+              client_udid: "usr_buyer456"
+              amount: 1000
+              payment_method: "card"
+      responses:
+        '200':
+          description: Транзакция создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              example:
+                transaction_id: "txn_abc"
+                pool_amount: 68.40
+                distribution:
+                  company: 27.36
+                  representative: 27.36
+                  ambassador: 13.68
+
+  /cashback/accrue:
+    post:
+      tags: [cashback]
+      summary: Начисление кэшбэка
+      description: Внутренний вызов из конструктора лояльности для начисления кэшбэка по транзакции.
+      operationId: cashbackAccrue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashbackAccrueRequest'
+            example:
+              transaction_id: "txn_abc"
+              client_udid: "usr_buyer456"
+              cashback_percent: 15
+      responses:
+        '200':
+          description: Кэшбэк начислен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashbackAccrueResponse'
+              example:
+                cashback_id: "cb_xyz"
+                client_received: 150.00
+                platform_fee: 37.50
+                distribution:
+                  company: 15.00
+                  representative: 15.00
+                  ambassador: 7.50
+
+  /status/{udid}:
+    get:
+      tags: [status]
+      summary: Получить статус представителя
+      description: Возвращает текущий статус и метрики представителя по его UDID.
+      operationId: getStatus
+      parameters:
+        - name: udid
+          in: path
+          required: true
+          description: UDID пользователя
+          schema:
+            type: string
+            example: "usr_abc"
+      responses:
+        '200':
+          description: Статус представителя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              example:
+                udid: "usr_abc"
+                status: "Мэр"
+                msp_count: 42
+                cities_count: 1
+                network_gmv_30d: 1850000
+                assigned_at: "2026-07-15T03:00:00Z"
+
+  /account/transfer:
+    post:
+      tags: [account]
+      summary: Перевод между UDID-счетами
+      description: Переводит средства с одного UDID-счёта на другой.
+      operationId: accountTransfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountTransferRequest'
+            example:
+              from_udid: "usr_sender"
+              to_udid: "usr_receiver"
+              amount: 500
+      responses:
+        '200':
+          description: Перевод выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountTransferResponse'
+              example:
+                transfer_id: "tr_xyz"
+                from_balance_after: 1500.00
+                to_balance_after: 2500.00
+        '404':
+          description: Получатель не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "UDID_NOT_FOUND"
+                message: "Получатель не существует"
+        '402':
+          description: Недостаточно средств
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "BALANCE_TOO_LOW"
+                message: "Недостаточно средств"
+
+  /account/withdraw:
+    post:
+      tags: [account]
+      summary: Вывод средств через СБП
+      description: |
+        Вывод средств с UDID-счёта через СБП. Доступен только для pull-канала
+        (Представитель, Амбассадор, МСП-Самозанятый). Для МСП со статусом ИП/ООО выплата
+        идёт автоматически по push-каналу — этот эндпоинт для них недоступен.
+        Единый порог pull-канала — 10 000 ₽.
+      operationId: accountWithdraw
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountWithdrawRequest'
+            example:
+              udid: "usr_abc"
+              amount: 10000
+              sbp_phone: "+79991234567"
+      responses:
+        '200':
+          description: Вывод выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountWithdrawResponse'
+              example:
+                withdrawal_id: "wd_xyz"
+                amount: 10000
+                bank_commission: 50.00
+                commission_paid_by: "company"
+                balance_after: 2500.00
+        '402':
+          description: Запрошенная сумма меньше 10 000 ₽ (единый порог pull-канала)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "BALANCE_TOO_LOW"
+                message: "Минимальная сумма вывода — 10 000 ₽"
+        '400':
+          description: Попытка вызвать эндпоинт для МСП со статусом ИП/ООО (push-канал)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "PUSH_CHANNEL_ONLY"
+                message: "Для данного статуса выплата производится по push-каналу"
+
+  /events/register:
+    post:
+      tags: [events]
+      summary: Регистрация на событие
+      description: Регистрирует пользователя на событие (Школа / Академия / Каникулы).
+      operationId: eventsRegister
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRegisterRequest'
+            example:
+              udid: "usr_abc"
+              event_type: "Школа"
+              role: "mentor"
+      responses:
+        '200':
+          description: Регистрация успешна
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  registration_id:
+                    type: string
+                    example: "evt_reg_xyz"
+                  status:
+                    type: string
+                    example: "registered"
+        '403':
+          description: |
+            SUBSCRIPTION_INACTIVE — подписка истекла;
+            STATUS_INSUFFICIENT — статус не позволяет участвовать
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                subscription_inactive:
+                  value:
+                    code: "SUBSCRIPTION_INACTIVE"
+                    message: "Подписка истекла"
+                status_insufficient:
+                  value:
+                    code: "STATUS_INSUFFICIENT"
+                    message: "Статус не позволяет участвовать"
+
+  /ambassador/create:
+    post:
+      tags: [ambassador]
+      summary: Создание нового Амбассадора
+      description: Создаёт нового Амбассадора (только для Основателя).
+      operationId: ambassadorCreate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmbassadorCreateRequest'
+            example:
+              phone: "+79991234567"
+              full_name: "Петров Пётр"
+              assigned_prefix: "BJ"
+      responses:
+        '201':
+          description: Амбассадор создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmbassadorCreateResponse'
+              example:
+                udid: "usr_ambassador"
+                promo_code: "BJ7K2P"
+                prefix: "BJ"
+
+  /admin/promos/collisions:
+    get:
+      tags: [admin]
+      summary: Список коллизий промокодов
+      description: Возвращает список коллизий генерации промокодов (только для админа).
+      operationId: adminPromosCollisions
+      responses:
+        '200':
+          description: Список коллизий
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromoCollisionsResponse'
+              example:
+                collisions:
+                  - prefix: "BJ"
+                    attempted_suffix: "7K2P"
+                    switched_to_prefix: "B1"
+                    timestamp: "2026-08-25T10:00:00Z"
+
+  /promo/validate:
+    post:
+      tags: [promo]
+      summary: Валидация промокода
+      description: Проверяет промокод для UI (валиден ли, префикс, владелец).
+      operationId: promoValidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromoValidateRequest'
+            example:
+              code: "BJ3M9K"
+      responses:
+        '200':
+          description: Результат валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromoValidateResponse'
+              example:
+                valid: true
+                prefix: "BJ"
+                owner_udid: "usr_xyz"
+
+components:
+  schemas:
+    Error:
+      type: object
+      description: Стандартная структура ошибки
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          description: Машинный код ошибки (например, PROMO_NOT_FOUND)
+        message:
+          type: string
+          description: Человекочитаемое описание
+
+    RegisterRequest:
+      type: object
+      required: [phone]
+      properties:
+        phone:
+          type: string
+          pattern: '^\+7\d{10}$'
+          description: Номер телефона в формате +7XXXXXXXXXX
+          example: "+79991234567"
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        full_name:
+          type: string
+          example: "Иванов Иван"
+        inviter_code:
+          type: string
+          pattern: '^[2-9A-HJ-NP-Z]{6}$'
+          description: Промокод пригласившего (опционально)
+          example: "BJ3M9K"
+
+    RegisterResponse:
+      type: object
+      required: [udid, promo_code, prefix]
+      properties:
+        udid:
+          type: string
+          description: UDID нового пользователя
+          example: "usr_abc123def456"
+        promo_code:
+          type: string
+          example: "BJ7K2P"
+        prefix:
+          type: string
+          pattern: '^[2-9A-HJ-NP-Z]{2}$'
+          example: "BJ"
+        invited_by:
+          type: string
+          description: Промокод пригласившего (если был)
+          example: "BJ3M9K"
+
+    PromoChangeRequest:
+      type: object
+      required: [udid]
+      properties:
+        udid:
+          type: string
+          example: "usr_abc123def456"
+
+    PromoChangeResponse:
+      type: object
+      required: [old_promo, new_promo, next_change_available_at]
+      properties:
+        old_promo:
+          type: string
+          example: "BJ3M9K"
+        new_promo:
+          type: string
+          example: "BJ9P7L"
+        next_change_available_at:
+          type: string
+          format: date-time
+          example: "2026-09-25T10:00:00Z"
+
+    SubscriptionActivateRequest:
+      type: object
+      required: [udid, period_months, payment_method]
+      properties:
+        udid:
+          type: string
+          example: "usr_abc123def456"
+        period_months:
+          type: integer
+          minimum: 1
+          maximum: 12
+          example: 12
+        payment_method:
+          type: string
+          enum: [card, sbp, udid_balance, mixed]
+          example: "mixed"
+        udid_balance_amount:
+          type: number
+          minimum: 0
+          description: Сумма списания с UDID-баланса (для mixed)
+          example: 1000
+        card_amount:
+          type: number
+          minimum: 0
+          description: Сумма оплаты картой (для mixed)
+          example: 2000
+
+    SubscriptionActivateResponse:
+      type: object
+      required: [subscription_id, started_at, expires_at, status]
+      properties:
+        subscription_id:
+          type: string
+          example: "sub_xyz789"
+        started_at:
+          type: string
+          format: date-time
+          example: "2026-08-25T10:00:00Z"
+        expires_at:
+          type: string
+          format: date-time
+          example: "2027-08-25T10:00:00Z"
+        status:
+          type: string
+          enum: [active, expired, pending]
+          example: "active"
+
+    TransactionRequest:
+      type: object
+      required: [msp_id, amount, payment_method]
+      properties:
+        msp_id:
+          type: string
+          description: Идентификатор МСП (по нему сервер определяет rep_udid/ambassador_prefix)
+          example: "msp_123"
+        client_udid:
+          type: string
+          example: "usr_buyer456"
+        amount:
+          type: number
+          minimum: 0
+          example: 1000
+        payment_method:
+          type: string
+          enum: [card, sbp, tpay]
+          example: "card"
+
+    Distribution:
+      type: object
+      required: [company, representative, ambassador]
+      properties:
+        company:
+          type: number
+          minimum: 0
+          example: 27.36
+        representative:
+          type: number
+          minimum: 0
+          example: 27.36
+        ambassador:
+          type: number
+          minimum: 0
+          example: 13.68
+
+    TransactionResponse:
+      type: object
+      required: [transaction_id, pool_amount, distribution]
+      properties:
+        transaction_id:
+          type: string
+          example: "txn_abc"
+        pool_amount:
+          type: number
+          minimum: 0
+          example: 68.40
+        distribution:
+          $ref: '#/components/schemas/Distribution'
+
+    CashbackAccrueRequest:
+      type: object
+      required: [transaction_id, client_udid, cashback_percent]
+      properties:
+        transaction_id:
+          type: string
+          example: "txn_abc"
+        client_udid:
+          type: string
+          example: "usr_buyer456"
+        cashback_percent:
+          type: number
+          minimum: 0
+          maximum: 100
+          example: 15
+
+    CashbackAccrueResponse:
+      type: object
+      required: [cashback_id, client_received, platform_fee, distribution]
+      properties:
+        cashback_id:
+          type: string
+          example: "cb_xyz"
+        client_received:
+          type: number
+          minimum: 0
+          example: 150.00
+        platform_fee:
+          type: number
+          minimum: 0
+          example: 37.50
+        distribution:
+          $ref: '#/components/schemas/Distribution'
+
+    StatusResponse:
+      type: object
+      required: [udid, status, msp_count, cities_count, network_gmv_30d, assigned_at]
+      properties:
+        udid:
+          type: string
+          example: "usr_abc"
+        status:
+          type: string
+          enum: [Представитель, Мэр, Губернатор]
+          example: "Мэр"
+        msp_count:
+          type: integer
+          minimum: 0
+          example: 42
+        cities_count:
+          type: integer
+          minimum: 0
+          example: 1
+        network_gmv_30d:
+          type: number
+          minimum: 0
+          example: 1850000
+        assigned_at:
+          type: string
+          format: date-time
+          example: "2026-07-15T03:00:00Z"
+
+    AccountTransferRequest:
+      type: object
+      required: [from_udid, to_udid, amount]
+      properties:
+        from_udid:
+          type: string
+          example: "usr_sender"
+        to_udid:
+          type: string
+          example: "usr_receiver"
+        amount:
+          type: number
+          minimum: 0
+          example: 500
+
+    AccountTransferResponse:
+      type: object
+      required: [transfer_id, from_balance_after, to_balance_after]
+      properties:
+        transfer_id:
+          type: string
+          example: "tr_xyz"
+        from_balance_after:
+          type: number
+          example: 1500.00
+        to_balance_after:
+          type: number
+          example: 2500.00
+
+    AccountWithdrawRequest:
+      type: object
+      required: [udid, amount, sbp_phone]
+      properties:
+        udid:
+          type: string
+          example: "usr_abc"
+        amount:
+          type: number
+          minimum: 10000
+          description: Минимальная сумма вывода (pull-канал) — 10 000 ₽
+          example: 10000
+        sbp_phone:
+          type: string
+          pattern: '^\+7\d{10}$'
+          example: "+79991234567"
+
+    AccountWithdrawResponse:
+      type: object
+      required: [withdrawal_id, amount, bank_commission, commission_paid_by, balance_after]
+      properties:
+        withdrawal_id:
+          type: string
+          example: "wd_xyz"
+        amount:
+          type: number
+          minimum: 0
+          example: 10000
+        bank_commission:
+          type: number
+          minimum: 0
+          example: 50.00
+        commission_paid_by:
+          type: string
+          enum: [company, user]
+          example: "company"
+        balance_after:
+          type: number
+          example: 2500.00
+
+    EventRegisterRequest:
+      type: object
+      required: [udid, event_type, role]
+      properties:
+        udid:
+          type: string
+          example: "usr_abc"
+        event_type:
+          type: string
+          enum: [Школа, Академия, Каникулы]
+          example: "Школа"
+        role:
+          type: string
+          example: "mentor"
+
+    AmbassadorCreateRequest:
+      type: object
+      required: [phone, full_name, assigned_prefix]
+      properties:
+        phone:
+          type: string
+          pattern: '^\+7\d{10}$'
+          example: "+79991234567"
+        full_name:
+          type: string
+          example: "Петров Пётр"
+        assigned_prefix:
+          type: string
+          pattern: '^[2-9A-HJ-NP-Z]{2}$'
+          example: "BJ"
+
+    AmbassadorCreateResponse:
+      type: object
+      required: [udid, promo_code, prefix]
+      properties:
+        udid:
+          type: string
+          example: "usr_ambassador"
+        promo_code:
+          type: string
+          example: "BJ7K2P"
+        prefix:
+          type: string
+          pattern: '^[2-9A-HJ-NP-Z]{2}$'
+          example: "BJ"
+
+    PromoCollisionsResponse:
+      type: object
+      required: [collisions]
+      properties:
+        collisions:
+          type: array
+          items:
+            type: object
+            required: [prefix, attempted_suffix, switched_to_prefix, timestamp]
+            properties:
+              prefix:
+                type: string
+                example: "BJ"
+              attempted_suffix:
+                type: string
+                example: "7K2P"
+              switched_to_prefix:
+                type: string
+                example: "B1"
+              timestamp:
+                type: string
+                format: date-time
+                example: "2026-08-25T10:00:00Z"
+
+    PromoValidateRequest:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          pattern: '^[2-9A-HJ-NP-Z]{6}$'
+          example: "BJ3M9K"
+
+    PromoValidateResponse:
+      type: object
+      required: [valid, prefix, owner_udid]
+      properties:
+        valid:
+          type: boolean
+          example: true
+        prefix:
+          type: string
+          pattern: '^[2-9A-HJ-NP-Z]{2}$'
+          example: "BJ"
+        owner_udid:
+          type: string
+          example: "usr_xyz"
+
+# TODO (gaps в API_SPEC.md, не моделированы как отдельные эндпоинты):
+# - Авторизация/токены: в спецификации не описан механизм аутентификации (Bearer/JWT),
+#   хотя все эндпоинты, очевидно, требуют авторизации. Требуется уточнение схемы security.
+# - GET /status/{udid}: не описаны коды ошибок (например, 404 при отсутствии udid).
+# - /events/register: в спецификации нет примера тела ответа 200 (смоделировано предположительно).
+# - /ambassador/create: не описаны коды ошибок (например, 403 при не-Основателе).
+# - /admin/promos/collisions: не описана схема авторизации админа.
+# - Пагинация/фильтрация для списочных эндпоинтов не специфицирована.
