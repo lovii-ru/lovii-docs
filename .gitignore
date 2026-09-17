@@ -1,0 +1,33 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Tool / runtime state (не документация проекта)
+.omo/
+.opencode/
+.playwright-mcp/
+.visual-qa/
+.audit-bundle/
+
+# Generated / derivable artifacts
+compare.html
+versions/
+
+# Embedded repos
+lovii_presentation_clone/
+presentations/
+
+# Sync script runtime log
+scripts/sync-public.log
+
+# Generated OCR / pdf-image caches at repo root (derivable, не коммитим)
+lovii_ocr/
+lovii_pdf_img/
+
+# Exports of chats at repo root (if present)
+chats/
+lovii_chats.*
+chat-export-*.json
+
+# One-off bug screenshot at root
+hero_bug.png
