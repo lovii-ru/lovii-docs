@@ -44,7 +44,8 @@
 
 | Репозиторий | Роль | Каталог доков |
 |:---|:---|:---|
-| [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | SSOT-хаб: канон чисел, продуктовые правила, оферты, контракты, журнал находок, устав SSOT | §2 |
+| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Рабочий публичный хаб**: полный корпус (канон, as-is, artifacts, оферты), живой пуш, Pages, CI-гейты. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9) | §2 |
+| [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | Приватное зеркало канона — аккаунт suspended с 2026-09-13 (F-051), догнать при возврате доступа | §2 |
 
 ### Продуктовые репозитории (организация [`lovii-tech`](https://github.com/lovii-tech))
 
@@ -58,7 +59,7 @@
 | [`infra`](https://github.com/lovii-tech/infra) | Ansible-каркас серверов | §3.6 |
 | `producer_ai`, `domains_finder` | Сателлиты вне платформы, к LOVII отношения не имеют | — |
 
-### Дизайн, публикация и контекст (аккаунт [`bestdeejay-design`](https://github.com/bestdeejay-design))
+### Дизайн, публикация и контекст (аккаунт [`bestdeejay-design`](https://github.com/bestdeejay-design) — suspended с 2026-09-13, F-051)
 
 | Репозиторий | Роль | Каталог доков |
 |:---|:---|:---|
