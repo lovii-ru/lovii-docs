@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Каноны (источник истины)
+    url: https://github.com/lovii-ru/lovii-docs/tree/main/canon
+    about: Если хочешь просто обсудить — issues тут, а не на issues канонического репо.
+  - name: Архив
+    url: https://github.com/lovii-ru/lovii-docs/tree/main/archive
+    about: Старые версии документов — там не правим, можно посмотреть историю.
+  - name: Регламент изменений
+    url: https://github.com/lovii-ru/lovii-docs/blob/main/DOCS_GUIDELINES.md
+    about: Что считается каноном и как правки вливаются.
