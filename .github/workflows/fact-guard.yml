@@ -1,0 +1,36 @@
+name: Docs governance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - 'scripts/*.py'
+      - 'scripts/*.sh'
+      - '.github/workflows/fact-guard.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - 'scripts/*.py'
+      - 'scripts/*.sh'
+      - '.github/workflows/fact-guard.yml'
+
+jobs:
+  docs-governance:
+    name: Task, link and fact checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check task IDs, statuses and archive boundaries
+        run: python3 scripts/task_guard.py
+
+      - name: Check stale facts, versions and markdown links
+        run: python3 scripts/doc-canon-check.py --strict
+
+      - name: Check duplicated canonical numbers
+        run: bash scripts/fact-guard.sh
+
+      - name: Determinism smoke test (two runs must agree)
+        run: python3 scripts/fact_guard.py --determinism

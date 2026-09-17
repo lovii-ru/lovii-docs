@@ -109,6 +109,12 @@ cd lovii_docs
 # 3. Публикация в публичный репо происходит автоматически при пуше в main
 #    (см. DEV_GUIDE.md). Локально проверить решения можно:
 bash scripts/sync-public.sh --dry-run
+# 4. При F-051 (пуш в приватный репо недоступен) — публикация в рабочее
+#    зеркало-хаб lovii-ru/lovii-docs (единственный живой пуш-путь на GitHub):
+git remote add mirror git@github.com-lovii-ru:lovii-ru/lovii-docs.git
+bash scripts/fact-guard.sh && python3 scripts/task_guard.py && python3 scripts/doc-canon-check.py --strict
+git push mirror main
+#    При возврате доступа догнать origin: git pull mirror main && git push origin main
 ```
 
 ### 2.5 Рабочие правила (топ-6)
