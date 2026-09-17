@@ -2,10 +2,13 @@
 
 > **Что это:** полный архив документации платформы LOVII для работы и фиксации правок.
 > **Срез:** 2026-09-17.
-> **Источник истины:** workspace `LOVII/lovii_docs/` (GitHub mirror `bestdeejay-design/lovii_docs` →
-> публичное зеркало `axiiom-ru/lovii`).
-> **Этот репо** — резервная публичная копия на профиле `lovii-ru`
-> (см. `canon/FINDINGS.md` → `F-051`: приостановка основного аккаунта 2026-09-13).
+> **Источник истины:** workspace `LOVII/lovii_docs/` — канон правится локально и расходится по зеркалам.
+> **Зеркала:** `bestdeejay-design/lovii_docs` (приватный; пуш из workspace недоступен при F-051) ·
+> `axiiom-ru/lovii` (лендинг, 4 файла) · **этот репо `lovii-ru/lovii-docs` — публичный полный корпус
+> и единственный рабочий пуш-путь на GitHub** (см. `canon/FINDINGS.md` → `F-051`).
+> **Путь обновления:** правка в workspace → commit в `LOVII/lovii_docs` (main) → `git push mirror main`,
+> где `mirror` = `git@github.com-lovii-ru:lovii-ru/lovii-docs.git` (SSH-ключ `lovii_ru_ed25519`,
+> Host `github.com-lovii-ru`). Не копить локальные коммиты: пушим в рабочее зеркало сразу.
 
 ## Раскладка
 
@@ -14,7 +17,7 @@
 | [`as-is/`](as-is/) | 13 модулей «как есть» по коду (витрина, корзина, заказы, баллы, роли/кабинеты, вход/OTP, пуши, доставка, b2b-кабинет, админка, БД, финансовый контур, сущности b2b) + индекс |
 | [`canon/`](canon/) | **Каноны** — единый источник истины: BRD, PRD, VISION, ROADMAP, PARAMS, FINANCIAL_CONTOUR/MODEL, ARCHITECTURE, DATA_MODEL, API_SPEC, DESIGN, PRODUCT_QUALITY_BAR, STATUS, BACKLOG, FINDINGS, FEATURES, + ADR/, + TASKS/ |
 | [`artifacts/`](artifacts/) | Ресёрчи, БД-разбор (db-schema-analysis — 85 таблиц), карта экранов, точечные отчёты |
-| [`archive/`](archive/) | Исторические версии канонов (BRD_v1.0, FINANCIAL_MODEL_REVIEW), аудиты, юр-документы |
+| `archive/` | Исторические версии канонов (BRD_v1.0, FINANCIAL_MODEL_REVIEW), аудиты, юр-документы |
 | [`public/`](public/) | Опубликованные юр-документы (публичная оферта, оферта присоединения, политика ПД, money_flow_public) |
 | [`contracts/`](contracts/) | OpenAPI-контракты |
 | [`scripts/`](scripts/) | Гварды пайплайна (doc-canon-check, fact-guard, sync-public, task_guard) |
