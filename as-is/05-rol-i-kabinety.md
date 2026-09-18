@@ -78,6 +78,14 @@ failed, expired`.
   часы (24ч-селекты), min_order_amount_rubles (UpdateMspBranchSettingsController.php:33–71;
   право owner/manager). **Тумблеры доставки из app не меняются** (их в API нет —
   только b2b).
+- Обновление 2026-09-18: `min_order_amount_rubles` — 0/null → NULL,
+  1..499 ₽ → 422 `min_order_amount_too_low` (пол 500 ₽ из конфига); ресурс
+  отдаёт `min_order_amount_effective` (см. [02](02-korzina-checkout.md) «Минимум
+  заказа»); смена `address_line` теперь **геокодируется** — location и city_id
+  пересчитываются (репро владельца: точка пропала из каталога после переезда
+  МСК→СПб, core `728f31e`); если геокодер не настроен/адрес не найден — текст
+  сохраняется, координаты не трогаются, в ответе `address_geocode_warning`
+  (app показывает тостом, `ae08535`).
 - Карточка магазина: `PATCH /msp/merchant` (название/описание/логотип).
 
 ## Команда точки
