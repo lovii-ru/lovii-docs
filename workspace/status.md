@@ -7,6 +7,22 @@
 > `canon/TASKS/`. Старые записи сжимаются до одной строки на дату.
 > Полная история до 20.09 — `../archive/old_versions/status-20260920-full.md`.
 
+## 2026-09-20 (ночь, 2) — верификация МСП входящим VER-платежом (9286495)
+
+- Уточнение владельца: вместо автопрогона «платформа шлёт рубль» — МСП платит 1 ₽ СО СВОЕГО
+  р/с (кнопка «Я отправил платёж» в MspPayment → `POST /msp/payment/sent`), банк (мок
+  `/av/v1/payment`) создаёт поступление на спец-счёт и уведомляет ядро
+  (`/payments/tbank/incoming`), матчинг = VER-код + ИНН + сумма; реквизиты плательщика
+  (банк/счёт) становятся первой «карточкой компании» → `verified_at`, гейт I-5 открыт.
+- Новое: `MatchIncomingVerificationAction`, `partner_payout_accounts` (lovii_b2b;
+  в core-тестах — через B2bSchema::ensure, боевая миграция — в lovii-b2b),
+  ConfirmVerificationPaymentSentController, в моке `/av/v1/payment` + таблица «Поступления».
+  App: кнопка дёргает `mspPaymentSent` (roles-api + MspPayment.vue). Тесты 4/4 + 8/8.
+- App-ветка: `feat/tbank-verification-app` (кнопка), core: `feat/tbank-mock-stand` 9286495.
+- ⚠️ Инцидент: у checkout `LOVII/lovii-docs` (дефис) пропал `.git` (~01:30) — ночные записи
+  status.md в ней не пушились; живой журнал — `lovii_docs/workspace/status.md`. Разобраться
+  владельцу (восстановить чекаут или признать workspace/status.md единственным).
+
 ## Состояние сейчас (поддерживать актуальным)
 
 - **Среды**: прод — чистая БД, ещё не задеплоен; staging — авто-деплой из ветки `staging`
