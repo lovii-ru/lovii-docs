@@ -1,8 +1,10 @@
 # 11. База данных: как хранится информация — как есть
 
-> Срез: 2026-09-17 (структура — по снимку staging 2026-09-13). Полный разбор всех
-> 85 таблиц с колонками и числами строк: `lovii_docs/artifacts/db-schema-analysis.md`
-> (обновлять при волнах миграций). Этот док — навигационная выжимка. Формат — [README](README.md).
+> Срез: 2026-09-17 (структура — по снимку staging 2026-09-13), **обновлено
+> 2026-09-19** (волна миграций подписки/выплат/ПЭП — см. «Прибавилось 18–19.09»).
+> Полный разбор всех 85 таблиц с колонками и числами строк:
+> `lovii_docs/artifacts/db-schema-analysis.md` (обновлять при волнах миграций).
+> Этот док — навигационная выжимка. Формат — [README](README.md).
 
 ## Устройство: одна БД, три схемы
 
@@ -75,13 +77,31 @@ PostgreSQL `lovii-core`, три схемы = три приложения:
   unique(wallet, order, type) = идемпотентность.
 - `loyalty_rules` — earn_percent, max_spend_percent, is_active.
 - `accounts` — рублёвые счета, полиморф owner: `user | partner | platform |
-  platform_nominal` + owner_id, balance bigint.
+  platform_nominal` + owner_id, balance bigint; с 18.09 флаг **payouts_blocked**
+  (минус-баланс блокирует исходящие выплаты).
 - `ledger_entries` — append-only журнал, amount **со знаком**; source_type/source_id,
   payment_channel, split_role (пул 40/40/20); unique(source, type, account, split_role).
+  Типы: order_income, pool_share, **payout, payout_commission, subscription_payment**,
+  adjustment, payment_income, acquiring_fee, chargeback_reversal, chargeback_bank_fee.
 - `payments` — платежи Т-Банк: status, amount, provider_payment_id, payment_url,
   deal_id (номинальная схема), provider_payload.
 - `cards` — внутренние номера-идентификаторы (пулы 9138/9142, Лун); банковской
   карты-витрины в БД нет.
+
+### Подписка, выплаты, ПЭП (прибавилось 18–19.09)
+- `subscriptions` — одна на профиль: цена-снимок (59900/19900 коп.), календарный
+  период, окно grace, promo_code; `subscription_status_changes` — append-only
+  история статусов; `subscription_charges` — журнал попыток списания;
+  `external_payment_methods` — каркас внешних карт (не используется до банк-контура).
+- `payouts` — push|pull: идемпотентность push за день unique(account, type,
+  for_date); суммы amount/net/commission, bearer, статус pending→sent.
+- `pep_reports` — закрывающие документы pull-выплат: payload jsonb, content_hash,
+  otp_hash + expiry, статус pending|signed.
+- `platform_order_settings` — строка платформенных правил минимума заказа
+  (default 60000 / floor 50000 коп.).
+- Колонки: `users.legal_status` (nullable — презумпция НПД),
+  `users.promo_code` (с 14.09), `accounts.payouts_blocked`.
+- На staging (SQL 19.09) таблицы живые, строк пока 0.
 
 ### Роли
 - `partner_applications` — заявка «ЛОВИ Бизнес»: inn, статус-лестница,

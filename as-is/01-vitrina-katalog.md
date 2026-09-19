@@ -1,7 +1,9 @@
 # 01. Витрина и каталог — как есть
 
-> Срез: 2026-09-17. Рабочая заметка (класс W), не канон. Проценты/суммы — ссылками
-> на канон (`lovii_docs/canon/PARAMS.md`). Формат и правила — [README](README.md).
+> Срез: 2026-09-17, **обновлено 2026-09-19** (чипы типов убраны с витрины —
+> app d8c3037, минимум заказа энфорсится). Рабочая заметка (класс W), не канон.
+> Проценты/суммы — ссылками на канон (`lovii_docs/canon/PARAMS.md`).
+> Формат и правила — [README](README.md).
 
 ## Что это
 
@@ -14,9 +16,9 @@
 
 | Роут | Экран | Что показывает |
 |---|---|---|
-| `/` | HomeView (`modules/home-module/HomeModule.vue`) | «Популярные заведения» (чипы типов, фильтр на клиенте — HomePopular.vue:16–24), статичный баннер (3 webp без API — HomeBanner.vue:4–10), блок «Рядом с вами» из `near_you` |
+| `/` | HomeView (`modules/home-module/HomeModule.vue`) | «Популярные заведения» (чипы типов убраны 19.09), статичный баннер (3 webp без API — HomeBanner.vue:4–10), блок «Рядом с вами» из `near_you` |
 | `/popular` | PopularStores (`modules/popular-stores/`) | лента «Популярные заведения», курсорная догрузка (PopularStores.vue:31–43) |
-| `/stores` | StoresCatalog (`modules/stores-catalog/`) | список точек, чипы типов (синхрон с URL `?types=`), фильтр категорий; при вводе в «Магазин или товар» — debounce 1 с → поиск точек (CatalogSearch.vue:32–46) |
+| `/stores` | StoresCatalog (`modules/stores-catalog/`) | список точек (чипы типов убраны 19.09), фильтр категорий; при вводе в «Магазин или товар» — debounce 1 с → поиск точек (CatalogSearch.vue:32–46) |
 | `/stores/:id` | StoreModule (`modules/store-module/`) | карточка точки (логотип, статус открытия, дистанция, избранное, инфо-лист) + товары; teaser-точка — плашка «Скоро» вместо витрины (StoreModule.vue:22, 70–76) |
 | `/stores/:id/product/:productId` | StoreProduct (`modules/store-product/`) | карточка позиции, ± корзина, рекомендации |
 
@@ -60,9 +62,13 @@ SQL-гейт :51–82, `allowsOrders()` :102–105, `state()` :111–143).
 ### Типы точек (merchant_type)
 Enum `store | restaurant | services | club`, лейблы «Сети-ритейл / Общепит /
 Услуги / Клубы» (`app/Domain/Merchant/Enums/MerchantType.php:9–33`).
-Решение владельца (SZ-005): тип — **явные чипы-фильтры**, без скрытого фильтра;
-витрина без `types` отдаёт все типы (GetStoresQuery.php:26–32). На главной
-`popular_restaurants` = только общепит (GetHomeQuery.php:46–55).
+**19.09 — чипы типов убраны с витрины** (решение владельца; app d8c3037,
+merge 0973a77): на главной и в каталоге фильтров по типам больше нет,
+`?types=`-чипы удалены. Бэкенд не тронут: `types[]` в API остаётся
+(`HasMerchantTypes.php:27–32`), витрина без `types` отдаёт все типы
+(GetStoresQuery.php:26–32). На главной `popular_restaurants` = только общепит
+(GetHomeQuery.php:46–55). Впереди — динамические категории по тегам
+(механику придумает владелец).
 
 ### Схема id
 `/stores/:id` = **branch_id** филиала (`exists:merchant_branches,id`,
@@ -124,9 +130,10 @@ StorefrontDeliveryOption.php:9–27), `categories`. Клиент скрывае�
 
 ## Кандидаты в «не хватает» (решает владелец)
 
-1. ~~Серверная проверка `min_order_amount`~~ — **сделано 2026-09-18** (см. [02](02-korzina-checkout.md)
-   «Минимум заказа»); остаток: витринные ресурсы отдают сырой минимум — карточка
-   точки может показать «0 ₽» при реальном пороге 600 ₽.
+1. ~~Серверная проверка `min_order_amount`~~ — **сделано 18.09** (№1 BACKLOG_REVIEW,
+   см. [02](02-korzina-checkout.md) «Минимум заказа»); витринные ресурсы отдают
+   `min_order_amount_effective[_rubles]` (StoreCard/NearbyBranch/StorefrontInfo
+   считаются через MinOrderPolicy).
 2. Рейтинги и бейджи точек — данные есть, UI нет (или убрать из API).
 3. `delivery_options` в инфо-карточке захардкожен и не связан с реальными
    тумблерами доставки точки (`delivery_available/pickup_available`).
@@ -134,6 +141,8 @@ StorefrontDeliveryOption.php:9–27), `categories`. Клиент скрывае�
    с фактом; либо довести комбинированный ответ, либо описать split.
 5. Зона по городу: выборка «городов в радиусе 30 км» — сегментация по городам
    фактически по координатам; для франшизы (гео-изоляция) нужен явный скоуп (C-1).
+6. Динамические категории на витрине по тегам merchants (вместо убранных чипов
+   типов) — механику определяет владелец.
 
 ## Сверка владельцем
 
