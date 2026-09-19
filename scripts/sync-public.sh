@@ -2,8 +2,9 @@
 #
 # sync-public.sh — автоматическая публикация публичных документов LOVII
 #
-# Источник правды : lovii_docs/            (этот репозиторий)
-# Публичное зеркало: axiiom-ru/lovii        (GitHub Pages, генерит сайт + лендинг)
+# Источник правды : lovii-ru/lovii-docs (этот репозиторий), папка public/ —
+#                   чистые публичные документы без служебных комментариев агентов
+# Публичное зеркало: axiiom-ru/lovii      (GitHub Pages, генерит сайт + лендинг)
 #
 # ПРАВИЛО ВЕРСИЙ (req. пользователя):
 #   • версия в источнике ВЫШЕ опубликованной → публикуем как есть, версию не трогаем
@@ -31,7 +32,7 @@ FILES=(
   "public/Публичная_оферта.md|docs/Публичная_оферта.md|1"
   "public/Оферта_присоединения.md|docs/Оферта_присоединения.md|1"
   "public/Политика_обработки_ПД.md|docs/Политика_обработки_ПД.md|1"
-  "README.md|README.md|0"
+  "public/README.md|README.md|0"
 )
 
 DRY_RUN=0
@@ -178,6 +179,6 @@ for entry in "${FILES[@]}"; do
 done
 
 if (( PUSH )); then
-  git -C "$ROOT" push origin main 2>&1 | tail -3 || log "WARN: push не удался"
+  git -C "$ROOT" push mirror main 2>&1 | tail -3 || log "WARN: push не удался"
 fi
 log "=== синхронизация завершена ==="
