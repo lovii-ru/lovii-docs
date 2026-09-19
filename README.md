@@ -3,9 +3,12 @@
 > **Что это:** полный архив документации платформы LOVII для работы и фиксации правок.
 > **Срез:** 2026-09-17.
 > **Источник истины:** workspace `LOVII/lovii_docs/` — канон правится локально и расходится по зеркалам.
-> **Зеркала:** `bestdeejay-design/lovii_docs` (приватный; пуш из workspace недоступен при F-051) ·
-> `axiiom-ru/lovii` (лендинг, 4 файла) · **этот репо `lovii-ru/lovii-docs` — публичный полный корпус
-> и единственный рабочий пуш-путь на GitHub** (см. `canon/FINDINGS.md` → `F-051`).
+> **Зеркала:** **этот репо `lovii-ru/lovii-docs` — публичный полный корпус и единственный
+> рабочий пуш-путь на GitHub** (см. `canon/FINDINGS.md` → `F-051`) ·
+> `bestdeejay-design/lovii_docs` — архивная копия, в синхронизацию не входит ·
+> `axiiom-ru/lovii` — публичный лендинг для пользователей и банка: наполняется ТОЛЬКО
+> из папки [`public/`](public/) этого репо скриптом `scripts/sync-public.sh`
+> (в т.ч. README — из `public/README.md`, не из корня репо).
 > **Путь обновления:** правка в workspace → commit в `LOVII/lovii_docs` (main) → `git push mirror main`,
 > где `mirror` = `git@github.com-lovii-ru:lovii-ru/lovii-docs.git` (SSH-ключ `lovii_ru_ed25519`,
 > Host `github.com-lovii-ru`). Не копить локальные коммиты: пушим в рабочее зеркало сразу.
@@ -18,7 +21,7 @@
 | [`canon/`](canon/) | **Каноны** — единый источник истины: BRD, PRD, VISION, ROADMAP, PARAMS, FINANCIAL_CONTOUR/MODEL, ARCHITECTURE, DATA_MODEL, API_SPEC, DESIGN, PRODUCT_QUALITY_BAR, STATUS, BACKLOG, FINDINGS, FEATURES, + ADR/, + TASKS/ |
 | [`artifacts/`](artifacts/) | Ресёрчи, БД-разбор (db-schema-analysis — 85 таблиц), карта экранов, точечные отчёты |
 | `archive/` | Исторические версии канонов (BRD_v1.0, FINANCIAL_MODEL_REVIEW), аудиты, юр-документы |
-| [`public/`](public/) | Опубликованные юр-документы (публичная оферта, оферта присоединения, политика ПД, money_flow_public) |
+| [`public/`](public/) | Чистые публичные документы для лендинга `axiiom-ru/lovii` (без служебных комментариев агентов): публичная оферта, оферта присоединения, политика ПД, money_flow_public, публичный README |
 | [`contracts/`](contracts/) | OpenAPI-контракты |
 | [`scripts/`](scripts/) | Гварды пайплайна (doc-canon-check, fact-guard, sync-public, task_guard) |
 | [`marketing/`](marketing/) | Материалы для амбассадоров/представителей, презентации, скриншоты |
