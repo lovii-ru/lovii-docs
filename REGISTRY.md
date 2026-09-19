@@ -92,7 +92,7 @@ lovii_docs/
 ├── archive/                  # остальные устаревшие документы и версии
 ├── contracts/openapi/        # машиночитаемый API-контракт
 ├── artifacts/ / marketing/  # рабочие и маркетинговые артефакты
-├── tbank/                    # справочная информация; договор — вне VCS
+├── tbank/                    # терминал-анкета; публичная база знаний API Мультисплита (docs/notes/openapi); договор — вне VCS
 ├── scripts/                  # проверки и публикация
 └── .github/workflows/        # docs-governance и sync-public
 ```
