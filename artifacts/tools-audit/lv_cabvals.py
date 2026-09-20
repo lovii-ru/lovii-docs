@@ -1,9 +1,11 @@
 """Сверка значений свойств общих кабинетных классов demo vs app (Vue scoped + cabinet-ui)."""
-import re, glob
+import re, glob, sys
 from collections import defaultdict
 
-DEMO = "/home/z/my-project/lovii/_fresh/lovii-demo/css/lovii.css"
-APP_DIR = "/home/z/my-project/lovii/_fresh/lovii-app/src/modules/roles-module"
+_demo_root = sys.argv[1] if len(sys.argv)>1 else "."
+_app_root = sys.argv[2] if len(sys.argv)>2 else "."
+DEMO = f"{_demo_root}/css/lovii.css"
+APP_DIR = f"{_app_root}/src/modules/roles-module"
 
 def blocks_from(src):
     src = re.sub(r"/\*.*?\*/", "", src, flags=re.S)

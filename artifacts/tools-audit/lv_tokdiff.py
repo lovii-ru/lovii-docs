@@ -1,5 +1,6 @@
-"""Нормализация и сравнение токен-слоёв demo (lovii-tokens.css) vs app (lovii-tokens.scss)."""
-import re, difflib
+"""Нормализация и сравнение токен-слоёв demo (lovii-tokens.css) vs app (lovii-tokens.scss).
+Использование: python3 lv_tokdiff.py <demo-репо> <app-репо>"""
+import re, difflib, sys
 
 def load(path):
     src = open(path, encoding="utf-8").read()
@@ -14,8 +15,10 @@ def load(path):
         lines.append(ln.rstrip(";"))
     return lines
 
-demo = load("/home/z/my-project/lovii/_fresh/lovii-demo/assets/lovii-tokens.css")
-app = load("/home/z/my-project/lovii/_fresh/lovii-app/src/scss/lovii-tokens.scss")
+_demo_root = sys.argv[1] if len(sys.argv)>1 else "."
+_app_root = sys.argv[2] if len(sys.argv)>2 else "."
+demo = load(f"{_demo_root}/assets/lovii-tokens.css")
+app = load(f"{_app_root}/src/scss/lovii-tokens.scss")
 
 def tokmap(lines):
     m = {}

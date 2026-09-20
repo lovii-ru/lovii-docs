@@ -1,9 +1,11 @@
 """Сравнение кабинетных стилей: demo css/lovii.css vs app styles/cabinet-ui.scss (+scoped SFC)."""
-import re, subprocess, glob
+import re, subprocess, glob, sys
 from collections import defaultdict
 
-DEMO = "/home/z/my-project/lovii/_fresh/lovii-demo/css/lovii.css"
-APP_UI = "/home/z/my-project/lovii/_fresh/lovii-app/src/modules/roles-module/styles/cabinet-ui.scss"
+_demo_root = sys.argv[1] if len(sys.argv)>1 else "."
+_app_root = sys.argv[2] if len(sys.argv)>2 else "."
+DEMO = f"{_demo_root}/css/lovii.css"
+APP_UI = f"{_app_root}/src/modules/roles-module/styles/cabinet-ui.scss"
 
 def parse_css_blocks(path, nested_ok=False):
     """Вернуть {selector: {prop: value}} — плоско, без вложенности SCSS (app не будес глубоко парсить)."""

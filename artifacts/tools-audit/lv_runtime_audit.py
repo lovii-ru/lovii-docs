@@ -43,8 +43,10 @@ def audit_route(page, url, theme, shots_dir, name):
         page.evaluate("document.documentElement.setAttribute('data-theme','dark')")
         page.wait_for_timeout(250)
 
+    # Только РЕАЛЬНО видимые svg: скрытые (display:none) дают 0×0 ложно.
     zero_svg = page.evaluate(
         """() => [...document.querySelectorAll('svg')]
+            .filter(s => (s.checkVisibility ? s.checkVisibility({checkOpacity:true,checkVisibilityCSS:true}) : true))
             .map(s => { const r = s.getBoundingClientRect();
                         return {cls: s.getAttribute('class')||'', w: r.width, h: r.height}; })
             .filter(s => s.w < 1 || s.h < 1)"""
@@ -72,6 +74,7 @@ def main():
     ap.add_argument("--shots", default=None)
     ap.add_argument("--routes", default=None, help="через запятую, например '#/home,#/orders'")
     ap.add_argument("--viewports", default="390", help="например 390,1280")
+    ap.add_argument("--channel", default=None, help="канал браузера, напр. chrome (системный)")
     args = ap.parse_args()
 
     from playwright.sync_api import sync_playwright  # noqa: import здесь — быстрый фейл без playwright
@@ -84,7 +87,7 @@ def main():
 
     total = 0
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(channel=args.channel) if args.channel else p.chromium.launch()
         for w, _h in vps:
             ctx = browser.new_context(viewport={"width": w, "height": 844})
             page = ctx.new_page()
