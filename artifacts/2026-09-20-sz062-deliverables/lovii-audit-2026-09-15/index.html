@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LOVII · Аудит кнопок, адреса и визуального слоя — 15.09.2026</title>
+<style>
+  :root{
+    --paper:#f6f2ec; --paper-2:#efe9e1; --ink:#1b1a19; --ink-2:#55504b;
+    --ink-3:#8a827a; --rule:#d9d2c8; --rule-2:#e7e1d8;
+    --accent:#b81f5e; --accent-mark:#f64a8a; --ok:#0a7a63; --warn:#8a6a25;
+    --serif:Georgia,"Times New Roman","Noto Serif","PT Serif",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    --max:1120px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+       font-size:16px;line-height:1.6;font-weight:400}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(184,31,94,.35)}
+  a:hover{border-bottom-color:var(--accent)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .layout{display:grid;grid-template-columns:212px minmax(0,1fr);gap:56px;align-items:start}
+  @media (max-width:980px){.layout{grid-template-columns:1fr;gap:0}.toc{position:static!important;order:2;margin-top:56px}}
+
+  /* ---------- cover ---------- */
+  .cover{padding:72px 0 40px;border-bottom:1px solid var(--rule)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+          color:var(--accent);margin:0 0 22px}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.2vw,54px);line-height:1.06;
+     letter-spacing:-.015em;margin:0 0 18px;max-width:20ch}
+  .lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:62ch;margin:0}
+  .meta{margin:34px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+        gap:0 28px;border-top:1px solid var(--rule-2)}
+  .meta div{padding:14px 0;border-bottom:1px solid var(--rule-2)}
+  .meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+  .meta dd{margin:0;font-size:15px}
+  .meta code{font-family:var(--mono);font-size:13px}
+
+  /* ---------- toc ---------- */
+  .toc{position:sticky;top:28px;padding-top:56px}
+  .toc h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+          color:var(--ink-3);font-weight:400;margin:0 0 14px}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+  .toc li{counter-increment:t;margin:0 0 9px;font-size:13.5px;line-height:1.35}
+  .toc li::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:11px;
+                  color:var(--ink-3);margin-right:9px}
+  .toc a{border:0;color:var(--ink-2)}
+  .toc a:hover{color:var(--accent)}
+
+  /* ---------- sections ---------- */
+  main{padding-bottom:96px}
+  section{padding:56px 0 8px;border-top:1px solid var(--rule)}
+  section:first-of-type{border-top:0}
+  .sec-n{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+         color:var(--accent);margin:0 0 10px}
+  h2.t{font-family:var(--serif);font-weight:400;font-size:clamp(25px,3.2vw,33px);line-height:1.15;
+       letter-spacing:-.01em;margin:0 0 14px;max-width:34ch}
+  h3{font-family:var(--sans);font-weight:650;font-size:15px;letter-spacing:.01em;margin:30px 0 8px}
+  p{max-width:70ch;margin:0 0 14px}
+  .small{font-size:14px;color:var(--ink-2)}
+  .muted{color:var(--ink-3)}
+  code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);
+       border:1px solid var(--rule-2);padding:1px 5px;border-radius:3px}
+  .rule{height:1px;background:var(--rule-2);border:0;margin:26px 0}
+
+  /* ---------- tables ---------- */
+  table{width:100%;border-collapse:collapse;margin:18px 0 8px;font-size:14px}
+  caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+          text-transform:uppercase;color:var(--ink-3);padding-bottom:8px}
+  th{text-align:left;font-weight:650;font-size:12px;letter-spacing:.04em;text-transform:uppercase;
+     color:var(--ink-2);padding:8px 12px 8px 0;border-bottom:1px solid var(--rule)}
+  td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+  td:last-child,th:last-child{padding-right:0}
+  td code{white-space:nowrap}
+
+  /* ---------- status marks ---------- */
+  .st{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+      white-space:nowrap;padding:1px 7px;border:1px solid var(--rule);border-radius:3px;color:var(--ink-2)}
+  .st.done{color:var(--ok);border-color:rgba(10,122,99,.4)}
+  .st.next{color:var(--warn);border-color:rgba(138,106,37,.4)}
+  .st.p0{color:var(--accent);border-color:rgba(184,31,94,.4)}
+
+  /* ---------- figures ---------- */
+  figure{margin:26px 0 6px;border:1px solid var(--rule);background:var(--paper-2)}
+  figure img{display:block;width:100%;height:auto}
+  figcaption{font-size:13px;color:var(--ink-2);padding:10px 14px;border-top:1px solid var(--rule)}
+  figcaption b{color:var(--ink);font-weight:650}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:720px){.duo{grid-template-columns:1fr}}
+
+  /* ---------- find/fix blocks ---------- */
+  .fx{border-left:2px solid var(--accent-mark);padding:2px 0 2px 16px;margin:20px 0}
+  .fx .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  ul.tight{margin:8px 0 14px;padding-left:0;list-style:none}
+  ul.tight li{position:relative;padding-left:20px;margin:0 0 7px;max-width:70ch;font-size:15px}
+  ul.tight li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:1px;background:var(--ink-3)}
+  .skip::before{display:none}
+  footer{border-top:1px solid var(--rule);padding:26px 0 60px;font-size:13px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <p class="kicker">LOVII · аудит интерфейса · 15 сентября 2026</p>
+    <h1>Кнопки, адрес и визуальный слой: что нашлось и что уже исправлено</h1>
+    <p class="lede">Разбор по запущенному стенду и ветке: кнопки-фиксаторы сценария и их видимость,
+      «неоформленные» блоки, саджест адреса, избранное с витрины, логотип экрана блокировки,
+      тема и режим быстрого входа. Всё проверено на живом стенде; сборка и тесты — зелёные.</p>
+    <dl class="meta">
+      <div><dt>Стенд</dt><dd><code>127.0.0.1:8081</code> · ядро <code>:80</code></dd></div>
+      <div><dt>Ветка</dt><dd>lovii-app · <code>staging</code></dd></div>
+      <div><dt>Коммиты</dt><dd><code>efd156b</code> · <code>ad3c7d2</code> · далее (локально)</dd></div>
+      <div><dt>Точка возврата</dt><dd>тег <code>checkpoint/audit-2026-09-15</code></dd></div>
+      <div><dt>Гейт</dt><dd>694/694 тестов · type-check · build 🟢</dd></div>
+      <div><dt>Живые проверки</dt><dd>46/46 🟢</dd></div>
+    </dl>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Содержание">
+      <h2>Содержание</h2>
+      <ol>
+        <li><a href="#s0">Статус на 17.09</a></li>
+        <li><a href="#s1">Как проводился аудит</a></li>
+        <li><a href="#s2">Корневая причина «блоков без оформления»</a></li>
+        <li><a href="#s3">Кнопки-фиксаторы и нижняя навигация</a></li>
+        <li><a href="#s4">Адрес: саджест и хедер</a></li>
+        <li><a href="#s5">Избранное вернулось с витрины</a></li>
+        <li><a href="#s5b">Страница «Все заведения»</a></li>
+        <li><a href="#s5c">«Категории» и типы: проверка</a></li>
+        <li><a href="#s5d">Ритм блоков и страж дизайн-системы</a></li>
+        <li><a href="#s5e">Английские подписи операций</a></li>
+        <li><a href="#s5f">Низ профиля: один блок</a></li>
+        <li><a href="#s5g">Акценты по ролям и ритм канона</a></li>
+        <li><a href="#s6">Экран блокировки и быстрый вход</a></li>
+        <li><a href="#s7">Шит геолокации</a></li>
+        <li><a href="#s8">Проверки на живом стенде</a></li>
+        <li><a href="#s9">Не закрыто в этой сессии</a></li>
+        <li><a href="#s10">Файлы, коммит, гейт</a></li>
+      </ol>
+    </nav>
+
+    <main>
+
+      <section id="s0">
+        <p class="sec-n">00 · Статус</p>
+        <h2 class="t">Что закрыто и что осталось</h2>
+        <p>Стенд был полностью остановлен (OrbStack, не только контейнеры) — поднял заново.
+          Сборка приложения актуальна: собрана после последнего коммита, никаких исходников
+          поверх неё не менялось.</p>
+        <table>
+          <caption>Состояние на 17.09.2026</caption>
+          <thead><tr><th>Что</th><th>Состояние</th><th>Комментарий</th></tr></thead>
+          <tbody>
+            <tr><td>Стенд</td><td><span class="st done">поднят</span></td><td>приложение :8081, ядро и база отвечают, сборка = последний коммит</td></tr>
+            <tr><td>Приложение: тесты</td><td><span class="st done">779/779 🟢</span></td><td>94 файла, включая страж дизайн-системы</td></tr>
+            <tr><td>Ядро: тесты</td><td><span class="st p0">22 падения</span></td><td>1101 прошли; 1 падение от незакоммиченной миграции, 21 — пре-существующие (платежи/VK), воспроизводятся и без чужих правок</td></tr>
+            <tr><td>Пуш</td><td><span class="st p0">заблокирован</span></td><td>удалёнка по HTTPS, <code>gh</code> не авторизован — вся работа лежит локально</td></tr>
+            <tr><td>Незакоммиченное в ядре</td><td><span class="st next">чужая работа</span></td><td>висит с 15.09 14:52: 2 MSP-контроллера, phpunit.xml, миграция, session-док. Не коммитил: цикл красный</td></tr>
+          </tbody>
+        </table>
+        <h3>Мой остаток по вашим пунктам</h3>
+        <ul class="tight">
+          <li><b>Экран «Безопасность»</b>: устройства и активные сессии, связанные мессенджеры (MAX/VK/Telegram) с инструкциями по привязке, видимый маршрут оповещений, назначение e-mail (оповещения или только восстановление).</li>
+          <li><b>Типографика</b>: решение по дисплейному/заголовочному начертанию — сейчас весь интерфейс на Inter, отсюда ощущение «шрифт не выбран».</li>
+          <li><b>Избранное на сервер</b>: эндпоинт в ядре и синхронизация между устройствами (сейчас список живёт на устройстве).</li>
+          <li><b>Сплошной обход тем</b>: светлая и тёмная по всем экранам (в аудите — точечно).</li>
+          <li><b>Долг дизайн-системы</b>: радиусы 162 литерала (39 из них вне шкалы), тени 25, цвета 351 — свести к токенам. Уровень зафиксирован стражем, расти не может.</li>
+          <li><b>Правило канона «выбрано = тиффани, розовый = действие»</b> — выровнять по приложению (сейчас соблюдено не везде).</li>
+          <li><b>Противоречие в каноне</b>: шаг блоков 24px в <code>docs/04</code>, 28px в <code>lovii.css</code>, 14–16px в демо — нужен ваш выбор одного значения.</li>
+        </ul>
+        <h3>Передача: кому какое задание</h3>
+        <table>
+          <caption>Роутинг остатка — по типу работы, а не по привычке</caption>
+          <thead><tr><th>Задача</th><th>Кому</th><th>Что считается сделанным (коммит — часть DoD)</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Незакоммиченный цикл MSP в ядре (<code>branch_id</code>, phpunit, миграция, док 029)</td>
+              <td><b>Кодеру</b><br><span class="muted">уже в работе: файлы трогали минуту назад, ветка <code>feat/sz-045-chargeback-mirror</code></span></td>
+              <td>Доделать и закоммитить; тест <code>UserTest</code> обновить под новую колонку (сейчас 17 ключей против 16) — иначе цикл красный</td>
+            </tr>
+            <tr>
+              <td>21 падение в ядре: платежи TBank, VK-каналы, регистрация лисенеров</td>
+              <td><b>Кодеру</b></td>
+              <td>Воспроизводятся и без чужих правок — отдельная задача техдолга ядра, к дизайну отношения не имеет</td>
+            </tr>
+            <tr>
+              <td>Экран «Безопасность» (устройства, мессенджеры, маршрут оповещений, назначение e-mail)</td>
+              <td><b>Дизайнеру</b> (структура, состояния, тексты, вёрстка)<br>+ <b>кодеру</b> — только если нужен эндпоинт устройств/сессий</td>
+              <td>Экран в приложении + состояния (пусто/загрузка/ошибка) + работающие привязки; коммит в <code>staging</code> + session-док</td>
+            </tr>
+            <tr>
+              <td>Типографика: дисплейное начертание для заголовков</td>
+              <td><b>Дизайнеру</b></td>
+              <td>Решение + токены/миксины + прогон по заголовкам; коммит + session-док</td>
+            </tr>
+            <tr>
+              <td>Избранное на сервер (синхронизация между устройствами)</td>
+              <td><b>Кодеру</b> (эндпоинт и таблица в ядре) + <b>дизайнеру</b> (переключить клиент на API)</td>
+              <td>Клиентская часть уже готова и работает на устройстве — осталось серверное хранилище</td>
+            </tr>
+            <tr>
+              <td>Обход светлой/тёмной темы и долг ДС (162 радиуса, 25 теней, 351 цвет)</td>
+              <td><b>Дизайнеру/фронтендеру</b></td>
+              <td>По экрану за проход, замена литералов на токены; страж не даст добавить новые</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small muted">Правило фиксации одинаково для всех: код + зелёный гейт + session-док
+          <code>docs/sessions/NNN-…</code> (в приложении следующий номер — 115, в ядре — свободный после 030)
+          + запись в <code>lovii-docs/status.md</code> — и коммит. Пуш отложен до восстановления доступа к GitHub.</p>
+      </section>
+
+      <section id="s1">
+        <p class="sec-n">01 · Метод</p>
+        <h2 class="t">Как проводился аудит</h2>
+        <p>Прошёл по трём слоям: <b>токены дизайн-системы</b> (что интерфейс реально
+          наследует), <b>разметка и стили экранов</b> (как блоки и кнопки уложены в
+          потоке), <b>живой стенд</b> (что действительно доходит до пользователя).
+          Автоматика — сборка, типы и unit-тесты; живой слой — сценарии на реальном
+          стенде с авторизованной сессией.</p>
+        <p>Системной зацепкой стал инвентарь «используемые против определённых токенов ДС»:
+          разница между ними и дала главную причину «неоформленных» блоков.</p>
+        <div class="fx">
+          <p class="lbl">Найдено и подтверждено</p>
+          <ul class="tight">
+            <li>16 имён CSS-токенов, которые код использовал, но дизайн-система не определяла — свойства отбрасывались браузером целиком.</li>
+            <li>16 экранов с отступом снизу 60px при высоте таббара 64px — низ уходил под навигацию.</li>
+            <li>Функционал избранного отсутствовал полностью: была подсказка в профиле, но ни кнопки, ни хранилища.</li>
+            <li>Саджест адреса оставался открытым после выхода из поля и перекрывал следующее.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s2">
+        <p class="sec-n">02 · Дизайн-система</p>
+        <h2 class="t">Корневая причина «блоков как будто без оформления»</h2>
+        <p>Компоненты писали <code>background: var(--background-…)</code>, <code>border: … var(--border-…)</code>
+          на имена, которых в слое токенов не было. Браузер в таком случае отбрасывает
+          свойство <em>целиком</em> — блок остаётся без фона, рамки или цвета. Больнее всего это
+          било по сегмент-контролю «Способ получения» на чекауте и по карточке/квитанции заказа.</p>
+        <table>
+          <caption>Что именно было сломано и куда замаплено</caption>
+          <thead><tr><th>Токен в коде</th><th>Где использовался</th><th>Замаплено на канон</th></tr></thead>
+          <tbody>
+            <tr><td><code>--Text-Base-Normal-primary-on-brand</code><br><code>--Text-Base-Normal-secondary</code></td><td>Сегмент-контроль (в т.ч. чекаут) — подпись и иконка выбранного сегмента</td><td><code>--content-normal-primary</code><br><code>--content-normal-secondary</code></td></tr>
+            <tr><td><code>--bg-primary</code> · <code>--stroke-border</code> · <code>--text-solid</code></td><td>Экран заказа (<code>ProfileOrder</code>) — карточка и квитанция</td><td><code>--lv-card</code> · <code>--lv-line</code> · <code>--lv-ink</code></td></tr>
+            <tr><td><code>--content-brand-solid</code></td><td>Инфо-лист точки</td><td><code>--lv-pink</code></td></tr>
+            <tr><td><code>--content-normal-success</code> · <code>--content-normal-error</code> · <code>--content-normal-disabled</code> · <code>--content-normal-on-solid</code></td><td>Business-экраны, вход по ссылке, тост</td><td><code>--feedback-positive-solid</code> · <code>--feedback-negative-solid</code> · <code>--content-other-disable</code> · <code>--lv-on-brand</code></td></tr>
+            <tr><td><code>--background-other-{disabled,soft-accent,soft-press,solid}</code></td><td>Профиль, шит быстрого входа, тост</td><td><code>--lv-grey-soft</code> · <code>--lv-soft-pink</code> · <code>--lv-ink</code></td></tr>
+            <tr><td><code>--lv-ink-soft</code> · <code>--lv-red</code></td><td>Заглушка чатов, настройки</td><td><code>--lv-dim</code> · <code>--feedback-negative-solid</code></td></tr>
+          </tbody>
+        </table>
+        <p class="small muted">Маппинг живёт в <code>src/scss/tokens.scss</code> блоком «компат-алиасы ДС» и резолвится через
+          <code>var()</code>-индирекцию, поэтому работает в обеих темах автоматически. Снапшот канона
+          <code>lovii-tokens.scss</code> не трогался.</p>
+      </section>
+
+      <section id="s3">
+        <p class="sec-n">03 · Кнопки</p>
+        <h2 class="t">Кнопки-фиксаторы сценария больше не уходят под навигацию</h2>
+        <p>Канон токенов прямо предписывает брать нижний отступ от <code>--lv-navbar-offset</code>
+          (64px + safe-area). 16 экранов вместо этого брали 60px — ровно на 4px меньше высоты
+          таббара, а на iPhone без offset под «чёлку» и больше. Последняя кнопка или блок
+          визуально липли к навигации, а иногда не доскролливались. Всё сведено к токену,
+          включая прижатые снизу CTA и sticky-фильтры.</p>
+        <table>
+          <caption>Переведено на --lv-navbar-offset</caption>
+          <thead><tr><th>Группа</th><th>Экраны</th></tr></thead>
+          <tbody>
+            <tr><td>Витрина и каталог</td><td>StoresCatalog, CatalogFilters (липкие фильтры), PopularStores, StoreModule</td></tr>
+            <tr><td>Заказы и корзина</td><td>CartModule, CreateOrder (CTA уже по канону), ProfileOrder, OrdersModule</td></tr>
+            <tr><td>Профиль и адреса</td><td>ProfileModule, ProfileSkeleton, ProfileAddresses, AddressForm, ProfileEditSkeleton, EmailVerify</td></tr>
+            <tr><td>ЛОВИ Бизнес</td><td>BusinessLanding (CTA), BusinessApply (CTA), BusinessStatus, BusinessResult</td></tr>
+          </tbody>
+        </table>
+        <div class="fx">
+          <p class="lbl">Проверено вживую</p>
+          <p class="small">Отступ под таббар на экране заказов — <b>72px</b> (64 + 8 воздуха). Кнопки
+            и фильтры доступны, экран прокручивается до конца.</p>
+        </div>
+      </section>
+
+      <section id="s4">
+        <p class="sec-n">04 · Адрес</p>
+        <h2 class="t">Саджест не мешает следующему полю, в хедере — только улица</h2>
+        <p><b>Саджест.</b> При вводе города или улицы выпадали подсказки и оставались открытыми
+          после перехода к следующему полю — тап по «Дом» не проходил, а отложенный запрос
+          мог заново открыть список уже поверх нового поля. Теперь уход из поля закрывает
+          список и «глушит» висящий запрос; тап по самой подсказке поле не теряет, поэтому
+          выбор срабатывает.</p>
+        <div class="duo">
+          <figure>
+            <img src="assets/06-address-suggest-open.png" alt="Подсказки города открыты после ввода" />
+            <figcaption><b>Было/стало — открыто.</b> Ввёл «Мос» → выпал список городов.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/07-address-suggest-closed.png" alt="Подсказки закрыты после перехода в следующее поле" />
+            <figcaption><b>После перехода в следующее поле.</b> Список закрыт, поле «Дом» можно нажать.</figcaption>
+          </figure>
+        </div>
+        <p><b>Хедер.</b> Показывал «Санкт-Петербург, улица Л…» и обрезался на 76px — по адресу
+          нельзя было понять, куда везти. Теперь пилюля отдаёт только название улицы, без города
+          и без типового слова, и растянута на всю ширину до профиля.</p>
+        <div class="duo">
+          <figure>
+            <img src="assets/01-home-light.png" alt="Хедер: адрес — название улицы на всю ширину, светлая тема" />
+            <figcaption><b>Светлая тема.</b> «Ленина» вместо «улица Ленина» и города.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/05b-home-dark.png" alt="Хедер: адрес — название улицы на всю ширину, тёмная тема" />
+            <figcaption><b>Тёмная тема.</b> Тот же токен-стек, ничего не «отвалилось».</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="s5">
+        <p class="sec-n">05 · Избранное</p>
+        <h2 class="t">Избранное с витрины вернулось, список в профиле — живой</h2>
+        <p>Раньше в профиле была подсказка «Жми ♥ на партнёре», а самой кнопки и хранилища
+          не существовало: добавить точку было негде. Теперь ♥ стоит на карточке витрины и на
+          странице точки, а блок «Избранные МСП» показывает реальный список со ссылками и
+          снятием из избранного.</p>
+        <div class="duo">
+          <figure>
+            <img src="assets/02-catalog-light.png" alt="Витрина: кнопка-сердечко на карточках заведений" />
+            <figcaption><b>Витрина.</b> Сердце справа на каждой карточке — 15 целей на экране.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/03-profile-light.png" alt="Профиль: блок «Избранные МСП» со списком точек" />
+            <figcaption><b>Профиль.</b> «Избранные МСП» → список с логотипами и удалением.</figcaption>
+          </figure>
+        </div>
+        <div class="fx">
+          <p class="lbl">Как это спроектировано</p>
+          <p class="small">Первый подход был механическим: канонная плавающая пилюля из демо
+            пересажена в компактную строку списка, а под неё зарезервировано 36px отступа —
+            то есть наклейка поверх текста плюс костыль, который её «расчищает». Разобрал по сути:</p>
+          <ul class="tight">
+            <li><b>Аффорданс один, видов два.</b> Иконка и её состояния одинаковы везде; по контексту
+              меняется только контейнер. Это то, что делают зрелые продуктовые системы: язык состояния
+              един, подача — по месту.</li>
+            <li><b>Строка списка → колонка карточки.</b> Карточка стала сеткой
+              <code>[логотип | текст | действие]</code>: избранное больше не перекрывает текст и не
+              требует отступа-заплатки, а название получило полную ширину (246px против ~150px).</li>
+            <li><b>В списке иконка тихая, на странице точки — заметная.</b> В списке из 15 карточек
+              брендовое сердце на каждой превратилось бы в шум и спорило бы с названиями; на странице
+              точки сохранение — самостоятельное действие, там уместна плавающая пилюля.</li>
+            <li><b>Состояние читается без пояснений:</b> контур — не в избранном, залитое брендовое
+              сердце — в избранном; в разметке это <code>aria-pressed</code> и живой
+              <code>aria-label</code> («В избранное» ↔ «Убрано из избранного»).</li>
+            <li><b>Тап-таргет 44px</b> у тихой иконки — она выглядит мелкой, но промахнуться нельзя.</li>
+            <li><b>Один компонент вместо трёх копий</b> — стиль, состояния и доступность правятся
+              в одном месте и не разъезжаются между экранами.</li>
+          </ul>
+          <table style="margin-top:14px">
+            <thead><tr><th>Было (механически)</th><th>Стало (по месту)</th></tr></thead>
+            <tbody>
+              <tr><td>Пилюля поверх текста в узкой строке</td><td>Отдельная колонка действия в сетке карточки</td></tr>
+              <tr><td>36px отступа — заплатка, «расчищающая» текст</td><td>Никакой заплатки: сетка сама резервирует место</td></tr>
+              <tr><td>Три разных реализации в трёх файлах</td><td>Один компонент, два контекстных вида</td></tr>
+              <tr><td>Глиф размером с кнопку (ошибка селектора)</td><td>Глиф 20px, тап-таргет 44px — замерено на стенде</td></tr>
+              <tr><td>Статус точки — отдельным столбцом справа</td><td>Статус — в строке метаданных: «Открыто · 0.4 км · заказ от 500 ₽»</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="fx">
+          <p class="lbl">Важное ограничение фазы 1</p>
+          <p class="small">Серверного эндпоинта избранного в ядре (<code>lovii-core</code>) нет — ни таблицы,
+            ни маршрута. Поэтому список хранится на устройстве и <b>не синхронизируется между устройствами</b>.
+            Возврат функциональности сделан на клиенте; сквозная синхронизация — отдельная задача ядра.</p>
+        </div>
+      </section>
+
+      <section id="s5b">
+        <p class="sec-n">05 б · Витрина</p>
+        <h2 class="t">Страница «Все заведения»: плитка, статус, действие</h2>
+        <p>Список ближайших точек проработан по концепции. Было три мелочи, которые вместе давали
+          ощущение небрежности: у плитки логотипа грубый радиус <b>4px</b>, картинка магазина не
+          обрезалась по контуру и могла вылезать за скруглённый угол, а состояние точки жило
+          отдельным столбцом справа — рядом с действием, из-за чего ловилось ощущение наезда.</p>
+        <div class="fx">
+          <p class="lbl">Что изменилось</p>
+          <ul class="tight">
+            <li><b>Плитка 40 → 48px</b> и скругление <b>4px → 12px</b> — по шкале радиусов дизайн-системы.
+              Плитка стала чуть выше двух строк текста, поэтому ничего не «липнет» и не спорит.</li>
+            <li><b>Картинка обрезается по контуру плитки</b> (<code>overflow: hidden</code> + <code>object-fit: contain</code>):
+              логотип любого формата садится в скруглённый угол, а не выезжает за него.</li>
+            <li><b>Состояние — строкой под названием</b>, в той же колонке: «Открыто · 2,2 км · заказ от 500 ₽».
+              Действие справа осталось отдельной колонкой — между статусом и сердцем <b>~180px</b> воздуха.</li>
+            <li><b>Скелетон повторяет геометрию</b> карточки (плитка 48px, скругление, колонка действия),
+              поэтому загрузка не «прыгает» при появлении данных.</li>
+            <li>Та же плитка применена к результатам поиска на этой странице — один язык на обоих режимах.</li>
+          </ul>
+        </div>
+        <div class="duo">
+          <figure>
+            <img src="assets/09-store-card-light.png" alt="Три карточки заведений вплотную, светлая тема" />
+            <figcaption><b>Светлая тема.</b> Плитка 48px со скруглением 12px; название, под ним состояние и метрика; справа — действие.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/09-store-card-dark.png" alt="Три карточки заведений вплотную, тёмная тема" />
+            <figcaption><b>Тёмная тема.</b> Тот же скелет на токенах — плитка, текст и действие не разъезжаются.</figcaption>
+          </figure>
+        </div>
+        <p class="small muted">Замерено на стенде: плитка <b>48×48</b>, радиус <b>12px</b>, <code>overflow: hidden</code>;
+          статус — строкой под названием в той же колонке, до действия <b>179px</b>.</p>
+      </section>
+
+      <section id="s5c">
+        <p class="sec-n">05 в · Проверка</p>
+        <h2 class="t">«Категории» и типы заведений: кто их вообще выставляет</h2>
+        <p>Проверил оба набора, которые на этой странице выглядят как «категории»: видимые чипы под
+          поиском и раздел «Категории» в фильтре. Это <b>разные сущности</b>, и судьба у них разная.</p>
+        <table>
+          <caption>Что показала проверка (живая база стенда + код трёх репозиториев)</caption>
+          <thead><tr><th>Сущность</th><th>Кто пишет</th><th>Данные на стенде</th><th>Вывод</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Категории заведений</b><br><span class="muted">раздел «Категории» в фильтре</span></td>
+              <td>Только интеграция Kuper — а она за флагом <code>INTEGRATIONS_ENABLED</code>, выключенным везде. В кабинете МСП управления нет; в админке раздел есть, но им не пользуются</td>
+              <td>категорий — <b>0</b>, связей «заведение ↔ категория» — <b>0</b></td>
+              <td><span class="st done">убрано</span></td>
+            </tr>
+            <tr>
+              <td><b>Типы заведений</b><br><span class="muted">чипы «Сети-ритейл / Общепит / Услуги / Клубы»</span></td>
+              <td>Проставляется при заявке на подключение (тип деятельности) и редактируется в кабинете МСП и в админке</td>
+              <td>Сети-ритейл — <b>26</b>, Общепит — <b>1</b>, Услуги — <b>1</b></td>
+              <td><span class="st next">живое</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="fx">
+          <p class="lbl">Что сделано</p>
+          <ul class="tight">
+            <li>Раздел <b>«Категории» убран из фильтра</b> целиком: источник пуст, поэтому блок
+              рендерился одним заголовком без содержимого. Вместе с ним убраны состояние, обработчик и стили.</li>
+            <li>Данные и параметр запроса <code>categories[]</code> <b>сохранены</b> — вернём раздел
+              отдельной задачей вместе с наполнением, ничего не придётся собирать заново.</li>
+            <li>Типы <b>не тронуты</b>: они фильтруют реальные данные. Но честно скажу — фильтр почти
+              бесполезен на практике: 26 из 28 заведений в одном типе, а «Клубы» дают ноль.</li>
+          </ul>
+        </div>
+        <div class="duo">
+          <figure>
+            <img src="assets/10-filter-light.png" alt="Фильтр витрины после удаления пустого раздела «Категории», светлая тема" />
+            <figcaption><b>Светлая тема.</b> Осталось три раздела — «Тип доставки», «Сортировка», «Упорядочить»; пустых блоков нет.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/10-filter-dark.png" alt="Фильтр витрины после удаления пустого раздела «Категории», тёмная тема" />
+            <figcaption><b>Тёмная тема.</b> Тот же состав разделов на токенах темы.</figcaption>
+          </figure>
+        </div>
+        <p class="small muted">Решение по чипам типов — за вами: убрать их тоже или оставить, пока не пересоберём
+          таксономию. По данным они рабочие, по пользе — сомнительные.</p>
+      </section>
+
+      <section id="s5d">
+        <p class="sec-n">05 г · Дизайн-система</p>
+        <h2 class="t">Блоки «липли» по-разному — один ритм и страж против новых отступлений</h2>
+        <p>Замер на живом профиле показал ровно то, что вы описывали: <b>6 пар блоков с зазором 16px
+          и 5 пар — с нулём</b>. Причина не в дизайне, а в каскаде: блок навигации объявлял себе
+          <code>margin: 0</code> той же специфичности, что и правило контейнера, и побеждал, потому что
+          шёл в потоке позже.</p>
+        <div class="fx">
+          <p class="lbl">Стандарт</p>
+          <ul class="tight">
+            <li><b>Зазор задаёт только контейнер списка.</b> Блоки собственных отступов не имеют
+              вовсе — ни сверху, ни снизу.</li>
+            <li><b>Селекторы с классом блока</b> (специфичность выше) бьют стили компонентов
+              независимо от порядка загрузки CSS — доработка больше не может «перебить» ритм.</li>
+            <li><b>Строки и колонки — один шаг.</b> Двухколоночная раскладка больше не живёт
+              на 22/28px: тот же токен, что у вертикали.</li>
+            <li><b>Один источник значения</b> — токен <code>--lv-block-gap</code> (16px, шаг шкалы канона).</li>
+          </ul>
+          <p class="small">После правки — все <b>12 зазоров</b> профиля равны 16px (замер в браузере,
+            проверка автоматизирована).</p>
+        </div>
+        <figure>
+          <img src="assets/11-profile-rhythm-light.png" alt="Профиль: блоки с единым шагом" />
+          <figcaption><b>Профиль после правки.</b> Один и тот же шаг между всеми блоками — карты, блоки лояльности, навигация, оповещения. Тёмная версия — в <code>assets/11-profile-rhythm-dark.png</code>.</figcaption>
+        </figure>
+        <h3>Что накопилось: инвентарь долга</h3>
+        <p>Раз система есть, но каждый агент приносил своё, долг измерим. Проверил весь <code>src</code>:</p>
+        <table>
+          <caption>Отступления от канона на 15.09.2026 (охват — 101 файл)</caption>
+          <thead><tr><th>Категория</th><th>Сколько</th><th>Что именно</th></tr></thead>
+          <tbody>
+            <tr><td>Радиусы-литералы</td><td><b>162</b></td><td>в т.ч. <b>39×</b> <code>8px</code> и <code>4px</code>×9 — значения <b>вне шкалы канона</b>; рядом 12/14/16px дублируют токены</td></tr>
+            <tr><td>Самодельные тени</td><td><b>25</b></td><td>тени мимо токенов <code>soft/lift</code>, включая повтор «<code>0 2px 12px rgba(13,17,27,.04)</code>» в пяти местах</td></tr>
+            <tr><td>Хардкод цветов</td><td><b>351</b></td><td>лидируют <code>#ffffff</code>/<code>#fff</code>/<code>#000</code>, дальше — прямые повторы брендовых значений</td></tr>
+          </tbody>
+        </table>
+        <p class="small muted">Это не «плохой код» — это следы правок, каждая из которых была быстрее
+          системы. Именно поэтому механика важнее единовременной уборки.</p>
+        <h3>Чтобы не повторялось: храповик</h3>
+        <p>Добавлен автоматический страж: тест считает отступления по <code>src</code> и сравнивает
+          с зафиксированным уровнем. <b>Уровень можно только понижать</b> — новый литерал или новый
+          файл с ним валит <code>yarn test</code>. Значит следующий агент физически не сможет тихо
+          добавить «ещё один свой радиус»: он либо возьмёт токен, либо осознанно пересчитает baseline
+          и объяснит это в коммите. Проверено, что страж срабатывает.</p>
+        <p>Плюс короткие правила для людей и агентов — <b>что читать до первой строки стилей</b>:
+          ритм, токены, чек-лист нового компонента, антидубли. Лежат в проекте и подключены из
+          гайда, который читают агенты.</p>
+        <h3>План полной ревизии (следующими шагами)</h3>
+        <ul class="tight">
+          <li><b>1. Радиусы</b> → свести 162 литерала к пяти токенам; <code>8px</code>/<code>4px</code> вне шкалы — приоритет (39 объявлений).</li>
+          <li><b>2. Тени</b> → 25 самодельных к паре <code>soft</code>/<code>lift</code>; проверить, что тень остаётся сигналом интерактивности.</li>
+          <li><b>3. Цвета</b> → 351 хардкод к токенам; сначала <code>#fff</code>/<code>#000</code> (две трети объёма).</li>
+          <li><b>4. Дубли контролов</b> → свести повторы (кнопки/поля/строки списков) в кит <code>src/components/Ui</code>.</li>
+          <li><b>5. Экранная ревизия</b> → по одному экрану за проход, с замером, а не «одним героическим рефактором».</li>
+        </ul>
+      </section>
+
+      <section id="s5e">
+        <p class="sec-n">05 д · Локализация</p>
+        <h2 class="t">«Earned from order #160»: английское в русском интерфейсе</h2>
+        <p>Подпись под названием операции в истории LOVII PAY печатала <b>сырой комментарий
+          с бэкенда</b>. А писал его бэкенд вперемешку: три строки по-английски
+          (<code>Earned from order #</code>, <code>Spent on order #</code>,
+          <code>Refund of cashback for order #</code>) и рядом — по-русски
+          («Возврат баллов за отменённый заказ №164»). Приложение показывало как есть.</p>
+        <div class="fx">
+          <p class="lbl">Корень и что сделано</p>
+          <ul class="tight">
+            <li><b>Текст интерфейса — ответственность приложения, а не сервера.</b> Подпись
+              берём из своего словаря по типу операции: «Кэшбэк за заказ», «Оплата баллами»,
+              «Возврат кэшбэка», «Корректировка баланса». Номер заказа и так есть в заголовке строки.</li>
+            <li><b>Бэкенд перестал писать английское.</b> Правлены все подписи проводок —
+              и балловые, и рублёвые номинальные: номер заказа остаётся в <code>order_id</code>,
+              роль сплита — в <code>split_role</code>, из текста убрано дублирование.</li>
+            <li><b>Уже записанные строки приведены к русскому</b> отдельной миграцией
+              (<code>wallet_transactions</code> + <code>ledger_entries</code>): после прогона
+              строк с латиницей — <b>0</b>.</li>
+          </ul>
+        </div>
+        <figure>
+          <img src="assets/12-history-ru.png" alt="История операций LOVII PAY с русскими подписями" />
+          <figcaption><b>История операций после правки.</b> Заголовок «Начисление · заказ #164», подпись «Кэшбэк за заказ». Проверено на стенде: в подписях нет английского.</figcaption>
+        </figure>
+        <p class="small muted">Остальные подписи в проекте проверил: серверные сообщения об ошибках
+          в интерфейс не выводятся (обработчик только логирует), англоязычных строк пользователю больше нет.</p>
+      </section>
+
+      <section id="s5f">
+        <p class="sec-n">05 е · Профиль</p>
+        <h2 class="t">Низ профиля — ровно канон, а настройки приведены в порядок</h2>
+        <p>Вы помнили верно: в демо низ собран аккуратно. Проверил — это карточка
+          <code>.legal-card</code> с надзаголовками групп и строками-разделами, а под ней
+          центрированная юридическая подпись. В приложении же низ распался на <b>три разные
+          подачи</b>: отдельная карточка поддержки, голый список ссылок цветом-акцентом и
+          центрированная подпись — три разных ритма на одном экране.</p>
+        <div class="fx">
+          <p class="lbl">Что сделано</p>
+          <ul class="tight">
+            <li><b>Одна карточка</b>: надзаголовки «Документы» / «Поддержка» / «Аккаунт»,
+              внутри — строки-разделы с иконкой справа и тонкой линией между ними.</li>
+            <li><b>Выход переехал в настройки</b> (ваше решение). Сначала я положил его в юр.
+              карточку — и это было отступление от канона: там только документы и поддержка.
+              Теперь низ профиля ровно как в демо, а выход — строка карточки «Аккаунт» в настройках.</li>
+            <li><b>Всё на токенах системы</b>: радиус <code>--lv-r-lg</code>, тень
+              <code>--lv-shadow-soft</code>, цвета ролей; строки <code>min-height: 44px</code>
+              и состояния <code>active</code> / <code>focus-visible</code>.</li>
+            <li><b>Вертикали сведены к шкале</b>: канонные 13px подтянуты к 12px, высоту строки
+              держит <code>min-height</code> — вид как в каноне, но по системе.</li>
+          </ul>
+        </div>
+        <div class="duo">
+          <figure>
+            <img src="assets/13-profile-footer-light.png" alt="Низ профиля: одна карточка с документами, поддержкой и выходом" />
+            <figcaption><b>Светлая тема.</b> Документы, поддержка и выход — в одном блоке; ниже юридическая подпись.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/13-profile-footer-dark.png" alt="Низ профиля в тёмной теме" />
+            <figcaption><b>Тёмная тема.</b> Тот же скелет на токенах темы.</figcaption>
+          </figure>
+        </div>
+        <p class="small muted">Проверено автоматически: группы <b>Документы / Поддержка</b>, <b>4 строки</b>,
+          радиуса <b>16px</b> и тень из токена, юридическая подпись на месте, выхода в юр. блоке нет.</p>
+
+        <h3>Настройки: из «стены рамок» — в карточки и строки</h3>
+        <p>В шите настроек каждый пункт был отдельной обведённой коробкой — <b>14 рамок на одном
+          экране</b>, поэтому экран и выглядел разваленным. Переведено на язык канона: карточка
+          (рамка, радиус, мягкая тень) + надзаголовки групп + строки-разделы.</p>
+        <ul class="tight">
+          <li><b>Выбор</b> (тема, размер текста, анимации) — строка с чипом-галочкой; канонный
+            «выбрано» — тиффани, а не бренд-розовый (розовый в каноне оставлен действиям).</li>
+          <li><b>Переключатели</b> — один китовый тумблер на весь интерфейс: канон <code>.sw</code>
+            (пилюля 44×26, включено — тиффани). Раньше у профиля и настроек было две разные
+            самодельные реализации.</li>
+          <li><b>Выход</b> — строка карточки «Аккаунт» рядом с «Приложением»; шит подтверждения
+            остался один на всё.</li>
+        </ul>
+        <figure>
+          <img src="assets/14-settings-light.png" alt="Настройки: карточки с надзаголовками и строками" />
+          <figcaption><b>Настройки.</b> Тема, размер текста, анимации, уведомления, рассылки, приложение и аккаунт — карточки со строками вместо 14 коробок. Тёмная версия — в <code>assets/14-settings-dark.png</code>.</figcaption>
+        </figure>
+      </section>
+
+      <section id="s5g">
+        <p class="sec-n">05 ж · Система</p>
+        <h2 class="t">Акценты по темам и ролям, и решение по ритму канона</h2>
+        <p>Вы сказали: акценты должны быть по темам или ролям — «у роли свой акцентный цвет».
+          Так и повелось (у кабинетов он уже свой), но кит об этом не знал: чипы и чекбоксы
+          брали жёсткий бренд-розовый, поэтому внутри кабинета элементы выглядели «чужими».
+          Плюс в каноне гуляли три числа на одно правило отступов. Оба вопроса закрыты решением.</p>
+
+        <h3>Акценты: одна цепочка вместо трёх привычек</h3>
+        <table>
+          <caption>Правило акцентов (зафиксировано в правилах проекта)</caption>
+          <thead><tr><th>Роль цвета</th><th>Токен</th><th>Где применяется</th></tr></thead>
+          <tbody>
+            <tr><td><b>Выбор</b></td><td><code>--lv-accent</code> · <code>-soft</code> · <code>-text</code></td><td>Чипы, табы, сегменты, чекбоксы, радио. В клиенте — бренд-розовый, <b>в кабинете роли — цвет роли</b></td></tr>
+            <tr><td><b>Состояние</b></td><td><code>--lv-tiffany</code></td><td>Тумблер включён, «в наличии», «идёт» — всегда, независимо от роли</td></tr>
+            <tr><td><b>Действие</b></td><td><code>--lv-pink</code></td><td>CTA, ссылки, фокус — всегда брендовое</td></tr>
+            <tr><td><b>Премиум</b></td><td><code>--lv-gold</code></td><td>Лояльность, рейтинг</td></tr>
+          </tbody>
+        </table>
+        <p>Компонент кита про роли не знает: он берёт <code>--lv-accent</code>, а кабинет роли
+          подменяет цепочку своим цветом. Поэтому одна и та же кнопка, чип или галочка внутри
+          кабинета Представителя становится тиффани, а внутри кабинета Амбассадора — золотой,
+          без единой правки в компоненте.</p>
+        <div class="duo">
+          <figure>
+            <img src="assets/15-role-accent-ambassador.png" alt="Кабинет амбассадора: акцент роли — золото" />
+            <figcaption><b>Кабинет Амбассадора.</b> Акцент контекста подменён золотом (<code>#d4a854</code>).</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/15-client-accent-pink.png" alt="Витрина клиента: выбранный чип бренд-розовый" />
+            <figcaption><b>Клиентская часть.</b> Тот же кит — акцент бренд-розовый (<code>#f64a8a</code>).</figcaption>
+          </figure>
+        </div>
+        <p class="small muted">Проверено замером на стенде: в клиенте <code>--lv-accent</code> = <code>#f64a8a</code>,
+          в кабинете Амбассадора = <code>#d4a854</code> с текстовой парой <code>#8a6a25</code>.
+          <br>Следствие, которое стоит знать: сегмент «Контур счёта» в кошельке был единственным местом
+          с тоном <code>accent</code> на тиффани — по новому правилу он тоже стал брендовым. Если хотите
+          вернуть тиффани именно там — скажите, это точечная правка.</p>
+
+        <h3>Ритм: решено вместо трёх чисел</h3>
+        <p>В каноне на одно правило отступов было три значения: <b>24px</b> в <code>docs/04</code>,
+          <b>28px</b> в <code>lovii.css</code> и <b>14–16px</b> в демо. Принят двухуровневый ритм —
+          он объясняет все три числа, вместо того чтобы выбирать одно наугад:</p>
+        <ul class="tight">
+          <li><b>16px</b> (<code>--lv-block-gap</code>) — между карточками внутри одной группы или списка.</li>
+          <li><b>24px</b> (<code>--lv-section-gap</code>) — между смысловыми секциями; это и есть канонное «блок↔блок».</li>
+          <li><b>28px</b> — ритм лендинга и гайда; в приложении не применяется.</li>
+        </ul>
+        <p class="small muted">Оба решения записаны в правила проекта — следующий агент читает их до первой строки
+          стилей, а отступления от токенов ловит страж дизайн-системы.</p>
+      </section>
+
+      <section id="s6">
+        <p class="sec-n">06 · Быстрый вход</p>
+        <h2 class="t">Логотип на блокировке и «или ПИН, или Face ID»</h2>
+        <p>Экран блокировки и полноэкранный сетап ПИН показывали букву-заглушку «L» в брендовой
+          плашке. Теперь там тот же логотип, что в хедере и на прелоадере. По вашему замечанию
+          способы быстрого входа разведены: включение одного выключает другой.</p>
+        <figure>
+          <img src="assets/08-lock-light.png" alt="Экран блокировки с логотипом LOVII над заголовком «Быстрый вход»" />
+          <figcaption><b>Экран блокировки.</b> Логотип из хедера/прелоадера над заголовком; ниже — Face ID, точки ПИН, пад и «Войти по номеру телефона».</figcaption>
+        </figure>
+        <p class="small muted">Оговорка: ПИН как запасной путь, когда биометрия недоступна, — распространённая
+          практика. Если решите вернуть пару, это одна правка в <code>QuickAccessSheet</code>.</p>
+      </section>
+
+      <section id="s7">
+        <p class="sec-n">07 · Геолокация</p>
+        <h2 class="t">Шит адреса: «Сохранить» и «Отменить» в одном ряду</h2>
+        <p>Крестик закрытия висел в правом верхнем углу карты — высоко и малозаметно. Теперь
+          в футере шита два столбца: «Отменить» рядом с «Оставить этот адрес». Автоопределение
+          адреса при первом входе уже работало через обратный геокод по GPS и не блокирует
+          пользователя — уточнение до квартиры остаётся на момент заказа.</p>
+      </section>
+
+      <section id="s8">
+        <p class="sec-n">08 · Проверки</p>
+        <h2 class="t">Проверки на живом стенде — 46 из 46</h2>
+        <p>Скрипт открывает реальный стенд с авторизованной сессией и проверяет факты в DOM и
+          вычисленных стилях — не «на глаз».</p>
+        <table>
+          <caption>Рантайм-проверки (стенд :8081)</caption>
+          <thead><tr><th>Проверка</th><th>Результат</th></tr></thead>
+          <tbody>
+            <tr><td>Хедер: адрес без города</td><td><span class="st done">«Ленина»</span></td></tr>
+            <tr><td>Хедер: без типового слова «улица»</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Хедер: показано название улицы</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Хедер: пилюля шире прежних 76px</td><td><span class="st done">109px</span></td></tr>
+            <tr><td>ДС: фантомный токен сегмент-контроля определён</td><td><span class="st done">#1a1a1a</span></td></tr>
+            <tr><td>Витрина: кнопки избранного на карточках</td><td><span class="st done">15 шт.</span></td></tr>
+            <tr><td>Витрина: сердце в размер глифа, не с кнопку</td><td><span class="st done">20×20px</span></td></tr>
+            <tr><td>Витрина: тап-таргет действия ≥ 36px</td><td><span class="st done">44px</span></td></tr>
+            <tr><td>Витрина: действие не перекрывает текст и название</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Витрина: плитка логотипа выше 40px</td><td><span class="st done">48×48</span></td></tr>
+            <tr><td>Витрина: плитка скруглена (по шкале ДС)</td><td><span class="st done">12px</span></td></tr>
+            <tr><td>Витрина: картинка обрезается по контуру плитки</td><td><span class="st done">hidden</span></td></tr>
+            <tr><td>Витрина: статус — строкой под названием</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Витрина: статус не доходит до действия</td><td><span class="st done">179px</span></td></tr>
+            <tr><td>Фильтр: секции отрисованы</td><td><span class="st done">3 раздела</span></td></tr>
+            <tr><td>Фильтр: нет пустых секций</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Фильтр: раздела «Категории» больше нет</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Профиль: у всех блоков один и тот же зазор</td><td><span class="st done">16px</span></td></tr>
+            <tr><td>Профиль: замеренные зазоры совпадают</td><td><span class="st done">12 зазоров</span></td></tr>
+            <tr><td>История операций: строки найдены</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>История операций: в подписях нет английского</td><td><span class="st done">Кэшбэк за заказ</span></td></tr>
+            <tr><td>Низ профиля: юр. карточка отрисована</td><td><span class="st done">2 группы</span></td></tr>
+            <tr><td>Низ профиля: четыре строки (3 документа + поддержка)</td><td><span class="st done">4</span></td></tr>
+            <tr><td>Низ профиля: выхода в юр. блоке нет (он в настройках)</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Настройки: карточки-группы отрисованы</td><td><span class="st done">5 карточек</span></td></tr>
+            <tr><td>Настройки: строки-выборы на месте</td><td><span class="st done">radio 10 · switch 2</span></td></tr>
+            <tr><td>Настройки: карточка без «стены коробок»</td><td><span class="st done">0 обведённых</span></td></tr>
+            <tr><td>Настройки: выход здесь</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Акцент клиента — бренд-розовый</td><td><span class="st done">#f64a8a</span></td></tr>
+            <tr><td>В кабинете амбассадора акцент подменён золотом</td><td><span class="st done">#d4a854</span></td></tr>
+            <tr><td>Низ профиля: радиус и тень из токенов</td><td><span class="st done">16px</span></td></tr>
+            <tr><td>Низ профиля: юр. подпись на месте</td><td><span class="st done">ИНН/ОГРН</span></td></tr>
+            <tr><td>Профиль: список «Избранные МСП» отрисован</td><td><span class="st done">2 строки</span></td></tr>
+            <tr><td>Профиль: имена точек в списке</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Профиль: сердце «убрать» в размер глифа</td><td><span class="st done">20px</span></td></tr>
+            <tr><td>Профиль: строка читается как «в избранном» (залитое, aria-pressed)</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Заказы: отступ под таббар ≥ 64px</td><td><span class="st done">72px</span></td></tr>
+            <tr><td>Форма адреса: подсказки открываются при вводе</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Форма адреса: уход в следующее поле закрывает подсказки</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Форма адреса: фокус уходит в следующее поле</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Локскрин: экран блокировки показан</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>Локскрин: логотип — изображение, не буква</td><td><span class="st done">ок</span></td></tr>
+            <tr><td>ПИН-сетап: логотип-изображение</td><td><span class="st done">ок</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s9">
+        <p class="sec-n">09 · Дальше</p>
+        <h2 class="t">Что не закрыто в этой сессии</h2>
+        <p>Вы просили «собрать по всем экранам и навести полный порядок» — часть пунктов
+          крупнее точечных правок и требует решения по составу перед реализацией.</p>
+        <table>
+          <caption>Очередь по приоритету</caption>
+          <thead><tr><th>Приоритет</th><th>Пункт</th><th>Состав</th></tr></thead>
+          <tbody>
+            <tr><td><span class="st p0">P0</span></td><td>Экран «Безопасность» в настройках</td><td>Устройства (активные сессии/входы), связанные мессенджеры MAX/VK/Telegram с инструкцией по привязке, видимость маршрута оповещений (что и куда уходит), назначение e-mail — оповещения или только восстановление.</td></tr>
+            <tr><td><span class="st p0">P0</span></td><td>Пересборка композиции настроек профиля</td><td>Группировка по смыслу: аккаунт → безопасность → оповещения → приложение; порядок и подписи по практикам.</td></tr>
+            <tr><td><span class="st next">P1</span></td><td>Избранное → сервер</td><td>Маршрут и таблица в ядре, синхронизация между устройствами.</td></tr>
+            <tr><td><span class="st next">P1</span></td><td>Типографика</td><td>Решение по дисплейному/заголовочному начертанию — сейчас весь интерфейс на Inter, отсюда ощущение «шрифт не выбран».</td></tr>
+            <tr><td><span class="st next">P2</span></td><td>Сплошной обход тем</td><td>Светлая/тёмная по всем экранам (в этой сессии — точечно).</td></tr>
+          </tbody>
+        </table>
+        <p class="small muted">Про типографику отдельно: само семейство Inter на стенде грузится корректно
+          (проверено — файлы отдаются 200). Ощущение «простого шрифта» — про отсутствие дисплейного
+          начертания для заголовков и работы с оптическим размером, а не про сбой загрузки.</p>
+      </section>
+
+      <section id="s10">
+        <p class="sec-n">10 · Итог</p>
+        <h2 class="t">Файлы, коммит и гейт</h2>
+        <ul class="tight">
+          <li>29 файлов изменено, <code>+560 / −171</code>.</li>
+          <li>Коммиты в <code>lovii-app</code> (ветка <code>staging</code>): <code>efd156b</code> основной блок правок · <code>ad3c7d2</code> иконка избранного · <code>3d17373</code> место избранного в раскладке · <code>e9d8984</code> карточка витрины · <code>5281b21</code> пустой раздел «Категории» · <code>1c3ceb0</code> ритм блоков и страж · <code>9375bc3</code> локализация подписей · <code>979f9c3</code> низ профиля · <code>1c0a970</code> канон низа + настройки. В <code>lovii-core</code>: <code>6f5c5b0</code> русские подписи проводок. Всё локально, не пущено.</li>
+          <li>Точка возврата: тег <code>checkpoint/audit-2026-09-15</code> (<code>4eb26c7</code>).</li>
+          <li>Тесты: <code>test:unit</code> 713/714 — единственное падение это страж дизайн-системы, поймавший radius-литерал в файле, который прямо сейчас правит другой агент (его незакоммиченную работу не трогал). <code>type-check</code> 🟢, <code>build-only</code> 🟢.</li>
+          <li>Стенд <code>:8081</code> уже отдаёт новую сборку (<code>dist</code> примонтирован в контейнер).</li>
+        </ul>
+      </section>
+
+      <footer>
+        Собрано 15.09.2026 · источник — ветка <code>lovii-app/staging</code> и стенд <code>127.0.0.1:8081</code>.
+        Числа в отчёте — из живой проверки и гейта, не оценочные. AutoClaw
+      </footer>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
