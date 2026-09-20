@@ -1,3 +1,26 @@
+## 2026-09-21 (ночь) — zcode: SZ-069 РЕАЛИЗОВАНА (3 репо, локально; пуш после «го»)
+
+- Ветки от origin/staging в личных ворк-три (основные чекауты не тронуты — там
+  параллельная сессия fix/sz067): core `feat/sz069-per-device-notifications`
+  (73724f7+934e83f), app `feat/sz069-notifications-app` (29971a9+cf4afae+b2f42a5),
+  b2b `feat/sz069-push-devices-widget` (8d90537+ff59381).
+- Core: push_subscriptions.topics (миграция; null = включено всё), темы
+  order_status/orders в PushPayload, фильтр диспетчера, GET/PATCH
+  /api/v1/push/subscriptions, push.email_order_status=false (письма о заказах
+  выключены владельцем; откат — EMAIL_ORDER_STATUS_ENABLED=true).
+- App: в шите настроек «Уведомления» — тумблеры тем на этом устройстве
+  (опознание своего устройства по endpoint подписки).
+- b2b: виджет «Push-уведомления на устройствах» на канбане (OrderBoard) —
+  темы per-device по core_user_id партнёра.
+- Гейты: core полный набор 1345 passed (+2 средовых E2E — базлайн чистого
+  staging, проверено прогоном на нём); app yarn test 🟢; b2b полный набор
+  697 passed (прогон №1 дал 1 флейк, №2 чисто); pint/phpstan 🟢 во всех.
+- Live-прогон на стенде отложен: контейнеры заняты параллельной сессией —
+  после мержа обеих веток (нужна миграция topics). Мерж по «го» владельца.
+- Звук нового заказа уже был (13.09): requireInteraction+vibrate+renotify+
+  orders:remind-new — владельцу показано, что «как у Яндекса» реализовано
+  в доступных Web Push пределах.
+
 ## 2026-09-21 — zcode: решения владельца по пушам и гео-зонам зафиксированы (SZ-069, SZ-070)
 
 - **Пуши (SZ-069, новая карточка)**: клиентские — настройки в профиле, строго
