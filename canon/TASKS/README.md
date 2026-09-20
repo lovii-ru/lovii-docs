@@ -75,6 +75,7 @@
 | [`SZ-040`](SZ-040-billing-ledger-pool.md) | Рублёвый ledger и пул 40/40/20 |
 | [`SZ-041`](SZ-041-balances-personal-company.md) | Личные и корпоративные балансы |
 | [`SZ-042`](SZ-042-rep-subscription-gate.md) | Гейт подписки представителя |
+| [`SZ-062`](SZ-062-ds-css-icons-optimization.md) | Оптимизация CSS и иконок demo + сборка полной ДС (постановка чистой сессии; заменяет SPEC-ds-styling-session) |
 
 ## Исторический срез
 
