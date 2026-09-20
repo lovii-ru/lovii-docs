@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Правки по приёмке: «Счёт и операции» и команда точки</title>
+<style>
+  :root{
+    --paper:#faf8f4;--card:#fffefb;--ink:#1c1a19;--ink-2:#575149;--dim:#6f675c;
+    --hair:#e2dbcf;--hair-2:#efe9df;--accent:#c92a6a;--accent-soft:#f8e6ee;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16.5px;line-height:1.58;hyphens:auto;-webkit-hyphens:auto}
+  .wrap{max-width:900px;margin:0 auto;padding:0 28px 96px}
+  .shell{display:grid;grid-template-columns:1fr}
+  .side{display:none}
+  .main{min-width:0}
+  @media (min-width:1200px){
+    .wrap{max-width:1020px}
+    .shell{grid-template-columns:160px minmax(0,1fr);column-gap:72px}
+    .side{display:block;position:sticky;top:44px;align-self:start;padding-top:110px}
+    #inline-toc{display:none}
+  }
+  .prose,p,li{max-width:70ch}
+  figure p,figure li{max-width:none}
+  h1{font-size:clamp(32px,5vw,48px);line-height:1.05;letter-spacing:-.022em;margin:0 0 16px;font-weight:600}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 20px}
+  .cover{padding:96px 0 40px;border-bottom:1px solid var(--ink)}
+  .lede{font-size:19px;line-height:1.45;color:var(--ink-2);margin:0 0 44px;max-width:52ch}
+  .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px 34px;font-size:13px;border-top:1px solid var(--hair);padding-top:20px;margin-top:6px}
+  .meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:0 0 3px}
+  .meta dd{margin:0;font-size:14px}
+  section{padding-top:64px}
+  h2{font-size:26px;line-height:1.14;letter-spacing:-.015em;margin:0 0 10px;font-weight:600}
+  h2 .num{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:8px}
+  h3{font-size:18px;margin:30px 0 8px;font-weight:600}
+  p{margin:0 0 14px}
+  table{border-collapse:collapse;width:100%;margin:18px 0 22px;font-size:14px}
+  caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding-bottom:8px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px 9px 0;border-bottom:1px solid var(--hair-2)}
+  thead th{border-bottom:1px solid var(--ink);font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);font-weight:600}
+  tbody tr:last-child td{border-bottom:1px solid var(--hair)}
+  code{font-family:var(--mono);font-size:12px;background:#f2ece2;padding:1px 4px;border-radius:2px;word-break:break-word}
+  .num-cell{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border:1px solid var(--hair);color:var(--ink-2);white-space:nowrap}
+  .tag-ok{border-color:var(--ink);color:var(--ink)}
+  .tag-warn{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+  figure{margin:26px 0;border:1px solid var(--hair);background:var(--card);padding:14px}
+  figure img{display:block;width:100%;height:auto;border:1px solid var(--hair-2)}
+  figcaption{margin-top:10px;font-size:13px;line-height:1.45;color:var(--ink-2)}
+  figcaption b{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--dim);font-weight:400;display:block;margin-bottom:2px}
+  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:26px 0}
+  .pair figure{margin:0}
+  .verdict{margin:40px 0 0;border:1px solid var(--hair);background:var(--card);padding:24px 26px}
+  .verdict h2{font-size:15px;margin:0 0 14px;font-weight:600}
+  .verdict ul{margin:0;padding-left:20px}
+  .verdict li{margin:6px 0;max-width:74ch}
+  nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+  nav.toc li{counter-increment:t;border-bottom:1px solid var(--hair-2)}
+  nav.toc a{display:flex;gap:14px;padding:9px 0;text-decoration:none;color:var(--ink)}
+  nav.toc a::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:11.5px;color:var(--dim);padding-top:3px}
+  .side nav.toc li{border-bottom:0;border-top:1px solid var(--hair-2)}
+  .side nav.toc li:last-child{border-bottom:1px solid var(--hair-2)}
+  .side-kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:0 0 12px}
+  .colophon{margin-top:72px;border-top:1px solid var(--ink);padding-top:16px;font-size:12.5px;color:var(--ink-2);font-family:var(--mono);max-width:66ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="shell">
+<aside class="side">
+  <p class="side-kicker">Содержание</p>
+  <nav class="toc"><ol>
+    <li><a href="#what"><span>Что сделано</span></a></li>
+    <li><a href="#wallet"><span>«Счёт и операции»</span></a></li>
+    <li><a href="#team"><span>Команда точки</span></a></li>
+    <li><a href="#cabinet"><span>Общая причина в кабинете</span></a></li>
+    <li><a href="#checks"><span>Проверки и цифры</span></a></li>
+    <li><a href="#open"><span>Открытые вопросы</span></a></li>
+  </ol></nav>
+</aside>
+<div class="main">
+
+<header class="cover">
+  <p class="kicker">Правки по приёмке · сессия 109</p>
+  <h1>Чипы, которые читаются чипами, и точка, которую видно</h1>
+  <p class="lede">Четыре отклонения экрана «Счёт и операции», экран команды точки МСП и выбор точки при приглашении. Режим правок — доработка существующего интерфейса, без смены структуры и логики.</p>
+  <dl class="meta">
+    <div><dt>Дата</dt><dd>2026-09-16</dd></div>
+    <div><dt>Репозиторий</dt><dd>lovii-app · <code>staging</code></dd></div>
+    <div><dt>База</dt><dd><code>c6f7366</code></dd></div>
+    <div><dt>Режим</dt><dd>Refinement (доработка)</dd></div>
+    <div><dt>Стенд</dt><dd><code>localhost:8081</code></dd></div>
+    <div><dt>Проверки</dt><dd>94 файла / 777 тестов, type-check, eslint, build, страж ДС</dd></div>
+  </dl>
+</header>
+
+<div class="verdict">
+  <h2>Коротко</h2>
+  <ul>
+    <li><b>О1, О2, О3, О4 закрыты</b> в контуре «Счёт и операции»: точки карусели, сегмент контура, активный и неактивный чипы фильтра. О5 (обрезка подписи адреса) и О6 (пустая левая колонка) — по вашей отмашке О5 не трогали, О6 закрыт липкой колонкой.</li>
+    <li><b>Выбор теперь виден цветом выбора</b>: активное состояние сегментов, чипов и фильтров — tiffany (пара soft-tiffany → tiffany-text, 4.8:1 в светлой и 5.9:1 в тёмной). Бренд-розовый остался действию: знак ₽, ссылки, кнопки.</li>
+    <li><b>«Не видно, где кнопки, а где текст» на экране команды</b> оказалось буквальным: кнопки ролей и филиалов использовали классы, для которых в компоненте не подключены стили, — это были голые <code>&lt;button&gt;</code>. Подключены, плюс у контролов кабинета появился видимый контур.</li>
+    <li><b>Приглашение больше не «куда-то»</b>: в форме появилась точка приглашения с переключением, доступ к филиалам — видимые чипы с состоянием «Все филиалы точки».</li>
+  </ul>
+</div>
+
+<nav class="toc" id="inline-toc"><ol>
+  <li><a href="#what"><span>Что сделано</span></a></li>
+  <li><a href="#wallet"><span>«Счёт и операции»</span></a></li>
+  <li><a href="#team"><span>Команда точки</span></a></li>
+  <li><a href="#cabinet"><span>Общая причина в кабинете</span></a></li>
+  <li><a href="#checks"><span>Проверки и цифры</span></a></li>
+  <li><a href="#open"><span>Открытые вопросы</span></a></li>
+</ol></nav>
+
+<section id="what">
+  <h2><span class="num">01</span>Что сделано</h2>
+  <table>
+    <caption>Пять правок · три файла экранов + один файл стилей кабинета</caption>
+    <thead><tr><th style="width:58px">№</th><th>Что было</th><th>Что стало</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="num-cell">1</td>
+        <td>Точки-индикаторы карусели: неактивная <code>--lv-line</code> — 1.15:1 к фону страницы, активная золотая — 2.03:1. В светлой теме индикатора фактически не было.</td>
+        <td>Неактивная — <code>--lv-line-strong</code> (3.3:1), активная — <code>--lv-gold-text</code> (4.6:1 в светлой, 11:1 в тёмной). Золото карты сохранено.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">2</td>
+        <td>Сегмент контура: активный — белая подложка на белой карточке, трек цвета страницы с почти невидимой рамкой.</td>
+        <td>Новый тон <code>accent</code> у сегмента: трек surface с контуром <code>--lv-line-strong</code>, актив — soft-tiffany с рамкой и текстом tiffany-text. Заодно возвращена тень канона активному сегменту в тоне <code>surface</code>.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">3</td>
+        <td>Активный чип фильтра: <code>--lv-pink-dark</code> на soft-pink — 2.75:1 в тёмной теме, 4.18:1 в светлой.</td>
+        <td>Активный — soft-tiffany + tiffany-text + рамка: 4.8:1 светлая, 7.3:1 тёмная. Пара soft-tiffany → tiffany-text канонная.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">4</td>
+        <td>Неактивный чип: заливка <code>--lv-surface</code> на фоне <code>--lv-bg</code> — 1.02:1, ряд слипался в строку текста.</td>
+        <td>Неактивный — заливка card + рамка <code>--lv-line-strong</code> (3.3:1), отступ между чипами 8px. Ряд читается рядом контролов.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5</td>
+        <td>На 768/1440 левая колонка заканчивалась на сводке счёта: 574px против 1613px у ленты — под сводкой «дыра» в полэкрана.</td>
+        <td>Левая колонка липнет к верху на широких экранах: карта и сводка остаются в кадре, пока читается лента.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="wallet">
+  <h2><span class="num">02</span>«Счёт и операции»</h2>
+  <div class="prose">
+    <p>Правки — в пределах экрана: разметка, порядок блоков, тексты и логика не менялись. Изменились состояния контролов и поведение левой колонки на широком экране.</p>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <img src="assets/before-wallet-chips-crop-light.png" alt="Фильтры направления и периода до правки">
+      <figcaption><b>До · фильтры</b>Активный чип розовый, остальные — пилюли цвета страницы: ряд читается строкой текста.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/after-wallet-chips-390-light.png" alt="Фильтры направления и периода после правки">
+      <figcaption><b>После · фильтры</b>Каждый фильтр — чип с контуром, активный залит акцентом выбора, период — вторая строка той же системы.</figcaption>
+    </figure>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <img src="assets/after-wallet-top-390-light.png" alt="Экран «Счёт и операции» после правки, светлая тема">
+      <figcaption><b>После · 390, светлая</b>Точки под картой видны, сегмент контура читается выбранным состоянием.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/after-wallet-chips-390-dark.png" alt="Фильтры в тёмной теме после правки">
+      <figcaption><b>После · 390, тёмная</b>В тёмной теме активный чип стал читаемым (было 2.75:1).</figcaption>
+    </figure>
+  </div>
+
+  <table>
+    <caption>Замеры контраста до и после (композитинг альфы, как видит браузер)</caption>
+    <thead><tr><th>Элемент</th><th>До</th><th>После</th><th>Порог</th></tr></thead>
+    <tbody>
+      <tr><td>Точка карусели, неактивная</td><td class="num-cell">1.15:1</td><td class="num-cell">3.3:1</td><td class="num-cell">3:1</td></tr>
+      <tr><td>Точка карусели, активная (светлая тема)</td><td class="num-cell">2.03:1</td><td class="num-cell">4.6:1</td><td class="num-cell">3:1</td></tr>
+      <tr><td>Чип фильтра, неактивный</td><td class="num-cell">1.02:1</td><td class="num-cell">3.3:1 рамка</td><td class="num-cell">3:1</td></tr>
+      <tr><td>Чип фильтра, активный, тёмная тема</td><td class="num-cell">2.75:1</td><td class="num-cell">7.3:1</td><td class="num-cell">4.5:1</td></tr>
+      <tr><td>Чип фильтра, активный, светлая тема</td><td class="num-cell">4.18:1</td><td class="num-cell">4.8:1</td><td class="num-cell">4.5:1</td></tr>
+      <tr><td>Сегмент контура, активный</td><td class="num-cell">— (белое на белом)</td><td class="num-cell">4.9:1 / 5.9:1</td><td class="num-cell">4.5:1</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="team">
+  <h2><span class="num">03</span>Команда точки</h2>
+  <div class="prose">
+    <p>Причина «не видно, где кнопки, а где текст» оказалась технической, а не вкусовой: кнопки выбора роли и филиалов использовали классы <code>role-day</code> и <code>role-control</code>, для которых в этом компоненте не подключены стили. В браузере это были <b>голые</b> элементы: прозрачный фон, нулевой радиус, обнулённый паддинг, высота 20px — то есть визуально текст.</p>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <img src="assets/before-team-390-light.png" alt="Экран команды до правки">
+      <figcaption><b>До · 390, светлая</b>«Сотрудник / Администратор» и «На Белы Куна / Пончики» — неотличимы от подписей; поля ввода — дефолтные браузерные.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/after-team-390-light.png" alt="Экран команды после правки">
+      <figcaption><b>После · 390, светлая</b>Роль — сегмент с выбранным состоянием, точка и филиалы — чипы с контуром, поля — системные контролы.</figcaption>
+    </figure>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <img src="assets/after-team-roles-390-light.png" alt="Форма приглашения: роль, точка, филиалы, поля">
+      <figcaption><b>После · форма</b>Роль (сегмент), Точка (выбор из точек), Филиалы доступа (мультивыбор с «Все филиалы точки»), телефон и имя.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/after-team-390-dark.png" alt="Экран команды после правки, тёмная тема">
+      <figcaption><b>После · 390, тёмная</b>Тот же язык: контуры контролов и акцент выбора работают в обеих темах.</figcaption>
+    </figure>
+  </div>
+
+  <h3>Выбор точки приглашения</h3>
+  <div class="prose">
+    <p>Раньше форма молчала, в какую точку уйдёт приглашение: оно уходило в рабочую точку кабинета, а её на этом экране не было видно. Теперь в форме есть поле <b>«Точка»</b>: одна точка — названа прямо, несколько — переключаются на месте, и кабинет перечитывает данные по выбранной (та же рабочая точка, что в «Обзоре»). Поле «Филиалы доступа» стало мультивыбором с чипом «Все филиалы точки», который показывает состояние по умолчанию.</p>
+  </div>
+  <table>
+    <caption>Поведение формы после правки (проверено кликами на стенде)</caption>
+    <thead><tr><th>Действие</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr><td>Открыть форму</td><td>Роль «Сотрудник» выбрана; активная точка отмечена; «Все филиалы точки» нажата; подпись «Ничего не выбрано — доступ ко всем филиалам точки»</td></tr>
+      <tr><td>Отметить филиал</td><td>«Все филиалы точки» снимается, выбранный чип подсвечивается, подпись → «Выбрано 1 — доступ только к отмеченным адресам»</td></tr>
+      <tr><td>Вернуть «Все филиалы точки»</td><td>Отметки снимаются, подпись возвращается к «доступ ко всем филиалам»</td></tr>
+      <tr><td>Переключить точку</td><td>Состав команды на экране перечитывается по новой точке (в проверке: 4 участника → 1)</td></tr>
+      <tr><td>Сменить роль на «Администратор»</td><td>Выбор переходит, подпись меняется на описание прав администратора; право выдавать администратора остаётся только у владельца</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="cabinet">
+  <h2><span class="num">04</span>Общая причина в кабинете</h2>
+  <div class="prose">
+    <p>На экране команды дефект был крайним случаем. У остальных контролов кабинета (чипы, поля, поиск, сегменты) контур брался из токена <code>--lv-line</code> — это цвет разделителя строк: 1.1:1 к карточке. Формально элемент есть, глазом — нет.</p>
+  </div>
+  <div class="prose">
+    <p>Контуры контролов кабинета переведены на <code>--lv-line-strong</code> — токен, который дизайн-система ввела именно для видимых границ контролов (3.3:1 к фону страницы, 4.4:1 к тёмной карточке) и который в сессии 106 уже применили к чекбоксам и радио. Правка сделана в общих миксинах кабинета, поэтому одинаково работает на команде, заказах, товарах и настройках точки.</p>
+  </div>
+  <figure>
+    <img src="assets/after-team-1440-light.png" alt="Экран команды на 1440 после правки">
+    <figcaption><b>После · 1440</b>Широкий экран: та же форма, контролы не растягиваются в «текстовые» полосы — у каждого есть контур и своё состояние.</figcaption>
+  </figure>
+</section>
+
+<section id="checks">
+  <h2><span class="num">05</span>Проверки и цифры</h2>
+  <table>
+    <caption>Гейты репозитория</caption>
+    <thead><tr><th>Проверка</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr><td><code>vitest run</code></td><td>94 файла / 777 тестов — зелёные (было 94 / 777)</td></tr>
+      <tr><td>Страж дизайн-системы</td><td>зелёный: новых радиусов, теней и хардкода цветов не добавлено</td></tr>
+      <tr><td><code>vue-tsc --build</code></td><td>чисто, exit 0</td></tr>
+      <tr><td><code>eslint</code> / <code>oxlint</code></td><td>0 ошибок, 0 предупреждений</td></tr>
+      <tr><td><code>vite build</code></td><td>собран, precache 215 записей</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <caption>Живой стенд: 390 и 1440, светлая и тёмная тема</caption>
+    <thead><tr><th>Показатель</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Ошибки консоли</td><td class="num-cell">0 на всех восьми прогонах</td></tr>
+      <tr><td>Горизонтальное переполнение</td><td class="num-cell">0px</td></tr>
+      <tr><td>Фокус с клавиатуры</td><td>2px <code>#f64a8a</code> на сегментах, чипах, полях и кнопках; у полей — кольцо поля</td></tr>
+      <tr><td>Наложения и обрезки</td><td>последний блок формы команды заканчивается за 4px до нижней навигации — контент не перекрыт</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="open">
+  <h2><span class="num">06</span>Открытые вопросы</h2>
+  <div class="prose">
+    <p>Два места, где я не стал решать за вас — логика продукта, а не вёрстка.</p>
+  </div>
+  <ul class="plain">
+    <li><b>Пустой список филиалов уходит в ядро как «все точки юрлица».</b> Кабинет команды (администратор с одной точкой) отправляет свой список явно, а кабинет МСП — то, что отмечено. Для владельца разницы нет, но если в МСП-кабинет попадёт администратор с урезанным доступом, контракт даст ему больше, чем он видит. Одна строка правки, но это изменение логики — жду вашего решения.</li>
+    <li><b>«Точка» и «Филиалы доступа» — один и тот же список.</b> Сейчас это два разных смысла: контекст приглашения и область доступа. Читаются различимо, но на двух точках выглядят как дубль. Если решите свести в один контрол — сделаю.</li>
+  </ul>
+</section>
+
+<p class="colophon">Правки по приёмке · сессия 109 · 2026-09-16 · lovii-app · режим «доработка» · 5 правок, 4 файла, гейты зелёные</p>
+
+</div>
+</div>
+</div>
+</body>
+</html>

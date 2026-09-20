@@ -1,0 +1,599 @@
+/* ============================================================
+   LOVII UI — СЛОЙ B: КОМПОНЕНТЫ (рукописный исходник)
+   ------------------------------------------------------------
+   Этот файл — источник слоя компонентов. Единый файл для сайтов
+   lovii.css собирается из двух слоёв командой:
+     python3 tools/build-lovii-css.py
+       слой A: tokens/tokens.css   (токены + база + движение)
+       слой B: css/lovii-components.css (этот файл)
+
+   Нормы правок:
+   - имена классов каноничны (docs/09, style-guide.html,
+     examples/08) — переименование = ломает все сайты;
+   - никаких hex-литералов: только var(--lv-*) — страж
+     tools/check-sync.py ловит дрейф;
+   - новый компонент = сюда + docs/09 + живой образец в
+     examples/08 (три места, иначе компонента «нет»).
+
+   Разделы §1–§9 соответствуют docs/09-components.md и
+   библиотеке examples/08-components.html.
+   ============================================================ */
+
+/* ============ Каркас (канон examples) ============ */
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html { scroll-behavior:auto; } }
+/* body задаёт слой A (tokens/tokens.css §4) — здесь не дублируется */
+.view { max-width:var(--lv-container-wide); margin:0 auto; padding:0 16px calc(var(--lv-nav-h) + 32px + env(safe-area-inset-bottom,0px)); }
+.no-scrollbar { scrollbar-width:none; } .no-scrollbar::-webkit-scrollbar { display:none; }
+img.logo-dark-img, img.logo-light-img { display:block; height:28px; width:auto; }
+html[data-theme="light"] img.logo-dark-img { display:none; }
+html[data-theme="dark"] img.logo-light-img { display:none; }
+.ico { fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+section[id] { scroll-margin-top:calc(var(--lv-header-h) + 12px); }
+
+/* Хедер: sticky glass 56px */
+.app-header {
+  position:sticky; top:0; z-index:40; height:var(--lv-header-h);
+  display:flex; align-items:center; gap:12px; padding:0 var(--lv-pad-x);
+  background:var(--lv-glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+}
+.theme-btn {
+  margin-left:auto; width:36px; height:36px; border-radius:var(--lv-r-pill); flex:none;
+  background:var(--lv-surface); display:flex; align-items:center; justify-content:center;
+  color:var(--lv-ink); transition:transform .15s ease, background .2s ease;
+}
+.theme-btn:active { transform:scale(.95); }
+.theme-btn svg { width:16px; height:16px; }
+.theme-btn .tb-sun { display:none; }
+html[data-theme="dark"] .theme-btn .tb-sun { display:block; }
+html[data-theme="dark"] .theme-btn .tb-moon { display:none; }
+.head-pill { font-size:11px; font-weight:700; color:var(--lv-dim); background:var(--lv-surface); border-radius:var(--lv-r-pill); padding:4px 10px; white-space:nowrap; }
+
+/* Hero */
+.hero {
+  margin-top:16px; padding:26px 22px; border-radius:var(--lv-r-lg);
+  background-image:var(--lv-gradient-brand); color:var(--lv-on-brand);
+  box-shadow:var(--lv-shadow-lift); position:relative; overflow:hidden;
+}
+.hero .kicker { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.7); }
+.hero h1 { font-size:26px; font-weight:800; letter-spacing:-.02em; line-height:1.15; margin:8px 0 6px; }
+.hero p { font-size:14px; color:rgba(255,255,255,.72); line-height:1.6; max-width:52ch; }
+.hero .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.hero .chip { font-size:12px; font-weight:600; padding:6px 12px; border-radius:var(--lv-r-pill); background:rgba(255,255,255,.14); color:var(--lv-on-brand); }
+
+/* Якорная лента */
+.anchor-rail { display:flex; gap:8px; overflow-x:auto; padding:14px 0 2px; }
+.anchor-chip {
+  flex:none; display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 14px;
+  border-radius:var(--lv-r-pill); background:var(--lv-card); border:1px solid var(--lv-line);
+  font-size:12px; font-weight:600; color:var(--lv-ink); text-decoration:none;
+  transition:background .15s ease, border-color .15s ease;
+}
+.anchor-chip .ico { width:14px; height:14px; }
+.anchor-chip:hover { background:var(--lv-soft-pink); border-color:transparent; }
+
+/* Секции и панели */
+.section { margin-top:28px; }
+.section-title { font-size:20px; font-weight:800; letter-spacing:-.02em; }
+.section-sub { font-size:13px; color:var(--lv-dim); line-height:1.6; margin:4px 0 14px; }
+.section-sub code { font-family:ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size:12px; color:var(--lv-pink-dark); background:var(--lv-soft-pink); border-radius:6px; padding:1px 6px; }
+.panel {
+  background:var(--lv-card); border:1px solid var(--lv-line); border-radius:var(--lv-r-lg);
+  box-shadow:var(--lv-shadow-soft); padding:16px;
+}
+.panel + .panel { margin-top:12px; }
+.panel h3 { font-size:14px; font-weight:700; letter-spacing:-.01em; }
+.spec {
+  margin-top:12px; padding-top:10px; border-top:1px solid var(--lv-line-2);
+  font-family:ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size:10.5px; line-height:1.6; color:var(--lv-dim);
+}
+.spec b { color:var(--lv-ink); font-weight:700; }
+.demo-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.demo-row + .demo-row { margin-top:12px; }
+.demo-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; }
+@media (max-width:560px){ .demo-grid { grid-template-columns:1fr 1fr; } }
+
+/* ============ §1 Кнопки (канон docs/09 §2) ============ */
+.btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:0; align-items:center; }
+.btn-row + .btn-row { margin-top:12px; }
+.cta-btn { height:36px; padding:0 16px; border-radius:var(--lv-r-pill); color:var(--lv-on-brand); font-size:12px; font-weight:700; transition:all .2s; display:inline-flex; align-items:center; justify-content:center; gap:6px; background-image:var(--lv-gradient-brand); }
+.cta-btn:hover { box-shadow:var(--lv-shadow-lift); }
+.cta-btn:active { transform:scale(.95); }
+.cta-btn.big { height:48px; font-size:14px; padding:0 24px; }
+.cta-btn.sm { height:32px; padding:0 12px; font-size:12px; }
+.cta-btn .ico { width:16px; height:16px; }
+.cta-btn.plain { background-image:none; background:var(--lv-surface); color:var(--lv-ink); }
+.cta-btn.disabled { opacity:.5; pointer-events:none; }
+.cta-btn.loading { opacity:.7; pointer-events:none; }
+.cta-btn .spinner { width:14px; height:14px; border-radius:var(--lv-r-pill); border:2px solid rgba(255,255,255,.4); border-top-color:var(--lv-on-brand); animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.ghost-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; height:40px; padding:0 16px; border-radius:var(--lv-r-pill); border:1.5px solid var(--lv-line); background:var(--lv-card); font-size:13px; font-weight:700; color:var(--lv-ink); transition:all .2s; }
+.ghost-btn:hover { border-color:var(--lv-pink); color:var(--lv-pink-dark); }
+.ghost-btn.sm { height:32px; padding:0 12px; font-size:12px; }
+.ghost-btn .ico { width:16px; height:16px; }
+.link-btn { display:inline-flex; align-items:center; gap:2px; font-size:13px; font-weight:600; color:var(--lv-pink-dark); transition:gap .2s; cursor:pointer; }
+.link-btn:hover { gap:6px; }
+.link-btn .ico { width:16px; height:16px; }
+.pill-btn { display:flex; align-items:center; gap:6px; height:36px; padding:0 10px; border-radius:var(--lv-r-pill); background:var(--lv-surface); font-size:14px; font-weight:500; color:var(--lv-ink); transition:background .2s; }
+.pill-btn:hover { background:var(--lv-soft-pink); }
+.pill-btn .ico { width:16px; height:16px; color:var(--lv-pink); flex-shrink:0; }
+.icon-btn { position:relative; display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:var(--lv-r-pill); background:var(--lv-surface); color:var(--lv-ink); transition:background .2s; }
+.icon-btn:hover { background:var(--lv-soft-pink); }
+.icon-btn:active { transform:scale(.95); }
+.icon-btn .ico { width:18px; height:18px; }
+.count-badge {
+  position:absolute; top:-3px; right:-3px; min-width:17px; height:17px; padding:0 4px;
+  border-radius:var(--lv-r-pill); background-image:var(--lv-gradient-brand); color:var(--lv-on-brand);
+  font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  font-variant-numeric:tabular-nums; border:2px solid var(--lv-card);
+}
+
+/* ============ §2 Чипы, статусы, бейджи (канон docs/09 §3) ============ */
+.pill-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.pill-row + .pill-row { margin-top:12px; }
+.stat-pill { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 12px; border-radius:var(--lv-r-pill); font-size:12px; font-weight:600; }
+.stat-pill.pink { background:var(--lv-soft-pink); color:var(--lv-pink-dark); }
+.stat-pill.tiffany { background:var(--lv-soft-tiffany); color:var(--lv-tiffany-text); }
+.stat-pill.gold { background:var(--lv-soft-gold); color:var(--lv-gold-text); }
+.stat-pill.grey { background:var(--lv-grey-soft); color:#999; }
+.badge-pill { display:inline-flex; align-items:center; height:20px; padding:0 8px; border-radius:var(--lv-r-pill); font-size:10px; font-weight:700; }
+.badge-hit { background:var(--lv-badge-hit); color:var(--lv-pink-dark); }
+.badge-new { background:var(--lv-badge-new); color:var(--lv-tiffany-text); }
+.badge-sale { background:var(--lv-badge-sale); color:var(--lv-gold-text); }
+.badge-eco { background:var(--lv-green-soft); color:var(--lv-green-text); }
+.status-pill { display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 10px; border-radius:var(--lv-r-pill); font-size:11px; font-weight:700; }
+.st-chip { display:inline-flex; align-items:center; gap:5px; height:22px; padding:0 9px; border-radius:var(--lv-r-pill); font-size:10.5px; font-weight:700; }
+.walk-pill { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 8px; border-radius:var(--lv-r-pill); background:var(--lv-soft-tiffany); color:var(--lv-tiffany-text); font-size:11px; font-weight:600; }
+.walk-pill .ico { width:13px; height:13px; }
+.open-pill { display:inline-flex; align-items:center; gap:4px; height:20px; padding:0 8px; border-radius:var(--lv-r-pill); font-size:10px; font-weight:700; }
+.open-pill .dot { width:6px; height:6px; border-radius:var(--lv-r-pill); }
+.open-pill.on { background:var(--lv-badge-new); color:var(--lv-tiffany-text); }
+.open-pill.on .dot { background:var(--lv-tiffany); }
+.open-pill.off { background:var(--lv-grey-soft); color:#999; }
+.open-pill.off .dot { background:#bbb; }
+.filter-chip {
+  display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px;
+  border-radius:var(--lv-r-pill); border:1px solid var(--lv-line); background:var(--lv-card);
+  font-size:12px; font-weight:600; color:var(--lv-ink); cursor:pointer;
+  transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.filter-chip .ico { width:14px; height:14px; }
+.filter-chip:hover { background:var(--lv-surface); }
+.filter-chip.active { background-image:var(--lv-gradient-brand); color:var(--lv-on-brand); border-color:transparent; }
+.filter-chip:focus-visible { outline:2px solid var(--lv-pink); outline-offset:2px; }
+
+/* ============ §3 Поля и контролы (канон docs/07 §5) ============ */
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:640px){ .form-grid { grid-template-columns:1fr; } }
+.f-field { display:block; }
+.f-field .lb { display:block; margin-bottom:6px; font-size:12px; font-weight:700; color:var(--lv-ink); }
+.f-field input, .f-field textarea, .f-field select { width:100%; border:1.5px solid var(--lv-line); border-radius:var(--lv-r-md); padding:12px 14px; font:inherit; font-size:14px; background:var(--lv-card); color:var(--lv-ink); outline:none; transition:border-color .2s, box-shadow .2s; }
+.f-field input:focus, .f-field textarea:focus, .f-field select:focus { border-color:var(--lv-pink); box-shadow:var(--lv-ring-field); }
+.f-field textarea { min-height:84px; resize:vertical; }
+.f-field .err { display:none; margin-top:6px; font-size:11px; font-weight:600; color:var(--lv-pink-dark); }
+.f-field.error input { border-color:var(--lv-pink); box-shadow:var(--lv-ring-field); }
+.f-field.error .err { display:block; }
+.search-bar { display:flex; align-items:center; gap:8px; height:44px; padding:0 16px; border-radius:var(--lv-r-pill); background:var(--lv-surface); transition:all .2s; }
+.search-bar:focus-within { background:var(--lv-card); box-shadow:var(--lv-ring-search); }
+.search-bar .ico { width:16px; height:16px; color:var(--lv-dim); flex-shrink:0; }
+.search-bar input { flex:1; border:0; outline:none; background:none; font-size:14px; color:var(--lv-ink); min-width:0; }
+.search-bar input::placeholder { color:var(--lv-dim); }
+.check-row { display:flex; align-items:center; gap:10px; cursor:pointer; font-size:13px; font-weight:600; color:var(--lv-ink); }
+.check-row input { position:absolute; opacity:0; width:0; height:0; }
+.cbx { flex:none; width:20px; height:20px; border-radius:6px; border:1.5px solid var(--lv-line); background:var(--lv-card); display:flex; align-items:center; justify-content:center; transition:all .15s ease; }
+.cbx .ico { width:12px; height:12px; stroke-width:3; color:var(--lv-on-brand); opacity:0; transform:scale(.5); transition:all .15s ease; }
+.check-row input:checked + .cbx { background-image:var(--lv-gradient-brand); border-color:transparent; }
+.check-row input:checked + .cbx .ico { opacity:1; transform:scale(1); }
+.check-row input:focus-visible + .cbx { outline:2px solid var(--lv-pink); outline-offset:2px; }
+.switch-row { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:13px; font-weight:600; color:var(--lv-ink); }
+.switch { position:relative; flex:none; width:42px; height:24px; border-radius:var(--lv-r-pill); background:var(--lv-grey-soft); transition:background .2s ease; cursor:pointer; }
+.switch input { position:absolute; opacity:0; width:0; height:0; }
+.switch .knob { position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:var(--lv-r-pill); background:var(--lv-card); box-shadow:var(--lv-shadow-float); transition:transform .2s ease; }
+.switch input:checked ~ .knob { transform:translateX(18px); }
+.switch:has(input:checked) { background-image:var(--lv-gradient-brand); }
+.switch input:focus-visible ~ .knob { outline:2px solid var(--lv-pink); outline-offset:2px; }
+.seg { display:inline-flex; gap:2px; padding:3px; border-radius:var(--lv-r-pill); background:var(--lv-surface); }
+.seg button { height:30px; padding:0 14px; border-radius:var(--lv-r-pill); border:0; background:none; font-size:12px; font-weight:700; color:var(--lv-dim); cursor:pointer; transition:all .15s ease; font-family:inherit; }
+.seg button.active { background:var(--lv-card); color:var(--lv-ink); box-shadow:var(--lv-shadow-float); }
+.seg button:focus-visible { outline:2px solid var(--lv-pink); outline-offset:1px; }
+.stepper { display:inline-flex; align-items:center; gap:2px; height:36px; padding:0 4px; border-radius:var(--lv-r-pill); background:var(--lv-surface); }
+.stepper button { width:28px; height:28px; border-radius:var(--lv-r-pill); border:0; background:none; color:var(--lv-ink); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s ease; font-family:inherit; }
+.stepper button:hover { background:var(--lv-soft-pink); }
+.stepper button:active { transform:scale(.92); }
+.stepper button .ico { width:14px; height:14px; }
+.stepper .val { min-width:28px; text-align:center; font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; }
+
+/* ============ §4 Карточки (канон docs/09 §4) ============ */
+.btn-card { display:block; width:100%; text-align:left; background:var(--lv-card); border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); box-shadow:var(--lv-shadow-soft); overflow:hidden; transition:transform .2s, box-shadow .2s; padding:0; cursor:pointer; color:var(--lv-ink); font-family:inherit; }
+.btn-card:hover { transform:translateY(-2px); box-shadow:var(--lv-shadow-lift); }
+.btn-card:active { transform:scale(.97); }
+.cover { height:80px; display:flex; align-items:center; justify-content:center; position:relative; }
+.cover .em { width:38px; height:38px; color:var(--lv-on-tile); transition:transform .2s; }
+.btn-card:hover .em { transform:scale(1.1); }
+.cover.tile-pink { background:var(--lv-tile-pink); }
+.cover.tile-tiffany { background:var(--lv-tile-tiffany); }
+.cover.tile-gold { background:var(--lv-tile-gold); }
+.cover.tile-sand { background:var(--lv-tile-sand); }
+.cover.tile-ink { background:var(--lv-tile-ink); }
+.card-body { padding:12px; }
+.card-name { font-size:14px; font-weight:700; letter-spacing:-.01em; }
+.card-sub { font-size:12px; color:var(--lv-dim); margin-top:2px; }
+.card-foot { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
+.rating { display:flex; align-items:center; gap:3px; font-size:12px; font-weight:700; color:var(--lv-gold); }
+.star-ico { display:inline-block; width:12px; height:12px; fill:var(--lv-gold); flex:none; }
+.price { font-size:16px; font-weight:800; font-variant-numeric:tabular-nums; }
+.price-old { font-size:12px; color:var(--lv-dim); text-decoration:line-through; font-variant-numeric:tabular-nums; }
+.quick-btn { width:36px; height:36px; border-radius:var(--lv-r-pill); border:0; background-image:var(--lv-gradient-brand); color:var(--lv-on-brand); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; flex:none; }
+.quick-btn:hover { box-shadow:var(--lv-shadow-lift); }
+.quick-btn:active { transform:scale(.95); }
+.quick-btn .ico { width:16px; height:16px; }
+.promo-card { border-radius:var(--lv-r-lg); padding:16px; transition:transform .2s, box-shadow .2s; }
+.promo-card:hover { transform:translateY(-2px); box-shadow:var(--lv-shadow-lift); }
+.promo-card.tone-pink { background:var(--lv-soft-pink); }
+.promo-card.tone-gold { background:var(--lv-sand-soft); }
+.promo-mini { display:inline-flex; align-items:center; gap:6px; height:20px; padding:0 8px; border-radius:var(--lv-r-pill); background:rgba(255,255,255,.8); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--lv-pink-dark); }
+.promo-title { margin-top:8px; font-size:16px; font-weight:800; line-height:1.3; }
+.promo-desc { font-size:12px; color:var(--lv-dim); margin-top:2px; }
+.kpi { border-radius:var(--lv-r-lg); padding:12px 14px; min-width:0; background:var(--lv-card); border:1px solid var(--lv-line); box-shadow:var(--lv-shadow-soft); }
+.kpi.accent { background-image:linear-gradient(150deg, var(--lv-kpi-soft), var(--lv-card)); border-color:rgba(246, 74, 138, .25); }
+.kpi .l { font-size:10.5px; font-weight:700; color:var(--lv-dim); text-transform:uppercase; letter-spacing:.04em; }
+.kpi .v { margin-top:5px; font-size:19px; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.kpi .d { margin-top:5px; display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; }
+.delta-up { color:var(--lv-tiffany-text); }
+.delta-down { color:var(--lv-pink-dark); }
+
+/* ============ §5 Списки и строки ============ */
+.list-card { background:var(--lv-card); border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); box-shadow:var(--lv-shadow-soft); padding:4px 0; }
+.row { display:flex; align-items:center; gap:12px; padding:11px 14px; border-bottom:1px solid var(--lv-line-2); cursor:pointer; background:none; border-left:0; border-right:0; border-top:0; width:100%; text-align:left; font-family:inherit; color:var(--lv-ink); transition:background .15s ease; }
+.row:last-child { border-bottom:0; }
+.row:hover { background:var(--lv-surface); }
+.row-icon { flex:none; width:36px; height:36px; border-radius:var(--lv-r-sm); background:var(--lv-soft-pink); color:var(--lv-pink-dark); display:flex; align-items:center; justify-content:center; }
+.row-icon.tiffany { background:var(--lv-soft-tiffany); color:var(--lv-tiffany-text); }
+.row-icon.gold { background:var(--lv-soft-gold); color:var(--lv-gold-text); }
+.row-icon .ico { width:17px; height:17px; }
+.row-main { flex:1; min-width:0; }
+.row-title { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.row-sub { font-size:12px; color:var(--lv-dim); margin-top:1px; }
+.row .chev { flex:none; width:16px; height:16px; color:var(--lv-dim); }
+.row.danger .row-title, .row.danger .row-icon { color:var(--lv-pink-dark); }
+.row.danger .row-icon { background:var(--lv-soft-pink); }
+.district-row { display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 16px; border-radius:var(--lv-r-lg); border:1px solid var(--lv-line); transition:all .2s; text-align:left; width:100%; color:var(--lv-ink); background:var(--lv-card); cursor:pointer; font-family:inherit; }
+.district-row:hover { border-color:var(--lv-pink); }
+.district-row.active { border-color:var(--lv-pink); background:var(--lv-soft-pink); }
+.district-row .nm { display:block; font-size:14px; font-weight:600; }
+.district-row .mt { display:block; font-size:12px; color:var(--lv-dim); }
+.divider-demo { display:flex; flex-direction:column; gap:14px; }
+.divider-demo .cap { font-family:ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size:10.5px; color:var(--lv-dim); }
+.hr-2 { height:1px; background:var(--lv-line-2); }
+.hr-hair { height:1px; background:var(--lv-hairline); }
+
+/* ============ §6 Навигация ============ */
+.nav-demo { border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); background:var(--lv-card); overflow:hidden; max-width:480px; }
+.app-nav-in { display:grid; grid-template-columns:repeat(5, 1fr); height:64px; }
+.nav-btn { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:11px; font-weight:500; color:var(--lv-dim); transition:color .2s; font-family:inherit; border:0; background:none; cursor:pointer; }
+.nav-btn.active { color:var(--lv-pink); font-weight:700; }
+.nav-btn .top-ind { position:absolute; top:0; width:32px; height:2px; border-radius:var(--lv-r-pill); background:var(--lv-pink); display:none; }
+.nav-btn.active .top-ind { display:block; }
+.nav-btn:active { transform:scale(.95); }
+.nav-ico { display:flex; }
+.nav-ico .ico { width:22px; height:22px; }
+.subheader-demo { display:flex; align-items:center; gap:10px; height:48px; padding:0 12px; border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); background:var(--lv-card); max-width:480px; }
+.subheader-demo .back { flex:none; width:32px; height:32px; border-radius:var(--lv-r-pill); background:var(--lv-surface); display:flex; align-items:center; justify-content:center; color:var(--lv-ink); border:0; cursor:pointer; transition:background .15s ease; font-family:inherit; }
+.subheader-demo .back:hover { background:var(--lv-soft-pink); }
+.subheader-demo .back .ico { width:16px; height:16px; }
+.subheader-demo .t { font-size:15px; font-weight:700; }
+.tabs { display:flex; gap:2px; border-bottom:1px solid var(--lv-line-2); max-width:480px; }
+.tabs button { flex:1; height:40px; padding:0 8px; border:0; background:none; font-size:13px; font-weight:600; color:var(--lv-dim); cursor:pointer; position:relative; transition:color .15s ease; font-family:inherit; }
+.tabs button.active { color:var(--lv-pink-dark); font-weight:700; }
+.tabs button.active::after { content:''; position:absolute; left:50%; transform:translateX(-50%); bottom:-1px; width:32px; height:2px; border-radius:var(--lv-r-pill); background:var(--lv-pink); }
+.tabs button:focus-visible { outline:2px solid var(--lv-pink); outline-offset:-2px; border-radius:10px; }
+
+/* ============ §7 Обратная связь ============ */
+.toast-wrap { position:fixed; left:0; right:0; bottom:84px; z-index:60; display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; padding:0 16px; }
+.toast { max-width:100%; background:var(--lv-ink); color:var(--lv-card); border-radius:var(--lv-r-lg); padding:10px 16px; font-size:13px; font-weight:600; box-shadow:var(--lv-shadow-toast); animation:lv-toast-in .25s ease-out; }
+.toast .d { font-size:11px; color:var(--lv-toast-d); font-weight:400; margin-top:2px; }
+@keyframes lv-toast-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.toast.hide { opacity:0; transform:translateY(8px); transition:all .25s; }
+.sheet-overlay { position:fixed; inset:0; z-index:50; background:rgba(26, 26, 26, .4); opacity:0; pointer-events:none; transition:opacity .25s; }
+.sheet-overlay.open { opacity:1; pointer-events:auto; }
+.sheet { position:fixed; left:0; right:0; bottom:0; z-index:51; background:var(--lv-card); border-radius:var(--lv-r-xl) var(--lv-r-xl) 0 0; max-height:72dvh; display:flex; flex-direction:column; transform:translateY(100%); visibility:hidden; transition:transform .3s cubic-bezier(.32, .72, 0, 1), visibility .3s; max-width:var(--lv-container); margin:0 auto; }
+.sheet.open { transform:translateY(0); visibility:visible; }
+.sheet-head { padding:20px 16px 8px; }
+.sheet-head h3 { margin:0; font-size:18px; font-weight:800; }
+.sheet-head p { margin:4px 0 0; font-size:14px; color:var(--lv-dim); }
+.sheet-body { padding:0 16px 24px; overflow-y:auto; display:grid; gap:8px; }
+.skeleton-card { border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); padding:12px; display:flex; gap:12px; align-items:center; }
+.sk { background:var(--lv-grey-soft); border-radius:8px; position:relative; overflow:hidden; }
+.sk::after { content:''; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent); animation:shimmer 1.4s infinite; }
+@keyframes shimmer { to { transform:translateX(100%); } }
+.sk-ava { width:44px; height:44px; border-radius:var(--lv-r-pill); flex:none; }
+.sk-l1 { height:12px; width:70%; }
+.sk-l2 { height:10px; width:45%; margin-top:8px; }
+.empty-state { display:flex; flex-direction:column; align-items:center; text-align:center; padding:28px 16px; }
+.empty-state .ico { width:44px; height:44px; color:var(--lv-dim); stroke-width:1.6; }
+.empty-state h4 { margin-top:12px; font-size:16px; font-weight:800; }
+.empty-state p { margin-top:4px; font-size:13px; color:var(--lv-dim); line-height:1.55; max-width:34ch; }
+.empty-state .cta-btn { margin-top:14px; }
+.progress-wrap { max-width:360px; }
+.progress-track { height:6px; border-radius:var(--lv-r-pill); background:var(--lv-grey-soft); overflow:hidden; }
+.progress-fill { height:100%; width:64%; border-radius:var(--lv-r-pill); background-image:var(--lv-gradient-brand); transition:width .3s ease; }
+.progress-meta { display:flex; justify-content:space-between; margin-top:6px; font-size:11px; font-weight:600; color:var(--lv-dim); font-variant-numeric:tabular-nums; }
+.spinner-lg { width:20px; height:20px; border-radius:var(--lv-r-pill); border:2px solid var(--lv-soft-pink); border-top-color:var(--lv-pink); animation:spin .8s linear infinite; }
+
+/* ============ §8 Контентные блоки ============ */
+.section-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.section-head .t { font-size:16px; font-weight:800; letter-spacing:-.01em; }
+.tiles-row { display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
+@media (max-width:560px){ .tiles-row { grid-template-columns:repeat(3, 1fr); } }
+.tile { border-radius:var(--lv-r-sm); padding:12px 8px; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; border:0; font-family:inherit; color:var(--lv-on-tile); transition:transform .15s ease; }
+.tile:active { transform:scale(.96); }
+.tile .ico { width:26px; height:26px; color:var(--lv-on-tile); }
+.tile .nm { font-size:11px; font-weight:600; }
+.tile-pink { background:var(--lv-tile-pink); }
+.tile-tiffany { background:var(--lv-tile-tiffany); }
+.tile-gold { background:var(--lv-tile-gold); }
+.tile-sand { background:var(--lv-tile-sand); }
+.tile-ink { background:var(--lv-tile-ink); }
+.glass-demo { border-radius:var(--lv-r-xl); padding:20px; color:var(--lv-on-brand); background-image:var(--lv-gradient-ink); position:relative; overflow:hidden; }
+.glass-demo .kicker { font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.6); }
+.glass-demo .big { margin-top:6px; font-size:18px; font-weight:800; }
+.glass-demo .big .g { color:var(--lv-gold); }
+.glass-chip { display:inline-flex; align-items:center; gap:4px; height:28px; padding:0 12px; border-radius:var(--lv-r-pill); background:rgba(255,255,255,.1); font-size:12px; font-weight:600; color:var(--lv-on-brand); }
+.glass-chip .g { color:var(--lv-gold); }
+.glass-chip .t { color:var(--lv-tiffany); }
+.stars-row { display:flex; align-items:center; gap:3px; }
+.stars-row .star-ico { width:16px; height:16px; }
+.stars-row .off { fill:var(--lv-grey-soft); }
+.stars-meta { margin-left:8px; font-size:12px; font-weight:600; color:var(--lv-dim); }
+.avatar-row { display:flex; align-items:center; gap:12px; }
+.avatar { flex:none; width:40px; height:40px; border-radius:var(--lv-r-pill); background:var(--lv-soft-pink); color:var(--lv-pink-dark); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; letter-spacing:.02em; }
+.avatar.tiffany { background:var(--lv-soft-tiffany); color:var(--lv-tiffany-text); }
+.avatar.gold { background:var(--lv-soft-gold); color:var(--lv-gold-text); }
+.avatar .ico { width:18px; height:18px; }
+.timeline { position:relative; padding-left:22px; display:grid; gap:16px; }
+.timeline::before { content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:var(--lv-hairline); }
+.milestone { position:relative; }
+.milestone .pt { position:absolute; left:-22px; top:3px; width:11px; height:11px; border-radius:var(--lv-r-pill); background:var(--lv-dim); border:2px solid var(--lv-card); }
+.milestone.done .pt { background:var(--lv-tiffany); }
+.milestone.now .pt { background:var(--lv-pink); animation:lv-pulse-dot 1.4s ease-in-out infinite; }
+.milestone .t { font-size:13px; font-weight:700; }
+.milestone.now .t { color:var(--lv-pink-dark); }
+.milestone .s { font-size:12px; color:var(--lv-dim); margin-top:1px; }
+.promo-code { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-radius:var(--lv-r-lg); border:1.5px dashed var(--lv-line); background:var(--lv-card); max-width:360px; }
+.promo-code .code { font-size:20px; font-weight:800; letter-spacing:.06em; background-image:var(--lv-gradient-brand); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.copy-mini { flex:none; width:36px; height:36px; border-radius:var(--lv-r-pill); border:0; background:var(--lv-surface); color:var(--lv-pink-dark); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s ease; font-family:inherit; }
+.copy-mini:hover { background:var(--lv-soft-pink); }
+.copy-mini .ico { width:16px; height:16px; }
+.legal { border-top:1px solid var(--lv-hairline); padding-top:12px; margin-top:14px; font-size:12px; line-height:1.7; color:var(--lv-dim); }
+.legal a { color:var(--lv-pink-dark); font-weight:600; text-decoration:none; }
+
+/* ============ §9 Состояния ============ */
+.state-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; }
+.state-cell { border:1px solid var(--lv-line-2); border-radius:var(--lv-r-md); padding:14px 12px 10px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+.state-cell .nm { font-family:ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size:10px; color:var(--lv-dim); }
+.enter-target { transition:none; }
+
+/* Фирменное свечение бренда (v1.7.0) */
+.hero::before, .hero::after { content:""; position:absolute; border-radius:var(--lv-r-pill); pointer-events:none; }
+.hero::before { width:210px; height:210px; right:-60px; top:-90px; background:radial-gradient(closest-side, rgba(255,255,255,.3), rgba(255,255,255,0)); animation:lv-float 6s ease-in-out infinite; }
+.hero::after { width:150px; height:150px; left:-50px; bottom:-70px; background:radial-gradient(closest-side, rgba(255,255,255,.18), rgba(255,255,255,0)); animation:lv-float 7s ease-in-out 1s infinite reverse; }
+
+/* ============ §10 LOVII PAY (профиль лояльности, v1.13.2; скины v1.14.0; свип-луч v1.14.1) ============
+   Программа LOVII PAY: карта + счёт + баланс (1 балл = 1 ₽, вывод через СБП).
+   Канон демо: lovii-demo js/club.js + css/lovii.css — словарь классов одинаковый.
+   Термины владельца (2026-09): платформа «Лови» · программа LOVII PAY.
+   «Клубов» и «карты жителя» нет. Карты (канон 2026-09-12): у клиента ОДИН
+   счёт — меняется только СКИН: LOVII PAY (база, всем при регистрации) →
+   LOVII PASS (подписка; статус представителя + вывод на карту 0% от 3 000 ₽)
+   → LOVII VIP (оборот от 300 000 ₽ В МЕСЯЦ); LOVII BUSINESS — бизнес-карта,
+   выдаётся по умолчанию всем МСП (свой счёт точки). Привилегии — мерч,
+   мероприятия и спец-скидки у МСП (повышенный кэшбек НЕ используется).
+   ⚠ Класс 3D-карты — .paycard (без дефиса): .pay-card занят карточкой
+   шага «Платёж и возврат» в онбординге МСП демо.
+   Иконки: .ico (§icons), спрайт v6: i-wallet i-qr i-rotate i-percent i-send i-arrow-down-left i-ticket. */
+
+/* ---------- Хедер участника ---------- */
+.pay-head { display:flex; align-items:center; gap:14px; }
+.pay-badge { margin-left:auto; flex:none; display:inline-flex; align-items:center; gap:5px; height:28px; padding:0 12px; border-radius:var(--lv-r-pill); background:var(--lv-soft-gold); color:var(--lv-gold-text); font-size:11px; font-weight:800; letter-spacing:.04em; white-space:nowrap; }
+.pay-badge .ico { width:13px; height:13px; }
+
+/* ---------- Карта LOVII PAY: 3D flip + tilt + блики (v1.14.1) ---------- */
+.pay-stage { }
+.pay-tilt { perspective:1100px; transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transition:transform .25s ease; }
+.paycard { position:relative; display:block; width:100%; margin:0; aspect-ratio:1.586/1; border:0; padding:0; cursor:pointer; transform-style:preserve-3d; transition:transform .65s cubic-bezier(.2,.75,.25,1); text-align:left; border-radius:var(--lv-r-xl); box-shadow:var(--lv-shadow-nav); font-family:inherit; }
+.paycard.flipped { transform:rotateY(180deg); }
+.paycard:active { transform:scale(.985); }
+.paycard.flipped:active { transform:rotateY(180deg) scale(.985); }
+.pay-face { position:absolute; inset:0; display:flex; flex-direction:column; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:var(--lv-r-xl); background-image:var(--lv-gradient-ink); overflow:hidden; color:#ffffff; padding:18px 20px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.09); }
+.pay-sheen { position:absolute; inset:0; pointer-events:none; background:radial-gradient(120% 90% at 88% -8%, rgba(212,168,84,.38) 0%, rgba(212,168,84,.1) 34%, transparent 62%), radial-gradient(90% 70% at -6% 108%, rgba(246,74,138,.28) 0%, transparent 55%); }
+/* премиальные блики: пятно света следит за курсором (только pointer:fine);
+   координаты --gx/--gy в % ставит JS (в демо — initPayCardFx, club.js) */
+.pay-glare { position:absolute; inset:0; pointer-events:none; background:radial-gradient(300px 300px at var(--gx,70%) var(--gy,15%), rgba(255,255,255,.28) 0%, rgba(255,255,255,.07) 40%, transparent 65%); opacity:0; transition:opacity .25s ease; }
+.pay-tilt:hover .pay-glare { opacity:1; }
+/* живой свип-луч (канон владельца 2026-09-12 — эффект прототипа lv-card-shine):
+   при hover/tap через карту за ~1.15s пробегает диагональный луч света;
+   transition:none в покое — при уходе курсора луч мгновенно возвращается,
+   каждое наведение = свежий пробег. Тонировка под скин — в блоках скинов */
+.pay-sweep { position:absolute; inset:-60% -20%; pointer-events:none; background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.18) 48%, rgba(255,255,255,.06) 52%, transparent 60%); transform:translateX(-120%); transition:none; will-change:transform; }
+.paycard:hover .pay-sweep, .paycard:active .pay-sweep { transform:translateX(120%); transition:transform 1.15s cubic-bezier(.25,.6,.3,1); }
+@media (prefers-reduced-motion: reduce) { .pay-sweep { display:none; } }
+@media (hover:hover) { .pay-tilt:hover .paycard { box-shadow:var(--lv-shadow-nav); } }
+
+/* ---- Скины карт (канон владельца 2026-09-12): у клиента ОДИН счёт и ОДИН
+   номер — меняется только оформление. Класс ставится на .paycard, действует
+   на обе стороны. Подача — rgba-оверлеи поверх var(--lv-gradient-ink)
+   (прецедент §10) + токены. skin-pass наследует базовую ink-подачу. ---- */
+/* LOVII PAY — база: матовый графит, серебро (выдаётся всем при регистрации) */
+.paycard.skin-pay .pay-face { background-image:linear-gradient(135deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.04) 52%, rgba(255,255,255,.02) 100%), var(--lv-gradient-ink); box-shadow:inset 0 0 0 1px rgba(255,255,255,.14); }
+.paycard.skin-pay .pay-brand { background:linear-gradient(90deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 55%, rgba(255,255,255,.3) 100%); -webkit-background-clip:text; background-clip:text; }
+.paycard.skin-pay .pay-chip { background:linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.5) 60%, rgba(255,255,255,.28)); }
+.paycard.skin-pay .pay-sheen { background:radial-gradient(120% 90% at 88% -8%, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 34%, transparent 62%); }
+.paycard.skin-pay .pay-sweep { background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.22) 48%, rgba(255,255,255,.07) 52%, transparent 60%); }
+/* LOVII PASS — премиум: ink + розовое свечение бренда (по подписке Лови;
+   даёт статус представителя LOVII + вывод на карту 0% от 3 000 ₽) */
+.paycard.skin-pass .pay-face { box-shadow:inset 0 0 0 1px rgba(246,74,138,.28), inset 0 0 44px rgba(246,74,138,.1); }
+.paycard.skin-pass .pay-brand { background:linear-gradient(90deg, rgba(255,215,230,.95) 0%, var(--lv-pink) 55%, var(--lv-gold) 100%); -webkit-background-clip:text; background-clip:text; }
+.paycard.skin-pass .pay-sweep { background:linear-gradient(115deg, transparent 42%, rgba(255,214,230,.26) 48%, rgba(246,74,138,.1) 52%, transparent 60%); }
+/* LOVII VIP — чёрное золото: кромка и номер золотые (оборот от 300 000 ₽/мес) */
+.paycard.skin-vip .pay-face { background-image:linear-gradient(135deg, rgba(212,168,84,.32) 0%, rgba(212,168,84,.12) 45%, rgba(0,0,0,.42) 100%), var(--lv-gradient-ink); box-shadow:inset 0 0 0 1px rgba(212,168,84,.5), inset 0 0 44px rgba(212,168,84,.12); }
+.paycard.skin-vip .pay-num { color:rgba(243,217,164,1); text-shadow:0 1px 2px rgba(0,0,0,.55); }
+.paycard.skin-vip .pay-sheen { background:radial-gradient(120% 90% at 88% -8%, rgba(243,217,164,.5) 0%, rgba(212,168,84,.16) 34%, transparent 62%); }
+.paycard.skin-vip .pay-glare { background:radial-gradient(300px 300px at var(--gx,70%) var(--gy,15%), rgba(255,232,180,.34) 0%, rgba(255,232,180,.08) 40%, transparent 65%); }
+.paycard.skin-vip .pay-sweep { background:linear-gradient(115deg, transparent 42%, rgba(255,232,180,.3) 48%, rgba(212,168,84,.12) 52%, transparent 60%); }
+/* LOVII BUSINESS — бизнес-карта МСП: графит + тиффани (выдаётся всем МСП) */
+.paycard.skin-biz .pay-face { background-image:linear-gradient(135deg, rgba(10,186,181,.26) 0%, rgba(10,186,181,.1) 48%, rgba(0,0,0,.32) 100%), var(--lv-gradient-ink); box-shadow:inset 0 0 0 1px rgba(10,186,181,.35); }
+.paycard.skin-biz .pay-brand { background:linear-gradient(90deg, rgba(214,255,249,.95) 0%, var(--lv-tiffany) 55%, var(--lv-tiffany) 100%); -webkit-background-clip:text; background-clip:text; font-size:14px; }
+.paycard.skin-biz .pay-chip { background:linear-gradient(135deg, rgba(214,255,249,.9), var(--lv-tiffany) 60%, rgba(7,125,120,1)); }
+.paycard.skin-biz .pay-sheen { background:radial-gradient(120% 90% at 88% -8%, rgba(10,186,181,.3) 0%, rgba(10,186,181,.08) 34%, transparent 62%), radial-gradient(90% 70% at -6% 108%, rgba(255,255,255,.12) 0%, transparent 55%); }
+.paycard.skin-biz .pay-sweep { background:linear-gradient(115deg, transparent 42%, rgba(214,255,249,.26) 48%, rgba(10,186,181,.12) 52%, transparent 60%); }
+/* LOVII NOMINAL — номинальный (транзитный) счёт платформы (SZ-043):
+   техническая подача — тонкая диагональная штриховка, серебро без золота;
+   счёт учётный, деньги через него проходят транзитом и не «оседают» */
+.paycard.skin-nominal .pay-face { background-image:repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0 1px, transparent 1px 9px), linear-gradient(135deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.03) 52%, rgba(0,0,0,.3) 100%), var(--lv-gradient-ink); box-shadow:inset 0 0 0 1px rgba(255,255,255,.22); }
+.paycard.skin-nominal .pay-brand { background:linear-gradient(90deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.45) 55%, rgba(255,255,255,.25) 100%); -webkit-background-clip:text; background-clip:text; font-size:14px; }
+.paycard.skin-nominal .pay-chip { background:linear-gradient(135deg, rgba(255,255,255,.7), rgba(255,255,255,.35) 60%, rgba(255,255,255,.18)); }
+.paycard.skin-nominal .pay-sheen { background:radial-gradient(120% 90% at 88% -8%, rgba(255,255,255,.1) 0%, rgba(255,255,255,.03) 34%, transparent 62%); }
+.paycard.skin-nominal .pay-glare { background:radial-gradient(300px 300px at var(--gx,70%) var(--gy,15%), rgba(255,255,255,.2) 0%, rgba(255,255,255,.05) 40%, transparent 65%); }
+.paycard.skin-nominal .pay-sweep { background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.16) 48%, rgba(255,255,255,.05) 52%, transparent 60%); }
+.pay-top { position:relative; display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.pay-brand { font-size:17px; font-weight:800; letter-spacing:.14em; background:var(--lv-gradient-gold); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.pay-chip { position:relative; width:40px; height:30px; border-radius:7px; background:var(--lv-gradient-gold); box-shadow:inset 0 0 0 1px rgba(255,255,255,.35); }
+.pay-chip::before { content:""; position:absolute; inset:6px 8px; border:1px solid rgba(26,26,26,.35); border-radius:4px; }
+.pay-num { position:relative; margin-top:auto; margin-bottom:14px; font-size:clamp(17px,5.6vw,21px); font-weight:700; letter-spacing:.12em; font-variant-numeric:tabular-nums; color:#ffffff; text-shadow:0 1px 2px rgba(0,0,0,.35); white-space:nowrap; }
+/* номер масштабируется от ШИРИНЫ КАРТЫ (v1.13.2): в узкой колонке ≥640px (карта ~250-330px) vw-кламп обрезал номер - cqw чинит (кламп выше - fallback) */
+@supports (font-size: 1cqw) {
+  .pay-stage { container-type:inline-size; }
+  .pay-num { font-size:clamp(12px,5.8cqw,21px); }
+}
+.pay-bot { position:relative; display:flex; align-items:flex-end; gap:14px; }
+.pay-bot .lbl { display:block; font-size:8.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+.pay-bot .val { display:block; margin-top:2px; font-size:12.5px; font-weight:700; letter-spacing:.04em; color:#ffffff; }
+.pay-holder { min-width:0; }
+.pay-holder .val { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pay-bal { margin-left:auto; text-align:right; }
+.pay-bal .val { font-size:16px; font-weight:800; color:var(--lv-gold); }
+.pay-back { transform:rotateY(180deg); padding:0; }
+.pay-mag { display:block; height:40px; margin-top:16px; background:rgba(0,0,0,.5); }
+.pay-back-mid { display:flex; align-items:center; gap:14px; padding:14px 20px 0; }
+.pay-qr { flex-shrink:0; width:84px; height:84px; padding:7px; border-radius:var(--lv-r-md); background:var(--lv-page); color:var(--lv-ink); }
+.pay-qr svg, .pay-qr .ico { display:block; width:100%; height:100%; }
+.pay-back-info { min-width:0; display:flex; flex-direction:column; gap:8px; }
+.pay-cvv .lbl { display:block; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+.pay-cvv .val { margin-top:2px; display:inline-block; padding:3px 10px; border-radius:6px; background:rgba(255,255,255,.92); color:var(--lv-ink); font-size:12px; font-weight:700; letter-spacing:.2em; }
+.pay-note { font-size:11px; line-height:1.45; color:rgba(255,255,255,.75); }
+.pay-back-bot { margin-top:auto; padding:0 20px 14px; font-size:9.5px; font-weight:600; letter-spacing:.03em; color:rgba(255,255,255,.55); }
+.pay-hints { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; }
+.pay-hint { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--lv-dim); }
+.pay-hint .ico { width:13px; height:13px; }
+.pay-hint.as-btn { color:var(--lv-pink); cursor:pointer; border:0; background:none; font-family:inherit; }
+.pay-hint.as-btn:active { opacity:.7; }
+
+/* ---------- Счёт LOVII PAY ---------- */
+.acct-card { padding:16px; background:var(--lv-card); border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); box-shadow:var(--lv-shadow-soft); }
+.acct-balance { font-size:30px; font-weight:800; letter-spacing:-.02em; color:var(--lv-ink); font-variant-numeric:tabular-nums; }
+.acct-balance .unit { margin-left:4px; font-size:18px; font-weight:700; color:var(--lv-pink); }
+.acct-lbl { margin-top:3px; font-size:11.5px; font-weight:600; color:var(--lv-dim); }
+.acct-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+.as-b { padding:10px 8px; border-radius:var(--lv-r-sm); background:var(--lv-surface); text-align:center; }
+.as-b .v { display:block; font-size:14.5px; font-weight:800; color:var(--lv-ink); font-variant-numeric:tabular-nums; }
+.as-b .l { display:block; margin-top:2px; font-size:9.5px; font-weight:600; color:var(--lv-dim); }
+.acct-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+.acct-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px; padding:10px 14px; border-radius:var(--lv-r-pill); font-size:12.5px; font-weight:700; transition:transform .15s ease; cursor:pointer; font-family:inherit; }
+.acct-btn:active { transform:scale(.97); }
+.acct-btn .ico { width:15px; height:15px; }
+.acct-btn.brand { background-image:var(--lv-gradient-brand); color:var(--lv-on-brand); }
+.acct-btn.ghost { border:1px solid var(--lv-line); color:var(--lv-ink); background:var(--lv-card); }
+
+/* ---------- История операций: фильтры и строки ---------- */
+.tx-tabs { display:flex; gap:6px; overflow-x:auto; }
+.tx-day { padding:12px 0 4px; font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--lv-dim); }
+.tx-row { display:flex; align-items:center; gap:12px; padding:10px 0; }
+.tx-row + .tx-row { border-top:1px solid var(--lv-line-2); }
+.tx-row:has(+ .tx-day) { border-top:0; }
+.tx-ico { flex-shrink:0; width:36px; height:36px; border-radius:var(--lv-r-sm); display:flex; align-items:center; justify-content:center; }
+.tx-ico .ico { width:17px; height:17px; }
+.tx-ico.in { background:var(--lv-soft-tiffany); color:var(--lv-tiffany-text); }
+.tx-ico.buy { background:var(--lv-soft-pink); color:var(--lv-pink-dark); }
+.tx-ico.out { background:var(--lv-soft-gold); color:var(--lv-gold-text); }
+.tx-mid { min-width:0; }
+.tx-name { font-size:13px; font-weight:700; color:var(--lv-ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tx-meta { margin-top:1px; font-size:11px; color:var(--lv-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tx-sum { flex-shrink:0; font-size:13.5px; font-weight:800; color:var(--lv-ink); font-variant-numeric:tabular-nums; }
+.tx-sum.plus { color:var(--lv-tiffany-text); }
+
+/* ---------- Статус LOVII PAY: уровни PAY→PASS→VIP и прогресс ---------- */
+.tier-card { padding:16px; background:var(--lv-card); border:1px solid var(--lv-line); border-radius:var(--lv-r-lg); box-shadow:var(--lv-shadow-soft); }
+.tier-levels { display:flex; gap:6px; }
+/* уровни — кнопки превью скина (канон «счёт один»: клик по уровню
+   показывает оформление карты, повторный возвращает свой) */
+.tier-levels .tl { border:0; font-family:inherit; cursor:pointer; }
+.tier-levels .tl:focus-visible { outline:2px solid var(--lv-pink); outline-offset:2px; }
+.tl.pv { box-shadow:0 0 0 2px var(--lv-pink); }
+.pay-skin-note { margin-top:8px; font-size:11px; line-height:1.45; color:var(--lv-dim); }
+.pay-skin-note b { color:var(--lv-ink); }
+.tl { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:4px; min-width:0; height:30px; padding:0 6px; border-radius:var(--lv-r-pill); background:var(--lv-surface); font-size:10px; font-weight:800; letter-spacing:.02em; color:var(--lv-dim); white-space:nowrap; overflow:hidden; }
+.tl .ico { width:11px; height:11px; flex-shrink:0; }
+.tl.done { color:var(--lv-ink); }
+.tl.cur { background:var(--lv-soft-gold); color:var(--lv-gold-text); }
+.tier-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.tier-name { display:inline-flex; align-items:center; gap:6px; font-size:14.5px; font-weight:800; color:var(--lv-ink); }
+.tier-name .ico { width:15px; height:15px; color:var(--lv-gold); }
+.tier-cond { padding:3px 10px; border-radius:var(--lv-r-pill); background:var(--lv-soft-gold); color:var(--lv-gold-text); font-size:11px; font-weight:800; }
+.tier-bar { height:6px; margin-top:12px; border-radius:var(--lv-r-pill); background:var(--lv-surface); overflow:hidden; }
+.tier-bar span { display:block; height:100%; border-radius:var(--lv-r-pill); background-image:var(--lv-gradient-gold); transition:width .4s ease; }
+.tier-next { margin-top:10px; font-size:12px; line-height:1.5; color:var(--lv-dim); }
+.tier-next b { color:var(--lv-ink); }
+.tier-perks { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.tp { display:inline-flex; align-items:center; gap:4px; padding:5px 10px; border-radius:var(--lv-r-pill); background:var(--lv-surface); font-size:11px; font-weight:600; color:var(--lv-ink); }
+.tp .ico { width:12px; height:12px; color:var(--lv-tiffany-text); }
+
+/* ---------- Витрина привилегий ---------- */
+.priv-card { flex-shrink:0; width:168px; padding:14px; border-radius:var(--lv-r-lg); border:1px solid var(--lv-line); background:var(--lv-card); box-shadow:var(--lv-shadow-soft); display:flex; flex-direction:column; gap:6px; }
+.priv-card .pc-ico { width:34px; height:34px; border-radius:var(--lv-r-sm); display:flex; align-items:center; justify-content:center; }
+.priv-card .pc-ico .ico { width:17px; height:17px; }
+.priv-card.t-gold .pc-ico { background:var(--lv-soft-gold); color:var(--lv-gold-text); }
+.priv-card.t-pink .pc-ico { background:var(--lv-soft-pink); color:var(--lv-pink-dark); }
+.priv-card.t-tiffany .pc-ico { background:var(--lv-soft-tiffany); color:var(--lv-tiffany-text); }
+.pc-title { font-size:12.5px; font-weight:800; line-height:1.3; color:var(--lv-ink); }
+.pc-sub { font-size:10.5px; line-height:1.4; color:var(--lv-dim); }
+
+/* ---------- Избранные МСП ---------- */
+.msp-fav { flex-shrink:0; width:40px; height:40px; border-radius:var(--lv-r-pill); display:flex; align-items:center; justify-content:center; background:var(--lv-soft-pink); color:var(--lv-pink); transition:transform .15s ease; cursor:pointer; border:0; font-family:inherit; }
+.msp-fav:active { transform:scale(.9); }
+.msp-fav .ico { width:17px; height:17px; }
+
+/* ---------- Полировка + адаптив: планшет/десктоп (≥640px) ----------
+   Двухколоночная композиция «как в веб-банке» (v1.13.2/1.13.3, канон — демо):
+   .pay-cols ≥640px: слева карта+счёт (.pay-col-a, липкая при min-height:660px),
+   справа история+статус (.pay-col-b). На мобильном колонки стекаются
+   в порядке: карта → счёт → история → статус. Привилегии — сеткой. */
+.pay-screen .section-head { margin-top:22px; }
+.pay-cols { display:block; }
+@media (min-width:640px) {
+  .pay-cols { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,6fr); align-items:start; gap:0 22px; padding:0 16px; }
+  .pay-col-a, .pay-col-b { min-width:0; }
+  @media (min-height:660px) { .pay-col-a { position:sticky; top:68px; } }
+  .pay-cols .pay-stage { margin:14px 0 0; }
+  .pay-cols .section-head { padding:0; }
+  .pay-cols .pay-col-b > .section-head:first-child { margin-top:14px; }
+  .pay-cols .acct-card, .pay-cols .tier-card, .pay-cols .tx-list { margin-left:0; margin-right:0; }
+  .pay-cols .tx-tabs { padding:0; gap:4px; }
+  /* карточка по кромкам колонки, внутренний отстрочник сохранён (14px, как на
+     мобильном) — иначе иконки операций липнут к рамке (фикс v1.13.4) */
+  .pay-cols .tx-list { padding:2px 14px; }
+  .pay-cols .tx-tabs .tab-btn { flex:1; white-space:nowrap; padding:7px 8px; font-size:11.5px; }
+  .pay-cols .pay-hints { flex-wrap:wrap; row-gap:4px; }
+  .pay-cols .pay-hint { font-size:10.5px; gap:4px; white-space:nowrap; }
+  .pay-cols .pay-hint .ico { width:12px; height:12px; }
+  .pay-screen .priv-scroll { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:10px; }
+  .pay-screen .priv-card { width:auto; }
+}
+@media (min-width:1024px) { .pay-cols { gap:0 28px; } }
+
+/* ---------- Surface card (компонент ДС, SZ-062) ---------- */
+.card { background: var(--lv-card); border: 1px solid var(--lv-line); border-radius: var(--lv-r-lg); box-shadow: var(--lv-shadow-soft); overflow: hidden; box-sizing: border-box; }
+.card--flush { padding: 0; }
+.card--tap { transition: box-shadow .2s, transform .2s, border-color .2s; }
+.card--tap:hover { box-shadow: var(--lv-shadow-lift); border-color: var(--lv-pink); transform: translateY(-2px); }
