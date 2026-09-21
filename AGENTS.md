@@ -12,7 +12,7 @@
 | `REPO_DIR` | `lovii_docs` | имя checkout/каталога этого репозитория |
 | `WORKSPACE_DIR` | `LOVII/lovii-docs` | алиас локального workspace, **не** имя GitHub-репозитория |
 | `PUBLIC_REPO` | `axiiom-ru/lovii` | публичное зеркало документов (лендинг, 4 файла) |
-| `PUSH_REPO` | `lovii-ru/lovii-docs` | резервный публичный хаб-зеркало периода F-051 (SSH-ключ `lovii_ru_ed25519`, Host `github.com-lovii-ru`); после восстановления доступа (F-051 закрыт 22.09) основной путь — пуш в `REPO_ID`; ритм синхронизации хаба — решение владельца (см. F-057) |
+| `PUSH_REPO` | `lovii-ru/lovii-docs` | резервный бэкап-хаб (SSH-ключ `lovii_ru_ed25519`, Host `github.com-lovii-ru`); роль — резервный бэкап, синк по вехам (закрытие волн приёмок, значимые слияния, срезы ревизий) — решение владельца 22.09, F-057 закрыт. Оперативный пуш — только `REPO_ID` |
 | будущий alias | `lovii-docs` | только план миграции, не заменять им текущие имена автоматически |
 
 **Профиль `lovii-ru` — выделенный и изолированный** (решение владельца,
@@ -55,7 +55,7 @@ workspace-путь, будущий alias или конкретный репоз�
 | Очередь и решение владельца | `canon/BACKLOG.md` | статус задачи или session-док |
 | Карта всех документов/репозиториев | `canon/REFERENCE.md` / `REGISTRY.md` | случайный README |
 | Инженерная история исполнения | `docs/sessions/` соответствующего кодового репозитория | `canon/STATUS.md` как единственный отчёт |
-| Оперативная работа workspace | `LOVII/lovii-docs/` и его `status.md`/`decisions-needed.md` | канон; workspace не становится SSOT |
+| Оперативная работа workspace | `LOVII/lovii-docs/` (черновик сессии; канал фиксации — карточка канона + session-док) | канон; workspace не становится SSOT; `status.md`/`decisions-needed.md` — архив (F-057) |
 | Юридическая публикация | `public/` и зеркало `axiiom-ru/lovii` | `archive/`, task-spec или workspace |
 
 `canon/TASKS/` находится внутри канона только для удобства доступа; сами

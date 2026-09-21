@@ -10,9 +10,10 @@
 > `canon/FINDINGS.md` — журнал находок инженерии. Карта не дублирует карточки — она ведёт к ним.
 >
 > **Ведётся вручную** (`scripts/gen_registry.py` — DEPRECATED, не запускать).
-> Обновлено: 2026-09-12. GitHub-идентификатор хаба в переходный период:
-> `bestdeejay-design/lovii_docs`; checkout — `lovii_docs`; workspace-алиас —
-> `LOVII/lovii-docs`; будущий alias `lovii-docs` не является текущим slug.
+> Обновлено: 2026-09-22. GitHub-идентификатор хаба: `bestdeejay-design/lovii_docs`;
+> checkout — `lovii_docs`; workspace-алиас — `LOVII/lovii-docs` (черновик сессии,
+> канал фиксации — карточки канона, F-057); будущий alias `lovii-docs` не является
+> текущим slug.
 
 ---
 
@@ -44,7 +45,7 @@
 
 | Репозиторий | Роль | Каталог доков |
 |:---|:---|:---|
-| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Резервный публичный хаб** (период F-051): полный корпус (канон, as-is, artifacts, оферты), Pages, CI-гейты. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9). Ритм синхронизации после восстановления доступа — решение владельца (F-057) | §2 |
+| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Резервный бэкап-хаб**: полный корпус (канон, as-is, artifacts, оферты), Pages, CI-гейты. Роль (решение владельца 22.09, F-057 закрыт): синк по вехам — закрытие волны приёмок, значимое слияние, срез ревизии; не оперативный пуш-путь. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9) | §2 |
 | [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | **Основной канон-репозиторий** — F-051 закрыт 2026-09-22 (доступ восстановлен, корпус на HEAD) | §2 |
 
 ### Продуктовые репозитории (организация [`lovii-tech`](https://github.com/lovii-tech))
