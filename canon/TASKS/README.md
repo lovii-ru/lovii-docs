@@ -21,61 +21,83 @@
 
 ## Текущий активный срез
 
-### На приёмке
+> Пересобран из заголовков карточек 2026-09-21 (ревизия, задача 90): 37 + 7 + 15.
+> Ранее таблица не упоминала 18 карточек и держала `SZ-047` не в том статусе.
+> При расхождении приоритет — заголовок карточки; пересборка — скриптом по шапкам.
+
+### На приёмке (37)
 
 | Карточка | Тема |
 |---|---|
-| [`SZ-003`](SZ-003-media-upload-verification-optimizer.md) | Загрузка и оптимизация изображений в b2b |
-| [`SZ-004`](SZ-004-storefront-visibility-geo-cities.md) | Видимость витрины, гео и города |
-| [`SZ-005`](SZ-005-taxonomy-id-collision-research.md) | Таксономия и коллизия идентификаторов |
-| [`SZ-010`](SZ-010-pwa-push-notifications-service.md) | PWA push-сервис |
-| [`SZ-011`](SZ-011-b2b-cabinet-full-sweep.md) | Ревизия b2b-кабинета |
-| [`SZ-012`](SZ-012-clean-device-channels-otp-copy.md) | Чистое устройство и тексты OTP |
-| [`SZ-013`](SZ-013-b2b-position-branch-binding.md) | Привязка позиций к филиалу |
-| [`SZ-013B`](SZ-013B-storefront-search-section.md) | Раздел поиска на витрине; нормализованный ID после коллизии |
-| [`SZ-014`](SZ-014-mini-apps-vk-max-telegram-research.md) | Ресёрч мини-приложений |
-| [`SZ-015`](SZ-015-b2b-phpstan-gate.md) | PHPStan-гейт b2b |
-| [`SZ-016`](SZ-016-restricted-products-filter.md) | Фильтр запрещённых товаров |
-| [`SZ-017`](SZ-017-order-receipt.md) | Информационная квитанция заказа |
-| [`SZ-018`](SZ-018-secrets-rotation-plan.md) | План ротации секретов |
-| [`SZ-019`](SZ-019-sms-sender-audit.md) | Аудит SMS-отправителя |
-| [`SZ-020`](SZ-020-cities-by-id-and-nearest.md) | Города по ID и ближайшие города |
-| [`SZ-021`](SZ-021-mappings-export.md) | Экспорт/импорт mappings |
-| [`SZ-022`](SZ-022-consent-infrastructure.md) | Инфраструктура согласий |
-| [`SZ-023`](SZ-023-reconciliation-performance.md) | Производительность reconciliation |
-| [`SZ-024`](SZ-024-store-info-card.md) | Инфо-карточка точки |
-| [`SZ-025`](SZ-025-device-trust-passkeys.md) | Доверенные устройства и passkeys |
-| [`SZ-030`](SZ-030-reduced-motion-setting.md) | Настройка уменьшения анимаций |
+| [`SZ-003`](SZ-003-media-upload-verification-optimizer.md) | Загрузка изображений в b2b: валидация + фотооптимизатор |
+| [`SZ-004`](SZ-004-storefront-visibility-geo-cities.md) | Витрина: видимость магазина партнёра + гео/города |
+| [`SZ-005`](SZ-005-taxonomy-id-collision-research.md) | Таксономия заведений, коллизия id, видимость на витрине |
+| [`SZ-010`](SZ-010-pwa-push-notifications-service.md) | PWA push-сервис (общий, без внешних сервисов) |
+| [`SZ-011`](SZ-011-b2b-cabinet-full-sweep.md) | Полная ревизия b2b-кабинета |
+| [`SZ-012`](SZ-012-clean-device-channels-otp-copy.md) | Чистое устройство + тексты OTP по эталонам |
+| [`SZ-013`](SZ-013-b2b-position-branch-binding.md) | b2b: привязка позиций к филиалу (branch_id) |
+| [`SZ-013B`](SZ-013B-storefront-search-section.md) | Раздел «Поиск» на витрине; нормализованный ID после коллизии |
+| [`SZ-014`](SZ-014-mini-apps-vk-max-telegram-research.md) | Ресёрч мини-приложений VK / MAX / Telegram |
+| [`SZ-015`](SZ-015-b2b-phpstan-gate.md) | b2b: PHPStan → ноль, блокирующий гейт |
+| [`SZ-016`](SZ-016-restricted-products-filter.md) | Фильтр запрещённых товаров в ритейл-каталогах |
+| [`SZ-017`](SZ-017-order-receipt.md) | Квитанция заказа (I-2): инфо-подтверждение до фискального чека |
+| [`SZ-018`](SZ-018-secrets-rotation-plan.md) | Гигиена секретов перед продом (S-3, часть 1: ротация) |
+| [`SZ-019`](SZ-019-sms-sender-audit.md) | Аудит SMS-отправителя в b2b/admin |
+| [`SZ-020`](SZ-020-cities-by-id-and-nearest.md) | C-1: city_name → city_id + эндпоинт ближайших городов |
+| [`SZ-021`](SZ-021-mappings-export.md) | C-5: экспорт/импорт integration_entity_mappings |
+| [`SZ-022`](SZ-022-consent-infrastructure.md) | E-3 (часть): инфраструктура согласий |
+| [`SZ-023`](SZ-023-reconciliation-performance.md) | C-3: ускорение reconciliation импорта (Kuper) |
+| [`SZ-024`](SZ-024-store-info-card.md) | Инфо-карточка торговой точки |
+| [`SZ-025`](SZ-025-device-trust-passkeys.md) | Безопасность кабинета: сессии, устройства, Passkeys |
+| [`SZ-030`](SZ-030-reduced-motion-setting.md) | «Уменьшить анимации» в настройках (доступность) |
 | [`SZ-031`](SZ-031-app-version-in-settings.md) | Версия сборки в настройках |
-| [`SZ-032`](SZ-032-clear-cache-setting.md) | Очистка PWA-кэша |
-| [`SZ-033`](SZ-033-push-notifications-research.md) | Подготовительная спека push |
-| [`SZ-035`](SZ-035-storefront-teaser-gate.md) | Гейт витрины hidden/teaser/active |
-| [`SZ-036`](SZ-036-checkout-delivery-not-supported-ux.md) | UX неподдерживаемой доставки |
-| [`SZ-037`](SZ-037-b2b-order-events-bridge.md) | Мост событий b2b → core |
-| [`SZ-041B`](SZ-041B-bank-wallet-redesign.md) | Банковский редизайн кошелька; нормализованный ID после коллизии |
-| [`SZ-043`](SZ-043-nominal-account-founder.md) | Номинальный счёт и полный цикл ledger |
-| [`SZ-044`](SZ-044-accounts-premium-card-design.md) | Премиальные карточки счетов |
-| [`SZ-046`](SZ-046-address-contour-consolidation.md) | Консолидация адресного контура — **выполнена** (хирургия + комплекс, 6 атомов) |
+| [`SZ-032`](SZ-032-clear-cache-setting.md) | «Очистить кэш» в настройках приложения |
+| [`SZ-033`](SZ-033-push-notifications-research.md) | Подготовительная спека push (SZ-010) |
+| [`SZ-035`](SZ-035-storefront-teaser-gate.md) | Гейт витрины hidden/teaser/active (I-5) |
+| [`SZ-036`](SZ-036-checkout-delivery-not-supported-ux.md) | Чекаут: честный отказ «точка не доставляет» |
+| [`SZ-037`](SZ-037-b2b-order-events-bridge.md) | Мост b2b → core: события переходов заказа |
+| [`SZ-041B`](SZ-041B-bank-wallet-redesign.md) | Банковский редизайн кошелька LOVII PAY |
+| [`SZ-043`](SZ-043-nominal-account-founder.md) | Номинальный (транзитный) счёт Основателя |
+| [`SZ-044`](SZ-044-accounts-premium-card-design.md) | Премиальные «банковские карты» счетов |
+| [`SZ-045`](SZ-045-financial-contour-s5-code-fixes.md) | Точечные правки кода по FINANCIAL_CONTOUR §5 (v0.5) |
+| [`SZ-046`](SZ-046-address-contour-consolidation.md) | Консолидация адресного контура app — **выполнена** (хирургия + комплекс) |
+| [`SZ-047`](SZ-047-team-cabinet.md) | Отдельный кабинет сотрудника / администратора точки |
+| [`SZ-056`](SZ-056-sub-activation-pass-button.md) | Кнопка подписки LOVII PASS (активация с внутреннего счёта) |
+| [`SZ-057`](SZ-057-subscription-promo-structure.md) | Подписка по приглашению: гейт по промокоду + личный код |
+| [`SZ-058`](SZ-058-pay-turnover-vip.md) | Оборот по карте: вход уровня LOVII VIP |
+| [`SZ-061`](SZ-061-referral-canon-rework.md) | Реферальная система по канону владельца: два кода, счёт платформы |
 
-### В работе
-
-| Карточка | Тема |
-|---|---|
-| [`SZ-007`](SZ-007-lovi-business-connect-point.md) | «ЛОВИ Бизнес», фаза 1 и вынесенное продолжение |
-| [`SZ-034`](SZ-034-representative-cabinet.md) | Спека кабинета представителя |
-| [`SZ-038`](SZ-038-roles-rep-amb-msp.md) | Роли представителя, амбассадора и МСП |
-| [`SZ-047`](SZ-047-team-cabinet.md) | Отдельный кабинет сотрудника / администратора точки (P1, исполнитель zcode) |
-
-### Открыта
+### В работе (7)
 
 | Карточка | Тема |
 |---|---|
-| [`T-008`](T-008-staging-test-data-cleanup.md) | Чистка тестового мусора staging-БД (постановка Super Z → zcode) |
-| [`SZ-039`](SZ-039-points-accrual-mvp.md) | MVP баллового контура |
-| [`SZ-040`](SZ-040-billing-ledger-pool.md) | Рублёвый ledger и пул 40/40/20 |
-| [`SZ-041`](SZ-041-balances-personal-company.md) | Личные и корпоративные балансы |
-| [`SZ-042`](SZ-042-rep-subscription-gate.md) | Гейт подписки представителя |
-| [`SZ-062`](SZ-062-ds-css-icons-optimization.md) | Оптимизация CSS и иконок demo + сборка полной ДС (постановка чистой сессии; заменяет SPEC-ds-styling-session) |
+| [`SZ-007`](SZ-007-lovi-business-connect-point.md) | «ЛОВИ Бизнес»: подключение точки из приложения (фаза 1) |
+| [`SZ-034`](SZ-034-representative-cabinet.md) | Мобильный кабинет представителя: точки, отчёты, апрувы |
+| [`SZ-038`](SZ-038-roles-rep-amb-msp.md) | Роли платформы: Представитель / Амбассадор / МСП |
+| [`SZ-052`](SZ-052-sub-domain.md) | Подписка Представителя: домен (модель, статусы, миграции) |
+| [`SZ-053`](SZ-053-sub-billing.md) | Подписка Представителя: биллинг (каскад, retry, grace-cron) |
+| [`SZ-054`](SZ-054-payouts.md) | Выплаты: push-реестр ИП/ООО + pull-заявки НПД |
+| [`SZ-055`](SZ-055-pep-npd-reports.md) | ПЭП-реестр НПД: закрывающие документы, Push-OTP |
+
+### Открыта (15)
+
+| Карточка | Тема |
+|---|---|
+| [`SZ-039`](SZ-039-points-accrual-mvp.md) | Балловый контур MVP: куда приходят начисления |
+| [`SZ-040`](SZ-040-billing-ledger-pool.md) | Рублёвый ledger (A-1) + пул 40/40/20 (A-2) |
+| [`SZ-041`](SZ-041-balances-personal-company.md) | Балансы в профиле: личный счёт + счёт юрлица (A-3/A-4) |
+| [`SZ-042`](SZ-042-rep-subscription-gate.md) | Подписка представителя + гейт доли (Б-3) |
+| [`SZ-048`](SZ-048-team-audit-log.md) | Лог действий команды (аудит) + настройки кабинета команды |
+| [`SZ-049`](SZ-049-merchants-per-partner.md) | Мерчанты под юрлицами: создание и видимость всех юрлиц |
+| [`SZ-050`](SZ-050-msp-cabinet-v2.md) | Кабинет МСП v2: юрлица, бренды, точки, каталог |
+| [`SZ-051`](SZ-051-orphaned-media-cleanup.md) | Чистка осиротевших ссылок на медиа |
+| [`SZ-062`](SZ-062-ds-css-icons-optimization.md) | Оптимизация CSS/иконок demo + сборка полной ДС |
+| [`T-008`](T-008-staging-test-data-cleanup.md) | Чистка тестового мусора staging-БД (отложена владельцем) |
+| [`T-009`](T-009-client-order-status-pushes.md) | Пуши accepted/ready + `push:prune-dead` в планировщик |
+| [`T-010`](T-010-promo-ref-universal-capture.md) | Промо/реф-ссылки: любой суффикс, валидация кода по БД |
+| [`T-011`](T-011-sub-billing-cascade.md) | №3 Sub-billing: каскад списаний и авто-переходы жизненного цикла |
+| [`T-012`](T-012-lovii-pay-fin-service.md) | lovii-pay: каркас фин-сервиса + поддомен платёжных ссылок |
+| [`T-013`](T-013-payout-simulator-sandbox.md) | Выплаты: тестовый контур — модуль выплат и симулятор банка |
 
 ## Исторический срез
 

@@ -27,6 +27,7 @@
 | [`decisions/`](decisions/) | Открытые вопросы, требующие решения владельца (decisions-needed) |
 | [`workspace/`](workspace/) | Оперативные runbooks (status, auth-staging, manual-msp-cycle, superz-schedule) |
 | [`RELEASE_READINESS.md`](RELEASE_READINESS.md) | Вердикт готовности к релизу v1.0 (v0.1, 2026-09-17) |
+| [`REVISION_2026-09-21.md`](REVISION_2026-09-21.md) | Полная ревизия платформы: карта документов, сверка «код ↔ канон», техаудит трёх репо, приоритеты (задача 90) |
 
 ## Корневые мета-файлы
 
