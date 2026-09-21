@@ -44,8 +44,8 @@
 
 | Репозиторий | Роль | Каталог доков |
 |:---|:---|:---|
-| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Рабочий публичный хаб**: полный корпус (канон, as-is, artifacts, оферты), живой пуш, Pages, CI-гейты. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9) | §2 |
-| [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | Приватное зеркало канона — аккаунт suspended с 2026-09-13 (F-051), догнать при возврате доступа | §2 |
+| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Резервный публичный хаб** (период F-051): полный корпус (канон, as-is, artifacts, оферты), Pages, CI-гейты. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9). Ритм синхронизации после восстановления доступа — решение владельца (F-057) | §2 |
+| [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | **Основной канон-репозиторий** — F-051 закрыт 2026-09-22 (доступ восстановлен, корпус на HEAD) | §2 |
 
 ### Продуктовые репозитории (организация [`lovii-tech`](https://github.com/lovii-tech))
 
