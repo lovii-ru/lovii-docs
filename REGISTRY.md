@@ -93,6 +93,7 @@ lovii_docs/
 ├── archive/                  # остальные устаревшие документы и версии
 ├── contracts/openapi/        # машиночитаемый API-контракт
 ├── artifacts/ / marketing/  # рабочие и маркетинговые артефакты
+├── loyalty/                 # наработки по лояльности/промо партнёра (дизайн + прототипы), не канон
 ├── tbank/                    # терминал-анкета; публичная база знаний API Мультисплита (docs/notes/openapi); договор — вне VCS
 ├── scripts/                  # проверки и публикация
 └── .github/workflows/        # docs-governance и sync-public

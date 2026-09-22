@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Промо-конструктор партнёра — lovii (проект + демо)</title>
+<style>
+  :root{
+    --paper:#f7f6f3; --ink:#16150f; --ink-2:#4b4842; --ink-3:#8b8680;
+    --line:#e0dcd4; --line-2:#eae6de; --accent:#b8315f; --accent-soft:rgba(184,49,95,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --m:68ch;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px 96px}
+  .cover{padding:78px 0 46px;border-bottom:1px solid var(--ink);margin-bottom:8px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+  .cover h1{font-family:var(--serif);font-weight:400;font-size:clamp(38px,6.4vw,68px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 0;max-width:20ch}
+  .cover .lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:58ch;margin:22px 0 0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+  .meta b{display:block;font-family:var(--mono);font-weight:400;color:var(--ink-3);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:3px}
+  .doc{display:grid;grid-template-columns:212px 1fr;gap:56px;align-items:start;margin-top:44px}
+  .toc{position:sticky;top:34px;font-family:var(--mono);font-size:12.5px;line-height:1.9}
+  .toc .t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .toc a{display:block;color:var(--ink-2);text-decoration:none;border-left:1px solid var(--line);padding-left:13px}
+  .toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+  main{max-width:var(--m);min-width:0}
+  section{padding-top:46px}
+  h2{font-family:var(--serif);font-weight:400;font-size:31px;line-height:1.15;letter-spacing:-.01em;margin:0 0 6px;display:flex;gap:16px;align-items:baseline}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.06em;padding-top:6px}
+  .rule{height:1px;background:var(--line);width:64px;margin:14px 0 20px}
+  h3{font-family:var(--sans);font-weight:600;font-size:16.5px;margin:30px 0 8px}
+  p{margin:0 0 14px}
+  .muted{color:var(--ink-3)}
+  code{font-family:var(--mono);font-size:.87em;background:var(--accent-soft);border:1px solid var(--line-2);padding:.5px 5px;border-radius:3px;color:var(--ink)}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(184,49,95,.35)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0 18px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:400;border-bottom:1px solid var(--ink-2)}
+  td .f{font-family:var(--mono);font-size:12px;color:var(--accent)}
+  .cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--line);margin:16px 0}
+  .cards>div{padding:20px}
+  .cards>div+div{border-left:1px solid var(--line)}
+  .cards .tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+  .cards .name{font-family:var(--serif);font-size:19px;margin:6px 0 4px}
+  .cards p{font-size:13.5px;color:var(--ink-2);margin:8px 0 0}
+  figure{margin:18px 0 22px}
+  figure svg{width:100%;height:auto;display:block;border:1px solid var(--line);background:#fbfaf8}
+  figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:8px}
+  .shot{display:flex;gap:14px;overflow-x:auto;padding:4px 0 10px;margin:16px 0 6px}
+  .shot figure{margin:0;flex:0 0 auto;width:210px}
+  .shot img{width:210px;height:440px;object-fit:cover;object-position:top;border:1px solid var(--line);display:block;background:#fff}
+  .q{border-top:1px solid var(--line);padding:15px 0}
+  .q .h{font-weight:600;font-size:14.5px}
+  .q .r{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+  .q .r b{color:var(--accent);font-weight:600}
+  .colophon{margin-top:64px;padding-top:20px;border-top:1px solid var(--ink);font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  @media (max-width:900px){.doc{grid-template-columns:1fr;gap:0}.toc{position:static;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:16px}.cards{grid-template-columns:1fr}.cards>div+div{border-left:0;border-top:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="kicker">LOVII · lovii-b2b + lovii-core + lovii-app · проект + демо</div>
+    <h1>Промо-конструктор партнёра</h1>
+    <p class="lede">Партнёр собирает акции из триггера и награды: кэшбэк по группам, порог чека, комбо. Комбо выходит на витрину товаром, акции — карточками в промо-блоке, а покупатель видит процент и сумму кэшбэка в корзине и при оформлении.</p>
+    <div class="meta">
+      <div><b>Черновик ID</b>SZ-071 (расширение SZ-070)</div>
+      <div><b>Демо</b>lovii-demo · раздел «Промо» в #/msp</div>
+      <div><b>Дата</b>2026-09-22</div>
+      <div><b>Статус</b>дизайн + рабочий прототип</div>
+    </div>
+  </header>
+
+  <div class="doc">
+    <nav class="toc" aria-label="Содержание">
+      <div class="t">Содержание</div>
+      <a href="#s1">1 · Ключевая идея</a>
+      <a href="#s2">2 · Механики</a>
+      <a href="#s3">3 · Стекирование</a>
+      <a href="#s4">4 · Модель данных</a>
+      <a href="#s5">5 · Как это работает</a>
+      <a href="#s6">6 · Демо и доказательства</a>
+      <a href="#s7">7 · Работы по репозиториям</a>
+      <a href="#s8">8 · Этапы</a>
+      <a href="#s9">9 · Открытые вопросы</a>
+    </nav>
+
+    <main>
+      <section id="s1">
+        <h2><span class="n">01</span>Ключевая идея</h2>
+        <div class="rule"></div>
+        <p>Комбо — это <b>товар</b>. Оно живёт на витрине как обычная позиция: своя цена, зачёркнутая старая, состав. Поэтому каталог, корзина, заказ, чекаут и квитанция работают <b>без новой логики</b> — меняется только способ создания (конструктор) и рендер состава. Технически это <code>merchant_offers</code> с <code>offer_type = 'bundle'</code> и составом в <code>merchant_offer_bundle_items</code>.</p>
+        <div class="cards">
+          <div><div class="tag">Было</div><div class="name">Одно правило</div><p>Один глобальный процент на всю платформу, управление — только руками в БД. Партнёр не может ничего.</p></div>
+          <div><div class="tag">Стало</div><div class="name">Кэшбэк + группы</div><p>Партнёр задаёт процент по умолчанию и выделяет группы товаров своим процентом.</p></div>
+          <div><div class="tag">Добавляем</div><div class="name">Акции и комбо</div><p>Порог чека, подарок, комбо-товар, промо-блок и подписи выгоды в корзине и чекауте.</p></div>
+        </div>
+      </section>
+
+      <section id="s2">
+        <h2><span class="n">02</span>Механики: триггер × награда</h2>
+        <div class="rule"></div>
+        <h3>Триггеры</h3>
+        <table>
+          <thead><tr><th>ID</th><th>Триггер</th><th>Условие</th><th>Пример</th></tr></thead>
+          <tbody>
+            <tr><td class="f">T1 item</td><td>товар / группа</td><td>в корзине есть товар группы</td><td>кэшбэк 10% на витамины</td></tr>
+            <tr><td class="f">T2 cart_sum</td><td>сумма чека</td><td>чек ≥ N ₽</td><td>от 2 000 ₽ → напиток в подарок</td></tr>
+            <tr><td class="f">T3 combo</td><td>комбо</td><td>товары из набора вместе</td><td>бургер + напиток со скидкой</td></tr>
+            <tr><td class="f">T4–T6</td><td>nth / time / segment</td><td>N-й товар, часы, сегмент</td><td>Ф3</td></tr>
+          </tbody>
+        </table>
+        <h3>Награды</h3>
+        <table>
+          <thead><tr><th>ID</th><th>Награда</th><th>Что делает</th><th>Область</th></tr></thead>
+          <tbody>
+            <tr><td class="f">R1</td><td>cashback_percent</td><td>% баллами</td><td>заказ / группа / товар</td></tr>
+            <tr><td class="f">R2</td><td>discount_percent</td><td>скидка %</td><td>комбо-набор / чек</td></tr>
+            <tr><td class="f">R3</td><td>discount_fixed</td><td>скидка ₽</td><td>комбо-набор</td></tr>
+            <tr><td class="f">R4</td><td>gift</td><td>товар за 0 ₽</td><td>позиция + лимит</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s3">
+        <h2><span class="n">03</span>Правила стекирования</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Ситуация</th><th>Поведение по умолчанию</th></tr></thead>
+          <tbody>
+            <tr><td>Скидка + кэшбэк</td><td>разные линии; кэшбэк считается от суммы <b>после</b> скидки (параметр — можно от исходной)</td></tr>
+            <tr><td>Две скидки</td><td>«лучшая для клиента»; опция «суммировать до лимита»</td></tr>
+            <tr><td>Кэшбэк разных правил</td><td>приоритет: чек → группа → товар → умолчание</td></tr>
+            <tr><td>Подарок</td><td>не более N на заказ; не суммируется со скидкой на тот же товар</td></tr>
+            <tr><td>Нет совпадений</td><td>0, без догадок</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s4">
+        <h2><span class="n">04</span>Модель данных</h2>
+        <div class="rule"></div>
+        <p>Единая таблица правил вместо разрозненных сущностей. Текущая <code>loyalty_rules</code> обобщается в <code>promo_rules</code>; глобальная строка мигрирует как правило <code>type='cashback'</code> с <code>merchant_id = NULL</code>.</p>
+        <table>
+          <thead><tr><th>Таблица</th><th>Смысл</th><th>Ключевые поля</th></tr></thead>
+          <tbody>
+            <tr><td class="f">promo_rules</td><td>правила акций</td><td>type, trigger (jsonb), reward (jsonb), limits (jsonb), storefront (jsonb), priority</td></tr>
+            <tr><td class="f">merchant_offer_bundle_items</td><td>состав комбо</td><td>offer_id, component_offer_id, qty</td></tr>
+            <tr><td class="f">loyalty_product_groups</td><td>группы товаров</td><td>merchant_id, name, is_active (из SZ-070)</td></tr>
+            <tr><td class="f">loyalty_group_categories / _products</td><td>состав групп</td><td>FK-пивоты (из SZ-070)</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Комбо не заводит собственных таблиц каталога: это оффер с <code>offer_type='bundle'</code> — витрина, корзина и заказ работают штатно.</p>
+      </section>
+
+      <section id="s5">
+        <h2><span class="n">05</span>Как это работает</h2>
+        <div class="rule"></div>
+        <figure>
+          <svg viewBox="0 0 900 250" role="img" aria-label="Путь акции от конструктора до покупателя">
+            <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#4b4842" stroke-width="1"/></marker></defs>
+            <g font-family="ui-monospace,monospace" font-size="12" fill="#16150f">
+              <rect x="26" y="30" width="196" height="58" fill="none" stroke="#b8315f" stroke-width="1"/>
+              <text x="44" y="54">Кабинет · Промо</text><text x="44" y="71" fill="#8b8680" font-size="10.5">триггер + награда</text>
+
+              <rect x="26" y="140" width="196" height="58" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="44" y="164">promo_rules</text><text x="44" y="181" fill="#8b8680" font-size="10.5">+ комбо-оффер bundle</text>
+
+              <line x1="124" y1="88" x2="124" y2="136" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+
+              <rect x="330" y="85" width="180" height="58" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="348" y="109">Витрина</text><text x="348" y="126" fill="#8b8680" font-size="10.5">карточка комбо</text>
+
+              <rect x="330" y="20" width="180" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="348" y="42">Главная</text><text x="348" y="58" fill="#8b8680" font-size="10.5">промо-блок акций</text>
+
+              <line x1="222" y1="60" x2="326" y2="44" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="222" y1="168" x2="326" y2="118" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+
+              <rect x="632" y="85" width="240" height="58" fill="none" stroke="#b8315f" stroke-width="1"/>
+              <text x="650" y="109">Корзина · Чекаут</text><text x="650" y="126" fill="#8b8680" font-size="10.5">«Кэшбэк 10% · +33 балл.»</text>
+
+              <line x1="510" y1="114" x2="628" y2="114" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+
+              <text x="26" y="232" fill="#8b8680" font-size="10.5">Покупатель видит выгоду заранее; выплаты — из доли точки</text>
+            </g>
+          </svg>
+          <figcaption>Путь акции: конструктор → правило → витрина и корзина/чекаут</figcaption>
+        </figure>
+        <p>В корзине и на чекауте под каждой позицией появляется строка выгоды, а в итогах — суммарный кэшбэк за заказ и подарки. Суммы считаются из реальных правил, без «примерно».</p>
+      </section>
+
+      <section id="s6">
+        <h2><span class="n">06</span>Демо и доказательства</h2>
+        <div class="rule"></div>
+        <p>Рабочий прототип собран на <b>lovii-demo</b>: раздел «Промо» в кабинете партнёра (<code>#/msp</code>). Открыть: <code>lovii-demo/index.html#/msp</code> → нижний бар → «Промо». Скриншоты ниже — из реального прогона (Playwright, Chrome, 390×844, без ошибок в консоли).</p>
+        <div class="shot">
+          <figure><img src="assets/lv-demo/01-kabinet-promo.png" alt="Раздел Промо"><figcaption>Конструктор: кэшбэк, группы, акции</figcaption></figure>
+          <figure><img src="assets/lv-demo/07-mech-picker.png" alt="Выбор механики"><figcaption>Мастер: 3 механики</figcaption></figure>
+          <figure><img src="assets/lv-demo/02-combo-editor.png" alt="Редактор комбо"><figcaption>Комбо: товары, скидка, предпросмотр</figcaption></figure>
+          <figure><img src="assets/lv-demo/03-kabinet-published.png" alt="Опубликовано"><figcaption>Статус «На витрине»</figcaption></figure>
+        </div>
+        <p class="muted">Дальше — то, что видит покупатель после публикации: карточка в промо-блоке, комбо-товар в каталоге точки и подписи выгоды в корзине.</p>
+        <div class="shot">
+          <figure><img src="assets/lv-demo/04-home-promos.png" alt="Промо-блок на главной"><figcaption>Главная: промо-блок акций</figcaption></figure>
+          <figure><img src="assets/lv-demo/05-store-combo.png" alt="Комбо в каталоге"><figcaption>Каталог: комбо-товар</figcaption></figure>
+          <figure><img src="assets/lv-demo/06-cart-cashback.png" alt="Корзина с кэшбэком"><figcaption>Корзина: кэшбэк по позициям</figcaption></figure>
+        </div>
+      </section>
+
+      <section id="s7">
+        <h2><span class="n">07</span>Работы по репозиториям</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Репозиторий</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>lovii-core</td><td>миграция <code>loyalty_rules → promo_rules</code>; таблица состава комбо; движок резолвинга (триггер×награда, стекирование, лимиты); сборка комбо-оффера; API конфигурации для кабинета</td></tr>
+            <tr><td>lovii-b2b</td><td>раздел «Промо»: список правил, мастер акции (порог чека / комбо), публикация; cross-tenant тесты</td></tr>
+            <tr><td>lovii-app</td><td>бейдж кэшбэка в карточке, комбо в каталоге, подписи выгоды в корзине и чекауте, промо-блок</td></tr>
+            <tr><td>lovii-demo</td><td>рабочий прототип (этот раздел) — для приёмки продуктовой механики до кода</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s8">
+        <h2><span class="n">08</span>Этапы</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Этап</th><th>Содержание</th><th>Репозитории</th></tr></thead>
+          <tbody>
+            <tr><td>Ф1</td><td>кэшбэк: умолчание + группы + резолвинг</td><td>core, b2b</td></tr>
+            <tr><td>Ф2</td><td>promo_rules (threshold/gift/combo) + комбо-оффер + публикация + подписи в корзине/чекауте</td><td>core, b2b, app</td></tr>
+            <tr><td>Ф3</td><td>динамические комбо, nth/time/segment, стекирование, A/B</td><td>core, b2b, app</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s9">
+        <h2><span class="n">09</span>Открытые вопросы</h2>
+        <div class="rule"></div>
+        <div class="q"><div class="h">Комбо: статичный оффер или динамика в корзине</div><div class="r">Ф2 — статичный оффер (цена на витрине), Ф3 — динамика. <b>Предложение: так.</b></div></div>
+        <div class="q"><div class="h">Кэшбэк считать до или после скидки</div><div class="r"><b>Предложение: после скидки.</b></div></div>
+        <div class="q"><div class="h">Кто платит скидку и подарок</div><div class="r">доля точки, как кэшбэк (T-014). <b>Предложение: да.</b></div></div>
+        <div class="q"><div class="h">Потолки</div><div class="r">кэшбэк 30%, скидка 50%. <b>Предложение: так, в настройках админки.</b></div></div>
+        <div class="q"><div class="h">Модерация платформой</div><div class="r">может ли платформа снять акцию партнёра. <b>Предложение: да, из админки.</b></div></div>
+      </section>
+
+      <div class="colophon"><span>Промо-конструктор · SZ-071 · lovii</span><span>AutoClaw · 2026-09-22</span></div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
