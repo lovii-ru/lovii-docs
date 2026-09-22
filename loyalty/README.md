@@ -17,8 +17,10 @@
 |---|---|---|
 | [cashback-constructor.md](cashback-constructor.md) | базовый конструктор: кэшбэк по умолчанию + группы товаров (SZ-070) | проект к согласованию |
 | [promo-constructor.md](promo-constructor.md) | промо-механики: сумма чека, подарок, комбо, публикация на витрину (SZ-071) | проект + прототип |
+| [promo-roadmap.md](promo-roadmap.md) | бэклог развития: новые механики, контуры управления, отчётность, риски | предложение |
 | [prototypes/cashback-constructor.html](prototypes/cashback-constructor.html) | HTML-спека базового конструктора + макет мобильных экранов | макет |
 | [prototypes/promo-constructor.html](prototypes/promo-constructor.html) | HTML-спека промо-конструктора + скриншоты живого прогона | макет |
+| [prototypes/promo-roadmap.html](prototypes/promo-roadmap.html) | визуальная версия бэклога с картой приоритетов | макет |
 | `prototypes/assets/lv-demo/` | скриншоты прогона демо (390×844, Chrome) | артефакт |
 
 ## Демо (рабочий прототип)
