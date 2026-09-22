@@ -24,6 +24,10 @@
 - [`SZ-072`](../canon/TASKS/SZ-072-promo-app-integration.md) — применение промо-механик
   в `lovii-app`: акция → торговая точка → корзина → чекаут (`lovii-core` + `lovii-app`);
   читаемая версия — [prototypes/sz-072-brief.html](prototypes/sz-072-brief.html).
+- Решения владельца 22.09 (настройка базовых механик из приложения, база кэшбэка —
+  фактически оплаченная сумма, комбо — первая категория витрины точки, ротация промо,
+  без платформенных потолков, скидки/акции за счёт точки) — канон
+  [`canon/BRD.md` §7.3.1](../canon/BRD.md).
 | [prototypes/cashback-constructor.html](prototypes/cashback-constructor.html) | HTML-спека базового конструктора + макет мобильных экранов | макет |
 | [prototypes/promo-constructor.html](prototypes/promo-constructor.html) | HTML-спека промо-конструктора + скриншоты живого прогона | макет |
 | [prototypes/promo-roadmap.html](prototypes/promo-roadmap.html) | визуальная версия бэклога с картой приоритетов | макет |
