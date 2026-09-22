@@ -29,6 +29,24 @@
   трогаются и не разворачиваются этой командой.
 - Зона core-billing не трогается (WORK_PROTOCOL §1.2).
 
+## Разведка нового исполнителя (23.09) — факт-чек Super Z по origin/staging `16e062b`
+
+- Переходы (`SubscriptionStatus.php:42–48`): Active достижим из
+  GracePeriod/Suspended/Cancelled одним легальным переходом; Active→Active
+  запрещён (BusinessException `invalid_status_transition` в
+  `SubscriptionStatusMachine::transition`). Сброс из Active — через
+  промежуточный статус либо идемпотентный no-op с отчётом в логе.
+- Машина чистит только `grace_ends_at` (выход из grace);
+  `suspended_at`/`cancelled_at`/`current_period_*` не сбрасываются —
+  полный сброс требует `forceFill()`. Прецедент в ядре:
+  `SubscriptionBillingService.php:79/:219/:490`. `forceFill()` — штатный
+  Eloquent-механизм и пункту 2 постановки («никаких прямых UPDATE мимо
+  Eloquent/сервисов») НЕ противоречит.
+- Перевыпуск промокода: `RepresentativePromoService::issue()`
+  (`app/Domain/Roles/Services/RepresentativePromoService.php:32`).
+- Идиома env-гейта в командах: `app()->environment('production')`
+  (прецедента отдельного env-флага в командах нет).
+
 ## Приёмка
 
 - [ ] Отчёт исполнителя: сигнатура команды, лог, гейт окружения.
