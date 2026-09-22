@@ -25,11 +25,12 @@
 
 Собран в репозитории `lovii-demo` — раздел **«Промо»** в кабинете партнёра:
 
-- файлы: `lovii-demo/js/loyalty.js`, `lovii-demo/css/loyalty.css`, подключение в `lovii-demo/index.html`;
-- открыть локально:
+- файлы: `lovii-demo/js/loyalty.js`, `lovii-demo/css/loyalty.css`, подключение в `lovii-demo/index.html` (коммит `284bf32`);
+- публично (Pages): **https://lovii.mobiap.com/#/msp** → нижний бар → «Промо» (с телефона работает как PWA: можно добавить на домашний экран);
+- локально (если нужен закрытый контур):
   ```bash
-  cd ~/LOVII/lovii-demo && python3 -m http.server 4173 --bind 127.0.0.1
-  # затем http://127.0.0.1:4173/#/msp → нижний бар → «Промо»
+  cd ~/LOVII/lovii-demo && python3 -m http.server 4173 --bind 0.0.0.0
+  # затем http://<IP-машины>:4173/#/msp
   ```
 - что проверено сквозным прогоном: сборка комбо → публикация → карточка в промо-блоке
   главной → комбо-товар в каталоге точки → подписи кэшбэка в корзине и на чекауте;
