@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Развитие промо-конструктора — бэклог и приоритеты</title>
+<style>
+  :root{
+    --paper:#f7f6f3; --ink:#16150f; --ink-2:#4b4842; --ink-3:#8b8680;
+    --line:#e0dcd4; --line-2:#eae6de; --accent:#b8315f; --accent-soft:rgba(184,49,95,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --m:68ch;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px 96px}
+  .cover{padding:78px 0 46px;border-bottom:1px solid var(--ink);margin-bottom:8px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+  .cover h1{font-family:var(--serif);font-weight:400;font-size:clamp(36px,6vw,64px);line-height:1.03;letter-spacing:-.02em;margin:18px 0 0;max-width:22ch}
+  .cover .lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:58ch;margin:22px 0 0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+  .meta b{display:block;font-weight:400;color:var(--ink-3);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:3px}
+  .doc{display:grid;grid-template-columns:212px 1fr;gap:56px;align-items:start;margin-top:44px}
+  .toc{position:sticky;top:34px;font-family:var(--mono);font-size:12.5px;line-height:1.9}
+  .toc .t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .toc a{display:block;color:var(--ink-2);text-decoration:none;border-left:1px solid var(--line);padding-left:13px}
+  .toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+  main{max-width:var(--m);min-width:0}
+  section{padding-top:46px}
+  h2{font-family:var(--serif);font-weight:400;font-size:31px;line-height:1.15;letter-spacing:-.01em;margin:0 0 6px;display:flex;gap:16px;align-items:baseline}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.06em;padding-top:6px}
+  .rule{height:1px;background:var(--line);width:64px;margin:14px 0 20px}
+  h3{font-family:var(--sans);font-weight:600;font-size:16.5px;margin:30px 0 8px}
+  p{margin:0 0 14px}
+  .muted{color:var(--ink-3)}
+  code{font-family:var(--mono);font-size:.87em;background:var(--accent-soft);border:1px solid var(--line-2);padding:.5px 5px;border-radius:3px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0 18px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:400;border-bottom:1px solid var(--ink-2)}
+  td .f{font-family:var(--mono);font-size:12px;color:var(--accent)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--ink-2)}
+  .badge.p1{border-color:rgba(184,49,95,.5);color:var(--accent)}
+  /* Квадрант приоритетов */
+  .quad{display:grid;grid-template-columns:44px 1fr 1fr;grid-template-rows:auto 1fr 1fr;border:1px solid var(--line);margin:18px 0 8px}
+  .quad .ax{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:grid;place-items:center;padding:8px}
+  .quad .cell{padding:14px;border-left:1px solid var(--line);border-top:1px solid var(--line);min-height:120px}
+  .quad .cell h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px;font-weight:400}
+  .item{display:block;font-size:13px;padding:6px 0;border-top:1px solid var(--line-2)}
+  .item:first-of-type{border-top:0}
+  .item b{font-weight:600}
+  .item span{display:block;color:var(--ink-3);font-size:11.5px;font-family:var(--mono)}
+  .pick{border-top:1px solid var(--line);padding:14px 0;display:grid;grid-template-columns:28px 1fr;gap:12px}
+  .pick .i{font-family:var(--mono);font-size:12px;color:var(--accent);padding-top:2px}
+  .pick .h{font-weight:600;font-size:14.5px}
+  .pick .d{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+  .colophon{margin-top:64px;padding-top:20px;border-top:1px solid var(--ink);font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  @media (max-width:900px){.doc{grid-template-columns:1fr;gap:0}.toc{position:static;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:16px}.quad{grid-template-columns:1fr;grid-template-rows:none}.quad .cell{border-left:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="cover">
+    <div class="kicker">LOVII · loyalty · бэклог развития</div>
+    <h1>Что добавить в промо-конструктор</h1>
+    <p class="lede">Идеи развиваются в три стороны: больше механик (что срабатывает), контуры управления (чтобы было безопасно) и обратная связь (чтобы партнёр видел эффект). Ниже — приоритеты и моя рекомендация.</p>
+    <div class="meta">
+      <div><b>Класс</b>рабочая наработка, не канон</div>
+      <div><b>Дата</b>2026-09-22</div>
+      <div><b>База</b>кэшбэк · группы · чек · комбо · подарок</div>
+      <div><b>Статус</b>предложение к обсуждению</div>
+    </div>
+  </header>
+
+  <div class="doc">
+    <nav class="toc" aria-label="Содержание">
+      <div class="t">Содержание</div>
+      <a href="#s1">1 · Карта приоритетов</a>
+      <a href="#s2">2 · Новые механики</a>
+      <a href="#s3">3 · Контуры управления</a>
+      <a href="#s4">4 · Эффект акции</a>
+      <a href="#s5">5 · Опыт покупателя</a>
+      <a href="#s6">6 · Риски</a>
+      <a href="#s7">7 · Рекомендация</a>
+    </nav>
+
+    <main>
+      <section id="s1">
+        <h2><span class="n">01</span>Карта приоритетов</h2>
+        <div class="rule"></div>
+        <p>Оценка по опыту рынка, не измерение: «эффект» — ожидаемая польза для удержания и среднего чека, «стоимость» — объём работы в <code>core + b2b + app</code>.</p>
+        <div class="quad">
+          <div class="ax"></div>
+          <div class="ax">низкая стоимость</div>
+          <div class="ax">высокая стоимость</div>
+          <div class="ax" style="writing-mode:vertical-rl;transform:rotate(180deg)">высокий эффект</div>
+          <div class="cell">
+            <h4>Делать первым</h4>
+            <span class="item"><b>Счастливые часы</b><span>time → любой</span></span>
+            <span class="item"><b>Бюджет и лимиты акции</b><span>контур, не механика</span></span>
+            <span class="item"><b>Штампы «N-й в подарок»</b><span>nth → gift</span></span>
+            <span class="item"><b>Сегменты: новичок / спящий</b><span>segment → любой</span></span>
+            <span class="item"><b>Пуш-напоминания по акции</b><span>пуши уже есть</span></span>
+          </div>
+          <div class="cell">
+            <h4>Крупные ставки</h4>
+            <span class="item"><b>Динамическое комбо в корзине</b><span>combo → discount</span></span>
+            <span class="item"><b>Серии и миссии</b><span>streak → cashback_fixed</span></span>
+            <span class="item"><b>Выгоды держателям PASS</b><span>subscription → discount</span></span>
+            <span class="item"><b>POS/касса</b><span>интеграция</span></span>
+          </div>
+          <div class="ax" style="writing-mode:vertical-rl;transform:rotate(180deg)">низкий эффект</div>
+          <div class="cell">
+            <h4>Быстрые улучшения</h4>
+            <span class="item"><b>x2 баллы в выходные</b><span>time → bonus_multiplier</span></span>
+            <span class="item"><b>Минимум для самовывоза</b><span>delivery → discount</span></span>
+            <span class="item"><b>Раздел «Мои акции»</b><span>витрина</span></span>
+            <span class="item"><b>Шаблоны и дублирование</b><span>UX конструктора</span></span>
+          </div>
+          <div class="cell">
+            <h4>Потом</h4>
+            <span class="item"><b>Выбор подарка покупателем</b><span>gift_choice</span></span>
+            <span class="item"><b>Календарь кампаний</b><span>внутренний инструмент</span></span>
+            <span class="item"><b>Реферальная связка</b><span>referral</span></span>
+          </div>
+        </div>
+        <p class="muted">Вертикальная ось — ожидаемый эффект, горизонтальная — стоимость внедрения. Раскладка — предмет решения, а не измерение.</p>
+      </section>
+
+      <section id="s2">
+        <h2><span class="n">02</span>Новые механики</h2>
+        <div class="rule"></div>
+        <p>Механика — это по-прежнему пара «триггер → награда». Добавляем и то, и другое.</p>
+        <h3>P1 — следующий шаг</h3>
+        <table>
+          <thead><tr><th>Механика</th><th>Триггер → Награда</th><th>Зачем</th></tr></thead>
+          <tbody>
+            <tr><td>Штампы «N-й в подарок»</td><td class="f">nth → gift</td><td>возврат: «6-й кофе в подарок»</td></tr>
+            <tr><td>Счастливые часы / дни</td><td class="f">time → любой</td><td>заполнить просадки трафика</td></tr>
+            <tr><td>Сегмент: новичок / спящий</td><td class="f">segment → любой</td><td>точность вместо скидки всем</td></tr>
+            <tr><td>Второй товар со скидкой</td><td class="f">qty → discount</td><td>рост среднего чека</td></tr>
+          </tbody>
+        </table>
+        <h3>P2–P3 — расширение</h3>
+        <table>
+          <thead><tr><th>Механика</th><th>Триггер → Награда</th><th>Зачем</th></tr></thead>
+          <tbody>
+            <tr><td>x2 баллы в выходные</td><td class="f">time → bonus_multiplier</td><td>мотивация без скидки</td></tr>
+            <tr><td>Промокод после покупки</td><td class="f">cart_sum → coupon_issue</td><td>возврат клиента</td></tr>
+            <tr><td>Бесплатная доставка от суммы</td><td class="f">cart_sum → free_delivery</td><td>средний чек</td></tr>
+            <tr><td>День рождения / праздники</td><td class="f">birthday → gift</td><td>тёплая механика</td></tr>
+            <tr><td>Выбор подарка покупателем</td><td class="f">cart_sum → gift_choice</td><td>вовлечение</td></tr>
+            <tr><td>Серии и миссии</td><td class="f">streak → cashback_fixed</td><td>привычка</td></tr>
+            <tr><td>Выгоды держателям PASS</td><td class="f">subscription → discount</td><td>аргумент подписки</td></tr>
+            <tr><td>Динамическое комбо</td><td class="f">combo → discount</td><td>скидка при наборе A+B</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s3">
+        <h2><span class="n">03</span>Контуры управления</h2>
+        <div class="rule"></div>
+        <p>Без этих контуров включать механики опасно: удачная акция может стать дорогой.</p>
+        <table>
+          <thead><tr><th>Контур</th><th>Что даёт</th></tr></thead>
+          <tbody>
+            <tr><td>Бюджет акции + авто-стоп</td><td>«не больше 20 000 ₽ в месяц», при исчерпании — выключается</td></tr>
+            <tr><td>Лимиты на клиента</td><td>«1 раз», «не чаще раза в месяц» — защита от абуза</td></tr>
+            <tr><td>Расписание и автозапуск</td><td>старт/стоп по дате, дни недели, часы</td></tr>
+            <tr><td>Черновик → публикация → архив</td><td>подготовить и отключить в один клик</td></tr>
+            <tr><td>Шаблоны и дублирование</td><td>пресеты: «Счастливые часы», «Подарок от 2 000», «1+1»</td></tr>
+            <tr><td>Сеть: акция на все точки</td><td>один раз настроил — применилось к бренду</td></tr>
+            <tr><td>Модерация платформой</td><td>потолки %, стоп-лист — защита экономики</td></tr>
+            <tr><td>История и откат</td><td>разбор спорных начислений</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s4">
+        <h2><span class="n">04</span>Эффект акции</h2>
+        <div class="rule"></div>
+        <p>Партнёр выключит то, пользы чего не видит. Нужен отчёт, который связывает акцию с деньгами.</p>
+        <table>
+          <thead><tr><th>Метрика</th><th>Смысл</th></tr></thead>
+          <tbody>
+            <tr><td>Чеки с акцией / без</td><td>охват механики</td></tr>
+            <tr><td>Средний чек с акцией vs без</td><td>влияние на чек</td></tr>
+            <tr><td>Стоимость программы</td><td>выплаты из доли точки + комиссия 25%; прогноз до публикации и факт после</td></tr>
+            <tr><td>Новые vs вернувшиеся</td><td>привлекаем или каннибализируем</td></tr>
+            <tr><td>Топ-клиенты акции</td><td>кого терять нельзя</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s5">
+        <h2><span class="n">05</span>Опыт покупателя</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Идея</th><th>Что даёт</th></tr></thead>
+          <tbody>
+            <tr><td>Раздел «Мои акции» в профиле</td><td>покупатель видит, где выгодно</td></tr>
+            <tr><td>Штампы и уровни</td><td>прогресс «3 из 5»</td></tr>
+            <tr><td>Пуш-напоминания</td><td>«счастливый час начался», «остался 1 штамп»</td></tr>
+            <tr><td>Честный чек</td><td>«начислено 55 баллов, сэкономлено 58 ₽»</td></tr>
+            <tr><td>«Сколько вы сэкономили»</td><td>гордость и возврат — скрин-тест премиального банка</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s6">
+        <h2><span class="n">06</span>Риски</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Осторожно</th><th>Почему</th></tr></thead>
+          <tbody>
+            <tr><td>Скидка «в лоб» по умолчанию</td><td>режет маржу линейно; баллы и подарки дешевле в восприятии</td></tr>
+            <tr><td>Стекирование без лимита</td><td>скидка × кэшбэк × подарок складываются в убыток</td></tr>
+            <tr><td>Публикация без прогноза стоимости</td><td>партнёр не понимает, за что платит</td></tr>
+            <tr><td>Акция «для всех» постоянным клиентам</td><td>каннибализация — лучше сегменты</td></tr>
+            <tr><td>Много сложных механик сразу</td><td>5 понятных работают лучше 50 непонятных</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s7">
+        <h2><span class="n">07</span>Рекомендация</h2>
+        <div class="rule"></div>
+        <p>Мой порядок для следующей волны:</p>
+        <div class="pick"><div class="i">1</div><div><div class="h">Бюджет и лимиты акции</div><div class="d">дешевле всего и снимает главный страх партнёра — что акция разорит</div></div></div>
+        <div class="pick"><div class="i">2</div><div><div class="h">Штампы «N-й в подарок»</div><div class="d">сильнейший возврат для типового МСП: кофейни, пекарни</div></div></div>
+        <div class="pick"><div class="i">3</div><div><div class="h">Счастливые часы</div><div class="d">малая доработка существующих правил, ощутимый эффект на трафик</div></div></div>
+        <div class="pick"><div class="i">4</div><div><div class="h">Сегменты с пресетами</div><div class="d">новичок / спящий — точность вместо «скидки всем»</div></div></div>
+        <div class="pick"><div class="i">5</div><div><div class="h">Пуш-напоминания и «Мои акции»</div><div class="d">дёшево, усиливает любую механику</div></div></div>
+        <div class="pick"><div class="i">6</div><div><div class="h">Отчёт «эффект акции»</div><div class="d">доверие и повторяемость</div></div></div>
+        <p class="muted">Порядок зависит от цели первой волны: удержание (штампы, серии) или трафик (счастливые часы, «спящий»).</p>
+      </section>
+
+      <div class="colophon"><span>Промо-конструктор · бэклог развития · loyalty/</span><span>AutoClaw · 2026-09-22</span></div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
