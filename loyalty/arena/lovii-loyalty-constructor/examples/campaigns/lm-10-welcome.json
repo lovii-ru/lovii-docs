@@ -1,0 +1,80 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "welcome",
+  "name": "+100 баллов за первую покупку",
+  "priority": 120,
+  "stacking": {
+    "group": "bonus",
+    "mode": "exclusive"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "customer.orders_at_merchant",
+      "op": "==",
+      "value": 0
+    },
+    {
+      "field": "basket.paid_money",
+      "op": ">=",
+      "value": 30000
+    }
+  ],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "mode": "fixed",
+      "amount": 100,
+      "ttl_days": 10,
+      "funding": "merchant",
+      "lot_label": "Приветственные баллы"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "campaign"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "+100 баллов за первую покупку",
+    "badge": "+100 б.",
+    "subtitle": "Чек от 300 ₽ · баллы на 10 дней",
+    "terms": "Один раз для нового клиента точки при первой покупке от 300 ₽, оплаченной деньгами."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-10",
+    "template_params": {
+      "amount": 100,
+      "min_check_minor": 30000,
+      "ttl_days": 10,
+      "holdout_pct": 10
+    }
+  }
+}

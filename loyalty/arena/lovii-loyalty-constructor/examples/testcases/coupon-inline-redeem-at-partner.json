@@ -1,0 +1,178 @@
+{
+  "id": "coupon-inline-redeem-at-partner",
+  "title": "Купон партнёра (inline) в кошельке клиента → виртуальная кампания coupon:<code> даёт −15 % у mrc_sloyka",
+  "kind": "quote",
+  "campaigns": [],
+  "settings": {},
+  "context": {
+    "merchant_id": "mrc_sloyka",
+    "location_id": "loc_tverskoy",
+    "order_id": "ord_sloyka_1",
+    "channel": "qr",
+    "now": "2026-09-22T09:40:00+03:00",
+    "customer": {
+      "id": "cus_1",
+      "name": "Аня",
+      "status": "PASS",
+      "tier": null,
+      "orders_at_merchant": 12,
+      "days_since_last_purchase": 3,
+      "visits_30d": 6,
+      "spent_90d": 1240000,
+      "is_staff": false,
+      "birthday_in_days": 40,
+      "segments": [
+        "regular"
+      ],
+      "points_balance": 1250
+    },
+    "items": [
+      {
+        "sku": "sl1",
+        "name": "Слойка",
+        "category": "bakery",
+        "price_minor": 18000,
+        "qty": 2
+      }
+    ],
+    "coupon_code": "LV-TEST2345",
+    "redeem_points": 0,
+    "state": {
+      "stamps": {},
+      "counters": {},
+      "lots": [],
+      "coupons": [
+        {
+          "code": "LV-TEST2345",
+          "title": "Купон −15 % от «Daily»",
+          "inline": {
+            "conditions": [],
+            "actions": [
+              {
+                "type": "discount",
+                "scope": "basket",
+                "mode": "percent",
+                "value": 15
+              }
+            ]
+          },
+          "expires_at": "2026-09-27T09:40:00+03:00",
+          "redeemer_merchant_id": "mrc_sloyka",
+          "issued_by": "cmp_cross",
+          "issued_at": "2026-09-22T08:00:00+03:00",
+          "used": false,
+          "template_id": "lm-12"
+        }
+      ]
+    },
+    "catalog": []
+  },
+  "expected": {
+    "after_discounts_minor": 30600,
+    "applied": [
+      {
+        "action_index": 0,
+        "action_type": "discount",
+        "campaign_id": "coupon:LV-TEST2345",
+        "campaign_version": 1,
+        "cost_minor": 5400,
+        "details": {
+          "mode": "percent",
+          "scope": "basket",
+          "value": 15
+        },
+        "discount_minor": 5400,
+        "funding": "merchant",
+        "items": [
+          {
+            "discount_minor": 5400,
+            "qty": 2,
+            "sku": "sl1"
+          }
+        ],
+        "mechanic": "coupon",
+        "points": 0,
+        "title": "Купон −15 % от «Daily»",
+        "ttl_days": null
+      },
+      {
+        "action_index": 0,
+        "action_type": "accrue_points",
+        "campaign_id": "platform_base",
+        "campaign_version": 1,
+        "cost_minor": 0,
+        "details": {
+          "base_minor": 30600,
+          "expires_at": null,
+          "lot_label": "Кэшбэк LOVII",
+          "mode": "percent",
+          "percent": 5,
+          "to": "customer"
+        },
+        "discount_minor": 0,
+        "funding": "platform",
+        "mechanic": "platform_base",
+        "points": 15,
+        "title": "Кэшбэк LOVII 5 %",
+        "ttl_days": null
+      }
+    ],
+    "cost_minor": 5400,
+    "coupon": {
+      "campaign_id": "coupon:LV-TEST2345",
+      "code": "LV-TEST2345",
+      "valid": true
+    },
+    "coupons_issued": [],
+    "deferred": [],
+    "discount_total_minor": 5400,
+    "explain": [
+      {
+        "campaign_id": "coupon:LV-TEST2345",
+        "name": "Купон −15 % от «Daily»",
+        "result": "applied"
+      },
+      {
+        "campaign_id": "platform_base",
+        "name": "Кэшбэк LOVII 5 %",
+        "result": "applied"
+      }
+    ],
+    "gross_total_minor": 36000,
+    "hints": [],
+    "lines": [
+      {
+        "category": "bakery",
+        "discount_minor": 5400,
+        "final_minor": 30600,
+        "name": "Слойка",
+        "price_minor": 18000,
+        "qty": 2,
+        "sku": "sl1"
+      }
+    ],
+    "local": {
+      "date": "2026-09-22",
+      "time": "09:40",
+      "timezone": "Europe/Moscow",
+      "weekday": 2
+    },
+    "lots_to_accrue": [
+      {
+        "campaign_id": "platform_base",
+        "expires_at": null,
+        "funding": "platform",
+        "label": "Кэшбэк LOVII",
+        "points": 15
+      }
+    ],
+    "lots_to_redeem": [],
+    "notifications": [],
+    "paid_money_minor": 30600,
+    "points_redeem_max": 153,
+    "points_redeemed": 0,
+    "points_to_accrue": 15,
+    "reward_base_minor": 30600,
+    "stamps": []
+  }
+}

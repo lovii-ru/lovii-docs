@@ -1,0 +1,62 @@
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--clr-bg, #0A0A0F);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+#preloader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#preloader.hidden-done {
+  display: none;
+}
+
+.preloader-svg {
+  width: 80px;
+  height: 80px;
+  overflow: visible;
+}
+
+.preloader-svg rect,
+.preloader-svg circle {
+  fill: none;
+  stroke: var(--clr-heading, rgba(255,255,255,0.8));
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
+.preloader-svg circle {
+  fill: var(--clr-heading, rgba(255,255,255,0.8));
+}
+
+/* Scattered start positions */
+.preloader-svg .pr1 { transform: translate(-60px, -40px); }
+.preloader-svg .pr2 { transform: translate(40px, -50px); }
+.preloader-svg .pr3 { transform: translate(-50px, 40px); }
+.preloader-svg .pr4 { transform: translate(50px, 40px); }
+.preloader-svg .pc  { transform: translate(60px, -40px); }
+
+/* Assembly animation */
+.preloader-svg.animate rect,
+.preloader-svg.animate circle {
+  opacity: 1;
+  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.preloader-svg.animate .pr1 { transform: translate(0, 0); transition-delay: 0s; }
+.preloader-svg.animate .pr2 { transform: translate(0, 0); transition-delay: 0.1s; }
+.preloader-svg.animate .pr3 { transform: translate(0, 0); transition-delay: 0.2s; }
+.preloader-svg.animate .pr4 { transform: translate(0, 0); transition-delay: 0.3s; }
+.preloader-svg.animate .pc  { transform: translate(0, 0); transition-delay: 0.4s; opacity: 0.8; }

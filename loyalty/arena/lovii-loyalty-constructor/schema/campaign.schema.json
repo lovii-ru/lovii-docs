@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lovii.ru/schemas/loyalty/campaign-1.0.json",
+  "title": "LOVII Loyalty Campaign Spec",
+  "description": "Единая спецификация кампании лояльности LOVII (DSL). См. docs/lovii-loyalty-constructor/03-rules-engine.md",
+  "type": "object",
+  "required": ["spec_version", "mechanic", "name", "trigger", "actions"],
+  "additionalProperties": false,
+  "properties": {
+    "spec_version": { "const": "1.0" },
+    "mechanic": {
+      "type": "string",
+      "enum": ["threshold", "bundle", "addon", "cashback", "happy_hours", "stamps", "tiers", "subscription", "challenge", "welcome", "referral", "cross_promo", "coupon", "winback", "birthday", "instant_win", "gift_card", "review", "platform_base", "custom"]
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "description": { "type": "string", "maxLength": 2000 },
+    "priority": { "type": "integer", "minimum": 0, "maximum": 1000, "default": 100 },
+    "stacking": { "$ref": "#/$defs/Stacking" },
+    "schedule": { "$ref": "#/$defs/Schedule" },
+    "audience": { "$ref": "#/$defs/Audience" },
+    "trigger": { "$ref": "#/$defs/Trigger" },
+    "conditions": { "type": "array", "items": { "$ref": "#/$defs/Condition" }, "default": [] },
+    "actions": { "type": "array", "minItems": 1, "maxItems": 10, "items": { "$ref": "#/$defs/Action" } },
+    "limits": { "$ref": "#/$defs/Limits" },
+    "content": { "$ref": "#/$defs/Content" },
+    "channels": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "showcase": { "type": "boolean", "default": true },
+        "checkout": { "type": "boolean", "default": true },
+        "push": { "type": "boolean", "default": false },
+        "cashier": { "type": "boolean", "default": true }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "template_id": { "type": "string", "pattern": "^lm-[0-9]{2}$|^platform$|^custom$" },
+        "template_params": { "type": "object" },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "Minor": { "type": "integer", "minimum": 0, "description": "Сумма в копейках" },
+    "Points": { "type": "integer", "minimum": 0, "description": "Баллы (1 балл = 1 ₽)" },
+    "Percent": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 0.01 },
+
+    "Stacking": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["group", "mode"],
+      "properties": {
+        "group": { "type": "string", "enum": ["item_price", "basket_discount", "cashback", "bonus", "stamp", "coupon_out", "platform_base", "custom"] },
+        "mode": { "type": "string", "enum": ["exclusive", "stackable"] },
+        "blocks": { "type": "array", "items": { "type": "string" }, "description": "Группы, которые не применяются вместе с этой кампанией" }
+      }
+    },
+
+    "Schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "starts_at": { "type": ["string", "null"], "format": "date-time" },
+        "ends_at": { "type": ["string", "null"], "format": "date-time" },
+        "timezone": { "type": "string", "default": "Europe/Moscow" },
+        "windows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["days", "from", "to"],
+            "properties": {
+              "days": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 1, "maximum": 7 }, "description": "1 = понедельник … 7 = воскресенье" },
+              "from": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$" },
+              "to": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$" }
+            }
+          }
+        }
+      }
+    },
+
+    "Audience": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "segments": { "type": "array", "items": { "type": "string" }, "default": ["all"], "description": "all | new | regular | sleeping | vip_platform | custom:<segment_id>" },
+        "statuses": { "type": "array", "items": { "type": "string", "enum": ["PAY", "PASS", "VIP"] } },
+        "tiers": { "type": "array", "items": { "type": "string" } },
+        "include_customer_ids": { "type": "array", "items": { "type": "string" } },
+        "exclude_customer_ids": { "type": "array", "items": { "type": "string" } },
+        "exclude_staff": { "type": "boolean", "default": true },
+        "holdout_pct": { "type": "integer", "minimum": 0, "maximum": 50, "default": 0 }
+      }
+    },
+
+    "Trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["purchase", "checkin", "referral_qualified", "inactivity", "birthday", "stamp_card_completed", "challenge_completed", "review_approved", "tier_recalculated", "subscription_purchased", "manual"] },
+        "params": { "type": "object" }
+      }
+    },
+
+    "ItemFilter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sku": { "type": "object", "properties": { "in": { "type": "array", "items": { "type": "string" } } } },
+        "category": { "type": "object", "properties": { "in": { "type": "array", "items": { "type": "string" } } } },
+        "tags": { "type": "object", "properties": { "any": { "type": "array", "items": { "type": "string" } }, "all": { "type": "array", "items": { "type": "string" } } } },
+        "exclude_sku": { "type": "array", "items": { "type": "string" } },
+        "min_price_minor": { "$ref": "#/$defs/Minor" }
+      }
+    },
+
+    "FieldPath": {
+      "type": "string",
+      "pattern": "^(basket\\.(gross_total|after_discounts|paid_money|items|item_count|eligible_amount)|customer\\.(status|tier|orders_at_merchant|days_since_last_purchase|visits_30d|spent_90d|is_staff|birthday_in_days|segments|points_balance)|context\\.(weekday|time|date|channel)|coupon\\.(code|valid)|stamps\\.[a-z0-9_]+\\.count|subscription\\.active\\.[a-z0-9_]+|referral\\.qualified)$"
+    },
+
+    "Condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["field", "op"],
+          "properties": {
+            "field": { "$ref": "#/$defs/FieldPath" },
+            "op": { "type": "string", "enum": ["==", "!=", ">", ">=", "<", "<=", "in", "not_in", "between", "contains", "any", "all", "count_gte", "sum_gte"] },
+            "value": {},
+            "match": { "$ref": "#/$defs/ItemFilter" },
+            "min_qty": { "type": "integer", "minimum": 1 }
+          }
+        },
+        { "type": "object", "additionalProperties": false, "required": ["any"], "properties": { "any": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Condition" } } } },
+        { "type": "object", "additionalProperties": false, "required": ["all"], "properties": { "all": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Condition" } } } },
+        { "type": "object", "additionalProperties": false, "required": ["not"], "properties": { "not": { "$ref": "#/$defs/Condition" } } }
+      ]
+    },
+
+    "BundleGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filter", "qty"],
+      "properties": { "name": { "type": "string" }, "filter": { "$ref": "#/$defs/ItemFilter" }, "qty": { "type": "integer", "minimum": 1 } }
+    },
+
+    "Action": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["discount", "free_item", "redeem_subscription_unit", "accrue_points", "stamp", "coupon_issue", "challenge_progress", "random_reward", "notify", "tier_assign"] },
+        "filter": { "$ref": "#/$defs/ItemFilter" },
+        "stacking": { "$ref": "#/$defs/Stacking" },
+        "cost_model": { "type": "string", "enum": ["face_value", "cost_price", "zero"], "default": "face_value" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "discount" } } },
+          "then": {
+            "required": ["scope", "mode", "value"],
+            "properties": {
+              "scope": { "type": "string", "enum": ["basket", "items", "item", "bundle"] },
+              "mode": { "type": "string", "enum": ["percent", "fixed", "to_price", "cheapest_free"] },
+              "value": { "type": "number", "minimum": 0 },
+              "max_amount_minor": { "$ref": "#/$defs/Minor" },
+              "max_qty": { "type": "integer", "minimum": 1 },
+              "bundle": { "type": "object", "properties": { "groups": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/BundleGroup" } }, "max_sets": { "type": "integer", "minimum": 1, "default": 1 } } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "free_item" } } },
+          "then": {
+            "properties": {
+              "sku": { "type": "string" },
+              "pick": { "type": "string", "enum": ["cheapest", "most_expensive"], "default": "cheapest" },
+              "qty": { "type": "integer", "minimum": 1, "default": 1 },
+              "add_if_missing": { "type": "boolean", "default": false },
+              "requires_purchase_of": { "$ref": "#/$defs/ItemFilter" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "accrue_points" } } },
+          "then": {
+            "required": ["mode", "funding"],
+            "properties": {
+              "mode": { "type": "string", "enum": ["percent", "fixed", "ladder", "by_category", "multiplier"] },
+              "percent": { "$ref": "#/$defs/Percent" },
+              "amount": { "$ref": "#/$defs/Points" },
+              "multiplier": { "type": "number", "minimum": 1, "maximum": 10 },
+              "steps": { "type": "array", "minItems": 1, "maxItems": 5, "items": { "type": "object", "required": ["from_minor", "percent"], "properties": { "from_minor": { "$ref": "#/$defs/Minor" }, "percent": { "$ref": "#/$defs/Percent" } } } },
+              "categories": { "type": "object", "additionalProperties": { "$ref": "#/$defs/Percent" } },
+              "base": { "type": "string", "enum": ["paid_money", "eligible_amount", "total"], "default": "paid_money" },
+              "cap": { "$ref": "#/$defs/Points" },
+              "ttl_days": { "type": ["integer", "null"], "minimum": 1, "maximum": 730 },
+              "funding": { "type": "string", "enum": ["merchant", "platform"] },
+              "to": { "type": "string", "enum": ["customer", "referrer", "referee"], "default": "customer" },
+              "lot_label": { "type": "string", "maxLength": 60 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "stamp" } } },
+          "then": {
+            "required": ["card", "target", "reward"],
+            "properties": {
+              "card": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+              "count": { "type": "integer", "minimum": 1, "default": 1 },
+              "max_per_order": { "type": "integer", "minimum": 1, "default": 1 },
+              "min_interval_minutes": { "type": "integer", "minimum": 0, "default": 120 },
+              "target": { "type": "integer", "minimum": 2, "maximum": 30 },
+              "start_bonus": { "type": "integer", "minimum": 0, "default": 0 },
+              "card_ttl_days": { "type": "integer", "minimum": 7, "default": 90 },
+              "min_paid_money_minor": { "$ref": "#/$defs/Minor" },
+              "reward": { "$ref": "#/$defs/Action" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "coupon_issue" } } },
+          "then": {
+            "required": ["ttl_days"],
+            "properties": {
+              "redeem_campaign_id": { "type": "string" },
+              "inline": { "type": "object", "required": ["actions"], "properties": { "conditions": { "type": "array", "items": { "$ref": "#/$defs/Condition" } }, "actions": { "type": "array", "items": { "$ref": "#/$defs/Action" } } } },
+              "ttl_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+              "to": { "type": "string", "enum": ["customer", "referrer", "referee"], "default": "customer" },
+              "redeemer_merchant_id": { "type": "string" },
+              "max_per_customer_per_week": { "type": "integer", "minimum": 1, "default": 1 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "challenge_progress" } } },
+          "then": {
+            "required": ["challenge", "metric", "target", "window_days", "reward"],
+            "properties": {
+              "challenge": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+              "metric": { "type": "string", "enum": ["visits", "amount", "unique_sku", "streak_weeks"] },
+              "increment": { "type": "integer", "minimum": 1, "default": 1 },
+              "target": { "type": "integer", "minimum": 1 },
+              "window_days": { "type": "integer", "minimum": 1, "maximum": 90 },
+              "reward": { "$ref": "#/$defs/Action" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "random_reward" } } },
+          "then": {
+            "required": ["table"],
+            "properties": {
+              "seed": { "type": "string", "enum": ["order_id"], "default": "order_id" },
+              "table": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["weight", "action"], "properties": { "weight": { "type": "number", "exclusiveMinimum": 0 }, "action": { "$ref": "#/$defs/Action" }, "daily_limit": { "type": "integer", "minimum": 0 }, "fallback": { "type": "boolean" }, "label": { "type": "string" } } } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "redeem_subscription_unit" } } },
+          "then": { "required": ["plan_id"], "properties": { "plan_id": { "type": "string" }, "units": { "type": "integer", "minimum": 1, "default": 1 } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "notify" } } },
+          "then": { "required": ["channel", "template"], "properties": { "channel": { "type": "string", "enum": ["push", "email", "inapp"] }, "template": { "type": "string" }, "params": { "type": "object" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "tier_assign" } } },
+          "then": { "required": ["tier"], "properties": { "tier": { "type": "string" } } }
+        }
+      ]
+    },
+
+    "Limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "per_customer": {
+          "type": ["object", "null"],
+          "required": ["count", "period"],
+          "properties": {
+            "count": { "type": "integer", "minimum": 1 },
+            "period": { "type": "string", "enum": ["day", "week", "month", "campaign"] }
+          }
+        },
+        "total_uses": { "type": ["integer", "null"], "minimum": 1 },
+        "budget_total_minor": { "type": ["integer", "null"], "minimum": 0 },
+        "budget_daily_minor": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+
+    "Content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title"],
+      "properties": {
+        "title": { "type": "string", "maxLength": 60 },
+        "badge": { "type": "string", "maxLength": 12 },
+        "subtitle": { "type": "string", "maxLength": 120 },
+        "cta": { "type": "string", "maxLength": 30 },
+        "terms": { "type": "string", "maxLength": 1000 },
+        "image": { "type": "string", "format": "uri-reference" },
+        "push": { "type": "object", "properties": { "title": { "type": "string", "maxLength": 50 }, "body": { "type": "string", "maxLength": 150 } } }
+      }
+    }
+  }
+}

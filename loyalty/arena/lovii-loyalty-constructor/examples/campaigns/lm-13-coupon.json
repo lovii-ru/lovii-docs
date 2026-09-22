@@ -1,0 +1,102 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "coupon",
+  "name": "Промокод DAILY15: −15 % на завтраки",
+  "priority": 130,
+  "stacking": {
+    "group": "basket_discount",
+    "mode": "exclusive"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "purchase",
+    "params": {
+      "coupon": {
+        "codes": [
+          "DAILY15"
+        ],
+        "kind": "public"
+      }
+    }
+  },
+  "conditions": [
+    {
+      "field": "coupon.valid",
+      "op": "==",
+      "value": true
+    },
+    {
+      "field": "basket.gross_total",
+      "op": ">=",
+      "value": 30000
+    }
+  ],
+  "actions": [
+    {
+      "type": "discount",
+      "scope": "items",
+      "mode": "percent",
+      "value": 15,
+      "filter": {
+        "category": {
+          "in": [
+            "breakfast"
+          ]
+        }
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "campaign"
+    },
+    "total_uses": 500,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Промокод DAILY15: −15 % на завтраки",
+    "badge": "DAILY15",
+    "subtitle": "Чек от 300 ₽",
+    "cta": "Ввести код",
+    "terms": "Код вводится при оплате. 1 раз на клиента, всего 500 использований. Не суммируется с другими скидками."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-13",
+    "template_params": {
+      "code": "DAILY15",
+      "kind": "public",
+      "reward_type": "discount",
+      "discount_pct": 15,
+      "category": "breakfast",
+      "points": 150,
+      "free_sku": "cd3",
+      "min_check_minor": 30000,
+      "until": "",
+      "per_customer": 1,
+      "total_uses": 500,
+      "blocks_cashback": false
+    }
+  }
+}

@@ -1,0 +1,504 @@
+{
+  "id": "scheduler-winback-birthday",
+  "title": "Планировщик: win-back для уснувшего (47 дней ≥ 45, ≥ 2 покупок) и подарок имениннице (3 дня до ДР); постоянный и новый — без выдачи",
+  "kind": "scheduler",
+  "campaigns": [
+    {
+      "campaign_id": "cmp_winback",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-14-winback.json"
+    },
+    {
+      "campaign_id": "cmp_bday",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-15-birthday.json"
+    }
+  ],
+  "merchant_id": "mrc_daily",
+  "now": "2026-09-22T10:00:00+03:00",
+  "settings": {},
+  "customers": [
+    {
+      "customer": {
+        "id": "cus_1",
+        "name": "Аня",
+        "status": "PASS",
+        "tier": null,
+        "orders_at_merchant": 12,
+        "days_since_last_purchase": 3,
+        "visits_30d": 6,
+        "spent_90d": 1240000,
+        "is_staff": false,
+        "birthday_in_days": 40,
+        "segments": [
+          "regular"
+        ],
+        "points_balance": 1250
+      },
+      "state": {
+        "stamps": {
+          "coffee": {
+            "count": 4,
+            "last_at": "2026-09-20T10:00:00+03:00"
+          }
+        },
+        "counters": {},
+        "subscriptions": [],
+        "challenges": {},
+        "coupons": [],
+        "lots": [
+          {
+            "lot_id": "lot_base",
+            "label": "Баллы LOVII",
+            "amount": 1050,
+            "amount_left": 1050,
+            "expires_at": null,
+            "funding": "platform",
+            "merchant_id": null
+          },
+          {
+            "lot_id": "lot_p1",
+            "label": "От 450 ₽ — +60 баллов",
+            "amount": 200,
+            "amount_left": 200,
+            "expires_at": "2026-09-26T23:59:59+03:00",
+            "funding": "merchant",
+            "merchant_id": "mrc_daily"
+          }
+        ]
+      }
+    },
+    {
+      "customer": {
+        "id": "cus_sleep",
+        "name": "Игорь",
+        "status": "PAY",
+        "tier": null,
+        "orders_at_merchant": 5,
+        "days_since_last_purchase": 47,
+        "visits_30d": 0,
+        "spent_90d": 68000,
+        "is_staff": false,
+        "birthday_in_days": 200,
+        "segments": [
+          "sleeping"
+        ],
+        "points_balance": 300
+      },
+      "state": {
+        "stamps": {
+          "coffee": {
+            "count": 2,
+            "last_at": "2026-08-06T12:00:00+03:00"
+          }
+        },
+        "counters": {},
+        "subscriptions": [],
+        "challenges": {},
+        "coupons": [],
+        "lots": [
+          {
+            "lot_id": "lot_base",
+            "label": "Баллы LOVII",
+            "amount": 300,
+            "amount_left": 300,
+            "expires_at": null,
+            "funding": "platform",
+            "merchant_id": null
+          }
+        ]
+      }
+    },
+    {
+      "customer": {
+        "id": "cus_bday",
+        "name": "Оля",
+        "status": "VIP",
+        "tier": null,
+        "orders_at_merchant": 8,
+        "days_since_last_purchase": 9,
+        "visits_30d": 2,
+        "spent_90d": 540000,
+        "is_staff": false,
+        "birthday_in_days": 3,
+        "segments": [
+          "regular"
+        ],
+        "points_balance": 4200
+      },
+      "state": {
+        "stamps": {},
+        "counters": {},
+        "subscriptions": [],
+        "challenges": {},
+        "coupons": [],
+        "lots": [
+          {
+            "lot_id": "lot_base",
+            "label": "Баллы LOVII",
+            "amount": 4200,
+            "amount_left": 4200,
+            "expires_at": null,
+            "funding": "platform",
+            "merchant_id": null
+          }
+        ]
+      }
+    },
+    {
+      "customer": {
+        "id": "cus_new",
+        "name": "Дима",
+        "status": "PAY",
+        "tier": null,
+        "orders_at_merchant": 0,
+        "days_since_last_purchase": null,
+        "visits_30d": 0,
+        "spent_90d": 0,
+        "is_staff": false,
+        "birthday_in_days": 120,
+        "segments": [
+          "new"
+        ],
+        "points_balance": 0
+      },
+      "state": {
+        "stamps": {},
+        "counters": {},
+        "subscriptions": [],
+        "challenges": {},
+        "coupons": [],
+        "lots": []
+      }
+    }
+  ],
+  "expected": {
+    "customers": [
+      {
+        "customer": {
+          "birthday_in_days": 40,
+          "days_since_last_purchase": 3,
+          "id": "cus_1",
+          "is_staff": false,
+          "name": "Аня",
+          "orders_at_merchant": 12,
+          "points_balance": 1250,
+          "segments": [
+            "regular"
+          ],
+          "spent_90d": 1240000,
+          "status": "PASS",
+          "tier": null,
+          "visits_30d": 6
+        },
+        "state": {
+          "challenges": {},
+          "counters": {},
+          "coupons": [],
+          "lots": [
+            {
+              "amount": 1050,
+              "amount_left": 1050,
+              "expires_at": null,
+              "funding": "platform",
+              "label": "Баллы LOVII",
+              "lot_id": "lot_base",
+              "merchant_id": null
+            },
+            {
+              "amount": 200,
+              "amount_left": 200,
+              "expires_at": "2026-09-26T23:59:59+03:00",
+              "funding": "merchant",
+              "label": "От 450 ₽ — +60 баллов",
+              "lot_id": "lot_p1",
+              "merchant_id": "mrc_daily"
+            }
+          ],
+          "stamps": {
+            "coffee": {
+              "count": 4,
+              "last_at": "2026-09-20T10:00:00+03:00"
+            }
+          },
+          "subscriptions": []
+        }
+      },
+      {
+        "customer": {
+          "birthday_in_days": 200,
+          "days_since_last_purchase": 47,
+          "id": "cus_sleep",
+          "is_staff": false,
+          "name": "Игорь",
+          "orders_at_merchant": 5,
+          "points_balance": 600,
+          "segments": [
+            "sleeping"
+          ],
+          "spent_90d": 68000,
+          "status": "PAY",
+          "tier": null,
+          "visits_30d": 0
+        },
+        "state": {
+          "challenges": {},
+          "counters": {
+            "cmp_winback:sched:cus_sleep:1": 1
+          },
+          "coupons": [],
+          "lots": [
+            {
+              "amount": 300,
+              "amount_left": 300,
+              "expires_at": null,
+              "funding": "platform",
+              "label": "Баллы LOVII",
+              "lot_id": "lot_base",
+              "merchant_id": null
+            },
+            {
+              "accrued_at": "2026-09-22T10:00:00+03:00",
+              "amount": 300,
+              "amount_left": 300,
+              "campaign_id": "cmp_winback",
+              "expires_at": "2026-10-02T10:00:00+03:00",
+              "funding": "merchant",
+              "label": "Мы скучали",
+              "lot_id": "lot_032f213f",
+              "merchant_id": "mrc_daily"
+            }
+          ],
+          "stamps": {
+            "coffee": {
+              "count": 2,
+              "last_at": "2026-08-06T12:00:00+03:00"
+            }
+          },
+          "subscriptions": []
+        }
+      },
+      {
+        "customer": {
+          "birthday_in_days": 3,
+          "days_since_last_purchase": 9,
+          "id": "cus_bday",
+          "is_staff": false,
+          "name": "Оля",
+          "orders_at_merchant": 8,
+          "points_balance": 4200,
+          "segments": [
+            "regular"
+          ],
+          "spent_90d": 540000,
+          "status": "VIP",
+          "tier": null,
+          "visits_30d": 2
+        },
+        "state": {
+          "challenges": {},
+          "counters": {
+            "cmp_bday:sched:cus_bday:2026": 1
+          },
+          "coupons": [
+            {
+              "campaign_id": null,
+              "code": "LV-JD3MN9LL",
+              "expires_at": "2026-10-02T10:00:00+03:00",
+              "inline": {
+                "actions": [
+                  {
+                    "filter": {
+                      "category": {
+                        "in": [
+                          "dessert"
+                        ]
+                      }
+                    },
+                    "pick": "cheapest",
+                    "qty": 1,
+                    "requires_purchase_of": {
+                      "category": {
+                        "in": [
+                          "coffee"
+                        ]
+                      }
+                    },
+                    "type": "free_item"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "field": "basket.items",
+                    "match": {
+                      "category": {
+                        "in": [
+                          "coffee"
+                        ]
+                      }
+                    },
+                    "min_qty": 1,
+                    "op": "any"
+                  }
+                ]
+              },
+              "issued_at": "2026-09-22T10:00:00+03:00",
+              "issued_by": "cmp_bday",
+              "redeemer_merchant_id": "mrc_daily",
+              "template_id": "lm-15",
+              "title": "Десерт в подарок ко дню рождения",
+              "to": "customer",
+              "ttl_days": 10,
+              "used": false
+            }
+          ],
+          "lots": [
+            {
+              "amount": 4200,
+              "amount_left": 4200,
+              "expires_at": null,
+              "funding": "platform",
+              "label": "Баллы LOVII",
+              "lot_id": "lot_base",
+              "merchant_id": null
+            }
+          ],
+          "stamps": {},
+          "subscriptions": []
+        }
+      },
+      {
+        "customer": {
+          "birthday_in_days": 120,
+          "days_since_last_purchase": null,
+          "id": "cus_new",
+          "is_staff": false,
+          "name": "Дима",
+          "orders_at_merchant": 0,
+          "points_balance": 0,
+          "segments": [
+            "new"
+          ],
+          "spent_90d": 0,
+          "status": "PAY",
+          "tier": null,
+          "visits_30d": 0
+        },
+        "state": {
+          "challenges": {},
+          "counters": {},
+          "coupons": [],
+          "lots": [],
+          "stamps": {},
+          "subscriptions": []
+        }
+      }
+    ],
+    "issued": [
+      {
+        "campaign_id": "cmp_winback",
+        "customer_id": "cus_sleep",
+        "issued": {
+          "coupons": [],
+          "lots": [
+            {
+              "accrued_at": "2026-09-22T10:00:00+03:00",
+              "amount": 300,
+              "amount_left": 300,
+              "campaign_id": "cmp_winback",
+              "expires_at": "2026-10-02T10:00:00+03:00",
+              "funding": "merchant",
+              "label": "Мы скучали",
+              "lot_id": "lot_032f213f",
+              "merchant_id": "mrc_daily"
+            }
+          ],
+          "notifications": [
+            {
+              "campaign_id": "cmp_winback",
+              "channel": "push",
+              "params": {
+                "reward": "+300 баллов",
+                "ttl_days": 10
+              },
+              "template": "winback_step1"
+            }
+          ]
+        }
+      },
+      {
+        "campaign_id": "cmp_bday",
+        "customer_id": "cus_bday",
+        "issued": {
+          "coupons": [
+            {
+              "campaign_id": null,
+              "code": "LV-JD3MN9LL",
+              "expires_at": "2026-10-02T10:00:00+03:00",
+              "inline": {
+                "actions": [
+                  {
+                    "filter": {
+                      "category": {
+                        "in": [
+                          "dessert"
+                        ]
+                      }
+                    },
+                    "pick": "cheapest",
+                    "qty": 1,
+                    "requires_purchase_of": {
+                      "category": {
+                        "in": [
+                          "coffee"
+                        ]
+                      }
+                    },
+                    "type": "free_item"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "field": "basket.items",
+                    "match": {
+                      "category": {
+                        "in": [
+                          "coffee"
+                        ]
+                      }
+                    },
+                    "min_qty": 1,
+                    "op": "any"
+                  }
+                ]
+              },
+              "issued_at": "2026-09-22T10:00:00+03:00",
+              "issued_by": "cmp_bday",
+              "redeemer_merchant_id": "mrc_daily",
+              "template_id": "lm-15",
+              "title": "Десерт в подарок ко дню рождения",
+              "to": "customer",
+              "ttl_days": 10,
+              "used": false
+            }
+          ],
+          "lots": [],
+          "notifications": [
+            {
+              "campaign_id": "cmp_bday",
+              "channel": "push",
+              "params": {
+                "window_days": 10
+              },
+              "template": "birthday_gift"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
