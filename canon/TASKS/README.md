@@ -86,7 +86,7 @@
 | [`SZ-054`](SZ-054-payouts.md) | Выплаты: push-реестр ИП/ООО + pull-заявки НПД |
 | [`SZ-055`](SZ-055-pep-npd-reports.md) | ПЭП-реестр НПД: закрывающие документы, Push-OTP |
 
-### Открыта (17)
+### Открыта (18)
 
 | Карточка | Тема |
 |---|---|
@@ -99,6 +99,7 @@
 | [`SZ-050`](SZ-050-msp-cabinet-v2.md) | Кабинет МСП v2: юрлица, бренды, точки, каталог |
 | [`SZ-051`](SZ-051-orphaned-media-cleanup.md) | Чистка осиротевших ссылок на медиа |
 | [`SZ-062`](SZ-062-ds-css-icons-optimization.md) | Оптимизация CSS/иконок demo + сборка полной ДС |
+| [`SZ-072`](SZ-072-promo-app-integration.md) | Применение промо-механик в app: акция → торговая точка → корзина → чекаут |
 | [`T-008`](T-008-staging-test-data-cleanup.md) | Чистка тестового мусора staging-БД (отложена владельцем) |
 | [`T-009`](T-009-client-order-status-pushes.md) | Пуши accepted/ready + `push:prune-dead` в планировщик |
 | [`T-010`](T-010-promo-ref-universal-capture.md) | Промо/реф-ссылки: любой суффикс, валидация кода по БД |

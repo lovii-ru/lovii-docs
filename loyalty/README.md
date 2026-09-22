@@ -18,9 +18,16 @@
 | [cashback-constructor.md](cashback-constructor.md) | базовый конструктор: кэшбэк по умолчанию + группы товаров (SZ-070) | проект к согласованию |
 | [promo-constructor.md](promo-constructor.md) | промо-механики: сумма чека, подарок, комбо, публикация на витрину (SZ-071) | проект + прототип |
 | [promo-roadmap.md](promo-roadmap.md) | бэклог развития: новые механики, контуры управления, отчётность, риски | предложение |
+
+## Задание на реализацию
+
+- [`SZ-072`](../canon/TASKS/SZ-072-promo-app-integration.md) — применение промо-механик
+  в `lovii-app`: акция → торговая точка → корзина → чекаут (`lovii-core` + `lovii-app`);
+  читаемая версия — [prototypes/sz-072-brief.html](prototypes/sz-072-brief.html).
 | [prototypes/cashback-constructor.html](prototypes/cashback-constructor.html) | HTML-спека базового конструктора + макет мобильных экранов | макет |
 | [prototypes/promo-constructor.html](prototypes/promo-constructor.html) | HTML-спека промо-конструктора + скриншоты живого прогона | макет |
 | [prototypes/promo-roadmap.html](prototypes/promo-roadmap.html) | визуальная версия бэклога с картой приоритетов | макет |
+| [prototypes/sz-072-brief.html](prototypes/sz-072-brief.html) | читаемая версия задания SZ-072 (поток, объём, критерии) | макет |
 | `prototypes/assets/lv-demo/` | скриншоты прогона демо (390×844, Chrome) | артефакт |
 | [arena/](arena/README.md) | альтернативный пакет «Конструктор лояльности» (18 механик LM-01…LM-18, JSON Schema/OpenAPI/DDL, 36 golden-кейсов, референсный движок + прототип) из ветки `arena/01a0c9b6-axiiom` репо `bestdeejay-design/axiiom` — **модель не совпадает с SZ-070/071**, канон не выбран | импорт, к сверке |
 
