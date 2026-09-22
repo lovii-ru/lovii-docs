@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Конструктор лояльности — lovii-b2b (проект)</title>
+<style>
+  :root{
+    --paper:#f7f6f3;
+    --ink:#16150f;
+    --ink-2:#4b4842;
+    --ink-3:#8b8680;
+    --line:#e0dcd4;
+    --line-2:#eae6de;
+    --accent:#b8315f;
+    --accent-soft:rgba(184,49,95,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --m:68ch;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.6;
+    font-feature-settings:"kern" 1;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px 96px}
+
+  /* ---------- cover ---------- */
+  .cover{padding:78px 0 46px;border-bottom:1px solid var(--ink);margin-bottom:8px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+  .cover h1{
+    font-family:var(--serif);font-weight:400;font-size:clamp(38px,6.4vw,68px);
+    line-height:1.02;letter-spacing:-.02em;margin:18px 0 0;max-width:22ch;
+  }
+  .cover .lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:56ch;margin:22px 0 0}
+  .meta{
+    display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:34px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--ink-2);
+  }
+  .meta b{display:block;font-family:var(--mono);font-weight:400;color:var(--ink-3);
+    font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:3px}
+
+  /* ---------- layout ---------- */
+  .doc{display:grid;grid-template-columns:212px 1fr;gap:56px;align-items:start;margin-top:44px}
+  .toc{position:sticky;top:34px;font-family:var(--mono);font-size:12.5px;line-height:1.9}
+  .toc .t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .toc a{display:block;color:var(--ink-2);text-decoration:none;border-left:1px solid var(--line);padding-left:13px}
+  .toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+  main{max-width:var(--m);min-width:0}
+  main .bleed{max-width:none}
+
+  section{padding-top:46px}
+  h2{
+    font-family:var(--serif);font-weight:400;font-size:31px;line-height:1.15;
+    letter-spacing:-.01em;margin:0 0 6px;display:flex;gap:16px;align-items:baseline;
+  }
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.06em;padding-top:6px}
+  .rule{height:1px;background:var(--line);width:64px;margin:14px 0 20px}
+  h3{font-family:var(--sans);font-weight:600;font-size:16.5px;letter-spacing:.005em;margin:30px 0 8px}
+  p{margin:0 0 14px}
+  .muted{color:var(--ink-3)}
+  code{font-family:var(--mono);font-size:.87em;background:var(--accent-soft);
+    border:1px solid var(--line-2);padding:.5px 5px;border-radius:3px;color:var(--ink)}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(184,49,95,.35)}
+
+  /* ---------- tables ---------- */
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0 18px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:400;border-bottom:1px solid var(--ink-2)}
+  td .f{font-family:var(--mono);font-size:12px;color:var(--accent);word-break:break-word}
+
+  /* ---------- entity cards ---------- */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);margin:16px 0 8px}
+  .two>div{padding:22px 22px 24px}
+  .two>div+div{border-left:1px solid var(--line)}
+  .two .name{font-family:var(--serif);font-size:21px;margin-bottom:4px}
+  .two .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+  .two p{font-size:14px;color:var(--ink-2);margin:12px 0 0}
+
+  /* ---------- steps ---------- */
+  .steps{margin:14px 0 8px;border-top:1px solid var(--line)}
+  .step{display:grid;grid-template-columns:40px 1fr;gap:0 14px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .step .i{font-family:var(--mono);font-size:12px;color:var(--accent);padding-top:2px}
+  .step .h{font-weight:600;font-size:14.5px;margin-bottom:2px}
+  .step .d{font-size:13.5px;color:var(--ink-2)}
+
+  figure{margin:18px 0 22px}
+  figure svg{width:100%;height:auto;display:block;border:1px solid var(--line);background:#fbfaf8}
+  figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3);margin-top:8px}
+
+  /* ---------- prototype ---------- */
+  .proto{border:1px solid var(--ink);margin-top:22px;background:#fff}
+  .proto-top{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line);background:var(--paper)}
+  .proto-top button{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--ink-2);
+    background:none;border:0;border-right:1px solid var(--line);padding:12px 16px;cursor:pointer;
+  }
+  .proto-top button[aria-selected="true"]{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+  .proto-body{display:flex;justify-content:center;padding:30px 20px 34px;background:#f1efeb}
+  .phone{
+    width:340px;background:#f7f6f3;border:1px solid #2a2823;border-radius:26px;
+    padding:12px 12px 16px;position:relative;
+  }
+  .status{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);padding:2px 6px 10px}
+  .ph{background:#fff;border:1px solid var(--line);border-radius:16px;min-height:520px;overflow:hidden;display:flex;flex-direction:column}
+  .ph-head{display:flex;align-items:center;gap:9px;padding:14px 14px 12px;border-bottom:1px solid var(--line-2)}
+  .ph-back{width:22px;height:22px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;color:var(--ink-2);font-size:12px}
+  .ph-title{font-weight:600;font-size:15px}
+  .ph-sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .ph-body{padding:14px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .blk{border:1px solid var(--line-2);border-radius:12px;padding:14px}
+  .blk .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .big{font-family:var(--serif);font-size:34px;line-height:1;letter-spacing:-.02em}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-2)}
+  .row:last-child{border-bottom:0}
+  .row .nm{font-size:14px;font-weight:550}
+  .row .sm{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .pct{font-family:var(--mono);font-size:14px;color:var(--accent)}
+  .sw{width:40px;height:23px;border-radius:999px;background:var(--accent);position:relative;flex:0 0 auto}
+  .sw::after{content:"";position:absolute;top:2px;right:2px;width:19px;height:19px;border-radius:50%;background:#fff}
+  .sw.off{background:#d7d3cb}
+  .sw.off::after{left:2px;right:auto}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .chip{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--ink-2);background:#fff}
+  .chip .x{color:var(--ink-3);margin-left:6px}
+  .add{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px dashed rgba(184,49,95,.45);border-radius:999px;padding:6px 11px}
+  .track{height:4px;background:var(--line);border-radius:999px;position:relative;margin:14px 0 6px}
+  .track i{position:absolute;left:0;top:0;height:4px;width:0;background:var(--accent);border-radius:999px;display:block}
+  .save{margin-top:auto;background:var(--accent);color:#fff;text-align:center;font-weight:600;font-size:14.5px;padding:13px;border-radius:12px}
+  .prod-img{height:112px;border:1px solid var(--line-2);border-radius:10px;display:grid;place-items:center;color:var(--ink-3);font-family:var(--mono);font-size:10.5px;background:#f4f2ee}
+  .badge{display:inline-block;font-family:var(--mono);font-size:11px;color:#fff;background:var(--accent);padding:3px 9px;border-radius:999px}
+  .hint{font-size:12.5px;color:var(--ink-2);background:var(--accent-soft);border:1px solid var(--line-2);border-radius:9px;padding:9px 11px}
+
+  /* ---------- open questions ---------- */
+  .q{border-top:1px solid var(--line);padding:15px 0}
+  .q .h{font-weight:600;font-size:14.5px}
+  .q .r{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+  .q .r b{color:var(--accent);font-weight:600}
+
+  .colophon{margin-top:64px;padding-top:20px;border-top:1px solid var(--ink);font-family:var(--mono);
+    font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+  @media (max-width:900px){
+    .doc{grid-template-columns:1fr;gap:0}
+    .toc{position:static;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:16px}
+    .two{grid-template-columns:1fr}
+    .two>div+div{border-left:0;border-top:1px solid var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="kicker">LOVII · lovii-b2b · проект к согласованию</div>
+    <h1>Конструктор лояльности для кабинета партнёра</h1>
+    <p class="lede">Партнёр сам задаёт кэшбэк своему магазину и точечно управляет процентами по группам товаров. Лояльность перестаёт быть платформенной константой.</p>
+    <div class="meta">
+      <div><b>Черновик ID</b>SZ-070</div>
+      <div><b>Репозитории</b>lovii-core · lovii-b2b · (lovii-app, фаза 2)</div>
+      <div><b>Дата</b>2026-09-22</div>
+      <div><b>Статус</b>дизайн, кода нет</div>
+    </div>
+  </header>
+
+  <div class="doc">
+    <nav class="toc" aria-label="Содержание">
+      <div class="t">Содержание</div>
+      <a href="#s1">1 · Что есть сейчас</a>
+      <a href="#s2">2 · Проблема</a>
+      <a href="#s3">3 · Целевая модель</a>
+      <a href="#s4">4 · Модель данных</a>
+      <a href="#s5">5 · Алгоритм начисления</a>
+      <a href="#s6">6 · UX кабинета · прототип</a>
+      <a href="#s7">7 · Что видит покупатель</a>
+      <a href="#s8">8 · Guardrails</a>
+      <a href="#s9">9 · Тесты и гейты</a>
+      <a href="#s10">10 · Этапы</a>
+      <a href="#s11">11 · Открытые вопросы</a>
+    </nav>
+
+    <main>
+      <section id="s1">
+        <h2><span class="n">01</span>Что есть сейчас</h2>
+        <div class="rule"></div>
+        <p>Лояльность в платформе реализована на контуре баллов: <code>wallet</code> + <code>wallet_transactions</code> с типами <code>earn / spend / refund / adjustment</code> и идемпотентностью по unique-индексу <code>(wallet_id, order_id, type)</code>. Начисление ведёт <code>LoyaltyService::earnFromOrder</code>.</p>
+
+        <table>
+          <thead><tr><th>Слой</th><th>Факт</th><th>Где</th></tr></thead>
+          <tbody>
+            <tr><td>Правило</td><td>одна <b>глобальная</b> строка; сервис берёт <code>first()</code> из активных</td><td class="f">LoyaltyService.php:45</td></tr>
+            <tr><td>Поля</td><td><code>earn_percent</code>, <code>max_spend_percent</code>, окно дат</td><td class="f">migration 2025_01_01_000024</td></tr>
+            <tr><td>Начисление</td><td><code>round(order.total × % / 100)</code> — без мерчанта и товаров</td><td class="f">earnFromOrder</td></tr>
+            <tr><td>Экономика</td><td>кэшбэк — дебет доли точки + комиссия LOVII 25%</td><td class="f">LedgerEntryType (T-014)</td></tr>
+            <tr><td>Админка</td><td>правила — только просмотр (create/update → false)</td><td class="f">LoyaltyRulePolicy.php</td></tr>
+            <tr><td>Кабинет</td><td>Filament v5, tenant = Partner, скоуп через merchant.partner_id, доступ к core-схеме напрямую</td><td class="f">ScopedToCurrentPartnerViaMerchant</td></tr>
+          </tbody>
+        </table>
+
+        <figure>
+          <svg viewBox="0 0 900 200" role="img" aria-label="Текущий поток начисления кэшбэка">
+            <defs>
+              <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L7,3 L0,6" fill="none" stroke="#4b4842" stroke-width="1"/>
+              </marker>
+            </defs>
+            <g font-family="ui-monospace,monospace" font-size="12" fill="#16150f">
+              <rect x="24" y="70" width="150" height="56" fill="none" stroke="#b8315f" stroke-width="1"/>
+              <text x="42" y="94">Заказ</text><text x="42" y="112" fill="#8b8680" font-size="10.5">total, merchant_id</text>
+
+              <rect x="240" y="70" width="200" height="56" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="258" y="94">LoyaltyService</text><text x="258" y="112" fill="#8b8680" font-size="10.5">earnFromOrder</text>
+
+              <rect x="506" y="70" width="170" height="56" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="524" y="94">loyalty_rules</text><text x="524" y="112" fill="#8b8680" font-size="10.5">first() из активных</text>
+
+              <rect x="742" y="70" width="134" height="56" fill="none" stroke="#4b4842" stroke-width="1"/>
+              <text x="760" y="94">wallet</text><text x="760" y="112" fill="#8b8680" font-size="10.5">+earn</text>
+
+              <line x1="174" y1="98" x2="236" y2="98" stroke="#4b4842" stroke-width="1" marker-end="url(#ar)"/>
+              <line x1="440" y1="98" x2="502" y2="98" stroke="#4b4842" stroke-width="1" marker-end="url(#ar)"/>
+              <line x1="676" y1="98" x2="738" y2="98" stroke="#4b4842" stroke-width="1" marker-end="url(#ar)"/>
+
+              <text x="240" y="48" fill="#b8315f" font-size="10.5" letter-spacing="1.4">ОДНО ПРАВИЛО НА ВСЮ ПЛАТФОРМУ</text>
+              <line x1="240" y1="56" x2="676" y2="56" stroke="#b8315f" stroke-width="1"/>
+            </g>
+          </svg>
+          <figcaption>Текущий поток: процент одинаков для всех магазинов и товаров</figcaption>
+        </figure>
+      </section>
+
+      <section id="s2">
+        <h2><span class="n">02</span>Проблема</h2>
+        <div class="rule"></div>
+        <p>Партнёр не может ни выключить кэшбэк у себя, ни задать свой процент, ни выделить товарную группу. При этом кэшбэк списывается именно из его доли — то есть расход несёт партнёр, а решает платформа. Это и продуктовый дисбаланс, и потерянный рычаг: конкурентные акции по категориям не запустить без правки БД.</p>
+      </section>
+
+      <section id="s3">
+        <h2><span class="n">03</span>Целевая модель — две сущности</h2>
+        <div class="rule"></div>
+        <p>MVP-конструктор даёт партнёру ровно два рычага. Всё остальное (сегменты, уровни, акции по расписанию) — фазы 2–3.</p>
+        <div class="two">
+          <div>
+            <div class="tag">Сущность 1</div>
+            <div class="name">Кэшбэк по умолчанию</div>
+            <p>Один процент на магазин (мерчант). Включатель, значение, период. Это «пол» программы — что начисляется на весь заказ, если товар не попал ни в одну группу.</p>
+          </div>
+          <div>
+            <div class="tag">Сущность 2</div>
+            <div class="name">Группы товаров</div>
+            <p>Именованный набор с собственным процентом. Состав: категории каталога мерчанта и/или отдельные товары. Переопределяет процент по умолчанию для попавших в набор позиций.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="s4">
+        <h2><span class="n">04</span>Модель данных</h2>
+        <div class="rule"></div>
+        <p>Все таблицы живут в <b>lovii-core</b> (владелец commerce-таблиц, схема <code>public</code>). Кабинет читает/пишет их через соединение <code>pgsql_core</code> — как уже делает с <code>CatalogCategory</code> и <code>Merchant</code>.</p>
+
+        <h3>Расширение <code>loyalty_rules</code></h3>
+        <table>
+          <thead><tr><th>Поле</th><th>Тип</th><th>Смысл</th></tr></thead>
+          <tbody>
+            <tr><td class="f">merchant_id</td><td>bigint NULL → merchants</td><td>NULL = платформенное правило</td></tr>
+            <tr><td class="f">group_id</td><td>bigint NULL → groups</td><td>NULL = «весь магазин» (умолчание)</td></tr>
+            <tr><td class="f">priority</td><td>smallint default 0</td><td>разрешение пересечений</td></tr>
+            <tr><td class="f">(остальные)</td><td>без изменений</td><td>контракт LoyaltyService сохраняется</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Партиальный unique: одно активное правило «по умолчанию» на мерчанта — <code>UNIQUE (merchant_id) WHERE group_id IS NULL AND is_active</code>.</p>
+
+        <h3><code>loyalty_product_groups</code></h3>
+        <table>
+          <thead><tr><th>Поле</th><th>Тип</th></tr></thead>
+          <tbody>
+            <tr><td class="f">id</td><td>bigint PK</td></tr>
+            <tr><td class="f">merchant_id</td><td>bigint FK → merchants (NOT NULL)</td></tr>
+            <tr><td class="f">name</td><td>string</td></tr>
+            <tr><td class="f">is_active</td><td>bool, default true</td></tr>
+            <tr><td class="f">sort_order</td><td>smallint, default 0</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Состав — два пивота</h3>
+        <table>
+          <thead><tr><th>Таблица</th><th>Ключи</th><th>Индекс под матчинг</th></tr></thead>
+          <tbody>
+            <tr><td class="f">loyalty_group_categories</td><td>group_id, catalog_category_id</td><td class="f">(catalog_category_id)</td></tr>
+            <tr><td class="f">loyalty_group_products</td><td>group_id, catalog_product_id</td><td class="f">(catalog_product_id)</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Выбраны FK-пивоты, а не полиморфная таблица: БД держит целостность, «висячие» ссылки не ложатся на приложение.</p>
+      </section>
+
+      <section id="s5">
+        <h2><span class="n">05</span>Алгоритм начисления</h2>
+        <div class="rule"></div>
+        <p>Резолвинг выполняется один раз на заказ, без N+1 в request path (требование стража производительности SZ-060).</p>
+
+        <div class="steps">
+          <div class="step"><div class="i">1</div><div><div class="h">Правила мерчанта — 1 запрос</div><div class="d">активные правила, где <code>merchant_id = M OR merchant_id IS NULL</code>, с учётом окна дат</div></div></div>
+          <div class="step"><div class="i">2</div><div><div class="h">Состав групп — 2 запроса</div><div class="d">карты «категория → группа» и «товар → группа» для мерчанта</div></div></div>
+          <div class="step"><div class="i">3</div><div><div class="h">Матчинг позиции</div><div class="d">группа = сначала по товару, затем по категории, иначе null</div></div></div>
+          <div class="step"><div class="i">4</div><div><div class="h">Процент</div><div class="d">правило группы → правило «по умолчанию» мерчанта → платформенное → 0</div></div></div>
+          <div class="step"><div class="i">5</div><div><div class="h">Сумма</div><div class="d"><code>Σ round(item.total_price × % / 100)</code> → <code>orders.bonus_earned</code></div></div></div>
+        </div>
+
+        <p>Идемпотентность и возвраты не меняются: контракт <code>wallet_transactions (wallet_id, order_id, type)</code> остаётся, повторный вебхук банка по-прежнему даёт no-op.</p>
+
+        <figure>
+          <svg viewBox="0 0 900 250" role="img" aria-label="Порядок разрешения процента">
+            <defs>
+              <marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L7,3 L0,6" fill="none" stroke="#4b4842" stroke-width="1"/>
+              </marker>
+            </defs>
+            <g font-family="ui-monospace,monospace" font-size="12" fill="#16150f">
+              <rect x="30" y="26" width="180" height="52" fill="none" stroke="#b8315f" stroke-width="1"/>
+              <text x="48" y="50">Товар в группе</text><text x="48" y="67" fill="#8b8680" font-size="10.5">% группы</text>
+
+              <rect x="30" y="100" width="180" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="48" y="124">Категория в группе</text><text x="48" y="141" fill="#8b8680" font-size="10.5">% группы</text>
+
+              <rect x="30" y="174" width="180" height="52" fill="none" stroke="#e0dcd4" stroke-width="1"/>
+              <text x="48" y="198" fill="#8b8680">Иначе</text><text x="48" y="215" fill="#8b8680" font-size="10.5">умолчание → платформа → 0</text>
+
+              <line x1="210" y1="52" x2="300" y2="112" stroke="#4b4842" stroke-width="1" marker-end="url(#ar2)"/>
+              <line x1="210" y1="126" x2="300" y2="126" stroke="#4b4842" stroke-width="1" marker-end="url(#ar2)"/>
+              <line x1="210" y1="200" x2="300" y2="140" stroke="#4b4842" stroke-width="1" marker-end="url(#ar2)"/>
+
+              <rect x="306" y="100" width="180" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="324" y="124">Первый матч</text><text x="324" y="141" fill="#8b8680" font-size="10.5">порядок сверху вниз</text>
+
+              <line x1="486" y1="126" x2="576" y2="126" stroke="#4b4842" stroke-width="1" marker-end="url(#ar2)"/>
+
+              <rect x="582" y="100" width="288" height="52" fill="none" stroke="#b8315f" stroke-width="1"/>
+              <text x="600" y="124">earn = Σ round(item × %)</text><text x="600" y="141" fill="#8b8680" font-size="10.5">→ orders.bonus_earned → wallet +earn</text>
+
+              <text x="30" y="240" fill="#8b8680" font-size="10.5">Приоритет: товар &gt; категория &gt; умолчание магазина &gt; платформенное</text>
+            </g>
+          </svg>
+          <figcaption>Разрешение процента по позиции заказа</figcaption>
+        </figure>
+      </section>
+
+      <section id="s6">
+        <h2><span class="n">06</span>UX кабинета — mobile-first</h2>
+        <div class="rule"></div>
+        <p>В <b>lovii-b2b</b> появляется группа навигации «Лояльность» и страница-конструктор (не таблица CRUD). Требования качества: mobile-first 390px+, тап-таргеты ≥44px, три состояния (загрузка / пусто / ошибка), липкая кнопка сохранения, без широких таблиц — стек вместо grid. Переключение между магазинами партнёра — по существующему паттерну табов.</p>
+
+        <div class="proto">
+          <div class="proto-top" role="tablist" aria-label="Экраны конструктора">
+            <button role="tab" aria-selected="true" data-t="0">Экран 1 · Конструктор</button>
+            <button role="tab" aria-selected="false" data-t="1">Экран 2 · Группа</button>
+            <button role="tab" aria-selected="false" data-t="2">Экран 3 · Покупатель</button>
+          </div>
+          <div class="proto-body">
+
+            <div class="phone" data-p="0">
+              <div class="status"><span>9:41</span><span>ЛОВИ и B2B</span></div>
+              <div class="ph">
+                <div class="ph-head"><div class="ph-back">←</div><div><div class="ph-title">Лояльность</div><div class="ph-sub">Зелёная аптека</div></div></div>
+                <div class="ph-body">
+                  <div class="blk">
+                    <div class="lbl">Кэшбэк по умолчанию</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                      <div class="big">7%</div><div class="sw" role="img" aria-label="включено"></div>
+                    </div>
+                    <div class="sm" style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:8px">начисляется на весь заказ</div>
+                  </div>
+                  <div class="blk" style="padding-bottom:6px">
+                    <div class="lbl">Группы товаров</div>
+                    <div class="row"><div><div class="nm">Витамины</div><div class="sm">42 товара</div></div><div class="pct">10%</div></div>
+                    <div class="row"><div><div class="nm">Спортпит</div><div class="sm">18 товаров</div></div><div class="pct">5%</div></div>
+                    <div class="row"><div><div class="nm">Бытовая химия</div><div class="sm">76 товаров</div></div><div class="pct">3%</div></div>
+                    <div style="padding:10px 0 12px"><span class="add">+ Группа</span></div>
+                  </div>
+                  <div class="blk">
+                    <div class="lbl">Стоимость программы</div>
+                    <div style="font-size:13.5px;color:var(--ink-2)">Оборот ≈ 400 000 ₽/мес → выплаты ≈ 24 000 ₽/мес</div>
+                    <div class="sm" style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:6px">из доли точки + комиссия 25%</div>
+                  </div>
+                  <div class="save">Сохранить</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="phone" data-p="1" hidden>
+              <div class="status"><span>9:41</span><span>ЛОВИ и B2B</span></div>
+              <div class="ph">
+                <div class="ph-head"><div class="ph-back">←</div><div><div class="ph-title">Группа: Витамины</div><div class="ph-sub">правка</div></div></div>
+                <div class="ph-body">
+                  <div class="blk">
+                    <div class="lbl">Кэшбэк группы</div>
+                    <div style="display:flex;align-items:baseline;justify-content:space-between">
+                      <div class="big">10%</div><div class="sm" style="font-family:var(--mono);font-size:11px;color:var(--ink-3)">макс. по платформе 30%</div>
+                    </div>
+                    <div class="track"><i style="width:33%"></i></div>
+                  </div>
+                  <div class="blk">
+                    <div class="lbl">Категории</div>
+                    <div class="chips"><span class="chip">Витамины <span class="x">✕</span></span><span class="chip">БАДы <span class="x">✕</span></span><span class="add">+ добавить</span></div>
+                  </div>
+                  <div class="blk">
+                    <div class="lbl">Товары точечно · 2</div>
+                    <div class="row"><div class="nm" style="font-weight:400">Омега-3, 1000 мг</div><div class="sm">✕</div></div>
+                    <div class="row"><div class="nm" style="font-weight:400">Магний B6</div><div class="sm">✕</div></div>
+                    <div style="padding-top:10px"><span class="add">+ товар</span></div>
+                  </div>
+                  <div class="hint">Товар из списка получает 10% вместо 7% по умолчанию.</div>
+                  <div class="save">Сохранить группу</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="phone" data-p="2" hidden>
+              <div class="status"><span>9:41</span><span>ЛОВИ · витрина</span></div>
+              <div class="ph">
+                <div class="ph-head"><div class="ph-back">←</div><div><div class="ph-title">Омега-3, 1000 мг</div><div class="ph-sub">Зелёная аптека</div></div></div>
+                <div class="ph-body">
+                  <div class="prod-img">ФОТО ТОВАРА</div>
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <div class="big" style="font-size:28px">890 ₽</div>
+                    <span class="badge">Кэшбэк 10%</span>
+                  </div>
+                  <div class="hint">Вы получите <b>89 баллов</b> после оплаты. 1 балл = 1 ₽.</div>
+                  <div class="blk" style="margin-top:auto">
+                    <div class="lbl">Фаза 2</div>
+                    <div style="font-size:13.5px;color:var(--ink-2)">Бейдж и расчёт баллов в каталоге и чекауте — после появления поля <code>cashback_percent</code> в API каталога.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <figcaption style="font-family:var(--mono);font-size:11px;color:var(--ink-3)">Интерактивный макет: переключайте экраны вкладками выше. Цифры — иллюстративные.</figcaption>
+      </section>
+
+      <section id="s7">
+        <h2><span class="n">07</span>Что видит покупатель</h2>
+        <div class="rule"></div>
+        <p><b>Фаза 1, без изменений app:</b> начисление уже видно в ленте баллов (<code>wallet/transactions</code>, комментарий «Кэшбэк за заказ №N»). Расширяем комментарий именем правила — прозрачность без правок мобильного клиента.</p>
+        <p><b>Фаза 2 (lovii-app):</b> поле <code>cashback_percent</code> из API каталога, бейдж «Кэшбэк N%» в карточке товара и строка «Начислим N баллов» в чекауте. Это отдельная задача с визуальными гейтами `PRODUCT_QUALITY_BAR`.</p>
+      </section>
+
+      <section id="s8">
+        <h2><span class="n">08</span>Guardrails платформы</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Правило</th><th>Как держим</th></tr></thead>
+          <tbody>
+            <tr><td>Потолок <code>earn_percent</code></td><td>настройка в админке (рядом с <code>PlatformOrderSetting</code>); партнёр не может превысить</td></tr>
+            <tr><td><code>max_spend_percent</code></td><td>задаёт только платформа, партнёру не доступен</td></tr>
+            <tr><td>Пересечение групп</td><td>предупреждение «какой процент применится» до сохранения</td></tr>
+            <tr><td>Честность цифр</td><td>прогноз стоимости без выдуманных значений — требование <code>PRODUCT_QUALITY_BAR</code> §1</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s9">
+        <h2><span class="n">09</span>Тесты и гейты</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Репозиторий</th><th>Что проверяем</th></tr></thead>
+          <tbody>
+            <tr><td>lovii-core</td><td>unit на резолвинг: приоритеты, пересечения, окна дат, фолбэки, пустые группы; идемпотентность earn/refund</td></tr>
+            <tr><td>lovii-b2b</td><td>cross-tenant: партнёр A не видит и не правит группы/правила мерчантов партнёра B</td></tr>
+            <tr><td>данные</td><td>заказ по товару из группы и вне её → корректный <code>bonus_earned</code></td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Гейты: <code>docker exec lovii-core-app-1 composer test</code>, <code>docker exec lovii-b2b-app-1 composer test</code>.</p>
+      </section>
+
+      <section id="s10">
+        <h2><span class="n">10</span>Этапы</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Этап</th><th>Содержание</th><th>Репозитории</th></tr></thead>
+          <tbody>
+            <tr><td>Ф1</td><td>миграции + модели + резолвинг + страница-конструктор + тесты</td><td>core, b2b</td></tr>
+            <tr><td>Ф2</td><td><code>cashback_percent</code> в API каталога, бейдж и превью в app</td><td>core, app</td></tr>
+            <tr><td>Ф3</td><td>сегменты клиентов, уровни, акции по расписанию</td><td>core, b2b, app</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s11">
+        <h2><span class="n">11</span>Открытые вопросы</h2>
+        <div class="rule"></div>
+        <div class="q"><div class="h">Потолок кэшбэка</div><div class="r">какой максимум в % и где он задаётся? <b>Предложение: 30%, настройка админки.</b></div></div>
+        <div class="q"><div class="h">Состав групп</div><div class="r">только категории или ещё точечные товары? <b>Предложение: оба режима.</b></div></div>
+        <div class="q"><div class="h">Кто платит</div><div class="r">подтверждаем списание из доли точки (как T-014)? <b>Предложение: да.</b></div></div>
+        <div class="q"><div class="h">Фолбэк при выключенном кэшбэке</div><div class="r">0% или платформенное правило? <b>Предложение: явный 0%.</b></div></div>
+      </section>
+
+      <div class="colophon">
+        <span>Конструктор лояльности · lovii-b2b · черновик SZ-070</span>
+        <span>AutoClaw · 2026-09-22</span>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var tabs = document.querySelectorAll('.proto-top button');
+    var panes = document.querySelectorAll('.phone');
+    tabs.forEach(function(b){
+      b.addEventListener('click', function(){
+        var i = b.getAttribute('data-t');
+        tabs.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+        panes.forEach(function(p){ p.hidden = p.getAttribute('data-p') !== i; });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
