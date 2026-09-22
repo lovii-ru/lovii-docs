@@ -87,3 +87,25 @@
 - [ ] Гейт не-прод: на проде маска запрещена (или зафиксировано иное решение владельца).
 - [ ] Живая приёмка владельца: сценарий B2(а) T-014 — новый юзер видит честный
       403 кабинета; гейт SZ-057 — без промокода кнопки подписки нет.
+
+---
+
+## Отчёт исполнителя (AutoClaw код-агент, 2026-09-22)
+
+**Коммит:** `lovii-core` `dad7f84` (в `staging` вместе с T-016, tip `27f9b54`), запушен; CI run 35680798035 — `checks` 🟢, `deploy-staging` 🟢 (стенд `/opt/lovii-core-staging` на `27f9b54`).
+
+**Где редирект:** новый сервис `app/Domain/Auth/Services/OtpDeliveryTargetResolver.php`; вызов в `SendOtpAction` сразу после `createSession(...)` и ДО гейтов каналов и доставки. В проверки привязки и в `send()` идёт эффективный телефон; сессия/cooldown/профиль/dev-стор — по маске.
+
+**Маска:** одна константа `TEST_PHONE_PATTERN = '/^\+7000\d{7}$/'` («+7 000ХХХ-ХХ-ХХ» → `+7000` + 7 цифр). E.164-регексы не тронуты.
+
+**Env/флаги:** `OTP_TEST_REDIRECT_ENABLED` (default `false`), `OTP_TEST_REDIRECT_TO` (телефон владельца). Оба добавлены в `config/otp.php` и `.env.example`.
+
+**Формат лога:** `logger()->info('otp.test_redirect', ['test_phone', 'delivery_phone', 'channel', 'at'])` — на каждый редирект.
+
+**Поведение по окружениям:** production + маска → `otp_test_phone_forbidden` (отказ); не-прод + маска + флаг off → `otp_test_phone_disabled`; не-прод + флаг on + задан получатель → лог + доставка владельцу; получатель не задан → `otp_test_redirect_misconfigured`. Все отказы — 422 с честным текстом.
+
+**Гейты (локально):** pint 979 files PASS, rector [OK], phpstan «No errors», pest 1449 passed (type-coverage 99.0%).
+
+**Стенд (проверено AutoClaw):** POST `/auth/send-code` маска `+70001234567` → HTTP 422 `otp_test_phone_disabled` (флаг по умолчанию выключен — безопасный дефолт подтверждён); обычный номер не затронут (200).
+
+**Осталось (участие владельца):** включить `OTP_TEST_REDIRECT_ENABLED=true` + `OTP_TEST_REDIRECT_TO=<номер владельца>` на staging (с бэкапом `.env` и рестартом), затем живой прогон маски → код владельцу → B2(а) T-014. Маску в публичные доки не выносить.
