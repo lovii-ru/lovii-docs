@@ -1,0 +1,110 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "tiers",
+  "name": "Уровни: bronze → silver → gold",
+  "priority": 50,
+  "stacking": {
+    "group": "custom",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "tier_recalculated",
+    "params": {
+      "metric": "visits_90d",
+      "levels": [
+        {
+          "tier": "bronze",
+          "from": 0
+        },
+        {
+          "tier": "silver",
+          "from": 2
+        },
+        {
+          "tier": "gold",
+          "from": 4
+        }
+      ],
+      "soft_downgrade_days": 30
+    }
+  },
+  "conditions": [],
+  "actions": [
+    {
+      "type": "tier_assign",
+      "tier": "auto"
+    }
+  ],
+  "limits": {
+    "per_customer": null,
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Уровни: bronze → silver → gold",
+    "badge": "Уровни",
+    "subtitle": "gold: +7 % и приоритетная запись",
+    "terms": "Уровень пересчитывается ежедневно по последним 90 дням. Понижение — не раньше чем через 30 дней после предупреждения."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-07",
+    "template_params": {
+      "metric": "visits_90d",
+      "levels": [
+        {
+          "tier": "bronze",
+          "from": 0,
+          "cashback_pct": 0
+        },
+        {
+          "tier": "silver",
+          "from": 2,
+          "cashback_pct": 3
+        },
+        {
+          "tier": "gold",
+          "from": 4,
+          "cashback_pct": 7
+        }
+      ],
+      "soft_downgrade_days": 30
+    },
+    "notes": "tier_assign.tier = \"auto\" — уровень по таблице trigger.params.levels. Привилегии уровней компилируются в сопутствующие кампании LM-04 с audience.tiers.",
+    "benefits": [
+      {
+        "tier": "bronze",
+        "cashback_pct": 0
+      },
+      {
+        "tier": "silver",
+        "cashback_pct": 3
+      },
+      {
+        "tier": "gold",
+        "cashback_pct": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "referral",
+  "name": "Приведи друга — +500 баллов",
+  "priority": 100,
+  "stacking": {
+    "group": "bonus",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "referral_qualified",
+    "params": {
+      "min_paid_money_minor": 50000,
+      "payout": "immediate",
+      "invite_ttl_days": 30
+    }
+  },
+  "conditions": [
+    {
+      "field": "referral.qualified",
+      "op": "==",
+      "value": true
+    }
+  ],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "mode": "fixed",
+      "amount": 500,
+      "ttl_days": 30,
+      "funding": "merchant",
+      "to": "referrer",
+      "lot_label": "Приведи друга"
+    },
+    {
+      "type": "accrue_points",
+      "mode": "fixed",
+      "amount": 200,
+      "ttl_days": 30,
+      "funding": "merchant",
+      "to": "referee",
+      "lot_label": "Бонус за приглашение"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 10,
+      "period": "month"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Приведи друга — +500 баллов",
+    "badge": "+500 б.",
+    "subtitle": "Другу — +200 баллов",
+    "cta": "Поделиться",
+    "terms": "Награда после первой покупки друга от 500 ₽, оплаченной деньгами. Самоприглашения и дубли аккаунтов не засчитываются. До 10 приглашений в месяц."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-11",
+    "template_params": {
+      "referrer_points": 500,
+      "referee_type": "points",
+      "referee_points": 200,
+      "referee_discount_pct": 50,
+      "min_check_minor": 50000,
+      "payout": "immediate",
+      "monthly_limit": 10,
+      "ttl_days": 30
+    }
+  }
+}

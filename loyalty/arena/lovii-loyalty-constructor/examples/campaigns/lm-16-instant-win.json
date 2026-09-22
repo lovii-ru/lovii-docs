@@ -1,0 +1,148 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "instant_win",
+  "name": "Крути колесо от 700 ₽",
+  "priority": 70,
+  "stacking": {
+    "group": "bonus",
+    "mode": "exclusive"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.paid_money",
+      "op": ">=",
+      "value": 70000
+    }
+  ],
+  "actions": [
+    {
+      "type": "random_reward",
+      "seed": "order_id",
+      "table": [
+        {
+          "weight": 60,
+          "label": "+50 баллов",
+          "action": {
+            "type": "accrue_points",
+            "mode": "fixed",
+            "amount": 50,
+            "ttl_days": 14,
+            "funding": "merchant",
+            "lot_label": "Выигрыш"
+          },
+          "fallback": true
+        },
+        {
+          "weight": 30,
+          "label": "Эспрессо в подарок",
+          "action": {
+            "type": "free_item",
+            "sku": "cd3",
+            "qty": 1,
+            "add_if_missing": true
+          },
+          "daily_limit": 20
+        },
+        {
+          "weight": 9,
+          "label": "−20 % на следующий",
+          "action": {
+            "type": "discount",
+            "scope": "basket",
+            "mode": "percent",
+            "value": 20
+          },
+          "daily_limit": 10
+        },
+        {
+          "weight": 1,
+          "label": "Чизкейк бесплатно",
+          "action": {
+            "type": "free_item",
+            "sku": "cd8",
+            "qty": 1,
+            "add_if_missing": true
+          },
+          "daily_limit": 2
+        }
+      ]
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Крути колесо от 700 ₽",
+    "badge": "🎡",
+    "subtitle": "Шансы: +50 баллов 60 %, Эспрессо в подарок 30 %, −20 % на следующий 9 %, Чизкейк бесплатно 1 %",
+    "cta": "Крутить",
+    "terms": "Стимулирующее мероприятие. Участие — по факту покупки от 700 ₽, без дополнительной платы. Вероятности и лимиты призов опубликованы. Товарные призы — купоном на следующий визит (7 дней)."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-16",
+    "template_params": {
+      "min_check_minor": 70000,
+      "table": [
+        {
+          "label": "+50 баллов",
+          "weight": 60,
+          "prize_type": "points",
+          "value": "50",
+          "daily_limit": null
+        },
+        {
+          "label": "Эспрессо в подарок",
+          "weight": 30,
+          "prize_type": "free_item",
+          "value": "cd3",
+          "daily_limit": 20
+        },
+        {
+          "label": "−20 % на следующий",
+          "weight": 9,
+          "prize_type": "discount_next",
+          "value": "20",
+          "daily_limit": 10
+        },
+        {
+          "label": "Чизкейк бесплатно",
+          "weight": 1,
+          "prize_type": "free_item",
+          "value": "cd8",
+          "daily_limit": 2
+        }
+      ],
+      "holdout_pct": 10
+    }
+  }
+}

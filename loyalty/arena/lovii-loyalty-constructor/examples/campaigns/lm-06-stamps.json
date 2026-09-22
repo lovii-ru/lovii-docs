@@ -1,0 +1,115 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "stamps",
+  "name": "6-й напиток бесплатно",
+  "priority": 90,
+  "stacking": {
+    "group": "stamp",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.items",
+      "op": "any",
+      "match": {
+        "category": {
+          "in": [
+            "coffee",
+            "tea"
+          ]
+        }
+      },
+      "min_qty": 1
+    }
+  ],
+  "actions": [
+    {
+      "type": "stamp",
+      "card": "coffee",
+      "filter": {
+        "category": {
+          "in": [
+            "coffee",
+            "tea"
+          ]
+        }
+      },
+      "count": 1,
+      "max_per_order": 1,
+      "min_interval_minutes": 120,
+      "target": 6,
+      "start_bonus": 1,
+      "card_ttl_days": 90,
+      "reward": {
+        "type": "free_item",
+        "filter": {
+          "category": {
+            "in": [
+              "coffee",
+              "tea"
+            ]
+          }
+        },
+        "pick": "cheapest",
+        "qty": 1
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 3,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "6-й напиток бесплатно",
+    "badge": "6-й free",
+    "subtitle": "Штамп за каждый напиток",
+    "terms": "1 штамп за чек с покупкой из группы, не чаще раза в 2 ч. Награда применяется в следующем чеке. Карточка сгорает через 90 дней без покупок."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-06",
+    "template_params": {
+      "categories": [
+        "coffee",
+        "tea"
+      ],
+      "target": 6,
+      "max_per_order": 1,
+      "min_interval_minutes": 120,
+      "start_bonus": true,
+      "reward_type": "free_item",
+      "discount_pct": 50,
+      "reward_points": 200,
+      "card_ttl_days": 90,
+      "holdout_pct": 10
+    }
+  }
+}

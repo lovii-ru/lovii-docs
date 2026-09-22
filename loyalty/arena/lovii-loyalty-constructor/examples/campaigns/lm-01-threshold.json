@@ -1,0 +1,81 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "threshold",
+  "name": "От 450 ₽ — +60 баллов",
+  "priority": 100,
+  "stacking": {
+    "group": "bonus",
+    "mode": "exclusive"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.paid_money",
+      "op": ">=",
+      "value": 45000
+    }
+  ],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "mode": "fixed",
+      "amount": 60,
+      "ttl_days": 14,
+      "funding": "merchant",
+      "lot_label": "От 450 ₽ — +60 баллов"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 2,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": 3000000,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "От 450 ₽ — +60 баллов",
+    "badge": "+60 б.",
+    "subtitle": "Промо-баллы действуют 14 дней",
+    "cta": "Добрать до порога",
+    "terms": "Порог считается по сумме, оплаченной деньгами, после скидок. Не более двух срабатываний в день. При возврате чека награда аннулируется."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-01",
+    "template_params": {
+      "threshold_minor": 45000,
+      "reward_type": "points",
+      "reward_points": 60,
+      "discount_pct": 10,
+      "free_sku": "cd3",
+      "ttl_days": 14,
+      "per_day": 2,
+      "holdout_pct": 10,
+      "budget_total_minor": 3000000
+    }
+  }
+}

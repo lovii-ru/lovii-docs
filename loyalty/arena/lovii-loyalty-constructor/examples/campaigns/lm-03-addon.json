@@ -1,0 +1,88 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "addon",
+  "name": "Чизкейк за 199 ₽ к кофе",
+  "priority": 140,
+  "stacking": {
+    "group": "item_price",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.items",
+      "op": "any",
+      "match": {
+        "category": {
+          "in": [
+            "coffee"
+          ]
+        }
+      },
+      "min_qty": 1
+    }
+  ],
+  "actions": [
+    {
+      "type": "discount",
+      "scope": "item",
+      "mode": "to_price",
+      "value": 19900,
+      "max_qty": 1,
+      "filter": {
+        "sku": {
+          "in": [
+            "cd8"
+          ]
+        }
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": null,
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Чизкейк за 199 ₽ к кофе",
+    "badge": "Спеццена",
+    "subtitle": "Только вместе с кофе",
+    "cta": "Добавить",
+    "terms": "Спеццена действует на 1 шт. в чеке при наличии товара-триггера."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-03",
+    "template_params": {
+      "trigger_category": "coffee",
+      "offer_sku": "cd8",
+      "special_price_minor": 19900,
+      "max_qty": 1,
+      "holdout_pct": 10,
+      "offer_name": "Чизкейк"
+    }
+  }
+}

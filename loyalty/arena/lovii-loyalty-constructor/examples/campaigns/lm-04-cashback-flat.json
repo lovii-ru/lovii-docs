@@ -1,0 +1,97 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "cashback",
+  "name": "Кэшбэк 5 % баллами",
+  "priority": 100,
+  "stacking": {
+    "group": "cashback",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "base": "paid_money",
+      "cap": 300,
+      "ttl_days": 30,
+      "funding": "merchant",
+      "mode": "percent",
+      "percent": 5,
+      "lot_label": "Кэшбэк точки"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 5,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Кэшбэк 5 % баллами",
+    "badge": "+5 %",
+    "subtitle": "Сверх базового кэшбэка LOVII",
+    "terms": "Промо-баллы начисляются на сумму, оплаченную деньгами, и действуют 30 дней. Максимум 300 баллов за чек."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-04",
+    "template_params": {
+      "mode": "flat",
+      "percent": 5,
+      "steps": [
+        {
+          "from_minor": 35000,
+          "percent": 3
+        },
+        {
+          "from_minor": 65000,
+          "percent": 5
+        },
+        {
+          "from_minor": 100000,
+          "percent": 8
+        }
+      ],
+      "categories": [
+        {
+          "category": "dessert",
+          "percent": 10
+        },
+        {
+          "category": "coffee",
+          "percent": 3
+        }
+      ],
+      "status_min": "PASS",
+      "cap": 300,
+      "ttl_days": 30,
+      "holdout_pct": 10
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "cashback",
+  "name": "Кэшбэк до 8 % — чем больше чек, тем выше",
+  "priority": 100,
+  "stacking": {
+    "group": "cashback",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "base": "paid_money",
+      "cap": 300,
+      "ttl_days": 30,
+      "funding": "merchant",
+      "mode": "ladder",
+      "steps": [
+        {
+          "from_minor": 35000,
+          "percent": 3
+        },
+        {
+          "from_minor": 65000,
+          "percent": 5
+        },
+        {
+          "from_minor": 100000,
+          "percent": 8
+        }
+      ],
+      "lot_label": "Кэшбэк точки"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 5,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Кэшбэк до 8 % — чем больше чек, тем выше",
+    "badge": "до 8 %",
+    "subtitle": "от 350 ₽ — 3 % · от 650 ₽ — 5 % · от 1 000 ₽ — 8 %",
+    "terms": "Промо-баллы начисляются на сумму, оплаченную деньгами, и действуют 30 дней. Максимум 300 баллов за чек."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-04",
+    "template_params": {
+      "mode": "ladder",
+      "percent": 5,
+      "steps": [
+        {
+          "from_minor": 35000,
+          "percent": 3
+        },
+        {
+          "from_minor": 65000,
+          "percent": 5
+        },
+        {
+          "from_minor": 100000,
+          "percent": 8
+        }
+      ],
+      "categories": [
+        {
+          "category": "dessert",
+          "percent": 10
+        },
+        {
+          "category": "coffee",
+          "percent": 3
+        }
+      ],
+      "status_min": "PASS",
+      "cap": 300,
+      "ttl_days": 30,
+      "holdout_pct": 10
+    }
+  }
+}
