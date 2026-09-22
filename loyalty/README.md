@@ -21,8 +21,11 @@
 
 ## Задание на реализацию
 
-- [`SZ-072`](../canon/TASKS/SZ-072-promo-app-integration.md) — применение промо-механик
-  в `lovii-app`: акция → торговая точка → корзина → чекаут (`lovii-core` + `lovii-app`);
+- [`SZ-072`](../canon/TASKS/SZ-072-promo-loyalty-program.md) — программа (эпик):
+  сервис лояльности + промо-конструктор; этапы: [`SZ-073`](../canon/TASKS/SZ-073-loyalty-service-backend.md)
+  (бэкенд-сервис), [`SZ-074`](../canon/TASKS/SZ-074-loyalty-ui-frontend.md) (интерфейсы
+  из демо-эталона), [`SZ-075`](../canon/TASKS/SZ-075-loyalty-buyer-integration.md)
+  (интеграция в покупательский путь);
   читаемая версия — [prototypes/sz-072-brief.html](prototypes/sz-072-brief.html).
 - Решения владельца 22.09 (настройка базовых механик из приложения, база кэшбэка —
   фактически оплаченная сумма, комбо — первая категория витрины точки, ротация промо,
