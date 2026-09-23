@@ -92,3 +92,48 @@ SZ-060 на локальном стенде; миграции прогнать �
 ## 10. План отчёта
 Что сделано (миграции/домен/эндпоинты) со ссылками на файлы и коммиты; черновик
 контракта; прогон гейтов; внесённые канон-обновления; находки — `canon/FINDINGS.md`.
+
+---
+
+## Отчёт исполнителя
+
+**Дата:** 2026-09-22/23 · **Исполнитель:** zcode (прогон через AutoCoder) + доработка документации
+координатором · **Ветка:** `feat/sz-073-loyalty-service` (от `staging` `c098bfe`) · **Worktree:**
+`lovii-core-sz073` · **Коммиты:** _(см. ниже — хеши ветки)_
+
+### Что сделано
+- **Миграции:** `promo_rules` (обобщение `loyalty_rules` + перенос глобальной строки как
+  платформенного `cashback`; deprecated-представление `loyalty_rules` для `lovii-admin`),
+  `loyalty_product_groups`, `loyalty_group_categories`, `loyalty_group_products`,
+  `merchant_offer_bundle_items`, `promo_rule_customer_uses`.
+- **Движок:** `App\Domain\Loyalty\{Services/PromoResolver, PromoRuleRegistry, PromoOfferDecorator,
+  PromoAccess, DTO/*, Enums/*}`; `LoyaltyService` переведён на резолвер с сохранением контракта
+  `wallet_transactions` и идемпотентности.
+- **Контракт:** `app/Http/Controllers/Api/V1/Loyalty/*` (rules/groups/promos/preview/effect) +
+  `app/Http/Controllers/Internal/V1/Loyalty/ApplyPromoToOrderController`; события
+  `PromoRulePublished`/`PromoApplied` + листенеры; инвалидация кэша правил.
+- **Витрина:** виртуальная категория «Комбо» первой в `storefront/info`; промо-поля карточки
+  оффера (`cashback_percent`, `promo_badges[]`, `bundle`).
+- **Тесты:** `tests/Unit/Domain/Loyalty/PromoResolverTest.php`,
+  `tests/Feature/Loyalty/{PromoRuleContractTest, PromoFeedTest, PromoPreviewTest,
+  StorefrontComboTest, InternalPromoApplyTest}.php`.
+
+### Гейт
+Команда: `docker exec`-эквивалент в изолированном контейнере на worktree
+(`docker run --rm --network lovii-core_default -v <worktree>:/var/www/html -v <repo>/vendor:/var/www/html/vendor lovii-core/app-dev sh -c "rm -f bootstrap/cache/*.php; cd /var/www/html && composer test"`).
+- `pint --test` exit 0, `rector --dry-run` OK, `type-coverage` 98.8% (≥90), `openapi:validate` valid.
+- Полный сьют: **1495 passed (5445 assertions), exit 0** (последовательно, `-d memory_limit=3G`;
+  `--parallel` не проходит по памяти контейнера — средовая особенность харнесса).
+- Миграции прогнаны на тест-БД (`pgsql-testing`) через `RefreshDatabase` — зелено. Прогон на
+  staging — при мерже.
+
+### Отклонения
+- **Право доступа** (§8 эпика, вопрос 2) не решён владельцем — использована существующая
+  ability `merchant.update_profile`; вынесено как открытый вопрос.
+- **`GET /loyalty/effect`** — каркас Ф2 (честно измеримое + `null` для uplift).
+
+### Не сделано / не проверено
+- Не проверено живьём на staging (нужен мерж + прогон миграций).
+- Стресс-страж SZ-060 не гонялся (правило «по факту крупных обновлений»; витрина горячих
+  путей затронута — рекомендуется локальный прогон перед приёмкой).
+- Статус карточки не закрывается — приёмка владельца.

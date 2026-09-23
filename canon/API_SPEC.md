@@ -390,3 +390,122 @@ sequenceDiagram
 ```
 
 ---
+---
+
+## 3.13. Лояльность: промо-механики (SZ-073)
+
+**Источник:** карточка `canon/TASKS/SZ-073-loyalty-service-backend.md`, решения владельца —
+`canon/BRD.md` §7.3/§7.3.1. Реализация: `lovii-core` (домен `App\Domain\Loyalty\*`, контроллеры
+`app/Http/Controllers/Api/V1/Loyalty/*`). Кабинеты (app/b2b) ходят только сюда — к таблицам
+`promo_rules` напрямую не обращаются. Деньги — копейки.
+
+Правило механики (`promo_rules`): `type` ∈ `cashback|threshold|combo|stamps|hours`; скоуп
+`merchant_id` (NULL = платформенное), `branch_id`, `group_id`; параметры в jsonb
+`trigger`/`reward`/`limits`/`storefront`; `priority`, `spent_amount`. Дни недели — 0 = пн … 6 = вс.
+
+### 3.13.1. GET /api/v1/loyalty/rules
+
+**Описание:** правила акций в контексте точки (для конструктора). Отдаются правила точки и
+платформенные (`is_platform = true` — видны, не правятся).
+**Auth:** Bearer. **Query:** `branch_id` (опц.).
+
+**Response 200:**
+```json
+{
+  "data": [
+    {
+      "id": 12, "type": "cashback", "type_label": "Кэшбэк", "name": "Кэшбэк по умолчанию",
+      "merchant_id": 5, "branch_id": null, "group_id": 3, "is_platform": false,
+      "trigger": {}, "reward": {"kind": "cashback_percent", "value": 5, "scope": "order"},
+      "limits": {"max_spend_percent": 20},
+      "storefront": {"publish": true, "title": "Кэшбэк 5%"},
+      "priority": 0, "is_active": true, "starts_at": null, "ends_at": null,
+      "spent_amount": 0, "budget": null, "budget_remaining": null, "is_budget_stopped": false,
+      "cashback_percent": 5, "max_spend_percent": 20, "group": {"id": 3, "name": "Напитки"},
+      "created_at": "…", "updated_at": "…"
+    }
+  ],
+  "branch_id": 7, "merchant_id": 5
+}
+```
+
+### 3.13.2. POST /api/v1/loyalty/rules
+
+**Описание:** создание правила. `branch_id` необязателен (без него — на весь бренд).
+**Auth:** Bearer (+ право роли; дефолт `merchant.update_profile`).
+
+**Request:**
+```json
+{
+  "type": "threshold", "name": "Подарок к чеку",
+  "branch_id": 7, "priority": 0, "is_active": true, "starts_at": null, "ends_at": null,
+  "trigger": {"kind": "cart_sum", "min_sum": 200000},
+  "reward": {"kind": "gift", "gift_offer_id": 101, "gift_qty": 1},
+  "limits": {"budget": 5000000, "autostop": true, "per_customer": 1},
+  "storefront": {"publish": true, "title": "Подарок к чеку", "subtitle": "от 2 000 ₽"}
+}
+```
+**Response 201:** `{ "data": { …правило… } }`.
+
+### 3.13.3. PATCH /api/v1/loyalty/rules/{rule} · DELETE /api/v1/loyalty/rules/{rule}
+
+**Описание:** правка (PATCH не обязан слать весь объект; jsonb-блоки сливаются; **тип механики
+неизменяем** — 422 `promo_rule_type_immutable`) и снятие правила. Снятие пропадает с витрины
+сразу (кэш инвалидируется). **Response:** 200.
+
+### 3.13.4. GET/POST /api/v1/loyalty/groups · PATCH/DELETE /api/v1/loyalty/groups/{group}
+
+**Описание:** группы товаров (имя, активность, состав `category_ids`/`product_ids`). Удаление
+группы, на которую ссылается правило — 422 `loyalty_group_in_use`. **Response:** 200/201.
+
+### 3.13.5. GET /api/v1/loyalty/promos
+
+**Описание:** лента активных акций — ротация на главной и блок акций точки на витрине.
+Публичный (без авторизации, как витрина). Показывается только то, что точка пометила
+`storefront.publish`. Ротация детерминирована по текущему часу (стабильна в пределах часа).
+**Query:** `merchant_id`, `branch_id`, `limit` (1…50, дефолт 12).
+
+**Response 200:**
+```json
+{
+  "data": [
+    {
+      "rule_id": 12, "type": "combo", "type_label": "Комбо", "merchant_id": 5, "branch_id": 7,
+      "title": "Комбо со скидкой", "subtitle": "Кофе + Круассан · −15%", "badge": "Комбо",
+      "deadline_text": "сейчас", "cashback_percent": null, "discount_percent": 15,
+      "min_sum": null, "valid_until": null
+    }
+  ]
+}
+```
+
+### 3.13.6. POST /api/v1/loyalty/preview
+
+**Описание:** расчёт выгоды по чеку для корзины/чекаута — тем же движком, что применяет заказ
+(покупатель видит ровно то, что будет зафиксировано). Гостю доступно без клиентского контекста
+(лимит «раз на клиента» — только авторизованному). `bonus_to_spend` на расчёт промо не влияет.
+**Auth:** опционально.
+
+**Request:**
+```json
+{ "branch_id": 7, "items": [{"merchant_offer_id": 101, "qty": 2}], "bonus_to_spend": 0 }
+```
+**Response 200:** `{ "data": { "lines": [...], "gifts": [...], "stamps": null, "subtotal": 0,
+"discount_total": 0, "payable_total": 0, "cashback_total": 0, "order_cashback_percent": 0,
+"applied_rule_ids": [], "rule_costs": {}, "badges": [] } }` (суммы — копейки; **база кэшбэка =
+`payable_total`**).
+
+### 3.13.7. GET /api/v1/loyalty/effect (Ф2)
+
+**Описание:** эффект акции — только честно измеримые величины (заказы с промо, скидка, кэшбэк,
+подарки); `null` там, где данных нет (uplift оборота). **Auth:** Bearer. **Query:** `branch_id`,
+`rule_id`, `from`, `to`.
+
+### 3.13.8. POST /api/internal/v1/loyalty/apply
+
+**Описание:** применение промо к заказу (service-to-service): расчёт выгоды, запись блока `promo`
+в `orders.pricing_snapshot`, расход бюджета правил и счётчика «раз на клиента», событие
+`PromoApplied` в очередь. **Идемпотентно по заказу.** Заголовок `X-Internal-Secret`.
+
+**Request:** `{ "order_id": 42 }` → **Response 200:**
+`{ "applied": true, "order_id": 42, "promo": { … } }` (повтор — `applied: false`).
