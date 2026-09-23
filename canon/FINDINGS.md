@@ -725,4 +725,4 @@ not exist»).
 `promo_rules`) представление снести отдельной миграцией. Комментарий в БД помечает его
 `DEPRECATED`.
 
-**Связь:** `canon/API_SPEC.md` §3.13, `lovii-core/docs/sessions/055-sz073-loyalty-service-backend.md`.
+**Связь:** `canon/API_SPEC.md` §3.13, `lovii-core/docs/sessions/057-sz073-loyalty-service-backend.md`.
