@@ -99,6 +99,7 @@
 | F-058 | 2026-09-22 | `lovii-core` + `lovii-app` | Находки живой приёмки Блока А (Шаг A, T-014): кэшбэк-маршрут владельцу неочевиден — списание живёт на счёте точки/номинальном, а не в ленте клиента; фикс «нарисованного» кэшбэка — core `333373d` (cashback + cashback_fee 25% → 40/40/20) — требует контрольного прогона и активной `loyalty_rules`; копирование кода/ссылки в кабинете молча не работает (clipboard-паттерн и тихие return) | Open (доработка T-014; сценарий нового юзера — T-015; инструмент переоформления — T-016) | <!-- fact-guard: allow — числа цитируют конфиг payments.split (T-014) и канон PARAMS §1.5/BRD §7.3 -->
 | F-059 | 2026-09-22 | `lovii-core` | Инцидент живой приёмки SZ-056 (сценарий 9): активация подписки → 422 `insufficient_funds` при видимой сумме на карте PAY. Две «казны»: карта PAY показывает балльный кошелёк `Core\Wallet` (начисления — LoyaltyService, `WalletTransactionType::Earn`), а подписка дебетит леджер-счёт `Domain\Billing\Account` (`findFundedSource`, каскад business→pay) — разные таблицы, леджер-счёт пользователя пуст. Штатного пополнения леджер-счёта нет (только adjustment-проводки). Реворк владельца в фин-контуре (`e74f484`: кэшбэк клиенту — нога через номинал на лицевой счёт) — в процессе | Open (решения владельца: что показывает карта PAY; судьба накопленных баллов; финансирование приёмки 9–13) | <!-- fact-guard: allow — суммы баланса из живой приёмки владельца и тестовых данных SZ-058; канон-дом чисел подписки: PARAMS §1.4 -->
 | F-060 | 2026-09-22 | `lovii-core` | SZ-073: при обобщении `loyalty_rules` → `promo_rules` (единая таблица правил промо) Filament-ресурс правил в `lovii-admin` читает таблицу `loyalty_rules` напрямую через `pgsql_core`; без совместимости выкат core уронил бы чужой кабинет. Решение: temporary read-only VIEW `loyalty_rules` над `promo_rules` (type='cashback'). Долг: снять после перевода админки на `/api/v1/loyalty/rules` | Open (view создан миграцией `2026_09_22_120300`; снять после миграции админки на API правил) |
+| F-061 | 2026-09-23 | `lovii-core` | Гейт карточки `docker exec lovii-core-app-1 composer test` **не включает PHPStan** (`composer.json` `test` = lint + type-coverage + pest + openapi; PHPStan — отдельный `test:types`/`test-strict`), а CI-джоб `checks` **включает** `vendor/bin/phpstan`. Итог: задача может быть «зелёной» локально по гейту карточки и красной в CI. Полный локальный эквивалент CI — `scripts/preflight.sh` (pint/rector/phpstan/pest vs базлайн) | Documented (урок SZ-073: локально гнать `phpstan`/`preflight.sh`, не только `composer test`) |
 ---
 
 ## Карточки
@@ -726,3 +727,15 @@ not exist»).
 `DEPRECATED`.
 
 **Связь:** `canon/API_SPEC.md` §3.13, `lovii-core/docs/sessions/057-sz073-loyalty-service-backend.md`.
+
+### F-061 · `lovii-core` · `composer test` ≠ CI-гейт: PHPStan только в CI/preflight
+
+**Дата:** 2026-09-23 · **Статус:** Documented
+
+**Где стрельнуло:** SZ-073 — локальный гейт карточки (`docker exec lovii-core-app-1 composer test`) прошёл зелёным, но CI-джоб `checks` упал на шаге **Static analysis (PHPStan)** (21 замечание в новом коде лояльности).
+
+**Причина:** `composer.json` → `test` = `@lint` (rector+pint) + type-coverage + `test:unit` (pest) + `test:lint` + `test:openapi`. **PHPStan в него не входит** — он в отдельных скриптах `test:types` (`phpstan --no-progress`) и `test-strict`. А `.github/workflows/ci.yml` → job `checks` выполняет `vendor/bin/phpstan` отдельным шагом. Плюс `scripts/preflight.sh` (репо-рекомендация перед мержем) PHPStan тоже гоняет.
+
+**Урок:** перед мержем в `staging` гонять **`bash scripts/preflight.sh`** (pint/rector/phpstan/pest vs базлайн средовых падений) — он ближе к CI, чем `composer test`. Либо доп. шаг `php -d memory_limit=1G vendor/bin/phpstan analyse --no-progress`.
+
+**Типичная ошибка нового кода under level 8 + strict-rules:** `?->prop` слева от `??` и `=== null` по полям с non-null типом (`orders.branch_id NOT NULL`, `merchant_offers.catalog_product_id NOT NULL`, PHPDoc-модели) → `nullsafe.neverNull` / `identical.alwaysFalse`. Фикс — `instanceof`-сужение, как в соседнем коде правил. Коммит-пример: `lovii-core a0b18231`.
