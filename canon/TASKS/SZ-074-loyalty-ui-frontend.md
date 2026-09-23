@@ -126,3 +126,11 @@ UI-набора; не публиковать в прод-путь без про�
 - категория для «штампов» пока nullable (вместе с редактором групп).
 
 **Session-док:** `lovii-app/docs/sessions/126-sz074-loyalty-ui-app.md`.
+### Дополнение (2026-09-23): редактор групп + каталог
+
+- `lovii-app` `feat/sz-074-loyalty-groups`: редактор групп (`LoyaltyGroupEditor.vue`) — имя,
+  состав (категории и товары точки), активность; метод `loyaltyCatalog`; тесты (+2); гейт
+  `yarn test` 912 passed; на staging (`51548b8`).
+- `lovii-core` `feat/sz-075-loyalty-catalog` (`94325030`): `GET /api/v1/loyalty/catalog` —
+  каталог точки для конструктива групп (состав хранится каталожными id); тест + openapi + API_SPEC §3.13.9.
+- Не сделано: скрин-сверка с демо (390px), b2b-механики.
