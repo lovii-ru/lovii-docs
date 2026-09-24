@@ -509,3 +509,15 @@ sequenceDiagram
 
 **Request:** `{ "order_id": 42 }` → **Response 200:**
 `{ "applied": true, "order_id": 42, "promo": { … } }` (повтор — `applied: false`).
+### 3.13.9. GET /api/v1/loyalty/catalog
+
+**Описание:** каталог для конструктива групп — категории и товары точки
+(состав группы хранится каталожными id: `catalog_category_id`/`catalog_product_id`).
+Платформенные категории (`merchant_id = NULL`) включены; товары — только точки.
+**Auth:** Bearer (+ право роли; дефолт `merchant.update_profile`). **Query:** `branch_id`.
+
+**Response 200:**
+```json
+{ "data": { "categories": [{"id": 1, "name": "Витамины"}], "products": [{"id": 10, "title": "Магний"}] },
+  "branch_id": 7, "merchant_id": 5 }
+```
