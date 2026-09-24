@@ -117,7 +117,7 @@ API — staging) → владелец принимает → только пот
 **Начали с профиля и настроек** (решение владельца 2026-09-24). Кабинет МСП «Промо» реализован
 ранее и лежит на staging, но **приёмки по нему не было**.
 
-**Состояние ветки:** `lovii-app` `feat/sz-074-loyalty-groups`, **9 коммитов локально** поверх
+**Состояние ветки:** `lovii-app` `feat/sz-076-demo-skin` (**в origin**), 9 коммитов поверх
 `origin/staging` (не запушены/не смержены). Worktree: `lovii-app-sz074`.
 
 **Общий слой шкуры:** `src/scss/demo-skin/settings.scss`, `modules/roles-module/msp/loyalty/loyalty.scss`
