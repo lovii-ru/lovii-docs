@@ -103,6 +103,7 @@
 | [`SZ-073`](SZ-073-loyalty-service-backend.md) | Сервис лояльности (бэкенд): модель, движок, контракт API |
 | [`SZ-074`](SZ-074-loyalty-ui-frontend.md) | Интерфейсы лояльности: UI-набор из демо + конструктор в приложении и b2b |
 | [`SZ-075`](SZ-075-loyalty-buyer-integration.md) | Интеграция: точка, категория «Комбо», корзина, чекаут |
+| [`SZ-076`](SZ-076-demo-skin-restyle.md) | Рестайл под дизайн-систему демо: натянуть шкурку `lovii-demo/css/lovii.css` на экраны приложения (план по 21 экрану) |
 | [`T-008`](T-008-staging-test-data-cleanup.md) | Чистка тестового мусора staging-БД (отложена владельцем) |
 | [`T-009`](T-009-client-order-status-pushes.md) | Пуши accepted/ready + `push:prune-dead` в планировщик |
 | [`T-010`](T-010-promo-ref-universal-capture.md) | Промо/реф-ссылки: любой суффикс, валидация кода по БД |
