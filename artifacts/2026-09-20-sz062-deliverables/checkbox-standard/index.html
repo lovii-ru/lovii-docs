@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стандарт чекбоксов — согласия и фильтры</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f6f3;
+    --paper-2:#efece7;
+    --ink:#17181c;
+    --ink-2:#4b4d55;
+    --muted:#77797f;
+    --rule:#dcd8d1;
+    --rule-strong:#c4bfb6;
+    --accent:#b8246b;
+    --ok:#0f6b52;
+    --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.55;font-weight:400}
+  .wrap{max-width:920px;margin:0 auto;padding:64px 28px 96px}
+
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 18px}
+  h1{font-size:clamp(28px,4.4vw,42px);line-height:1.12;letter-spacing:-.02em;font-weight:600;
+    margin:0 0 20px;max-width:24ch}
+  .lede{font-size:17px;color:var(--ink-2);max-width:70ch;margin:0 0 26px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 0;margin:0;padding:14px 0;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .meta div{padding-right:26px}
+  .meta b{color:var(--ink-2);font-weight:500}
+
+  section{margin-top:56px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin:0 0 18px}
+  .sec-num{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em}
+  h2{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0}
+  h3{font-size:14px;font-weight:600;margin:26px 0 10px;letter-spacing:0}
+  p{margin:0 0 16px;max-width:74ch}
+  .muted{color:var(--muted)}
+  code,.mono{font-family:var(--mono);font-size:13.5px}
+  code{background:var(--paper-2);padding:1px 5px;border-radius:3px;color:var(--ink)}
+  pre{font-family:var(--mono);font-size:13px;line-height:1.6;color:var(--ink);
+    background:var(--paper-2);border:1px solid var(--rule);padding:16px 18px;margin:0 0 16px;
+    overflow:auto;border-radius:3px}
+  pre .c{color:var(--muted)}
+  pre .bad{color:var(--accent)}
+  pre .good{color:var(--ok)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0 0}
+  caption{text-align:left;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--muted);padding-bottom:10px}
+  th,td{text-align:left;padding:10px 14px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-weight:500;color:var(--muted);font-family:var(--mono);font-size:12px;
+    letter-spacing:.05em;text-transform:uppercase}
+  td.mono{font-family:var(--mono);font-size:13px;white-space:nowrap}
+  td.ok{color:var(--ok);font-family:var(--mono);font-size:13px}
+  tr:last-child td{border-bottom:0}
+
+  .note{border-left:2px solid var(--rule-strong);padding:2px 0 2px 18px;margin:0 0 16px;
+    color:var(--ink-2);max-width:72ch}
+
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:8px 0 0}
+  .shots.wide{grid-template-columns:1fr}
+  figure{margin:0}
+  .shot{background:#fbfaf8;border:1px solid var(--rule-strong);border-radius:2px;padding:10px;
+    display:flex;justify-content:center;overflow:hidden}
+  .shot img{display:block;width:100%;height:auto}
+  .shot.tall img{max-width:250px}
+  figcaption{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--muted);margin-top:10px}
+  figcaption b{color:var(--ink);font-weight:500}
+
+  .steps{margin:8px 0 0;border-top:1px solid var(--rule)}
+  .step{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:14px 0;
+    border-bottom:1px solid var(--rule)}
+  .step .k{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em;
+    text-transform:uppercase;padding-top:2px}
+  .step .v{max-width:62ch}
+  .step .v b{font-weight:600}
+  .badge{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    padding:2px 7px;border:1px solid var(--rule-strong);border-radius:999px;color:var(--ink-2)}
+  .badge.blocked{color:var(--accent);border-color:var(--accent)}
+  .badge.ok{color:var(--ok);border-color:var(--ok)}
+
+  footer{margin-top:72px;padding-top:18px;border-top:1px solid var(--rule);
+    font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;
+    gap:6px 24px;justify-content:space-between}
+  @media (max-width:640px){
+    .wrap{padding:44px 20px 72px}
+    .shots{grid-template-columns:1fr}
+    .step{grid-template-columns:1fr;gap:6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="kicker">LOVII · lovii-app · киты и токены</p>
+  <h1>Стандарт чекбоксов: согласия и фильтры</h1>
+  <p class="lede">Чекбоксы согласий в заявке «Добавить точку» не рисовались вовсе — пустой бокс был невидим, а ошибка согласия не читалась текстом. Причина в одном несуществующем токене. Сделан единый компонент кита для светлой и тёмной темы и применён ко всем чекбоксам клиента.</p>
+  <div class="meta">
+    <div><b>Дата</b> 2026-09-15</div>
+    <div><b>Клиент</b> lovii-app (Vue 3)</div>
+    <div><b>Новое</b> components/Ui/AppCheckbox.vue</div>
+    <div><b>Стенд</b> 127.0.0.1:8081</div>
+  </div>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Что было не так</h2></div>
+    <p>В форме заявки два пункта согласия — оферта и персональные данные. Пустой чекбокс не имел ни рамки, ни фона: отметить его «на глаз» было невозможно, а при попытке отправить заявку с экрана исчезала и причина отказа (проп <code>error</code> лишь красил рамку несуществующего бокса).</p>
+    <table>
+      <caption>Состояние чекбокса согласия — до правки</caption>
+      <thead><tr><th>Свойство</th><th>Было</th><th>Ожидалось</th></tr></thead>
+      <tbody>
+        <tr><td>Рамка бокса</td><td class="mono">не рисовалась</td><td class="mono">1.5px, видимая</td></tr>
+        <tr><td>Фон (не отмечен)</td><td class="mono">прозрачный</td><td class="mono">прозрачный</td></tr>
+        <tr><td>Текст ошибки под пунктом</td><td class="mono">отсутствовал</td><td class="mono">красная подпись</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Причина</h2></div>
+    <p>Компонент согласия ссылался на токен <code>--border-normal-strong</code>, которого в дизайн-системе нет: в таблице токенов определён только <code>--border-normal-stong</code> — с опечаткой. Неизвестная переменная внутри <code>border</code> делает декларацию недействительной целиком, поэтому рамка не рисовалась, а не «рисовалась серой».</p>
+    <pre><span class="c">/* BusinessOfferCheckbox.vue — было */</span>
+&amp;__mark {
+    border: 1.5px solid <span class="bad">var(--border-normal-strong)</span>;  <span class="c">/* токена нет → border обнуляется */</span>
+    background: transparent;                       <span class="c">/* заливка только в :checked */</span>
+}
+
+<span class="c">/* scss/tokens.scss — что реально было в ДС */</span>
+--border-normal-default: var(--lv-line);
+--border-normal-<span class="bad">stong</span>:    var(--lv-line);   <span class="c">/* опечатка в имени */</span>
+--border-normal-subtle:  var(--lv-line-2);</pre>
+    <p class="note">Родственная проблема нашлась у фильтров каталога: там был свой <code>span.checkbox</code> с 18px и другими токенами — визуально чекбокс существовал, но это был второй, независимый стандарт.</p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Стандарт</h2></div>
+    <p>Добавлен недостающий токен видимой нейтральной рамки и китовый компонент. Оба состояния живут на одних и тех же токенах, поэтому светлая и тёмная темы переключаются без отдельных правил.</p>
+    <table>
+      <caption>Токены стандарта</caption>
+      <thead><tr><th>Токен</th><th>Светлая</th><th>Тёмная</th><th>Роль</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">--lv-line-strong</td><td class="mono">#8f8578</td><td class="mono">#8d7f88</td><td>рамка пустого бокса (≥3:1 к фону карточки)</td></tr>
+        <tr><td class="mono">--border-normal-strong</td><td class="mono">→ lv-line-strong</td><td class="mono">→ lv-line-strong</td><td>DS-токен, закрывает фантом</td></tr>
+        <tr><td class="mono">--content-normal-brand</td><td class="mono">#f64a8a</td><td class="mono">#f64a8a</td><td>заливка отмеченного бокса</td></tr>
+        <tr><td class="mono">--content-normal-on-brand</td><td class="mono">#ffffff</td><td class="mono">#ffffff</td><td>галочка на брендовой заливке</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Компонент AppCheckbox</h3>
+    <p>Бокс 20×20, радиус 6, рамка 1.5px; отмеченный — брендовая заливка с галочкой; тап-таргет ≥44px, кольцо фокуса, состояния disabled и error. Реальный <code>input[type=checkbox]</code> остаётся в разметке — клавиатура, скринридеры и тестовые id работают как раньше. Варианты <code>reverse</code> и <code>block</code> дают вид «строка-настройка», поэтому фильтры каталога используют тот же компонент.</p>
+
+    <div class="shots">
+      <figure>
+        <div class="shot"><img src="assets/cb1-light-unchecked.png" alt="Согласия, светлая тема, чекбоксы не отмечены"></div>
+        <figcaption><b>Светлая</b> — пустые боксы с рамкой</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="assets/cb2-light-checked.png" alt="Согласия, светлая тема, первый чекбокс отмечен"></div>
+        <figcaption><b>Светлая</b> — отмеченный пункт</figcaption>
+      </figure>
+    </div>
+
+    <div class="shots" style="margin-top:22px">
+      <figure>
+        <div class="shot"><img src="assets/cb4-dark-unchecked.png" alt="Согласия, тёмная тема, чекбоксы не отмечены"></div>
+        <figcaption><b>Тёмная</b> — пустые боксы с рамкой</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="assets/cb3-dark-checked.png" alt="Согласия, тёмная тема, первый чекбокс отмечен"></div>
+        <figcaption><b>Тёмная</b> — отмеченный пункт</figcaption>
+      </figure>
+    </div>
+
+    <h3>Фильтры каталога — тот же стандарт</h3>
+    <div class="shots">
+      <figure>
+        <div class="shot tall"><img src="assets/cb5-filters-light.png" alt="Фильтры доставки, светлая тема"></div>
+        <figcaption><b>Светлая</b> — 6 строк, есть неактивная</figcaption>
+      </figure>
+      <figure>
+        <div class="shot tall"><img src="assets/cb6-filters-dark.png" alt="Фильтры доставки, тёмная тема"></div>
+        <figcaption><b>Тёмная</b> — те же токены</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Где применено</h2></div>
+    <table>
+      <caption>Инвентарь чекбоксов клиента</caption>
+      <thead><tr><th>Место</th><th>Что</th><th>Было</th><th>Стало</th></tr></thead>
+      <tbody>
+        <tr><td>Заявка «Добавить точку», ×2</td><td>согласие с офертой и с обработкой ПД</td><td class="mono">невидим</td><td class="mono ok">AppCheckbox</td></tr>
+        <tr><td>Фильтры каталога, ×6</td><td>тип доставки</td><td class="mono">свой span</td><td class="mono ok">AppCheckbox</td></tr>
+        <tr><td>Профиль — push/e-mail</td><td>согласия-переключатели</td><td class="mono">switch</td><td class="muted">не чекбокс, не тронут</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Кнопка действия и согласия</h2></div>
+    <p>Проверено на живом стенде: форма заполнена, отправка перехвачена на уровне сети — запрос засчитывался, но в базу ничего не уходило.</p>
+    <div class="steps">
+      <div class="step"><div class="k">Сценарий A</div><div class="v"><b>Отмечена только оферта.</b> Нажатие «Отправить заявку» не отправляет запрос, экран остаётся прежним, под пунктом ПД появляется красная подпись «Требуется согласие на обработку данных». <span class="badge blocked">заблокировано</span></div></div>
+      <div class="step"><div class="k">Сценарий B</div><div class="v"><b>Отмечены оба пункта.</b> Уходит <span class="mono">POST api/v1/business/applications</span>, ошибок валидации нет. <span class="badge ok">разрешено</span></div></div>
+      <div class="step"><div class="k">Побочный эффект</div><div class="v">Новых заявок в базе не появилось: проверка перехватывала запрос и подменяла ответ.</div></div>
+    </div>
+
+    <div class="shots wide" style="margin-top:22px">
+      <figure>
+        <div class="shot tall"><img src="assets/cb-gate-blocked.png" alt="Экран формы: первый чекбокс отмечен, второй пуст, под ним красная ошибка"></div>
+        <figcaption><b>Сценарий A</b> — галочка только у оферты, ошибка ПД видна текстом</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Проверка</h2></div>
+    <table>
+      <caption>Результат</caption>
+      <thead><tr><th>Шаг</th><th>Результат</th></tr></thead>
+      <tbody>
+        <tr><td>Замер бокса на стенде</td><td class="ok">светлая rgb(143,133,120) · тёмная rgb(141,127,136) · 20×20 r6</td></tr>
+        <tr><td>Отмеченный бокс</td><td class="ok">rgb(246,74,138) с галочкой, обе темы</td></tr>
+        <tr><td>Гейтинг кнопки (live)</td><td class="ok">без согласия — запрос не ушёл; с обоими — ушёл</td></tr>
+        <tr><td>Юнит-тесты</td><td class="ok">682 / 682 (88 файлов), +9 новых</td></tr>
+        <tr><td>Типы · линт · сборка</td><td class="ok">vue-tsc · eslint · vite build — чисто</td></tr>
+      </tbody>
+    </table>
+    <p class="note" style="margin-top:18px">Правка вошла в локальный коммит <span class="mono">204dec9</span> вместе с прочей работой по профилю; в удалённую ветку пока не отправлялась. Тем же коммитом профиль перестроен — блок «Кабинеты» вынесен из списка навигации, поэтому карточка берёт подложку из общего паттерна структурно.</p>
+  </section>
+
+  <footer>
+    <span>LOVII · lovii-app · сессия 101</span>
+    <span>стенд 127.0.0.1:8081 · 390×844 · dsf 2</span>
+  </footer>
+
+</div>
+</body>
+</html>

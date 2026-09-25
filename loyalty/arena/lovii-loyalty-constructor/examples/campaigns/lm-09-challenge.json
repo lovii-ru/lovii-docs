@@ -1,0 +1,100 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "challenge",
+  "name": "Утренний ритуал: 3 визита за 7 дн. → +300 баллов",
+  "priority": 80,
+  "stacking": {
+    "group": "custom",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "from": "07:00",
+        "to": "11:00"
+      }
+    ]
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [],
+  "actions": [
+    {
+      "type": "challenge_progress",
+      "challenge": "ch_utrenniy_ritual",
+      "metric": "visits",
+      "increment": 1,
+      "target": 3,
+      "window_days": 7,
+      "reward": {
+        "type": "accrue_points",
+        "mode": "fixed",
+        "amount": 300,
+        "ttl_days": 14,
+        "funding": "merchant",
+        "lot_label": "Утренний ритуал"
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Утренний ритуал",
+    "badge": "+300 б.",
+    "subtitle": "3 визита за 7 дн. · будни 07:00–11:00",
+    "terms": "Прогресс считается по чекам, оплаченным деньгами. Окно 7 дней с первого засчитанного чека; при истечении прогресс обнуляется."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-09",
+    "template_params": {
+      "name": "Утренний ритуал",
+      "metric": "visits",
+      "target": 3,
+      "window_days": 7,
+      "category": "",
+      "windows": [
+        {
+          "days": "weekdays",
+          "from": "07:00",
+          "to": "11:00"
+        }
+      ],
+      "reward_points": 300,
+      "ttl_days": 14,
+      "holdout_pct": 10
+    }
+  }
+}

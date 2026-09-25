@@ -1,0 +1,100 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "cashback",
+  "name": "Кэшбэк по категориям: десерты 10 %, кофе 3 %",
+  "priority": 100,
+  "stacking": {
+    "group": "cashback",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "base": "eligible_amount",
+      "cap": 300,
+      "ttl_days": 45,
+      "funding": "merchant",
+      "mode": "by_category",
+      "categories": {
+        "dessert": 10,
+        "coffee": 3
+      },
+      "lot_label": "Кэшбэк точки"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 5,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Кэшбэк по категориям: десерты 10 %, кофе 3 %",
+    "badge": "до 10 %",
+    "subtitle": "Начисляется на позиции категорий",
+    "terms": "Промо-баллы начисляются на сумму, оплаченную деньгами, и действуют 45 дней. Максимум 300 баллов за чек."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-04",
+    "template_params": {
+      "mode": "by_category",
+      "percent": 5,
+      "steps": [
+        {
+          "from_minor": 35000,
+          "percent": 3
+        },
+        {
+          "from_minor": 65000,
+          "percent": 5
+        },
+        {
+          "from_minor": 100000,
+          "percent": 8
+        }
+      ],
+      "categories": [
+        {
+          "category": "dessert",
+          "percent": 10
+        },
+        {
+          "category": "coffee",
+          "percent": 3
+        }
+      ],
+      "status_min": "PASS",
+      "cap": 300,
+      "ttl_days": 45,
+      "holdout_pct": 10
+    }
+  }
+}

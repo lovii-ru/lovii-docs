@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZ-062 · план работ после подтверждения архитектуры</title>
+<style>
+  :root{--ink:#17131a;--ink2:#4a444e;--ink3:#7d7681;--paper:#faf7f4;--paper2:#f2ece7;--rule:#ded5cc;--accent:#c92a6a;--soft:#fde8f1;--ok:#2f7d4f;--warn:#a8641a;--stop:#b3382f;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--serif:"Iowan Old Style",Palatino,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:56px 28px 96px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:24px;margin-bottom:34px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.14;margin:0 0 12px}
+  .lede{font-size:17px;color:var(--ink2);max-width:74ch;margin:0}
+  h2{font-family:var(--serif);font-weight:600;font-size:23px;margin:46px 0 6px;padding-top:16px;border-top:1px solid var(--rule)}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent);margin-right:8px}
+  p{margin:10px 0;max-width:76ch}
+  code{font-family:var(--mono);font-size:13px;background:var(--paper2);padding:1.5px 5px;border-radius:4px}
+  ul{padding-left:20px;max-width:76ch} li{margin:5px 0}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);border-bottom:1.5px solid var(--ink)}
+  tbody tr:hover{background:var(--paper2)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:4px;border:1px solid currentColor;text-transform:uppercase;white-space:nowrap}
+  .edit{color:var(--accent)} .read{color:var(--ink3)} .art{color:var(--ok)} .new{color:#6a3fb0}
+  .ok{display:inline-flex;align-items:center;gap:7px}
+  .ok::before{content:"";width:12px;height:12px;border-radius:3px;background:var(--ok);display:inline-block}
+  .dec{border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin:16px 0}
+  .dec .row{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:baseline;padding:11px 16px;border-bottom:1px solid var(--rule)}
+  .dec .row:last-child{border-bottom:0}
+  .dec .row .i{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+  .dec .row .a{font-family:var(--mono);font-size:11px;color:var(--ok);text-transform:uppercase;letter-spacing:.05em}
+  .callout{border-left:3px solid var(--accent);background:var(--soft);padding:14px 18px;margin:20px 0;font-size:14.5px}
+  .callout.warn{border-color:var(--warn);background:#fdf3e7}
+  .gate{background:#191419;color:#f5efec;padding:24px;margin:24px 0;border-radius:6px}
+  .gate .t{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#f7a9c8;margin:0 0 14px}
+  .gate li{margin:9px 0} .gate code{background:#2a2028;color:#fbcfe3} .gate .rec{color:#9fe8b0;font-size:12.5px}
+  .repo{border:1px solid var(--rule);border-radius:6px;padding:14px 16px;margin:14px 0}
+  .repo b{font-family:var(--mono);font-size:14px}
+  .repo ul{margin:8px 0 0;padding-left:18px} .repo li{font-size:13.5px}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink3);font-family:var(--mono)}
+  @media(max-width:640px){h1{font-size:26px}.wrap{padding:32px 18px 72px}.dec .row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">SZ-062 · план после подтверждения · 2026-09-20</p>
+  <h1>Куда идут правки и как устроен канон</h1>
+  <p class="lede">Вы подтвердили разбивку по репозиториям. Объём расширен: иконки выносим в канон, дизайн-система получает источник истины в <code>lovii-design</code> и каталог в витрине. Ниже — зафиксированные решения, обновлённый объём и оставшиеся контентные решения Гейта №1.</p>
+</header>
+
+<h2><span class="n">01</span>Подтверждено вами</h2>
+<div class="dec">
+  <div class="row"><span class="i">1</span><span>Правки CSS и иконок — только в <code>lovii-demo</code></span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">2</span><span>Канон стилей — в <code>lovii-design</code> (новые токены через Гейт №2)</span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">3</span><span>Канон иконок — вариант <b>A</b>: выносим в <code>lovii-design</code></span><span class="a">★ A</span></div>
+  <div class="row"><span class="i">4</span><span>ДС: источник истины в <code>lovii-design</code>, каталог — в <code>lovii-demo/design/ds/</code></span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">5</span><span><code>lovii-app</code> — только сверка, правок нет</span><span class="a">★ да</span></div>
+</div>
+
+<h2><span class="n">02</span>Обновлённый объём по репозиториям</h2>
+
+<div class="repo">
+  <b>lovii-design</b> <span class="badge new">расширено</span> — канон
+  <ul>
+    <li><code>icons/</code> <span class="badge new">новое</span> — полный каталог иконок: реестр SVG + манифест (имя → смысл) + шкала размеров + превью-витрина для подбора. Иконки <b>не удаляем — расширяем</b>.</li>
+    <li><code>tokens/</code> — добавить шкалу размеров иконок (и navbar-токен) — через Гейт №2.</li>
+    <li><code>docs/</code> — раздел про иконки; при необходимости — уточнения примитивов.</li>
+    <li><code>tools/</code> — разнос иконок в витрину по образцу токенов (генерация снапшота); механизм зафиксирую в фазе 3–4.</li>
+  </ul>
+</div>
+
+<div class="repo">
+  <b>lovii-demo</b> <span class="badge edit">правим здесь</span> — реализация + каталог
+  <ul>
+    <li><code>css/lovii.css</code> — оптимизация анатомии витрины (мёртвый CSS, дубли, токенизация, слои).</li>
+    <li><code>js/icons.js</code> — становится потребителем канона: явные размеры + шкала из <code>lovii-design</code>.</li>
+    <li><code>design/ds/</code> — каталог-витрина (README, tokens, primitives, components, icons, catalog.html), ссылается на канон.</li>
+    <li><code>index.html</code> — бамп <code>?v=</code> при правках.</li>
+  </ul>
+</div>
+
+<div class="repo">
+  <b>lovii-app</b> <span class="badge read">только сверка</span> · <b>lovii_docs</b> <span class="badge art">только артефакты</span>
+  <ul>
+    <li>Приложение — сравнение токенов и кабинетов, без правок.</li>
+    <li>Артефакты фаз 0–6 и строки реестра — в <code>lovii_docs</code>.</li>
+  </ul>
+</div>
+
+<div class="callout warn">
+  <b>Важное уточнение по пункту 4.</b> «Источник истины» относится к <b>уровню канона</b> — токены, шкала размеров, иконки, компоненты слоя B. Но <b>анатомия именно витрины</b> (её 919 классов вида <code>.store-card</code>, <code>.cabinet__*</code>) физически живёт в <code>lovii-demo</code> и в каноне её нет. Поэтому каталог компонентов в витрине документирует классы витрины и ссылается на канон — а не наоборот. Если хотите иначе — скажите.
+</div>
+
+<h2><span class="n">03</span>Гейт №1 — итог</h2>
+<p>Архитектура и пять из шести решений закрыты. Ниже статус каждого пункта.</p>
+<div class="dec">
+  <div class="row"><span class="i">1</span><span>Удаление мёртвого CSS — 38 классов</span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">2</span><span>Слияние 103 дублей + 9 дублей <code>@media 640px</code>, слои <code>tokens→base→primitives→components→utilities</code></span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">4</span><span>Иконки — <b>не удалять</b>, а расширять; полный каталог иконок и их стилей в <code>lovii-design</code></span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">5</span><span>Шкала иконок 16/20/24/32 + явный размер всем 195 вызовам</span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">6</span><span>Navbar-фикс <code>--lv-navbar-height: 64px</code></span><span class="a">★ да</span></div>
+  <div class="row"><span class="i">3</span><span>Токенизация хардкода: 52 hex + частотные размеры → <code>var(--lv-*)</code></span><span class="a" style="color:var(--warn)">⏳ жду</span></div>
+</div>
+<div class="callout warn">
+  <b>Открыт один пункт — №3.</b> Менять ли 52 hex и повторяющиеся размеры на токены <code>var(--lv-*)</code>? Чего нет в каноне — предложу новыми токенами на Гейте №2. Если «нет» — хардкод остаётся как есть, и ДС получит пометку «вне токенов».
+</div>
+<div class="callout">
+  <b>Следствие по иконкам (пункт 4).</b> Раз иконки не удаляем, «оптимизация» иконок = привести все вызовы к явному размеру, свести дубли SVG, упорядочить реестр и вынести канон в <code>lovii-design/icons/</code> с превью-каталогом. Удаления не будет ни одной иконки из 13 «неиспользуемых».
+</div>
+
+<h2><span class="n">04</span>Порядок дальше</h2>
+<p>Фаза 3 (оптимизация CSS) → Гейт №2 (токены, шкала иконок, таблица правок) → модуль иконок в каноне + Фаза 4 (ДС) → Фаза 5 (валидация на локальном стенде, скриншот-регрессия «до/после») → Гейт №3 (приёмка и команда на пуш).</p>
+
+<footer>SZ-062 · план после подтверждения · головы: demo a8a86be · design 0e93f47 · app 6d1d79e · docs 959c563 · стенд :8090</footer>
+</div>
+</body>
+</html>

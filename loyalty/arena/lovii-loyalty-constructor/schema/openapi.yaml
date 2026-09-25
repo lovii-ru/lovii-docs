@@ -1,0 +1,680 @@
+openapi: 3.1.0
+info:
+  title: LOVII Loyalty Constructor API
+  version: 1.0.0
+  description: |
+    API конструктора лояльности LOVII. Три поверхности:
+    * **Merchant API** — кабинет ТСП (`/merchants/{merchantId}/loyalty/...`), роли `merchant_owner`, `merchant_staff`, `representative`.
+    * **Runtime API** — расчёт чека (`/loyalty/quote|commit|reverse`), вызывается приложением LOVII (QR-оплата), кассовыми адаптерами и сервисом платежей.
+    * **Customer API** — приложение клиента (`/me/loyalty/...`).
+    Деньги — целые копейки (`*_minor`), баллы — целые. Все запросы, меняющие состояние, требуют `Idempotency-Key`.
+servers:
+  - url: https://api.lovii.ru/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Merchant · Campaigns
+  - name: Merchant · Templates
+  - name: Merchant · Analytics
+  - name: Merchant · Settings
+  - name: Merchant · Coupons & Partners
+  - name: Runtime
+  - name: Customer
+  - name: Webhooks
+
+paths:
+  # ------------------------------------------------------------------ Templates
+  /merchants/{merchantId}/loyalty/templates:
+    get:
+      tags: [Merchant · Templates]
+      summary: Каталог механик с формами и пресетами под категорию точки
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { name: goal, in: query, schema: { type: string, enum: [check, frequency, acquisition, reactivation, engagement, prepay] } }]
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Template' } } } }
+
+  /merchants/{merchantId}/loyalty/templates/{templateId}/compile:
+    post:
+      tags: [Merchant · Templates]
+      summary: Скомпилировать параметры шаблона в Spec (без сохранения) + прогноз стоимости
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { name: templateId, in: path, required: true, schema: { type: string, example: lm-01 } }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [params], properties: { params: { type: object } } } } } }
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: object, properties: { spec: { $ref: '#/components/schemas/CampaignSpec' }, estimate: { $ref: '#/components/schemas/Estimate' }, preview: { $ref: '#/components/schemas/Preview' } } } } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # ------------------------------------------------------------------ Campaigns
+  /merchants/{merchantId}/loyalty/campaigns:
+    get:
+      tags: [Merchant · Campaigns]
+      summary: Список кампаний точки
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { name: status, in: query, schema: { type: string } }, { $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Campaign' } }, total: { type: integer } } } } } }
+    post:
+      tags: [Merchant · Campaigns]
+      summary: Создать кампанию (черновик) из шаблона или из готового Spec
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - { type: object, required: [template_id, params], properties: { template_id: { type: string }, params: { type: object } } }
+                - { type: object, required: [spec], properties: { spec: { $ref: '#/components/schemas/CampaignSpec' } } }
+      responses:
+        '201': { description: Создано, content: { application/json: { schema: { $ref: '#/components/schemas/Campaign' } } } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /merchants/{merchantId}/loyalty/campaigns/{campaignId}:
+    parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/campaignId' }]
+    get:
+      tags: [Merchant · Campaigns]
+      summary: Кампания с текущим Spec и KPI
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Campaign' } } } }
+    patch:
+      tags: [Merchant · Campaigns]
+      summary: Изменить черновик или подготовить новую версию (для опубликованной — создаёт версию при publish)
+      parameters: [{ $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, properties: { spec: { $ref: '#/components/schemas/CampaignSpec' }, params: { type: object }, change_note: { type: string } } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Campaign' } } } }
+    delete:
+      tags: [Merchant · Campaigns]
+      summary: Архивировать (черновик удаляется, опубликованная — archived)
+      responses: { '204': { description: OK } }
+
+  /merchants/{merchantId}/loyalty/campaigns/{campaignId}/publish:
+    post:
+      tags: [Merchant · Campaigns]
+      summary: Опубликовать (создать неизменяемую версию, статус active/scheduled)
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/campaignId' }, { $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { effective_from: { type: string, format: date-time }, change_note: { type: string } } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Campaign' } } } }
+        '409': { description: Конфликт (например, нет тарифа PRO для механики), content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+  /merchants/{merchantId}/loyalty/campaigns/{campaignId}/pause:
+    post:
+      tags: [Merchant · Campaigns]
+      summary: Поставить на паузу
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/campaignId' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Campaign' } } } } }
+
+  /merchants/{merchantId}/loyalty/campaigns/{campaignId}/resume:
+    post:
+      tags: [Merchant · Campaigns]
+      summary: Возобновить
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/campaignId' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Campaign' } } } } }
+
+  /merchants/{merchantId}/loyalty/campaigns/{campaignId}/versions:
+    get:
+      tags: [Merchant · Campaigns]
+      summary: История версий
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/campaignId' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/CampaignVersion' } } } } } }
+
+  /merchants/{merchantId}/loyalty/simulate:
+    post:
+      tags: [Merchant · Campaigns]
+      summary: Симуляция чека (предпросмотр) — тот же движок без записи и резервов
+      parameters: [{ $ref: '#/components/parameters/merchantId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [context]
+              properties:
+                spec: { $ref: '#/components/schemas/CampaignSpec', description: 'Дополнительная (ещё не сохранённая) кампания' }
+                campaign_ids: { type: array, items: { type: string }, description: 'Ограничить набор кампаний; по умолчанию — все активные' }
+                context: { $ref: '#/components/schemas/QuoteContext' }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/QuoteResult' } } } }
+
+  # ------------------------------------------------------------------ Analytics
+  /merchants/{merchantId}/loyalty/analytics/overview:
+    get:
+      tags: [Merchant · Analytics]
+      summary: Сводка по лояльности точки за период
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/from' }, { $ref: '#/components/parameters/to' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AnalyticsOverview' } } } } }
+
+  /merchants/{merchantId}/loyalty/campaigns/{campaignId}/stats:
+    get:
+      tags: [Merchant · Analytics]
+      summary: Статистика кампании по дням + сравнение с holdout
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/campaignId' }, { $ref: '#/components/parameters/from' }, { $ref: '#/components/parameters/to' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/CampaignStats' } } } } }
+
+  /merchants/{merchantId}/loyalty/customers:
+    get:
+      tags: [Merchant · Analytics]
+      summary: Клиенты точки (обезличенно, только агрегаты и маскированный телефон) с сегментами
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { name: segment, in: query, schema: { type: string } }, { $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/CustomerProfile' } }, total: { type: integer } } } } } } }
+
+  # ------------------------------------------------------------------ Settings
+  /merchants/{merchantId}/loyalty/settings:
+    get:
+      tags: [Merchant · Settings]
+      summary: Настройки лояльности точки
+      parameters: [{ $ref: '#/components/parameters/merchantId' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/LoyaltySettings' } } } } }
+    put:
+      tags: [Merchant · Settings]
+      summary: Обновить настройки
+      parameters: [{ $ref: '#/components/parameters/merchantId' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LoyaltySettings' } } } }
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/LoyaltySettings' } } } } }
+
+  /merchants/{merchantId}/loyalty/manual-accruals:
+    post:
+      tags: [Merchant · Settings]
+      summary: Ручное начисление/списание баллов клиенту (с комментарием, лимитом и аудитом)
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [customer_id, points, reason], properties: { customer_id: { type: string }, points: { type: integer, description: 'положительное — начислить, отрицательное — списать' }, ttl_days: { type: integer }, reason: { type: string, maxLength: 200 } } } } } }
+      responses: { '201': { description: OK }, '429': { description: Превышен дневной лимит ручных операций } }
+
+  # ------------------------------------------------------------------ Coupons & Partners
+  /merchants/{merchantId}/loyalty/coupons/batches:
+    post:
+      tags: [Merchant · Coupons & Partners]
+      summary: Сгенерировать пакет одноразовых кодов для купонной кампании (для печати/флаеров)
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [campaign_id, count], properties: { campaign_id: { type: string }, count: { type: integer, minimum: 1, maximum: 10000 }, prefix: { type: string, maxLength: 6 }, expires_at: { type: string, format: date-time } } } } } }
+      responses: { '201': { description: OK, content: { application/json: { schema: { type: object, properties: { batch_id: { type: string }, download_url: { type: string, format: uri } } } } } } }
+
+  /merchants/{merchantId}/loyalty/partners:
+    get:
+      tags: [Merchant · Coupons & Partners]
+      summary: Партнёрства для кросс-промо (точки района)
+      parameters: [{ $ref: '#/components/parameters/merchantId' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Partnership' } } } } } }
+    post:
+      tags: [Merchant · Coupons & Partners]
+      summary: Пригласить точку района в партнёрство
+      parameters: [{ $ref: '#/components/parameters/merchantId' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [partner_merchant_id, terms], properties: { partner_merchant_id: { type: string }, terms: { type: object } } } } } }
+      responses: { '201': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Partnership' } } } } }
+
+  /merchants/{merchantId}/loyalty/partners/{partnershipId}/accept:
+    post:
+      tags: [Merchant · Coupons & Partners]
+      summary: Принять приглашение
+      parameters: [{ $ref: '#/components/parameters/merchantId' }, { name: partnershipId, in: path, required: true, schema: { type: string } }]
+      responses: { '200': { description: OK } }
+
+  # ------------------------------------------------------------------ Runtime
+  /loyalty/quote:
+    post:
+      tags: [Runtime]
+      summary: Предрасчёт стимулов для корзины (без списаний), TTL 15 мин
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/QuoteContext' } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/QuoteResult' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /loyalty/commit:
+    post:
+      tags: [Runtime]
+      summary: Зафиксировать стимулы после успешной оплаты (идемпотентно по order_id)
+      parameters: [{ $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [order_id, payment]
+              properties:
+                order_id: { type: string }
+                quote_id: { type: string, format: uuid }
+                strict: { type: boolean, default: false, description: 'true — отклонять при истёкшем quote вместо пересчёта' }
+                payment:
+                  type: object
+                  required: [method, paid_money_minor]
+                  properties:
+                    method: { type: string, enum: [qr_lovii_pay, sbp, card, cash, gift_card, mixed] }
+                    paid_money_minor: { type: integer }
+                    paid_points: { type: integer, default: 0 }
+                    payment_id: { type: string }
+                context: { $ref: '#/components/schemas/QuoteContext', description: 'Обязателен, если quote_id не передан' }
+      responses:
+        '200': { description: OK (в т.ч. повтор), content: { application/json: { schema: { $ref: '#/components/schemas/CommitResult' } } } }
+        '409': { description: LOY_QUOTE_EXPIRED / LOY_AMOUNT_MISMATCH, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+  /loyalty/reverse:
+    post:
+      tags: [Runtime]
+      summary: Откат стимулов при возврате/отмене (полный или частичный)
+      parameters: [{ $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [order_id, refund_id]
+              properties:
+                order_id: { type: string }
+                refund_id: { type: string }
+                full: { type: boolean, default: true }
+                amount_minor: { type: integer }
+                items: { type: array, items: { type: object, properties: { sku: { type: string }, qty: { type: integer } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/ReverseResult' } } } }
+        '404': { description: LOY_ORDER_NOT_FOUND }
+
+  /loyalty/coupons/validate:
+    post:
+      tags: [Runtime]
+      summary: Проверить код без расчёта корзины (для кассы)
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [merchant_id, code], properties: { merchant_id: { type: string }, code: { type: string }, customer_id: { type: string } } } } } }
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: object, properties: { valid: { type: boolean }, reason: { type: string }, campaign: { $ref: '#/components/schemas/CampaignPublic' } } } } } } }
+
+  /loyalty/checkin:
+    post:
+      tags: [Runtime]
+      summary: Отметка визита по QR без покупки (V2, штампы/челленджи с лимитом)
+      parameters: [{ $ref: '#/components/parameters/idempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [merchant_id, customer_id, qr_token], properties: { merchant_id: { type: string }, customer_id: { type: string }, qr_token: { type: string } } } } } }
+      responses: { '200': { description: OK } }
+
+  /loyalty/wallet/{customerId}:
+    get:
+      tags: [Runtime]
+      summary: Баланс клиента с разбивкой по лотам (для кассы/платёжного сервиса)
+      parameters: [{ name: customerId, in: path, required: true, schema: { type: string } }, { name: merchant_id, in: query, schema: { type: string } }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Wallet' } } } } }
+
+  # ------------------------------------------------------------------ Customer
+  /me/loyalty/offers:
+    get:
+      tags: [Customer]
+      summary: Актуальные предложения для клиента (лента «Акции рядом» / карточка точки)
+      parameters: [{ name: merchant_id, in: query, schema: { type: string } }, { name: location_id, in: query, schema: { type: string } }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Offer' } } } } } }
+
+  /me/loyalty/progress:
+    get:
+      tags: [Customer]
+      summary: Прогресс клиента у точки — штампы, уровень, челленджи, до порога
+      parameters: [{ name: merchant_id, in: query, required: true, schema: { type: string } }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Progress' } } } } }
+
+  /me/loyalty/wallet:
+    get:
+      tags: [Customer]
+      summary: Кошелёк — баланс, лоты и ближайшие сгорания
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Wallet' } } } } }
+
+  /me/loyalty/coupons:
+    get:
+      tags: [Customer]
+      summary: Мои купоны
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Coupon' } } } } } }
+
+  /me/loyalty/referral/{merchantId}:
+    get:
+      tags: [Customer]
+      summary: Моя реферальная ссылка/QR для точки и статус приглашений
+      parameters: [{ $ref: '#/components/parameters/merchantId' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: object, properties: { code: { type: string }, link: { type: string, format: uri }, invited: { type: integer }, qualified: { type: integer }, rewarded_points: { type: integer } } } } } } }
+
+  /me/loyalty/subscriptions:
+    get:
+      tags: [Customer]
+      summary: Мои абонементы
+      responses: { '200': { description: OK } }
+
+  /me/loyalty/spin/{orderId}:
+    post:
+      tags: [Customer]
+      summary: Получить результат мгновенного выигрыша по чеку (детерминированный, 1 раз)
+      parameters: [{ name: orderId, in: path, required: true, schema: { type: string } }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: object, properties: { prize_label: { type: string }, action: { type: object }, table: { type: array, items: { type: object } } } } } } } }
+
+  # ------------------------------------------------------------------ Webhooks (для документации подписчиков)
+  /webhooks/loyalty:
+    post:
+      tags: [Webhooks]
+      summary: Формат событий, доставляемых подписчикам (кассы, CRM, уведомления)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Event' } } } }
+      responses: { '200': { description: Подтверждение доставки } }
+
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+  parameters:
+    merchantId: { name: merchantId, in: path, required: true, schema: { type: string } }
+    campaignId: { name: campaignId, in: path, required: true, schema: { type: string, format: uuid } }
+    idempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, maxLength: 128 } }
+    page: { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+    limit: { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+    from: { name: from, in: query, schema: { type: string, format: date } }
+    to: { name: to, in: query, schema: { type: string, format: date } }
+  responses:
+    ValidationError: { description: LOY_SPEC_INVALID, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    BadRequest: { description: Ошибка запроса, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string, example: LOY_SPEC_INVALID }
+        message: { type: string }
+        details: { type: array, items: { type: object, properties: { path: { type: string }, message: { type: string } } } }
+        trace_id: { type: string }
+
+    CampaignSpec:
+      description: См. schema/campaign.schema.json
+      type: object
+      additionalProperties: true
+
+    Template:
+      type: object
+      properties:
+        id: { type: string, example: lm-01 }
+        mechanic: { type: string }
+        title: { type: string }
+        goal: { type: string }
+        tier: { type: string, enum: [free, pro] }
+        complexity: { type: string, enum: [S, M, L] }
+        available: { type: boolean, description: 'false — требуется PRO' }
+        params_schema: { type: object, description: JSON Schema формы }
+        defaults: { type: object }
+        presets: { type: array, items: { type: object, properties: { name: { type: string }, params: { type: object } } } }
+
+    Estimate:
+      type: object
+      properties:
+        cost_month_minor: { type: integer }
+        eligible_orders_month: { type: integer }
+        note: { type: string, example: 'При марже 60 % безопасно до 10 %' }
+        risk: { type: string, enum: [low, medium, high] }
+
+    Preview:
+      type: object
+      properties: { title: { type: string }, badge: { type: string }, subtitle: { type: string }, checkout_hint: { type: string } }
+
+    Campaign:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        merchant_id: { type: string }
+        mechanic: { type: string }
+        name: { type: string }
+        status: { type: string, enum: [draft, scheduled, active, paused, paused_budget, finished, archived] }
+        current_version: { type: integer }
+        spec: { $ref: '#/components/schemas/CampaignSpec' }
+        budget: { type: object, properties: { total_minor: { type: integer, nullable: true }, used_minor: { type: integer }, reserved_minor: { type: integer } } }
+        kpi: { type: object, properties: { orders_applied: { type: integer }, revenue_applied_minor: { type: integer }, cost_minor: { type: integer }, roi: { type: number, nullable: true } } }
+        created_at: { type: string, format: date-time }
+        published_at: { type: string, format: date-time, nullable: true }
+
+    CampaignPublic:
+      type: object
+      properties: { id: { type: string }, name: { type: string }, mechanic: { type: string }, content: { type: object } }
+
+    CampaignVersion:
+      type: object
+      properties: { version: { type: integer }, spec: { $ref: '#/components/schemas/CampaignSpec' }, spec_hash: { type: string }, published_at: { type: string, format: date-time }, published_by: { type: string }, change_note: { type: string } }
+
+    BasketItem:
+      type: object
+      required: [sku, price_minor, qty]
+      properties:
+        sku: { type: string }
+        name: { type: string }
+        category: { type: string }
+        price_minor: { type: integer, minimum: 0 }
+        qty: { type: integer, minimum: 1 }
+        tags: { type: array, items: { type: string } }
+
+    QuoteContext:
+      type: object
+      required: [merchant_id, items]
+      properties:
+        merchant_id: { type: string }
+        order_id: { type: string }
+        customer_id: { type: string, nullable: true, description: 'null — гость, только скидки без наград' }
+        channel: { type: string, enum: [qr, pos, online, delivery], default: qr }
+        items: { type: array, items: { $ref: '#/components/schemas/BasketItem' } }
+        coupon_code: { type: string, nullable: true }
+        redeem_points: { type: integer, minimum: 0, default: 0 }
+        gift_card_code: { type: string, nullable: true }
+        now: { type: string, format: date-time, description: 'Только для simulate' }
+
+    AppliedReward:
+      type: object
+      properties:
+        campaign_id: { type: string }
+        campaign_version: { type: integer }
+        mechanic: { type: string }
+        title: { type: string }
+        action_type: { type: string, enum: [discount, free_item, redeem_subscription_unit, accrue_points, stamp, challenge_progress, random_reward, coupon_issue, notify, tier_assign] }
+        action_index: { type: integer, description: 'Индекс действия в spec.actions' }
+        discount_minor: { type: integer }
+        points: { type: integer }
+        ttl_days: { type: integer, nullable: true }
+        funding: { type: string, enum: [merchant, platform, partner] }
+        items: { type: array, items: { type: object, properties: { sku: { type: string }, qty: { type: integer }, discount_minor: { type: integer } } } }
+        details: { type: object }
+        cost_minor: { type: integer, description: 'Стоимость действия для ТСП: скидка или баллы × 100 (funding = merchant)' }
+
+    Hint:
+      type: object
+      properties:
+        type: { type: string, enum: [threshold_progress, stamps, bundle_missing_component, addon_offer, coupon_available, points_expiring, tier_progress, challenge_progress] }
+        campaign_id: { type: string, nullable: true }
+        text: { type: string, example: 'До +60 баллов осталось 10 ₽ — добавьте Эспрессо 150 ₽' }
+        remaining_minor: { type: integer }
+        progress: { type: object, properties: { current: { type: integer }, target: { type: integer } } }
+        suggested_item: { $ref: '#/components/schemas/BasketItem' }
+        special_price_minor: { type: integer }
+        details: { type: object, description: 'Тип-специфичные данные: code/expires_at для coupon_available, points/expires_at для points_expiring, missing_group для набора' }
+
+    QuoteResult:
+      type: object
+      properties:
+        quote_id: { type: string, format: uuid }
+        expires_at: { type: string, format: date-time }
+        gross_total_minor: { type: integer }
+        discount_total_minor: { type: integer }
+        after_discounts_minor: { type: integer }
+        points_redeemed: { type: integer }
+        points_redeem_max: { type: integer, description: 'Сколько максимум можно списать' }
+        paid_money_minor: { type: integer }
+        reward_base_minor: { type: integer, description: 'База наград: paid_money минус позиции подарочных сертификатов' }
+        points_to_accrue: { type: integer, description: 'Итого баллов к начислению' }
+        lots_to_accrue: { type: array, items: { type: object, properties: { label: { type: string }, points: { type: integer }, expires_at: { type: string, format: date-time, nullable: true }, funding: { type: string }, campaign_id: { type: string } } } }
+        lots_to_redeem: { type: array, items: { type: object, properties: { lot_id: { type: string }, points: { type: integer } } }, description: 'Какие лоты спишутся (FIFO: промо точки → промо → базовые)' }
+        applied: { type: array, items: { $ref: '#/components/schemas/AppliedReward' } }
+        hints: { type: array, items: { $ref: '#/components/schemas/Hint' } }
+        stamps: { type: array, items: { type: object, properties: { card: { type: string }, before: { type: integer }, after: { type: integer }, target: { type: integer }, completed: { type: boolean } } } }
+        coupon: { type: object, nullable: true, properties: { code: { type: string }, valid: { type: boolean }, reason: { type: string }, campaign_id: { type: string, nullable: true } } }
+        coupons_issued: { type: array, items: { $ref: '#/components/schemas/Coupon' }, description: 'Купоны, которые будут выданы при commit (LM-12, LM-16, реферал)' }
+        notifications: { type: array, items: { type: object, properties: { campaign_id: { type: string }, channel: { type: string }, template: { type: string }, params: { type: object } } } }
+        deferred: { type: array, items: { type: object }, description: 'Награды, выдаваемые не в этом чеке (например, подарок за заполненную карту штампов — в следующем)' }
+        lines: { type: array, items: { type: object, properties: { sku: { type: string }, name: { type: string }, category: { type: string, nullable: true }, qty: { type: integer }, price_minor: { type: integer }, discount_minor: { type: integer }, final_minor: { type: integer }, added: { type: boolean } } }, description: 'Позиции чека после ценовых действий; added = позиция добавлена движком (подарок)' }
+        cost_minor: { type: integer, description: 'Стоимость наград для ТСП (списывается с бюджетов кампаний при commit)' }
+        explain: { type: array, items: { type: object, properties: { campaign_id: { type: string }, name: { type: string }, result: { type: string, enum: [applied, skipped] }, reason: { type: string } } } }
+        local: { type: object, properties: { date: { type: string, format: date }, time: { type: string }, weekday: { type: integer, minimum: 1, maximum: 7 }, timezone: { type: string } } }
+        engine_version: { type: string }
+        recomputed: { type: boolean }
+
+    CommitResult:
+      allOf:
+        - $ref: '#/components/schemas/QuoteResult'
+        - type: object
+          properties:
+            order_id: { type: string }
+            committed_at: { type: string, format: date-time }
+            idempotent_replay: { type: boolean }
+            new_balance: { type: integer }
+            coupons_issued: { type: array, items: { $ref: '#/components/schemas/Coupon' } }
+            spin_available: { type: boolean }
+
+    ReverseResult:
+      type: object
+      properties:
+        order_id: { type: string }
+        refund_id: { type: string }
+        points_clawed_back: { type: integer }
+        points_returned: { type: integer }
+        debt_created: { type: integer }
+        stamps_removed: { type: array, items: { type: object } }
+        coupons_revoked: { type: array, items: { type: string } }
+
+    Wallet:
+      type: object
+      properties:
+        balance: { type: integer }
+        base_balance: { type: integer }
+        promo_balance: { type: integer }
+        lots:
+          type: array
+          items: { type: object, properties: { id: { type: string }, label: { type: string }, merchant_id: { type: string, nullable: true }, amount_left: { type: integer }, expires_at: { type: string, format: date-time, nullable: true } } }
+        expiring_7d: { type: integer }
+
+    Offer:
+      type: object
+      properties:
+        campaign_id: { type: string }
+        merchant_id: { type: string }
+        mechanic: { type: string }
+        title: { type: string }
+        badge: { type: string }
+        subtitle: { type: string }
+        ends_at: { type: string, format: date-time, nullable: true }
+        window_ends_in_min: { type: integer, nullable: true }
+        progress: { type: object, nullable: true }
+        distance_m: { type: integer, nullable: true }
+
+    Progress:
+      type: object
+      properties:
+        stamps: { type: array, items: { type: object, properties: { card: { type: string }, title: { type: string }, count: { type: integer }, target: { type: integer }, pending_reward: { type: boolean } } } }
+        tier: { type: object, nullable: true, properties: { current: { type: string }, next: { type: string }, remaining_visits: { type: integer }, remaining_minor: { type: integer } } }
+        challenges: { type: array, items: { type: object } }
+        thresholds: { type: array, items: { $ref: '#/components/schemas/Hint' } }
+
+    Coupon:
+      type: object
+      properties:
+        id: { type: string }
+        code: { type: string }
+        title: { type: string }
+        merchant_id: { type: string }
+        merchant_name: { type: string }
+        issuer_merchant_name: { type: string, nullable: true }
+        status: { type: string, enum: [issued, redeemed, expired, revoked] }
+        expires_at: { type: string, format: date-time }
+
+    CustomerProfile:
+      type: object
+      properties:
+        customer_id: { type: string }
+        phone_masked: { type: string, example: '+7 926 •••-45-67' }
+        first_purchase_at: { type: string, format: date-time }
+        last_purchase_at: { type: string, format: date-time }
+        orders_total: { type: integer }
+        spent_total_minor: { type: integer }
+        tier: { type: string, nullable: true }
+        segments: { type: array, items: { type: string } }
+
+    LoyaltySettings:
+      type: object
+      properties:
+        business_category: { type: string }
+        margin_pct: { type: number }
+        accrue_on: { type: string, enum: [paid_money, total] }
+        max_points_share_pct: { type: integer }
+        max_total_discount_pct: { type: integer }
+        max_merchant_cashback_pct: { type: integer }
+        max_coupons_per_order: { type: integer }
+        default_promo_ttl_days: { type: integer }
+        staff_customer_ids: { type: array, items: { type: string } }
+        pro_plan: { type: boolean, readOnly: true }
+
+    AnalyticsOverview:
+      type: object
+      properties:
+        period: { type: object, properties: { from: { type: string }, to: { type: string } } }
+        revenue_minor: { type: integer }
+        orders: { type: integer }
+        avg_check_minor: { type: integer }
+        avg_check_participants_minor: { type: integer }
+        avg_check_holdout_minor: { type: integer }
+        repeat_rate_30d: { type: number }
+        active_campaigns: { type: integer }
+        cost_minor: { type: integer }
+        incremental_revenue_minor: { type: integer, nullable: true }
+        roi: { type: number, nullable: true }
+        points_liability: { type: integer, description: 'Непогашенные промо-баллы точки' }
+        recommendations: { type: array, items: { type: object, properties: { template_id: { type: string }, reason: { type: string } } } }
+
+    CampaignStats:
+      type: object
+      properties:
+        campaign_id: { type: string }
+        days: { type: array, items: { type: object, properties: { day: { type: string, format: date }, orders_applied: { type: integer }, revenue_applied_minor: { type: integer }, cost_minor: { type: integer }, holdout_orders: { type: integer }, holdout_revenue_minor: { type: integer } } } }
+        totals: { type: object }
+        lift: { type: object, properties: { avg_check_pct: { type: number, nullable: true }, frequency_pct: { type: number, nullable: true }, confidence: { type: string, enum: [low, medium, high] } } }
+        funnel: { type: object, properties: { hints_shown: { type: integer }, hints_converted: { type: integer }, coupons_issued: { type: integer }, coupons_redeemed: { type: integer } } }
+
+    Partnership:
+      type: object
+      properties:
+        id: { type: string }
+        partner: { type: object, properties: { merchant_id: { type: string }, name: { type: string }, distance_m: { type: integer } } }
+        status: { type: string, enum: [invited, active, paused, ended] }
+        terms: { type: object }
+
+    Event:
+      type: object
+      required: [id, type, occurred_at, data]
+      properties:
+        id: { type: string }
+        type:
+          type: string
+          enum:
+            - loyalty.campaign.published
+            - loyalty.campaign.paused
+            - loyalty.campaign.budget_exhausted
+            - loyalty.quote.created
+            - loyalty.order.committed
+            - loyalty.order.reversed
+            - loyalty.reward.applied
+            - loyalty.points.accrued
+            - loyalty.points.redeemed
+            - loyalty.points.expiring
+            - loyalty.points.expired
+            - loyalty.stamp.added
+            - loyalty.stamp_card.completed
+            - loyalty.coupon.issued
+            - loyalty.coupon.redeemed
+            - loyalty.referral.qualified
+            - loyalty.referral.rewarded
+            - loyalty.tier.changed
+            - loyalty.challenge.completed
+            - loyalty.subscription.purchased
+            - loyalty.subscription.redeemed
+            - loyalty.gift_card.purchased
+            - loyalty.gift_card.redeemed
+            - loyalty.hint.shown
+            - loyalty.hint.converted
+        occurred_at: { type: string, format: date-time }
+        location_id: { type: string }
+        merchant_id: { type: string }
+        customer_id: { type: string, nullable: true }
+        data: { type: object }
+        signature: { type: string, description: 'HMAC-SHA256 тела по секрету подписчика (заголовок X-Lovii-Signature)' }

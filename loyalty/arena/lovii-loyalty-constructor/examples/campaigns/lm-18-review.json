@@ -1,0 +1,77 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "review",
+  "name": "+50 баллов за отзыв с фото",
+  "priority": 40,
+  "stacking": {
+    "group": "bonus",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "review_approved",
+    "params": {
+      "require_photo": true,
+      "min_length": 60,
+      "window_hours": 72
+    }
+  },
+  "conditions": [],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "mode": "fixed",
+      "amount": 50,
+      "ttl_days": 30,
+      "funding": "merchant",
+      "lot_label": "За отзыв"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 4,
+      "period": "month"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "+50 баллов за отзыв с фото",
+    "badge": "+50 б.",
+    "subtitle": "В течение 72 ч после покупки",
+    "cta": "Оставить отзыв",
+    "terms": "Баллы начисляются после модерации отзыва с фото длиной от 60 символов, не более 4 в месяц. Отзыв публикуется в карточке точки."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-18",
+    "template_params": {
+      "points": 50,
+      "require_photo": true,
+      "min_length": 60,
+      "window_hours": 72,
+      "monthly_limit": 4,
+      "ttl_days": 30
+    }
+  }
+}

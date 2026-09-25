@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0A0A0F">
+  <script>try{var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'');document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <title>Конструктор лояльности LOVII — интерактивный прототип | AXIIOM</title>
+  <meta name="description" content="Кликабельный прототип конструктора лояльности для малого бизнеса: 18 механик (порог чека, кэшбэк, штампы, счастливые часы, win-back…), настройка, витрина клиента и симуляция чека на кассе.">
+  <link rel="canonical" href="https://axiiom.ru/demo/app/loyalty-constructor/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://axiiom.ru/demo/app/loyalty-constructor/">
+  <meta property="og:title" content="Конструктор лояльности LOVII — Демо | AXIIOM">
+  <meta property="og:description" content="Выберите механику, настройте параметры, посмотрите глазами клиента и пробейте чек на кассе — движок правил считает скидки, баллы и штампы в реальном времени.">
+  <meta property="og:image" content="https://axiiom.ru/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="AXIIOM">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://axiiom.ru/demo/app/loyalty-constructor/">
+  <meta name="twitter:title" content="Конструктор лояльности LOVII — Демо | AXIIOM">
+  <meta name="twitter:description" content="18 механик роста среднего чека и удержания, настройка за 3 шага, симуляция чека на кассе.">
+  <meta name="twitter:image" content="https://axiiom.ru/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Конструктор лояльности LOVII — AXIIOM Demo",
+    "description": "Интерактивный прототип конструктора программ лояльности для малого бизнеса: механики роста среднего чека, кэшбэк, штампы, купоны, win-back, симуляция чека.",
+    "url": "https://axiiom.ru/demo/app/loyalty-constructor/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "author": { "@type": "Organization", "name": "AXIIOM" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
+  }
+  </script>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23FF6B35' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/></svg>" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=20260912">
+  <link rel="stylesheet" href="/preloader.css?v=20260912">
+  <style>
+    .demo-page-hero {
+      min-height: 60vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden; padding-top: 100px;
+      background: radial-gradient(ellipse 60% 40% at 30% 20%, rgba(255,107,53,.14), transparent),
+                  radial-gradient(ellipse 50% 35% at 70% 80%, rgba(255,154,139,.06), transparent),
+                  var(--clr-bg);
+    }
+    .hero-bg-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 100%; max-width: 800px; opacity: .5; pointer-events: none; animation: rotateSlow 60s linear infinite; }
+    @keyframes rotateSlow { to { transform: translate(-50%,-50%) rotate(360deg); } }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin: 32px 0; }
+    .feature-item { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: rgba(255,255,255,.02); border: 1px solid var(--clr-border); border-radius: 12px; font-size: 14px; color: var(--clr-text); text-decoration: none; }
+    .feature-item svg { flex-shrink: 0; width: 20px; height: 20px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag-item { display: inline-block; padding: 4px 14px; border: 1px solid var(--clr-border); border-radius: 20px; font-size: 12px; color: var(--clr-muted); }
+    .demo-nav-back { position: fixed; top: 12px; left: 16px; z-index: 99999; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgba(10,10,15,.9); color: #C7C7CC; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; text-decoration: none; font-family: Inter,sans-serif; font-size: 13px; transition: all .2s; }
+    .demo-nav-back:hover { background: rgba(10,10,15,1); color: #F5F5F7; }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 24px; }
+    .step-card { padding: 22px; border: 1px solid var(--clr-border); border-radius: 16px; background: var(--clr-surface); }
+    .step-card b { display: block; color: var(--clr-heading); margin-bottom: 6px; font-size: 15px; }
+    .step-card span { font-size: 13.5px; color: var(--clr-muted); line-height: 1.55; }
+    .step-card i { display: inline-flex; width: 28px; height: 28px; border-radius: 50%; align-items: center; justify-content: center; background: linear-gradient(135deg,#FF6B35,#ff9a8b); color: #fff; font-style: normal; font-weight: 700; font-size: 13px; margin-bottom: 12px; }
+    @media (max-width: 768px) { .demo-page-hero { min-height: 50vh; padding-top: 80px; } .hero-bg-svg { max-width: 500px; } }
+
+    /* ───── конструктор (.lc) ───── */
+    .lc { --lv-bg:#0A0F1F; --lv-card:#1A2238; --lv-border:#2D3748; --lv-accent:#FF6B35; --ok:#2ecc71; --warn:#f39c12; --bad:#e74c3c;
+      margin: 20px 0 0; background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: 20px; overflow: hidden; font-size: 14px; position: relative; }
+    .lc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid var(--clr-border); background: var(--clr-bg-alt); }
+    .lc-brand { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--clr-faint); }
+    .lc-brand b { color: var(--lv-accent); letter-spacing: 2px; }
+    .lc-steps { display: flex; gap: 6px; flex-wrap: wrap; }
+    .lc-step { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 50px; border: 1px solid var(--clr-border); background: transparent; color: var(--clr-muted); font: inherit; font-size: 13px; cursor: pointer; transition: all .2s; }
+    .lc-step i { display: inline-flex; width: 20px; height: 20px; border-radius: 50%; align-items: center; justify-content: center; font-style: normal; font-size: 11px; font-weight: 700; background: var(--clr-border); color: var(--clr-heading); }
+    .lc-step.on { border-color: var(--lv-accent); color: var(--clr-heading); background: rgba(255,107,53,.08); }
+    .lc-step.on i { background: var(--lv-accent); color: #fff; }
+    .lc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+    .lc-main { padding: 20px 22px 26px; min-width: 0; }
+    .lc-side { border-left: 1px solid var(--clr-border); padding: 18px 16px; background: var(--clr-bg-alt); }
+    .lc-panel { display: none; } .lc-panel.on { display: block; }
+    .lc-card-h { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--clr-faint); margin: 18px 0 10px; }
+    .lc-card-h:first-child { margin-top: 0; }
+    .lc-card-h small { text-transform: none; letter-spacing: 0; color: var(--clr-faint); }
+    .lc-h { font-size: 17px; font-weight: 600; color: var(--clr-heading); }
+    .lc-sub, .lc-p { font-size: 13px; color: var(--clr-muted); line-height: 1.55; }
+    .lc-note, .lc-sim-note { font-size: 12.5px; color: var(--clr-muted); line-height: 1.55; margin-top: 12px; }
+    .lc-note a { color: var(--clr-accent); }
+    .lc-empty { padding: 28px; text-align: center; color: var(--clr-muted); border: 1px dashed var(--clr-border); border-radius: 14px; }
+    .lc-err { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: rgba(231,76,60,.12); color: #ff8a80; font-size: 13px; }
+    code { font-family: 'SF Mono','Fira Code',Consolas,monospace; font-size: .92em; background: rgba(127,127,127,.12); padding: 1px 5px; border-radius: 5px; }
+    /* чипы и кнопки */
+    .lc-toolbar { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .lc-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .lc-chip { padding: 6px 12px; border-radius: 50px; border: 1px solid var(--clr-border); background: transparent; color: var(--clr-muted); font: inherit; font-size: 12.5px; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
+    .lc-chip input { display: none; }
+    .lc-chip:hover { border-color: var(--clr-border-hover); color: var(--clr-heading); }
+    .lc-chip.on { background: var(--lv-accent); border-color: var(--lv-accent); color: #fff; }
+    .lc-chips.small .lc-chip { padding: 4px 10px; font-size: 12px; }
+    .lc-btn { padding: 9px 16px; border-radius: 50px; border: 1px solid var(--clr-border); background: var(--clr-bg); color: var(--clr-heading); font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
+    .lc-btn:hover { border-color: var(--clr-border-hover); }
+    .lc-btn.primary { background: linear-gradient(135deg,#FF6B35,#ff9a8b); border-color: transparent; color: #fff; }
+    .lc-btn.primary:hover { filter: brightness(1.06); }
+    .lc-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .lc-btn.wide { width: 100%; margin-top: 14px; padding: 12px; font-size: 15px; }
+    .lc-btn.xs { padding: 4px 10px; font-size: 12px; }
+    .lc-link { background: none; border: none; color: var(--clr-accent); font: inherit; font-size: 13px; cursor: pointer; padding: 6px 0; }
+    .lc-x { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--clr-border); background: transparent; color: var(--clr-muted); cursor: pointer; font-size: 14px; line-height: 1; flex-shrink: 0; }
+    .lc-x:hover { color: var(--clr-heading); border-color: var(--clr-border-hover); }
+    .lc-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .lc-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; vertical-align: middle; }
+    .lc-tag.mvp { background: rgba(46,204,113,.15); color: #2ecc71; } .lc-tag.v2 { background: rgba(127,127,127,.15); color: var(--clr-muted); }
+    .lc-tag.pro { background: rgba(255,107,53,.15); color: var(--lv-accent); } .lc-tag.free { background: rgba(127,127,127,.12); color: var(--clr-faint); }
+    .lc-ok { color: var(--ok); font-weight: 600; } .lc-skip { color: var(--clr-faint); font-weight: 600; }
+    b.ok { color: var(--ok); } b.warn { color: var(--warn); } b.bad { color: var(--bad); }
+    /* 1. механики */
+    .lc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+    .lc-mech { text-align: left; padding: 16px; border-radius: 16px; border: 1px solid var(--clr-border); background: var(--clr-bg); color: var(--clr-text); font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 6px; transition: all .15s; }
+    .lc-mech:hover { border-color: var(--lv-accent); transform: translateY(-2px); }
+    .lc-mech-top { display: flex; align-items: center; gap: 6px; }
+    .lc-mech-ico { font-size: 22px; margin-right: auto; }
+    .lc-mech-title { font-size: 15px; font-weight: 600; color: var(--clr-heading); }
+    .lc-mech-id { font-size: 10.5px; color: var(--clr-faint); font-weight: 500; letter-spacing: .5px; }
+    .lc-mech-short { font-size: 13px; color: var(--clr-accent); }
+    .lc-mech-sum { font-size: 12.5px; color: var(--clr-muted); line-height: 1.5; flex: 1; }
+    .lc-mech-foot { display: flex; justify-content: space-between; font-size: 11px; color: var(--clr-faint); margin-top: 6px; }
+    /* 2. настройка */
+    .lc-setup { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px; }
+    .lc-setup-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .lc-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+    .lc-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .lc-field.wide { grid-column: 1 / -1; }
+    .lc-field label { font-size: 12px; color: var(--clr-muted); }
+    .lc-field small { font-size: 11.5px; color: var(--clr-faint); line-height: 1.4; }
+    .lc-inp { display: inline-flex; align-items: center; border: 1px solid var(--clr-border); border-radius: 10px; background: var(--clr-bg); padding: 0 10px; min-width: 0; }
+    .lc-inp.grow { flex: 1; }
+    .lc-inp input, .lc-field select, .lc-field input[type=text], .lc-field input[type=time], .lc-field input[type=date], .lc-rows select, .lc-rows input { width: 100%; min-width: 0; border: none; background: transparent; color: var(--clr-heading); font: inherit; font-size: 14px; padding: 8px 0; outline: none; }
+    .lc-field select, .lc-field > input { border: 1px solid var(--clr-border); border-radius: 10px; background: var(--clr-bg); padding: 8px 10px; }
+    .lc-inp em { font-style: normal; color: var(--clr-faint); font-size: 12px; margin-left: 6px; }
+    .lc-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+    .lc-switch input { display: none; }
+    .lc-switch i { position: absolute; inset: 0; border-radius: 50px; background: var(--clr-border); transition: background .2s; }
+    .lc-switch i:before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; border-radius: 50%; background: #fff; transition: transform .2s; }
+    .lc-switch input:checked + i { background: var(--lv-accent); }
+    .lc-switch input:checked + i:before { transform: translateX(18px); }
+    .lc-rows table { width: 100%; border-collapse: collapse; }
+    .lc-rows th { font-size: 11px; color: var(--clr-faint); text-align: left; font-weight: 500; padding: 2px 4px; }
+    .lc-rows td { padding: 3px 4px; }
+    .lc-rows td .lc-inp, .lc-rows td select, .lc-rows td input { width: 100%; }
+    .lc-rows td select, .lc-rows td input[type=text], .lc-rows td input[type=time] { border: 1px solid var(--clr-border); border-radius: 10px; background: var(--clr-bg); padding: 8px 10px; }
+    .lc-est { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .lc-est div { padding: 12px; border-radius: 12px; background: var(--clr-bg); border: 1px solid var(--clr-border); text-align: center; }
+    .lc-est b { display: block; font-size: 18px; color: var(--clr-heading); font-variant-numeric: tabular-nums; }
+    .lc-est span { font-size: 11px; color: var(--clr-faint); }
+    .lc-sim { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .lc-sim th { text-align: left; font-weight: 500; font-size: 11px; color: var(--clr-faint); padding: 4px 6px; border-bottom: 1px solid var(--clr-border); }
+    .lc-sim td { padding: 7px 6px; border-bottom: 1px solid var(--clr-border); vertical-align: top; color: var(--clr-text); }
+    .lc-sim td small { display: block; color: var(--clr-faint); font-size: 11.5px; }
+    .lc-json { margin-top: 14px; border: 1px solid var(--clr-border); border-radius: 12px; padding: 10px 12px; background: var(--clr-bg); }
+    .lc-json summary { cursor: pointer; font-size: 12.5px; color: var(--clr-muted); }
+    .lc-json pre { margin-top: 10px; max-height: 360px; overflow: auto; font-family: 'SF Mono','Fira Code',Consolas,monospace; font-size: 11.5px; line-height: 1.5; color: var(--clr-text); white-space: pre; }
+    .lc-json table { margin-top: 10px; }
+    /* телефон LOVII */
+    .lv-phone { background: var(--lv-bg); border: 1px solid var(--lv-border); border-radius: 28px; padding: 18px 16px 12px; color: #E5E7EB; font-size: 13px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    .lv-phone.small { padding: 14px; border-radius: 20px; }
+    .lv-top { display: flex; justify-content: space-between; font-size: 11px; color: #94A3B8; margin-bottom: 10px; }
+    .lv-store-name { font-size: 17px; font-weight: 700; color: #fff; }
+    .lv-store-meta { font-size: 11.5px; color: #94A3B8; margin-bottom: 12px; }
+    .lv-wallet { background: linear-gradient(135deg,#FF6B35,#ff9a8b); border-radius: 18px; padding: 12px 14px; color: #fff; margin-bottom: 14px; }
+    .lv-wallet-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; }
+    .lv-wallet-row b { font-size: 22px; font-weight: 700; }
+    .lv-wallet-sub { font-size: 11px; opacity: .9; margin-top: 2px; }
+    .lv-h { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: #94A3B8; margin: 12px 0 8px; }
+    .lv-offer { background: var(--lv-card); border: 1px solid var(--lv-border); border-radius: 18px; padding: 12px 14px; margin-bottom: 8px; position: relative; }
+    .lv-offer.off { opacity: .6; }
+    .lv-offer-badge { position: absolute; right: 12px; top: 12px; background: var(--lv-accent); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 50px; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lv-offer-badge:empty { display: none; }
+    .lv-offer-title { font-size: 14px; font-weight: 600; color: #fff; padding-right: 42%; line-height: 1.35; }
+    .lv-offer-sub, .lv-offer-note { font-size: 11.5px; color: #94A3B8; margin-top: 3px; }
+    .lv-offer-cta { margin-top: 8px; font-size: 12px; color: var(--lv-accent); font-weight: 600; }
+    .lv-progress { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 11px; color: #94A3B8; }
+    .lv-bar { flex: 1; height: 6px; border-radius: 6px; background: #2D3748; overflow: hidden; }
+    .lv-bar i { display: block; height: 100%; background: linear-gradient(90deg,#FF6B35,#ff9a8b); }
+    .lv-terms { font-size: 10.5px; color: #64748B; line-height: 1.45; margin-top: 6px; }
+    .lv-empty { font-size: 12px; color: #94A3B8; padding: 14px; text-align: center; border: 1px dashed #2D3748; border-radius: 14px; }
+    .lv-coupon { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; background: var(--lv-card); border: 1px dashed #64748B; border-radius: 14px; padding: 10px 12px; margin-bottom: 6px; font-size: 12px; }
+    .lv-coupon b { color: var(--lv-accent); letter-spacing: 1px; grid-row: span 2; align-self: center; }
+    .lv-coupon small { color: #94A3B8; font-size: 10.5px; }
+    .lv-nav { display: flex; justify-content: space-around; border-top: 1px solid var(--lv-border); margin-top: 14px; padding-top: 10px; font-size: 10.5px; color: #64748B; }
+    .lv-nav .on { color: var(--lv-accent); font-weight: 600; }
+    /* 3. клиент */
+    .lc-client { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+    .lc-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin-top: 12px; }
+    .lc-kv div { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; padding: 6px 0; border-bottom: 1px solid var(--clr-border); }
+    .lc-kv span { color: var(--clr-faint); } .lc-kv b { color: var(--clr-heading); font-weight: 500; text-align: right; }
+    .lc-feed-item { padding: 8px 0; border-bottom: 1px solid var(--clr-border); font-size: 12.5px; line-height: 1.45; }
+    .lc-feed-item b { color: var(--clr-heading); margin-right: 6px; } .lc-feed-item small { display: block; color: var(--clr-faint); font-size: 11px; }
+    /* 4. касса */
+    .lc-pos { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); gap: 24px; align-items: start; }
+    .lc-catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
+    .lc-prod { text-align: left; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--clr-border); background: var(--clr-bg); color: var(--clr-heading); font: inherit; font-size: 12.5px; cursor: pointer; display: flex; flex-direction: column; gap: 1px; }
+    .lc-prod small { color: var(--clr-faint); font-size: 10.5px; }
+    .lc-prod:hover { border-color: var(--lv-accent); }
+    .lc-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .lc-range { width: 100%; font-size: 12.5px; color: var(--clr-muted); }
+    .lc-range b { color: var(--clr-heading); } .lc-range input { width: 100%; accent-color: var(--lv-accent); margin-top: 4px; }
+    #lc-dt { border: 1px solid var(--clr-border); border-radius: 50px; background: var(--clr-bg); color: var(--clr-heading); font: inherit; font-size: 12px; padding: 5px 10px; }
+    .lc-receipt { background: var(--clr-bg); border: 1px solid var(--clr-border); border-radius: 18px; padding: 16px 18px; position: sticky; top: 90px; }
+    .lc-receipt-head { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--clr-border); }
+    .lc-receipt-head b { color: var(--clr-heading); } .lc-receipt-head span { font-size: 11.5px; color: var(--clr-faint); }
+    .lc-line { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--clr-border); font-size: 13px; }
+    .lc-line.added { color: var(--ok); } .lc-line-name small { color: var(--ok); font-size: 10.5px; }
+    .lc-line-qty { display: inline-flex; align-items: center; gap: 4px; }
+    .lc-line-qty button { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--clr-border); background: transparent; color: var(--clr-heading); cursor: pointer; font-size: 13px; line-height: 1; }
+    .lc-line-qty span { min-width: 16px; text-align: center; color: var(--clr-heading); }
+    .lc-line-sum { text-align: right; font-variant-numeric: tabular-nums; color: var(--clr-heading); } .lc-line-sum s { color: var(--clr-faint); font-size: 11px; }
+    .lc-tot { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 13px; color: var(--clr-muted); }
+    .lc-tot b { color: var(--clr-heading); font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+    .lc-tot.dis b { color: var(--ok); } .lc-tot.big { font-size: 16px; border-top: 1px dashed var(--clr-border); margin-top: 6px; padding-top: 10px; } .lc-tot.big b { font-weight: 700; }
+    .lc-tot small { color: var(--clr-faint); font-size: 11px; }
+    .lc-hint { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: rgba(255,107,53,.08); border: 1px solid rgba(255,107,53,.25); font-size: 12.5px; color: var(--clr-heading); margin-bottom: 6px; }
+    .lc-orders { display: flex; flex-direction: column; gap: 4px; }
+    .lc-order { display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 12px; align-items: center; padding: 7px 10px; border-radius: 10px; background: var(--clr-bg); border: 1px solid var(--clr-border); font-size: 12.5px; color: var(--clr-muted); }
+    .lc-order b { color: var(--clr-heading); } .lc-order small { color: var(--clr-faint); }
+    /* боковая панель */
+    .lc-camp { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--clr-border); }
+    .lc-camp.off .lc-camp-body { opacity: .5; } .lc-camp.paused .lc-camp-title { color: var(--warn); }
+    .lc-camp-body { flex: 1; min-width: 0; }
+    .lc-camp-title { font-size: 13px; color: var(--clr-heading); font-weight: 500; line-height: 1.35; }
+    .lc-camp-meta { font-size: 10.5px; color: var(--clr-faint); word-break: break-word; line-height: 1.4; margin-top: 2px; }
+    .lc-side-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; }
+    .lc-side-legend { font-size: 11px; color: var(--clr-faint); line-height: 1.5; margin-top: 14px; }
+    /* тосты */
+    .lc-toasts { position: fixed; right: 18px; bottom: 18px; z-index: 10000; display: flex; flex-direction: column; gap: 8px; max-width: 360px; }
+    .lc-toast { background: #12121A; color: #E5E7EB; border: 1px solid rgba(255,255,255,.1); border-left: 3px solid var(--clr-faint); border-radius: 12px; padding: 10px 14px; font-size: 13px; line-height: 1.45; box-shadow: 0 10px 30px rgba(0,0,0,.4); opacity: 0; transform: translateY(8px); transition: all .3s; }
+    .lc-toast.show { opacity: 1; transform: none; } .lc-toast.ok { border-left-color: #2ecc71; } .lc-toast.warn { border-left-color: #f39c12; }
+    @media (max-width: 1024px) { .lc-layout { grid-template-columns: 1fr; } .lc-side { border-left: none; border-top: 1px solid var(--clr-border); } .lc-setup, .lc-client, .lc-pos { grid-template-columns: 1fr; } .lc-receipt { position: static; } .lv-phone { max-width: 380px; margin: 0 auto; } }
+    @media (max-width: 640px) { .lc-main { padding: 14px; } .lc-form { grid-template-columns: 1fr; } .lc-est { grid-template-columns: 1fr; } .lc-order { grid-template-columns: 1fr 1fr; } .lc-toasts { left: 12px; right: 12px; max-width: none; } }
+  </style>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://axiiom.ru/"},{"@type":"ListItem","position":2,"name":"Демо-приложения","item":"https://axiiom.ru/demo/app/"},{"@type":"ListItem","position":3,"name":"Конструктор лояльности LOVII — Демо","item":"https://axiiom.ru/demo/app/loyalty-constructor/"}]}</script>
+</head>
+<body>
+<a href="#main" class="skip-link">Перейти к содержанию</a>
+<div id="preloader">
+<script>(function(){var p=document.getElementById('preloader');if(!p)return;if(sessionStorage.getItem('_seen')){p.style.display='none';return}sessionStorage.setItem('_seen','1');var t=Date.now();p._start=t;setTimeout(function(){p.classList.add('_rdy')},500);window.addEventListener('load',function(){var e=Date.now()-t;if(e<900){setTimeout(function(){p.classList.add('hidden');setTimeout(function(){p.classList.add('hidden-done')},500)},900-e)}else{p.classList.add('hidden');setTimeout(function(){p.classList.add('hidden-done')},500)}})})();setTimeout(function(){var q=document.getElementById('preloader');if(q){q.classList.add('hidden');setTimeout(function(){q.classList.add('hidden-done')},500)}},2500)/*preloader-fallback*/</script>
+  <svg class="preloader-svg" viewBox="0 0 36 36" width="80" height="80">
+    <rect class="pr1" x="2" y="2" width="14" height="14" rx="2"/>
+    <rect class="pr2" x="20" y="2" width="14" height="14" rx="2"/>
+    <rect class="pr3" x="2" y="20" width="14" height="14" rx="2"/>
+    <rect class="pr4" x="20" y="20" width="14" height="14" rx="2"/>
+    <circle class="pc" cx="27" cy="27" r="3"/>
+  </svg>
+</div>
+
+<div class="noise"></div>
+<div class="grid-overlay"></div>
+
+<header class="header" id="header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo">
+        <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+          <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+          <rect x="20" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+          <rect x="2" y="20" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+          <rect x="20" y="20" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="27" cy="27" r="3" fill="currentColor" opacity=".8"/>
+        </svg>
+        <span>AXIIOM</span>
+      </a>
+      <ul class="nav-links nav-links--desktop" id="desktopNav"></ul>
+      <div class="nav-actions">
+        <a href="/#contact" class="btn btn-nav" id="ctaBtn">Обсудить проект</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Сменить тему">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <button class="nav-toggle" id="navToggle" aria-label="Меню"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay"><ul class="nav-links" id="mobileNav"></ul></div>
+<main id="main">
+<nav class="breadcrumbs" id="breadcrumbs" aria-label="Breadcrumb"><div class="container"></div></nav>
+
+<a href="/demo/app/" class="demo-nav-back">← Все демо AXIIOM</a>
+
+<section class="demo-page-hero">
+  <div class="hero-bg-svg" aria-hidden="true"><svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="400" cy="300" r="280" stroke="rgba(255,255,255,0.05)" stroke-width="2"/><circle cx="400" cy="300" r="200" stroke="rgba(255,255,255,0.06)" stroke-width="2"/><circle cx="400" cy="300" r="120" stroke="rgba(255,255,255,0.08)" stroke-width="2"/><line x1="50" y1="300" x2="750" y2="300" stroke="rgba(255,255,255,0.05)" stroke-width="2"/><line x1="400" y1="20" x2="400" y2="580" stroke="rgba(255,255,255,0.05)" stroke-width="2"/><path d="M200 300 L400 100 L600 300 L400 500 Z" stroke="rgba(255,255,255,0.06)" stroke-width="2" fill="none"/><circle cx="400" cy="300" r="4" fill="rgba(255,255,255,0.15)"/></svg></div>
+  <div class="container">
+    <div class="hero-content">
+      <p class="badge">LOVII · Прототип</p>
+      <h1>Конструктор лояльности для малого бизнеса</h1>
+      <p class="hero-desc">Точка выбирает механику, настраивает её за три шага и сразу видит, что получит клиент и что покажет касса. Расчёты делает эталонный движок правил из документации — без сервера, прямо в браузере.</p>
+      <div class="tag-list" style="justify-content:center;">
+        <span class="tag-item">18 механик</span>
+        <span class="tag-item">JSON-кампании</span>
+        <span class="tag-item">quote / commit</span>
+        <span class="tag-item">Стекинг и лимиты</span>
+        <span class="tag-item">Контрольные группы</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="label">Интерактивное демо</p>
+    <h2>Кабинет точки → Лояльность</h2>
+    <div class="lc" id="lc">
+      <div class="lc-head">
+        <div class="lc-brand"><b>LOVII</b> · Кофейня «Daily» · Тверской</div>
+        <div class="lc-steps">
+          <button class="lc-step on" data-step="mech"><i>1</i>Механика</button>
+          <button class="lc-step" data-step="setup"><i>2</i>Настройка</button>
+          <button class="lc-step" data-step="client"><i>3</i>Клиент</button>
+          <button class="lc-step" data-step="pos"><i>4</i>Касса</button>
+        </div>
+      </div>
+      <div class="lc-layout">
+        <div class="lc-main">
+          <section class="lc-panel on" data-panel="mech"></section>
+          <section class="lc-panel" data-panel="setup"></section>
+          <section class="lc-panel" data-panel="client"></section>
+          <section class="lc-panel" data-panel="pos"></section>
+        </div>
+        <aside class="lc-side" id="lc-side"></aside>
+      </div>
+      <div class="lc-toasts" id="lc-toasts"></div>
+    </div>
+    <noscript><p class="lc-note">Для работы прототипа нужен JavaScript.</p></noscript>
+  </div>
+</section>
+
+<section class="section dark">
+  <div class="container">
+    <p class="label">Как это работает</p>
+    <h2>Четыре шага — один движок</h2>
+    <div class="steps-grid">
+      <div class="step-card"><i>1</i><b>Механика</b><span>Каталог из 18 шаблонов с целями (средний чек, частота, новые клиенты, возврат уснувших), приоритетом MVP/V2 и оценкой сложности.</span></div>
+      <div class="step-card"><i>2</i><b>Настройка</b><span>Форма строится из JSON Schema шаблона. На выходе — Spec-кампания, оценка расходов для точки и симуляция типовых чеков.</span></div>
+      <div class="step-card"><i>3</i><b>Клиент</b><span>Витрина «Ваша выгода здесь», прогресс штампов, кошелёк с промо-баллами и купонами, планировщик win-back и дня рождения.</span></div>
+      <div class="step-card"><i>4</i><b>Касса</b><span><code>quote</code> считает скидки, списание баллов, начисления и подсказки «добавьте круассан»; <code>commit</code> фиксирует чек и меняет состояние клиента.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="label">Документация</p>
+    <h2>Всё, что нужно, чтобы собрать это в продукте</h2>
+    <p style="color:var(--clr-muted);max-width:720px;margin-bottom:8px">Прототип использует те же файлы, что и пакет документации для команды разработки и ИИ-агентов: каталог механик, спецификацию движка правил, JSON Schema кампании, SQL-схему, OpenAPI и золотые тест-кейсы.</p>
+    <div class="feature-grid">
+      <a class="feature-item" href="/docs/lovii-loyalty-constructor/"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Пакет документации «Конструктор лояльности»</span></a>
+      <a class="feature-item" href="/docs/lovii-loyalty-constructor/02-mechanics-catalog.md"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Каталог механик LM-01…LM-18</span></a>
+      <a class="feature-item" href="/docs/lovii-loyalty-constructor/03-rules-engine.md"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Движок правил: конвейер, стекинг, округления</span></a>
+      <a class="feature-item" href="/docs/lovii-loyalty-constructor/schema/campaign.schema.json"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>JSON Schema кампании</span></a>
+      <a class="feature-item" href="/docs/lovii-loyalty-constructor/schema/openapi.yaml"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>OpenAPI: merchant, runtime, customer</span></a>
+      <a class="feature-item" href="/demo/app/loyalty-constructor/engine.js"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>engine.js — эталонная реализация (ESM, без зависимостей)</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-section">
+  <div class="container">
+    <div class="glass-card" style="padding:48px 32px;text-align:center;border-radius:24px;">
+      <h2 style="margin-bottom:16px;">Нужен такой конструктор для вашего сервиса?</h2>
+      <p style="color:var(--clr-text);margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto;">Спроектируем механики под вашу экономику, опишем контракты и соберём MVP.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="mailto:hello@axiiom.ru" class="btn">hello@axiiom.ru</a>
+        <a href="tel:+78129287478" class="btn btn-outline">+7 (812) 928-74-78</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="footer">
+  <div class="container">
+    <div id="footerCopy"></div>
+  </div>
+</footer>
+
+<script>
+var header = document.getElementById('header');
+window.addEventListener('scroll', function() {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+var reveals = document.querySelectorAll('.reveal');
+var ro = new IntersectionObserver(function(e) {
+  e.forEach(function(entry) {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+reveals.forEach(function(r) { ro.observe(r); });
+</script>
+
+<script src="/config.js?v=20260912"></script>
+<script src="/nav.js?v=20260912"></script>
+<script>Nav.init({ cta: true, breadcrumbs: true });</script>
+<script src="/theme.js?v=20260912"></script>
+<script src="/preloader.js?v=20260912"></script>
+<script type="module" src="./app.js"></script>
+
+<script>
+(function() {
+  var t = document.getElementById('navToggle');
+  var o = document.getElementById('navOverlay');
+  if (!t || !o) return;
+  t.addEventListener('click', function(e) {
+    e.stopPropagation();
+    o.classList.toggle('open');
+    t.classList.toggle('active');
+    document.body.style.overflow = o.classList.contains('open') ? 'hidden' : '';
+  });
+})();
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script src="/metrika.js?v=20260912" defer></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HFS4BDGTV4"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-HFS4BDGTV4');</script>
+</body>
+</html>

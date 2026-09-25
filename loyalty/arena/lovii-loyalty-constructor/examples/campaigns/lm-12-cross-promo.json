@@ -1,0 +1,93 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "cross_promo",
+  "name": "Купон −15 % в «Слойка» после покупки",
+  "priority": 60,
+  "stacking": {
+    "group": "coupon_out",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.paid_money",
+      "op": ">=",
+      "value": 30000
+    }
+  ],
+  "actions": [
+    {
+      "type": "coupon_issue",
+      "ttl_days": 5,
+      "to": "customer",
+      "redeemer_merchant_id": "mrc_sloyka",
+      "max_per_customer_per_week": 1,
+      "inline": {
+        "conditions": [],
+        "actions": [
+          {
+            "type": "discount",
+            "scope": "basket",
+            "mode": "percent",
+            "value": 15
+          }
+        ]
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "week"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Купон −15 % в «Слойка» после покупки",
+    "badge": "−15 % рядом",
+    "subtitle": "Купон на 5 дней в «Слойка»",
+    "terms": "Купон выдаётся за чек от 300 ₽, действует 5 дней в точке-партнёре, 1 купон в неделю."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-12",
+    "template_params": {
+      "partner_merchant_id": "mrc_sloyka",
+      "discount_pct": 15,
+      "min_check_minor": 30000,
+      "ttl_days": 5,
+      "daily_limit": 30,
+      "funded_by": "receiver",
+      "partner_name": "Слойка"
+    },
+    "partnership": {
+      "partner_merchant_id": "mrc_sloyka",
+      "funded_by": "receiver",
+      "daily_limit": 30
+    }
+  }
+}

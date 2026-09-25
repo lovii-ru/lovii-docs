@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOVII · план: компоненты вместо правил</title>
+<style>
+  :root{--ink:#17131a;--ink2:#4a444e;--ink3:#7d7681;--paper:#faf7f4;--paper2:#f2ece7;--rule:#ded5cc;--accent:#c92a6a;--ok:#2f7d4f;--warn:#a8641a;--stop:#b3382f;--mono:ui-monospace,Menlo,Consolas,monospace;--serif:"Iowan Old Style",Palatino,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:52px 26px 92px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:30px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.13;margin:0 0 12px}
+  .lede{font-size:17px;color:var(--ink2);max-width:76ch;margin:0}
+  h2{font-family:var(--serif);font-weight:600;font-size:23px;margin:44px 0 6px;padding-top:16px;border-top:1px solid var(--rule)}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent);margin-right:8px}
+  p{margin:10px 0;max-width:78ch} code{font-family:var(--mono);font-size:13px;background:var(--paper2);padding:1.5px 5px;border-radius:4px}
+  pre{background:#191419;color:#f5efec;padding:14px 16px;border-radius:6px;overflow:auto;font-family:var(--mono);font-size:12.5px;line-height:1.55}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1.5px solid var(--ink)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:4px;border:1px solid currentColor;text-transform:uppercase}
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .stop{color:var(--stop)}
+  .callout{border-left:3px solid var(--accent);background:#fde8f1;padding:14px 18px;margin:18px 0;font-size:14.5px}
+  .callout.warn{border-color:var(--warn);background:#fdf3e7} .callout.stop{border-color:var(--stop);background:#fbeceb}
+  footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink3);font-family:var(--mono)}
+  @media(max-width:640px){h1{font-size:26px}}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+  <p class="kicker">LOVII · план архитектуры CSS</p>
+  <h1>Компоненты вместо дублей: план и оговорки</h1>
+  <p class="lede">Цель большой модели — ~1700–2000 строк на витрину, базовые компоненты + варианты, <code>@layer</code>, уникальное и адаптив — в продуктовом слое. Направление верное — беру его, но с тремя оговорками ниже.</p>
+</header>
+
+<h2><span class="n">01</span>Согласен с этим</h2>
+<table>
+  <thead><tr><th>Рекомендация</th><th>Беру?</th><th>Комментарий</th></tr></thead>
+  <tbody>
+    <tr><td>Цель ~1700–2000 строк</td><td><span class="badge ok">да</span></td><td>реалистично (против 3804); «500» — только ядро ДС, не витрина</td></tr>
+    <tr><td>Компоненты `.card .btn .chip .field .list-row`</td><td><span class="badge ok">да</span></td><td>это и есть переиспользование</td></tr>
+    <tr><td>Варианты вместо дублей</td><td><span class="badge ok">да</span></td><td>через модификаторы/атрибуты</td></tr>
+    <tr><td>В продуктовом CSS — только раскладка + адаптив</td><td><span class="badge ok">да</span></td><td>верно</td></tr>
+    <tr><td>`@layer` для каскада</td><td><span class="badge warn">да, с оговоркой</span></td><td>см. §02 — неочевидная ловушка</td></tr>
+    <tr><td>Не менять токены и уникальные компоненты</td><td><span class="badge ok">да</span></td><td>`.paycard`, `.pin-pad`, `.chat-body` — не трогаем</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="n">02</span>Три оговорки (иначе получим грабли)</h2>
+<div class="callout stop"><b>1. Это правка РАЗМЕТКИ, а не только CSS.</b> Чтобы «карточка» работала, в HTML/JS-шаблонах надо поставить класс <code>.card</code> и варианты. У нас карточки рендерятся в JS-шаблонах — значит меняем шаблоны. Риск визуальной регрессии → только пошагово, со скриншот-сверкой на каждом шаге.</div>
+<div class="callout warn"><b>2. Ловушка `@layer`.</b> Слои проигрывают необработанному CSS: <b>правила вне <code>@layer</code> всегда бьют правила слоёв</b>. Если заслоить часть, а часть оставить «голой» — получаем неожиданные перекрытия (ровно то, из-за чего уже были баги). Значит: либо слой у ВСЕХ стилей, либо не вводить вовсе. Ввожу — но целиком.</div>
+<div class="callout"><b>3. «Без роста правил» — только для вариаций.</b> Новый экран из готовых компонентов — да, почти без правил. Но новый УНИКАЛЬНЫЙ узел всегда стоит правила. Это и держим как бюджет: компонент — из ядра, экран — только раскладка.</div>
+
+<h2><span class="n">03</span>Мой набор компонентов (решение дизайнера)</h2>
+<table>
+  <thead><tr><th>Компонент</th><th>Варианты</th><th>Заменяет</th></tr></thead>
+  <tbody>
+    <tr><td><code>.card</code></td><td><code>--surface</code> (заливка), <code>--flat</code> (без тени), размер паддинга</td><td>nearby-store, catalog-store, popular-store, role-*, cart-*, order-preview…</td></tr>
+    <tr><td><code>.btn</code></td><td><code>solid</code> / <code>ghost</code> / <code>plain</code>; размеры s/m/l</td><td>cta-btn, acct__btn, sort-btn, рефакторинг кнопок</td></tr>
+    <tr><td><code>.chip</code></td><td><code>on</code> / <code>off</code>; <code>tone</code> (pink/tiffany/gold)</td><td>cat-chip, app-chip, filter-чипы, tag-pill</td></tr>
+    <tr><td><code>.field</code></td><td>со иконкой / без; ошибка</td><td>search-bar, sf-search, acc-field, auth-code</td></tr>
+    <tr><td><code>.list-row</code></td><td>иконка/аватар + шеврон; active</td><td>compact-row, district-row, ops-link, settings-row</td></tr>
+    <tr><td><code>.badge</code> / <code>.kpi</code> / <code>.tile</code></td><td>tone; размер</td><td>badge-*, role-kpi, плитки</td></tr>
+  </tbody>
+</table>
+<pre>@layer tokens, base, components, utilities, screens;
+/* tokens → base → components (что переиспользуем) → utilities → screens (раскладка) */</pre>
+
+<h2><span class="n">04</span>Порядок перехода (безопасный)</h2>
+<ol>
+  <li>Заводим слой компонентов в каноне <code>lovii-design</code> (карточка/кнопка/чип/поле/строка).</li>
+  <li>Пилот на одном экране (главная): карточки переводим на <code>.card</code>, сверяем скриншотами (0 отличий, кроме одобренного).</li>
+  <li>Правило-за-правилом по экранам: заменяем дубли на компоненты, удаляем старое.</li>
+  <li>Вводим <code>@layer</code> целиком, единым коммитом, после проверки.</li>
+</ol>
+<div class="callout"><b>Бюджет/контроль:</b> после каждого экрана — <code>node --check</code>, рантайм-обход и скриншот-регрессия. Ветка <code>sz062-ds</code>, откат в одну команду, прод не тронут.</div>
+
+<footer>LOVII · план компонентов · 2026-09-20 · lovii.css 3804 → цель ~1700–2000</footer>
+</div></body></html>

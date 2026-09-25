@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZ-062 · карта репозиториев и правок</title>
+<style>
+  :root{--ink:#17131a;--ink2:#4a444e;--ink3:#7d7681;--paper:#faf7f4;--paper2:#f2ece7;--rule:#ded5cc;--accent:#c92a6a;--soft:#fde8f1;--ok:#2f7d4f;--warn:#a8641a;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--serif:"Iowan Old Style",Palatino,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:56px 28px 96px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:24px;margin-bottom:36px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:36px;line-height:1.12;margin:0 0 12px}
+  .lede{font-size:17px;color:var(--ink2);max-width:72ch;margin:0}
+  h2{font-family:var(--serif);font-weight:600;font-size:24px;margin:48px 0 6px;padding-top:16px;border-top:1px solid var(--rule)}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent);margin-right:8px}
+  p{margin:10px 0;max-width:76ch}
+  code{font-family:var(--mono);font-size:13px;background:var(--paper2);padding:1.5px 5px;border-radius:4px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);border-bottom:1.5px solid var(--ink)}
+  tbody tr:hover{background:var(--paper2)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:4px;border:1px solid currentColor;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+  .edit{color:var(--accent)} .read{color:var(--ink3)} .art{color:var(--ok)}
+  .repo{border:1px solid var(--rule);border-radius:6px;padding:0;margin:16px 0;overflow:hidden}
+  .repo .hd{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:var(--paper2);border-bottom:1px solid var(--rule)}
+  .repo .hd b{font-family:var(--mono);font-size:14px}
+  .repo .hd .role{font-size:12.5px;color:var(--ink2)}
+  .repo .bd{padding:14px 16px} .repo .bd ul{margin:6px 0;padding-left:18px} .repo .bd li{margin:4px 0;font-size:13.5px}
+  .callout{border-left:3px solid var(--accent);background:var(--soft);padding:14px 18px;margin:20px 0;font-size:14.5px}
+  .callout.warn{border-color:var(--warn);background:#fdf3e7}
+  .gate{background:#191419;color:#f5efec;padding:22px 24px;margin:24px 0;border-radius:6px}
+  .gate .t{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#f7a9c8;margin:0 0 12px}
+  .gate li{margin:8px 0} .gate code{background:#2a2028;color:#fbcfe3}
+  .flow{font-family:var(--mono);font-size:12.5px;background:#191419;color:#f5efec;padding:18px;border-radius:6px;overflow:auto;line-height:1.7;margin:18px 0}
+  .flow b{color:#f7a9c8}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink3);font-family:var(--mono)}
+  @media(max-width:640px){h1{font-size:27px}.wrap{padding:32px 18px 72px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">SZ-062 · до правок · карта репозиториев</p>
+  <h1>Где мы вносим правки, где живёт канон</h1>
+  <p class="lede">Затронуть можно три кодовых репозитория плюс хранилище артефактов. Ниже — что где лежит, куда идут правки CSS и иконок, и где должен жить канон дизайн-системы.</p>
+</header>
+
+<h2><span class="n">01</span>Как устроено сейчас</h2>
+<p><code>lovii-design</code> — не «одна из трёх», а <b>фреймворк-канон</b>: в его <code>SCHEME.md</code> прямо написано «ЕДИНСТВЕННОЕ МЕСТО ПРАВОК СТИЛЯ». Токены и компоненты правятся здесь, а затем разносчик кладёт <b>снапшот</b> в репозитории-потребители.</p>
+<div class="flow">
+<b>lovii-design</b> (канон: tokens/design-tokens.json · tokens/tokens.css · css/lovii-components.css)
+   │   tools/propagate.py --push   →   сборка + снапшоты + стражи + коммиты
+   ├──▶ lovii-demo   assets/lovii-tokens.css   (только слой токенов --lv-*)
+   ├──▶ lovii.ru     assets/lovii.css          (токены + компоненты)
+   └──▶ lovii-site   assets/lovii.css
+</div>
+<p>Витрина <code>lovii-demo</code> держит <b>свой компонентный слой</b> — <code>css/lovii.css</code> (анатомия витрины), которому разрешено краситься только через <code>var(--lv-*)</code>. Именно этот слой и оптимизирует SZ-062.</p>
+
+<h2><span class="n">02</span>Три репозитория — что делаем с каждым</h2>
+
+<div class="repo">
+  <div class="hd"><b>lovii-demo</b><span class="role">витрина lovii.mobiap.com · <span class="badge edit">правим здесь</span></span></div>
+  <div class="bd"><ul>
+    <li><code>css/lovii.css</code> — оптимизация анатомии (мёртвый CSS, дубли, токенизация, слои).</li>
+    <li><code>js/icons.js</code> — реестр иконок: явные размеры + шкала + удаление неиспользуемых.</li>
+    <li><code>design/ds/</code> <span class="badge">новое</span> — витрина-каталог дизайн-системы (README, tokens, primitives, components, icons, catalog.html).</li>
+    <li><code>index.html</code> — бамп <code>?v=</code> при правках css/js (кэш).</li>
+  </ul></div>
+</div>
+
+<div class="repo">
+  <div class="hd"><b>lovii-design</b><span class="role">фреймворк-канон ДС · <span class="badge read">сейчас read-only</span></span></div>
+  <div class="bd"><ul>
+    <li>Здесь живёт <b>канон стилей</b>: значения токенов <code>--lv-*</code>, палитра, типографика, компоненты слоя B.</li>
+    <li>По SZ-062 заморожен до <b>Гейта №2</b>: новые токены (шкала размеров иконок, navbar) канонизируются здесь только по вашему решению, дальше <code>propagate.py --push</code> обновит снапшот в витрине.</li>
+    <li><b>Иконок в каноне нет.</b> В <code>lovii-design</code> лежит только <code>assets/icons.svg</code> (не реестр). Это дырка в ДС — см. §03.</li>
+  </ul></div>
+</div>
+
+<div class="repo">
+  <div class="hd"><b>lovii-app</b><span class="role">Vue-приложение · <span class="badge read">только сверка</span></span></div>
+  <div class="bd"><ul>
+    <li>Свой токен-слой (<code>src/scss/lovii-tokens.scss</code>) и <b>свой независимый</b> набор иконок (<code>src/scss/icons/*.scss</code>).</li>
+    <li>В SZ-062 — только для сверки значений (токены 103/106, 13 разночтений кабинетов). Правок нет.</li>
+    <li>Синхронизация приложения — отдельная задача, не эта.</li>
+  </ul></div>
+</div>
+
+<div class="repo">
+  <div class="hd"><b>lovii_docs</b><span class="role">реестр задач и артефактов · <span class="badge art">только артефакты</span></span></div>
+  <div class="bd"><ul><li>Сюда едут отчёты фаз 0–6 и строки реестра. Код сюда не попадает.</li></ul></div>
+</div>
+
+<h2><span class="n">03</span>Главный вопрос — где канон иконок</h2>
+<div class="callout warn">
+  Реестр иконок сегодня существует <b>только внутри витрины</b> (<code>js/icons.js</code>). В каноне его нет, у приложения — третья, независимая система. Значит «полной дизайн-системы» по факту пока нет: есть токены + компоненты в каноне и отдельно живущие иконки в витрине.
+</div>
+<p>Два пути — выбор за вами:</p>
+<table>
+  <thead><tr><th>Вариант</th><th>Что делаем</th><th>Плюс / минус</th></tr></thead>
+  <tbody>
+    <tr><td><b>A. Канон иконок в lovii-design</b> <span class="badge edit">рекомендую</span></td><td>Ввести в <code>lovii-design</code> модуль иконок (реестр + шкала размеров + манифест), разносчиком отдавать снапшот в витрину — как токены</td><td>ДС становится настоящим каноном; приложение позже подключим к тому же источнику. Минус — расширяет объём и трогает «read-only» репо (нужна ваша команда)</td></tr>
+    <tr><td><b>B. Иконки остаются в витрине</b></td><td>Реестр живёт в <code>lovii-demo/js/icons.js</code>, в ДС только документируется (<code>design/ds/icons.md</code>)</td><td>Быстрее, строго в рамках SZ-062. Минус — канон иконок так и не появится, app останется в стороне</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="n">04</span>Дизайн-система — где строим</h2>
+<div class="callout">
+  В SZ-062 пакет ДС описан в витрине — <code>lovii-demo/design/ds/</code>. Но по философии фреймворка канон живёт в <code>lovii-design</code>. Рекомендую разделить: <b>в <code>lovii-design</code> — источник истины</b> (токены, шкала иконок, компоненты слоя B), <b>в <code>lovii-demo/design/ds/</code> — витрина-каталог</b>, который ссылается на канон и покрывает 100% классов витрины. Так ДС не дублируется, а витрина остаётся рабочей страницей-справочником.
+</div>
+
+<h2><span class="n">05</span>Итог и что нужно подтвердить</h2>
+<div class="gate">
+  <p class="t">Решение владельца — до старта правок</p>
+  <ul>
+    <li><b>1.</b> Правки CSS и иконок — только в <code>lovii-demo</code>. Подтверждаете?</li>
+    <li><b>2.</b> Канон стилей — в <code>lovii-design</code> (сейчас заморожен до Гейта №2). Новые токены канонизируем там, разносчик обновит снапшот в витрине. Ок?</li>
+    <li><b>3.</b> Канон иконок: вариант <b>A</b> (вынести в <code>lovii-design</code>) или <b>B</b> (оставить в витрине)?</li>
+    <li><b>4.</b> Дизайн-система: источник истины в <code>lovii-design</code>, каталог-витрина в <code>lovii-demo/design/ds/</code>. Или всё в витрине по букве SZ-062?</li>
+    <li><b>5.</b> <code>lovii-app</code> — только сверка, правок нет. Подтверждаете?</li>
+  </ul>
+</div>
+
+<footer>SZ-062 · карта репозиториев · 2026-09-20 · головы: demo a8a86be · design 0e93f47 · app 6d1d79e · docs 959c563</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,293 @@
+{
+  "id": "staff-excluded",
+  "title": "Сотрудник точки: все кампании с exclude_staff → staff_excluded; базовый кэшбэк платформы остаётся",
+  "kind": "quote",
+  "campaigns": [
+    {
+      "campaign_id": "cmp_threshold",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-01-threshold.json"
+    },
+    {
+      "campaign_id": "cmp_stamps",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-06-stamps.json"
+    },
+    {
+      "campaign_id": "cmp_cashback",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-04-cashback-flat.json"
+    }
+  ],
+  "settings": {},
+  "context": {
+    "merchant_id": "mrc_daily",
+    "location_id": "loc_tverskoy",
+    "order_id": "ord_staff_1",
+    "channel": "qr",
+    "now": "2026-09-22T09:40:00+03:00",
+    "customer": {
+      "id": "cus_staff",
+      "name": "Марк",
+      "status": "PAY",
+      "tier": null,
+      "orders_at_merchant": 30,
+      "days_since_last_purchase": 1,
+      "visits_30d": 20,
+      "spent_90d": 300000,
+      "is_staff": true,
+      "birthday_in_days": 77,
+      "segments": [
+        "regular"
+      ],
+      "points_balance": 90
+    },
+    "items": [
+      {
+        "sku": "cd1",
+        "name": "Капучино",
+        "category": "coffee",
+        "price_minor": 22000,
+        "qty": 3,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      }
+    ],
+    "coupon_code": null,
+    "redeem_points": 0,
+    "state": {
+      "stamps": {},
+      "counters": {},
+      "subscriptions": [],
+      "challenges": {},
+      "coupons": [],
+      "lots": [
+        {
+          "lot_id": "lot_base",
+          "label": "Баллы LOVII",
+          "amount": 90,
+          "amount_left": 90,
+          "expires_at": null,
+          "funding": "platform",
+          "merchant_id": null
+        }
+      ]
+    },
+    "catalog": [
+      {
+        "sku": "cd1",
+        "name": "Капучино",
+        "category": "coffee",
+        "price_minor": 22000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd2",
+        "name": "Латте",
+        "category": "coffee",
+        "price_minor": 25000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd3",
+        "name": "Эспрессо",
+        "category": "coffee",
+        "price_minor": 15000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd4",
+        "name": "Раф",
+        "category": "coffee",
+        "price_minor": 29000,
+        "tags": [
+          "drink"
+        ]
+      },
+      {
+        "sku": "cd5",
+        "name": "Чай",
+        "category": "tea",
+        "price_minor": 18000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd6",
+        "name": "Круассан",
+        "category": "bakery",
+        "price_minor": 16400,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd7",
+        "name": "Слойка с вишней",
+        "category": "bakery",
+        "price_minor": 18000,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd8",
+        "name": "Чизкейк",
+        "category": "dessert",
+        "price_minor": 32000,
+        "tags": [
+          "food",
+          "sweet"
+        ]
+      },
+      {
+        "sku": "cd9",
+        "name": "Тирамису",
+        "category": "dessert",
+        "price_minor": 35000,
+        "tags": [
+          "food",
+          "sweet"
+        ]
+      },
+      {
+        "sku": "cd10",
+        "name": "Сырники",
+        "category": "breakfast",
+        "price_minor": 34000,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd11",
+        "name": "Сэндвич",
+        "category": "breakfast",
+        "price_minor": 29000,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "gc2000",
+        "name": "Сертификат 2 000 ₽",
+        "category": "gift_card",
+        "price_minor": 200000,
+        "tags": [
+          "gift"
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "after_discounts_minor": 66000,
+    "applied": [
+      {
+        "action_index": 0,
+        "action_type": "accrue_points",
+        "campaign_id": "platform_base",
+        "campaign_version": 1,
+        "cost_minor": 0,
+        "details": {
+          "base_minor": 66000,
+          "expires_at": null,
+          "lot_label": "Кэшбэк LOVII",
+          "mode": "percent",
+          "percent": 5,
+          "to": "customer"
+        },
+        "discount_minor": 0,
+        "funding": "platform",
+        "mechanic": "platform_base",
+        "points": 33,
+        "title": "Кэшбэк LOVII 5 %",
+        "ttl_days": null
+      }
+    ],
+    "cost_minor": 0,
+    "coupon": null,
+    "coupons_issued": [],
+    "deferred": [],
+    "discount_total_minor": 0,
+    "explain": [
+      {
+        "campaign_id": "cmp_threshold",
+        "name": "От 450 ₽ — +60 баллов",
+        "reason": "staff_excluded",
+        "result": "skipped"
+      },
+      {
+        "campaign_id": "cmp_cashback",
+        "name": "Кэшбэк 5 % баллами",
+        "reason": "staff_excluded",
+        "result": "skipped"
+      },
+      {
+        "campaign_id": "cmp_stamps",
+        "name": "6-й напиток бесплатно",
+        "reason": "staff_excluded",
+        "result": "skipped"
+      },
+      {
+        "campaign_id": "platform_base",
+        "name": "Кэшбэк LOVII 5 %",
+        "result": "applied"
+      }
+    ],
+    "gross_total_minor": 66000,
+    "hints": [],
+    "lines": [
+      {
+        "category": "coffee",
+        "discount_minor": 0,
+        "final_minor": 66000,
+        "name": "Капучино",
+        "price_minor": 22000,
+        "qty": 3,
+        "sku": "cd1"
+      }
+    ],
+    "local": {
+      "date": "2026-09-22",
+      "time": "09:40",
+      "timezone": "Europe/Moscow",
+      "weekday": 2
+    },
+    "lots_to_accrue": [
+      {
+        "campaign_id": "platform_base",
+        "expires_at": null,
+        "funding": "platform",
+        "label": "Кэшбэк LOVII",
+        "points": 33
+      }
+    ],
+    "lots_to_redeem": [],
+    "notifications": [],
+    "paid_money_minor": 66000,
+    "points_redeem_max": 90,
+    "points_redeemed": 0,
+    "points_to_accrue": 33,
+    "reward_base_minor": 66000,
+    "stamps": []
+  }
+}

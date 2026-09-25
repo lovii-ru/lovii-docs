@@ -1,0 +1,142 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "bundle",
+  "name": "Кофе + выпечка = 349 ₽",
+  "priority": 150,
+  "stacking": {
+    "group": "item_price",
+    "mode": "exclusive"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": [
+      {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "from": "08:00",
+        "to": "11:00"
+      }
+    ]
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.items",
+      "op": "count_gte",
+      "match": {
+        "category": {
+          "in": [
+            "coffee"
+          ]
+        }
+      },
+      "value": 1
+    },
+    {
+      "field": "basket.items",
+      "op": "count_gte",
+      "match": {
+        "category": {
+          "in": [
+            "bakery"
+          ]
+        }
+      },
+      "value": 1
+    }
+  ],
+  "actions": [
+    {
+      "type": "discount",
+      "scope": "bundle",
+      "mode": "fixed",
+      "value": 34900,
+      "bundle": {
+        "groups": [
+          {
+            "name": "кофе",
+            "filter": {
+              "category": {
+                "in": [
+                  "coffee"
+                ]
+              }
+            },
+            "qty": 1
+          },
+          {
+            "name": "выпечка",
+            "filter": {
+              "category": {
+                "in": [
+                  "bakery"
+                ]
+              }
+            },
+            "qty": 1
+          }
+        ],
+        "max_sets": 1
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": null,
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Кофе + выпечка = 349 ₽",
+    "badge": "Комбо",
+    "subtitle": "ежедневно 08:00–11:00",
+    "terms": "Набор собирается из самых дешёвых подходящих позиций чека. При возврате компонента набор пересчитывается."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-02",
+    "template_params": {
+      "group_a": "coffee",
+      "qty_a": 1,
+      "group_b": "bakery",
+      "qty_b": 1,
+      "price_mode": "fixed",
+      "bundle_price_minor": 34900,
+      "discount_pct": 15,
+      "max_sets": 1,
+      "windows": [
+        {
+          "days": "daily",
+          "from": "08:00",
+          "to": "11:00"
+        }
+      ],
+      "holdout_pct": 10
+    }
+  }
+}

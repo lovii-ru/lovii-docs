@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Счёт и операции — визуальная приёмка (сессия 109)</title>
+<style>
+  :root{
+    --paper:#faf8f4;
+    --card:#fffefb;
+    --ink:#1c1a19;
+    --ink-2:#575149;
+    --dim:#6f675c;
+    --hair:#e2dbcf;
+    --hair-2:#efe9df;
+    --accent:#c92a6a;        /* единственный акцент — pink-dark из канона LOVII */
+    --accent-soft:#f8e6ee;
+    --ok:#1c1a19;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--serif);font-size:16.5px;line-height:1.58;
+    font-kerning:normal;font-variant-numeric:oldstyle-nums;
+    hyphens:auto;-webkit-hyphens:auto;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 28px 96px}
+  .shell{display:grid;grid-template-columns:1fr}
+  .side{display:none}
+  .main{min-width:0}
+  @media (min-width:1200px){
+    .wrap{max-width:1020px}
+    .shell{grid-template-columns:160px minmax(0,1fr);column-gap:72px}
+    .side{display:block;position:sticky;top:44px;align-self:start;padding-top:110px}
+    #inline-toc{display:none}
+  }
+  .prose{max-width:70ch}
+  p,li{max-width:70ch}
+  figure p,figure li{max-width:none}
+  .verdict li{max-width:74ch}
+  .side-kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:0 0 12px}
+
+  /* ---------- cover ---------- */
+  .cover{padding:96px 0 40px;border-bottom:1px solid var(--ink)}
+  .cover .kicker{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 22px
+  }
+  h1{font-size:clamp(34px,5.4vw,52px);line-height:1.04;letter-spacing:-.022em;margin:0 0 16px;font-weight:600}
+  .lede{font-size:19px;line-height:1.45;color:var(--ink-2);margin:0 0 44px;max-width:52ch}
+  .meta{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:16px 34px;font-size:13px;border-top:1px solid var(--hair);padding-top:20px;margin-top:6px
+  }
+  .meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:0 0 3px}
+  .meta dd{margin:0;font-size:14px}
+  .meta dt{font-size:11px}
+
+  /* ---------- verdict ---------- */
+  .verdict{margin:40px 0 0;border:1px solid var(--hair);background:var(--card);padding:24px 26px}
+  .verdict h2{font-size:15px;letter-spacing:.02em;margin:0 0 14px;font-weight:600}
+  .verdict ul{margin:0;padding-left:20px}
+  .verdict li{margin:5px 0}
+
+  /* ---------- sections ---------- */
+  section{padding-top:64px}
+  h2{font-size:27px;line-height:1.12;letter-spacing:-.015em;margin:0 0 8px;font-weight:600}
+  h2 .num{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:8px}
+  h3{font-size:17px;margin:34px 0 8px;font-weight:600}
+  h4{font-size:15px;margin:22px 0 6px;font-weight:600}
+  p{margin:0 0 14px}
+  a{color:var(--accent);text-underline-offset:2px}
+  .rule{height:1px;background:var(--hair);border:0;margin:20px 0 26px;max-width:none}
+
+  /* ---------- tables ---------- */
+  table{border-collapse:collapse;width:100%;margin:18px 0 22px;font-size:14px}
+  caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding-bottom:8px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px 9px 0;border-bottom:1px solid var(--hair-2)}
+  thead th{border-bottom:1px solid var(--ink);font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);font-weight:600}
+  tbody tr:last-child td{border-bottom:1px solid var(--hair)}
+  td code,p code,li code{font-family:var(--mono);font-size:12px;background:#f2ece2;padding:1px 4px;border-radius:2px;word-break:break-word}
+  .num-cell{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  /* ---------- status tag ---------- */
+  .tag{
+    display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;padding:3px 7px;border:1px solid var(--hair);color:var(--ink-2);white-space:nowrap
+  }
+  .tag-pass{border-color:var(--ink);color:var(--ink)}
+  .tag-warn{border-color:var(--accent);color:var(--accent)}
+  .tag-fail{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+
+  /* ---------- deviation blocks ---------- */
+  .dev{border-top:1px solid var(--ink);margin:34px 0 0;padding-top:14px}
+  .dev .dev-head{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:12px}
+  .dev .dev-id{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--accent)}
+  .dev h3{margin:0;font-size:18px;flex:1 1 260px}
+  dl.fact{margin:0;font-size:14.5px;display:grid;grid-template-columns:150px 1fr;gap:6px 18px}
+  dl.fact dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-top:4px}
+  dl.fact dd{margin:0;max-width:64ch}
+  @media (max-width:620px){dl.fact{grid-template-columns:1fr;gap:2px 0}dl.fact dt{padding-top:10px}}
+
+  /* ---------- figures ---------- */
+  figure{margin:26px 0;border:1px solid var(--hair);background:var(--card);padding:14px}
+  figure img{display:block;width:100%;height:auto;border:1px solid var(--hair-2)}
+  figcaption{margin-top:10px;font-size:13px;line-height:1.45;color:var(--ink-2)}
+  figcaption b{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--dim);font-weight:400;display:block;margin-bottom:2px}
+  .fig-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:26px 0}
+  .fig-row figure{margin:0}
+  .fig-row img{width:100%}
+
+  /* ---------- toc ---------- */
+  nav.toc{margin:34px 0 0}
+  nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+  nav.toc li{counter-increment:t;border-bottom:1px solid var(--hair-2)}
+  nav.toc a{display:flex;gap:14px;padding:8px 0;text-decoration:none;color:var(--ink)}
+  nav.toc a::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:11.5px;color:var(--dim);padding-top:3px}
+  nav.toc a span{padding-right:6px}
+  .side nav.toc a{padding:9px 0}
+  .side nav.toc li{border-bottom:0;border-top:1px solid var(--hair-2)}
+  .side nav.toc li:last-child{border-bottom:1px solid var(--hair-2)}
+  nav.toc a:hover{color:var(--accent)}
+
+  ul.plain{padding-left:20px}
+  ul.plain li{margin:5px 0}
+  .colophon{margin-top:72px;border-top:1px solid var(--ink);padding-top:16px;font-size:12.5px;color:var(--ink-2);font-family:var(--mono);letter-spacing:.02em;max-width:66ch}
+  .kbd{font-family:var(--mono);font-size:12px;background:#f2ece2;padding:1px 4px;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="shell">
+<aside class="side">
+  <p class="side-kicker">Содержание</p>
+  <nav class="toc" id="side-toc"><ol>
+    <li><a href="#method"><span>Как проверяли</span></a></li>
+    <li><a href="#summary"><span>Сводка по разделам</span></a></li>
+    <li><a href="#regress"><span>Регрессия дефектов</span></a></li>
+    <li><a href="#deviations"><span>Отклонения</span></a></li>
+    <li><a href="#notes"><span>Наблюдения</span></a></li>
+    <li><a href="#unverified"><span>Что не проверено</span></a></li>
+    <li><a href="#matrix"><span>Прогоны и артефакты</span></a></li>
+  </ol></nav>
+</aside>
+<div class="main">
+
+<header class="cover">
+  <p class="kicker">Визуальная приёмка · сессия 109</p>
+  <h1>Один экран «Счёт и операции» вместо четырёх</h1>
+  <p class="lede">Живая проверка объединённого экрана счетов и операций: что реально видно на стенде после слияния. Только чтение и скриншоты — код не менялся.</p>
+  <dl class="meta">
+    <div><dt>Дата</dt><dd>2026-09-16</dd></div>
+    <div><dt>Репозиторий</dt><dd>lovii-app · ветка <code>staging</code></dd></div>
+    <div><dt>HEAD</dt><dd><code>3ecaccc</code> (локально, не запушен)</dd></div>
+    <div><dt>Стенд</dt><dd><code>localhost:8081</code> + API <code>:80</code></dd></div>
+    <div><dt>Пользователь</dt><dd>+7 911 928 74 78</dd></div>
+    <div><dt>Объём</dt><dd>74 кадра · 8 прогонов матрицы</dd></div>
+  </dl>
+</header>
+
+<div class="verdict">
+  <h2>Итог в четырёх строках</h2>
+  <ul>
+    <li>Из 9 разделов чек-листа <b>шесть пройдены полностью</b>, три — пройдены с замечаниями. Критичных блокеров нет: экран рабочий, данные честные, ни одного падения.</li>
+    <li><b>Три ранее пойманных дефекта не вернулись</b>: карусель следит за пресетом, дублей строк нет, в контуре «Баллы» — баллы, а не рубли.</li>
+    <li><b>Обязательные проверки раскладки и контраста пройдены</b>: горизонтального скролла нет ни на одном вьюпорте, ошибок консоли — ноль на всех восьми прогонах, фокус-кольцо есть у всех 58 интерактивных элементов.</li>
+    <li>Найдено <b>шесть отклонений</b> (от видимости индикатора карусели до обрезки заголовка адреса) и <b>пять наблюдений</b>, часть которых — свойство канона, а не этого экрана.</li>
+  </ul>
+</div>
+
+<nav class="toc" id="inline-toc">
+  <ol>
+    <li><a href="#method"><span>Как проверяли</span></a></li>
+    <li><a href="#summary"><span>Сводка по разделам чек-листа</span></a></li>
+    <li><a href="#regress"><span>Регрессия трёх пойманных дефектов</span></a></li>
+    <li><a href="#deviations"><span>Отклонения</span></a></li>
+    <li><a href="#notes"><span>Наблюдения (не дефекты)</span></a></li>
+    <li><a href="#unverified"><span>Что не удалось проверить</span></a></li>
+    <li><a href="#matrix"><span>Матрица прогонов и артефакты</span></a></li>
+  </ol>
+</nav>
+
+<section id="method">
+  <h2><span class="num">01</span>Как проверяли</h2>
+  <div class="prose">
+    <p>Проверка велась на живом стенде прод-сборки (<code>lovii-app/dist</code> за nginx на <code>:8081</code>, API — ядро на <code>:80</code>) под сохранённой сессией владельца, без входа через OTP. Идентификаторы счетов тянулись из живого API — личный <code>3</code>, номинал Основателя <code>18</code>, поэтому проверка не зависит от фикстур.</p>
+    <p>На каждом прогоне собирались и кадры, и машинные замеры: переполнение по горизонтали, адрес после редиректов, наличие сегмента контура, единицы измерения в сводке, активные состояния фильтров, состав ленты, дубли строк, консольные ошибки. Отдельным проходом снимались поведенческие сценарии — свайп и точки карусели, поворот карты, копирование номера, фильтры и период, серверная пагинация, пустые состояния, «назад» после редиректа, фокус с клавиатуры.</p>
+    <p>Отдельно прогнаны два сценария, которые не видны глазами: сверка ленты с сервером (сколько строк в DOM против <code>total</code> из API) и замер анти-FOUC (атрибут темы в момент <code>commit</code>, то есть до монтирования приложения).</p>
+    <p><b>Чем разбирались кадры.</b> У модели этого запуска нет нативного зрения, поэтому кадры разбирались автоматическим распознаванием изображений, а каждое спорное утверждение перепроверялось замером DOM и computed-стилей. Всё, что ниже помечено как факт, подтверждено замером или сверкой с API; визуальные формулировки распознавания, не подтверждённые замером, вынесены в наблюдения с явной пометкой.</p>
+  </div>
+</section>
+
+<section id="summary">
+  <h2><span class="num">02</span>Сводка по разделам чек-листа</h2>
+  <table>
+    <caption>Разделы 5.1–5.9 задания · вьюпорты 320 / 390 / 768 / 1440 · светлая и тёмная тема</caption>
+    <thead>
+      <tr><th style="width:74px">Раздел</th><th style="width:120px">Итог</th><th>Что подтвердилось</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num-cell">5.1</td>
+        <td><span class="tag tag-pass">пройдено</span></td>
+        <td>На профиле ровно одна кнопка «Счёт и операции»; ссылок «Все операции» и строки «Мои баллы» нет ни в одной теме и на всех вьюпортах. Блок «История операций» без собственной ссылки. Внизу профиля — одна юридическая карточка (Документы + Поддержка), дыр и разъехавшихся отступов нет.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.2</td>
+        <td><span class="tag tag-warn">с замечанием</span></td>
+        <td>Свайп меняет счёт вместе со сводкой и лентой; точки-индикаторы переключают карту; прямые ссылки <code>?account=ID</code> открывают нужный счёт (проверено на четырёх вьюпортах); карты несут бренд-скины, ИНН и «Транзит»; поворот карты работает, «Скопировать номер» кладёт в буфер <code>9643 9138 2379 0983</code> и показывает тост. Замечание — видимость точек-индикаторов в светлой теме.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.3</td>
+        <td><span class="tag tag-fail">расхождение</span></td>
+        <td>Сегмент есть только у личного счёта (у бизнеса и номинала его нет вовсе), переключение контура не сбрасывает счёт и не перезагружает страницу. Но «включённое» состояние сегмента — белая карточка, а не tiffany, как написано в задании; тени канона у активного сегмента тоже нет.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.4</td>
+        <td><span class="tag tag-pass">пройдено</span></td>
+        <td>Единица следует контуру: «Деньги» — <code>6 636,09 ₽</code>, «Баллы» — <code>4 909,25 б.</code> Рублёвого знака в балловом контуре нет. Баллы и рубли не сводятся в одну цифру. Подписи не смешивают контуры.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.5</td>
+        <td><span class="tag tag-pass">пройдено</span></td>
+        <td>Фильтры «Все / Начисления / Списания» переключают выдачу, период уходит на сервер как <code>from</code>/<code>to</code>; пагинация отдаёт страницу 2 и DOM сходится с сервером (40 строк против <code>total: 40</code>); группировка по дням, длинные подписи не рвут раскладку; у номинала цепочки чеков закрываются «Транзит закрыт · 0 ₽», а разрезанная страницей цепочка честно говорит «Цепочка продолжается на следующей странице»; подписи операций — по-русски.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.6</td>
+        <td><span class="tag tag-pass">пройдено</span></td>
+        <td><code>/profile/balance?account=3</code> → <code>/profile/wallet?account=3&amp;tab=points</code>; <code>/profile/operations</code> → <code>/profile/wallet?tab=operations</code>. Кнопка «Назад» возвращает на профиль, цикла редиректов нет.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.7</td>
+        <td><span class="tag tag-warn">с замечанием</span></td>
+        <td>Обе темы снимаются, анти-FOUC работает (тема выставлена ещё до монтирования приложения), фокус-кольцо канонное — 2&nbsp;px <code>#f64a8a</code> с отступом 2&nbsp;px и есть у всех 58 фокусируемых элементов. Замечания — контраст активных чипов в тёмной теме и видимость индикатора карусели.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.8</td>
+        <td><span class="tag tag-warn">с замечанием</span></td>
+        <td>Горизонтального переполнения нет ни на 320, ни на 390, ни на 768, ни на 1440 (замер <code>scrollWidth − clientWidth = 0</code>). Двухколоночная композиция включается с 640&nbsp;px и держится на 768/1440. Замечания — обрезка подписи адреса в хедере на 320/390 и пустующая левая колонка на широких экранах.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5.9</td>
+        <td><span class="tag tag-pass">пройдено</span></td>
+        <td>Бизнес-счёт без проводок даёт «Операций пока нет»; «Списания» на личном счёте — «По этой категории пока нет операций»; балловый контур без списаний — «В этом периоде операций нет». Тексты не обещают несуществующих функций, ссылка «Сделать заказ» уместна.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose">
+    <p>Ниже — тот же экран в двух темах и на крайних вьюпортах: это база, на которой построены все выводы.</p>
+  </div>
+
+  <div class="fig-row">
+    <figure>
+      <img src="assets/wallet-money-390-light.png" alt="Объединённый экран «Счёт и операции», контур «Деньги», 390 px, светлая тема">
+      <figcaption><b>390 · светлая</b>Контур «Деньги»: карта-селектор, сегмент контура, сводка в рублях, лента проводок.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/wallet-money-390-dark.png" alt="Тот же экран в тёмной теме">
+      <figcaption><b>390 · тёмная</b>Тема переключается целиком; мягкие заливки различимы, границы карточек на месте.</figcaption>
+    </figure>
+  </div>
+
+  <div class="fig-row">
+    <figure>
+      <img src="assets/wallet-money-320-light.png" alt="Объединённый экран на 320 px">
+      <figcaption><b>320 · светлая</b>Горизонтального скролла нет; карта уходит в full-bleed, как в каноне демо.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/wallet-money-1440-light.png" alt="Объединённый экран на 1440 px">
+      <figcaption><b>1440 · светлая</b>Двухколоночная композиция: слева карта и сводка, справа лента операций.</figcaption>
+    </figure>
+  </div>
+
+  <div class="fig-row">
+    <figure>
+      <img src="assets/wallet-points-390-light.png" alt="Контур «Баллы»">
+      <figcaption><b>390 · контур «Баллы»</b>Единицы — «б.», подпись «Доступно баллов · 1 балл = 1 ₽», рублёвого знака в сумме нет.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/wallet-nominal-390-light.png" alt="Номинальный счёт «Оператор платформы»">
+      <figcaption><b>390 · номинал</b>Сегмента контура нет вовсе; обрезан правый подзаголовок «Оператор платформ…».</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="regress">
+  <h2><span class="num">03</span>Регрессия трёх пойманных дефектов</h2>
+  <div class="prose">
+    <p>Три дефекта, найденные живой проверкой в прошлый раз, перепроверены целенаправленно — ни один не вернулся.</p>
+  </div>
+  <table>
+    <caption>Проверка по живым данным</caption>
+    <thead><tr><th style="width:38px">№</th><th>Дефект</th><th style="width:150px">Результат</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="num-cell">1</td>
+        <td>Карусель не следовала пресету <code>?account=ID</code>: ссылка открывала один счёт, а на виду была другая карта.</td>
+        <td><span class="tag tag-pass">не вернулся</span> На 320 / 390 / 768 / 1440 под <code>?account=18</code> активна последняя точка, первой видна карта «Оператор платформы» (<code>scrollLeft</code> 1600 / 1950 / 1782 / 2123).</td>
+      </tr>
+      <tr>
+        <td class="num-cell">2</td>
+        <td>Неподвижный курсор страницы: вторая страница запрашивалась как первая и дублировала строки.</td>
+        <td><span class="tag tag-pass">не вернулся</span> Запросы идут как <code>page=1</code> (24 строки) → <code>page=2</code> (+16); в DOM ровно 40 строк при <code>total: 40</code> у сервера. Дубли отсутствуют.</td>
+      </tr>
+      <tr>
+        <td class="num-cell">3</td>
+        <td>В балловом контуре показывались рублёвые единицы.</td>
+        <td><span class="tag tag-pass">не вернулся</span> Единица контура «Баллы» — <code>б.</code>, баланс <code>4 909,25 б.</code>, рублёвый знак не появляется.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="deviations">
+  <h2><span class="num">04</span>Отклонения</h2>
+  <div class="prose">
+    <p>Шесть пунктов, которые стоит решить до того, как экран уйдёт в прод. Формат — как просили в задании: кадр · маршрут и query · вьюпорт × тема · ожидалось / получено · селектор или файл.</p>
+  </div>
+
+  <article class="dev">
+    <div class="dev-head">
+      <span class="dev-id">О1</span>
+      <h3>Точки-индикаторы карусели почти не видны в светлой теме</h3>
+      <span class="tag tag-fail">не пройдено</span>
+    </div>
+    <dl class="fact">
+      <dt>Кадр</dt><dd><code>crop dots-light.png</code>, <code>wallet-money-390-light.png</code></dd>
+      <dt>Маршрут</dt><dd><code>/profile/wallet</code>, <code>/profile/wallet?account=18</code></dd>
+      <dt>Вьюпорт × тема</dt><dd>320 / 390 / 768 / 1440 × светлая (в тёмной — лучше: 8.38:1 у активной)</dd>
+      <dt>Ожидалось</dt><dd>Индикатор выбранной карты различим как элемент управления (порог для нетекстовых элементов — 3:1 к фону).</dd>
+      <dt>Получено</dt><dd>Неактивная точка <code>#ece5da</code> на фоне страницы <code>#f8f5f0</code> — <b>1.15:1</b>; активная золотая <code>#d4a854</code> — <b>2.03:1</b>. Точки 7×7 px, активная — пилюля 18×7 px.</dd>
+      <dt>Селектор</dt><dd><code>.wallet__dot</code> / <code>.wallet__dot_active</code> — <code>src/modules/profile-balance/ProfileWallet.vue</code> (фон из <code>--lv-line</code> и <code>--lv-gold</code>)</dd>
+      <dt>Влияние</dt><dd>Среднее. В светлой теме индикатор фактически исчезает, а на 320/390 это единственная подсказка, что карт несколько.</dd>
+    </dl>
+    <figure>
+      <img src="assets/dots-light.png" alt="Крупный фрагмент: точки-индикаторы карусели в светлой теме">
+      <figcaption><b>Фрагмент · светлая тема</b>Активная золотая пилюля и пять неактивных точек на фоне страницы.</figcaption>
+    </figure>
+  </article>
+
+  <article class="dev">
+    <div class="dev-head">
+      <span class="dev-id">О2</span>
+      <h3>Сегмент контура: активное состояние не «tiffany» и без тени канона</h3>
+      <span class="tag tag-fail">не пройдено</span>
+    </div>
+    <dl class="fact">
+      <dt>Маршрут</dt><dd><code>/profile/wallet</code> (личный счёт)</dd>
+      <dt>Вьюпорт × тема</dt><dd>все × светлая и тёмная</dd>
+      <dt>Ожидалось (задание)</dt><dd>«Включённое состояние сегмента — tiffany; бренд-розовый — действие/CTA».</dd>
+      <dt>Получено</dt><dd>Активный сегмент — <code>--background-normal-surface</code> (белая пилюля <code>#ffffff</code> в светлой, <code>#211b26</code> в тёмной) поверх трека цвета страницы. <code>box-shadow</code> у активного сегмента отсутствует.</dd>
+      <dt>Селектор</dt><dd><code>.segment-control__area label:has(input:checked)</code> — <code>src/components/Ui/AppSegmentControl.vue</code></dd>
+      <dt>Контекст</dt><dd>Это не «сломалось», а расхождение формулировок: канон дизайн-системы (<code>lovii-design/docs/12-components.md</code>, раздел <code>seg</code>) описывает активное состояние как «card + shadow-float» — цвет совпадает с ДС, но тень потеряна; ожидание «tiffany» из задания с ДС-каноном не совпадает. Нужно решение владельца, что считать истиной.</dd>
+    </dl>
+    <figure>
+      <img src="assets/segment-light.png" alt="Крупный фрагмент: сегмент контура «Деньги | Баллы» в светлой теме">
+      <figcaption><b>Фрагмент · светлая тема</b>Активный «Деньги» — белая пилюля; она опознаётся, но ни цветом бренда, ни тенью не заявлена.</figcaption>
+    </figure>
+  </article>
+
+  <article class="dev">
+    <div class="dev-head">
+      <span class="dev-id">О3</span>
+      <h3>Активный чип фильтра в тёмной теме не дотягивает до AA</h3>
+      <span class="tag tag-warn">внимание</span>
+    </div>
+    <dl class="fact">
+      <dt>Маршрут</dt><dd><code>/profile/wallet</code>, лента операций</dd>
+      <dt>Вьюпорт × тема</dt><dd>390 × тёмная (и светлая — 4.18:1)</dd>
+      <dt>Ожидалось</dt><dd>Активное состояние фильтра читается; для мелкого текста — не ниже 4.5:1.</dd>
+      <dt>Получено</dt><dd><code>--lv-pink-dark #c92a6a</code> на <code>--lv-soft-pink</code>: <b>2.75:1</b> в тёмной, <b>4.18:1</b> в светлой (текст 12 и 11.5 px, вес 700).</dd>
+      <dt>Селектор</dt><dd><code>.wallet__tab_active</code>, <code>.wallet__period-chip_active</code> — <code>ProfileWallet.vue</code></dd>
+      <dt>Контекст</dt><dd>Пара «soft-pink → pink-dark» — канонная (та же в демо, <code>.tx-tabs .tab-btn.active</code>), то есть это свойство канона, а не отклонение экрана. Но фактическая читаемость в тёмной теме низкая — повод поднять вопрос в дизайн-системе, а не чинить точечно здесь.</dd>
+    </dl>
+  </article>
+
+  <article class="dev">
+    <div class="dev-head">
+      <span class="dev-id">О4</span>
+      <h3>Неактивный чип фильтра не отличается от фона страницы</h3>
+      <span class="tag tag-warn">внимание</span>
+    </div>
+    <dl class="fact">
+      <dt>Маршрут</dt><dd><code>/profile/wallet</code>, лента операций</dd>
+      <dt>Вьюпорт × тема</dt><dd>все × светлая (в тёмной — 1.22:1, тоже слабо)</dd>
+      <dt>Ожидалось</dt><dd>Фильтр читается как элемент управления; активное состояние однозначно.</dd>
+      <dt>Получено</dt><dd>Фон неактивного чипа <code>--lv-surface #f8f8f8</code> на фоне страницы <code>--lv-bg #f8f5f0</code> — <b>1.02:1</b>. Пара выглядит как обычный текст без подложки; при автоматическом разборе кадров «активным» ошибочно назывался не тот чип.</dd>
+      <dt>Селектор</dt><dd><code>.wallet__tab</code>, <code>.wallet__period-chip</code> — <code>ProfileWallet.vue</code></dd>
+      <dt>Контекст</dt><dd>Та же пара, что в каноне демо (<code>.tab-btn background: var(--lv-surface)</code>), поэтому это тоже канонный вопрос: на фоне страницы пилюля не читается.</dd>
+    </dl>
+    <figure>
+      <img src="assets/filters-light.png" alt="Крупный фрагмент: фильтры направления и периода">
+      <figcaption><b>Фрагмент · светлая тема</b>Ряд фильтров и период: активный чип розовый, остальные — почти невидимые пилюли.</figcaption>
+    </figure>
+  </article>
+
+  <article class="dev">
+    <div class="dev-head">
+      <span class="dev-id">О5</span>
+      <h3>Подпись адреса в хедере обрезается на 320 и 390</h3>
+      <span class="tag tag-warn">внимание</span>
+    </div>
+    <dl class="fact">
+      <dt>Кадр</dt><dd><code>wallet-money-320-light.png</code> (видно «В…»), <code>wallet-money-390-light.png</code></dd>
+      <dt>Маршрут</dt><dd>любой — хедер общий</dd>
+      <dt>Вьюпорт × тема</dt><dd>320 и 390 × обе темы</dd>
+      <dt>Ожидалось</dt><dd>Раздел 5.8: «320 и 390 — ничего не обрезано».</dd>
+      <dt>Получено</dt><dd>Подпись «Выбрать адрес» шириной 116 px живёт в контейнере 67 px (390) и 16 px (320) с <code>overflow:hidden; text-overflow:ellipsis</code>. На 320 читается как «В…».</dd>
+      <dt>Селектор</dt><dd><code>.app-header__address</code>, внутренний <code>span</code> с эллипсисом</dd>
+      <dt>Контекст</dt><dd>Это глобальный хедер, а не сам объединённый экран, но обрезка воспроизводится на каждом кадре мобильной ширины и перекликается с прежним замечанием владельца по адресному хедеру.</dd>
+    </dl>
+  </article>
+
+  <article class="dev">
+    <div class="dev-head">
+      <span class="dev-id">О6</span>
+      <h3>На широких экранах левая колонка почти пустует</h3>
+      <span class="tag tag-warn">внимание</span>
+    </div>
+    <dl class="fact">
+      <dt>Кадр</dt><dd><code>wallet-money-768-light.png</code>, <code>wallet-money-1440-light.png</code></dd>
+      <dt>Маршрут</dt><dd><code>/profile/wallet</code></dd>
+      <dt>Вьюпорт × тема</dt><dd>768 и 1440 × обе темы</dd>
+      <dt>Ожидалось</dt><dd>Раздел 5.8: «двухколоночная композиция, блоки распределены без полупустых колонок и дыр».</dd>
+      <dt>Получено</dt><dd>Левая колонка (карта, подсказки, сегмент, сводка) — 560 px на 768 и 574 px на 1440; правая (лента) — 1613 px. Под сводкой остаётся примерно тысяча пикселей пустоты, пока лента продолжается.</dd>
+      <dt>Селектор</dt><dd><code>.wallet__col-a</code> / <code>.wallet__col-b</code> — <code>ProfileWallet.vue</code></dd>
+      <dt>Влияние</dt><dd>Среднее: композиция читается как «пустая левая половина», особенно на 1440.</dd>
+    </dl>
+    <figure>
+      <img src="assets/wallet-money-768-light.png" alt="Объединённый экран на 768 px">
+      <figcaption><b>768 · светлая</b>Лента уходит далеко вниз, левая колонка заканчивается на сводке счёта.</figcaption>
+    </figure>
+  </article>
+</section>
+
+<section id="notes">
+  <h2><span class="num">05</span>Наблюдения (не дефекты)</h2>
+  <div class="prose">
+    <p>Пять вещей, которые видно, но заводить их как баги этого экрана неверно — они либо унаследованы от канона, либо относятся к данным и соседним блокам.</p>
+  </div>
+  <ul class="plain">
+    <li><b>Н1 · Точки-индикаторы в тёмной теме</b> работают заметно лучше (активная — 8.38:1), так что проблема О1 именно световая, а не системная.</li>
+    <li><b>Н2 · Названия операций обрезаются эллипсисом на 768 и уже</b> («Вознаграждение амбассадора · за…»). Это разрешённая каноном обрезка <code>nowrap + ellipsis</code>, раскладка не ломается, но номер заказа при этом теряется; на 1440 подпись помещается целиком.</li>
+    <li><b>Н3 · Микротипографика 8.5 / 9.5 / 10.5 px</b> (подписи держателя, нижняя строка карты, день группы) пришла из демо-канона карты, а не из шкалы дизайн-системы. Читается, но это нижняя граница комфорта на мобильном.</li>
+    <li><b>Н4 · Правый подзаголовок сводки номинала</b> обрезается на 8 px — «Оператор платформ…», и выравнивается по первой строке двухстрочного заголовка. Мелочь, но заметная на 390.</li>
+    <li><b>Н5 · Смешение написаний «кэшбэк / кэшбек»</b> внутри продукта: на объединённом экране — «Кэшбэк за заказ», в сводке профиля — «Кэшбек за месяц». К объединённому экрану претензий нет, но стоит свести к одному написанию.</li>
+  </ul>
+</section>
+
+<section id="unverified">
+  <h2><span class="num">06</span>Что не удалось проверить</h2>
+  <div class="prose">
+    <p>Честный список того, что осталось за пределами проверки — чтобы не считать это подтверждённым.</p>
+  </div>
+  <ul class="plain">
+    <li><b>Сужение выдачи периодом визуально не подтверждено.</b> Запрос действительно уходит с <code>from</code>/<code>to</code> (<code>2026-09-01…2026-09-16</code> для «Месяца»), но все 40 живых проводок личного счёта лежат в сентябре, поэтому «Месяц» и «3 месяца» показывают тот же набор. Проверено, что фильтр доходит до сервера; проверить, что он сужает список, на текущих данных нельзя.</li>
+    <li><b>Чарджбэк и разворот на живых данных не встретились.</b> Направление чарджбэка как списания и разворота по знаку суммы подтверждено чтением <code>helpers/entries.ts</code>, но ни одной такой проводки в стенде нет — визуально не проверено.</li>
+    <li><b>Уровни LOVII PAY (PASS / VIP), «Выведено через СБП», доход представителя</b> — данных в API нет, скины статусов не задействованы. Это заранее оговорено как честное состояние, а не дефект, и в проверке не участвовало.</li>
+    <li><b>Вход через реальный UI (OTP) не проходился</b> — использовалась сохранённая сессия, чтобы не жечь лимит кодов.</li>
+    <li><b>Прямая пиксельная сверка «глазами»</b> не выполнялась: у модели этого запуска нет нативного зрения. Кадры разбирались автоматическим распознаванием изображений, спорные утверждения перепроверялись замерами DOM, стилей и API. Утверждения, которые нельзя подтвердить замером, помечены как наблюдения.</li>
+  </ul>
+</section>
+
+<section id="matrix">
+  <h2><span class="num">07</span>Матрица прогонов и артефакты</h2>
+  <table>
+    <caption>8 прогонов · на каждом: профиль, «Деньги», «Баллы», номинал, бизнес-счёт, оба редиректа</caption>
+    <thead><tr><th>Вьюпорт</th><th>Тема</th><th>Переполнение, px</th><th>Ошибки консоли</th><th>Композиция</th></tr></thead>
+    <tbody>
+      <tr><td class="num-cell">320×568</td><td>светлая</td><td class="num-cell">0</td><td class="num-cell">0</td><td>одна колонка</td></tr>
+      <tr><td class="num-cell">320×568</td><td>тёмная</td><td class="num-cell">0</td><td class="num-cell">0</td><td>одна колонка</td></tr>
+      <tr><td class="num-cell">390×844</td><td>светлая</td><td class="num-cell">0</td><td class="num-cell">0</td><td>одна колонка</td></tr>
+      <tr><td class="num-cell">390×844</td><td>тёмная</td><td class="num-cell">0</td><td class="num-cell">0</td><td>одна колонка</td></tr>
+      <tr><td class="num-cell">768×1024</td><td>светлая</td><td class="num-cell">0</td><td class="num-cell">0</td><td>две колонки</td></tr>
+      <tr><td class="num-cell">768×1024</td><td>тёмная</td><td class="num-cell">0</td><td class="num-cell">0</td><td>две колонки</td></tr>
+      <tr><td class="num-cell">1440×900</td><td>светлая</td><td class="num-cell">0</td><td class="num-cell">0</td><td>две колонки</td></tr>
+      <tr><td class="num-cell">1440×900</td><td>тёмная</td><td class="num-cell">0</td><td class="num-cell">0</td><td>две колонки</td></tr>
+    </tbody>
+  </table>
+
+  <div class="prose">
+    <p>Поведенческие сценарии, прогнанные сверх матрицы: свайп карусели и точки, поворот карты, копирование номера в буфер, фильтры «Все / Начисления / Списания» в обоих контурах, периоды «Всё время / Месяц / 3 месяца», серверная пагинация до последней страницы, пустые состояния (бизнес-счёт, «Списания», балловый период), цепочки чеков номинала, «назад» после редиректа, фокус с клавиатуры на 58 элементах, анти-FOUC и цвет <code>meta theme-color</code>.</p>
+  </div>
+
+  <figure>
+    <img src="assets/beh-nominal-chains.png" alt="Цепочки чеков на счёте оператора платформы">
+    <figcaption><b>Номинал · цепочки чеков</b>Полный цикл чека одной карточкой и честный итог «Транзит закрыт · 0 ₽»; разрезанная страницей цепочка не подводит ложный итог.</figcaption>
+  </figure>
+
+  <div class="fig-row">
+    <figure>
+      <img src="assets/beh-empty-company.png" alt="Пустое состояние бизнес-счёта">
+      <figcaption><b>Пустое состояние</b>Бизнес-счёт без проводок: «Операций пока нет», сегмента контура нет.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/beh-filter-out.png" alt="Фильтр «Списания» без результатов">
+      <figcaption><b>Фильтр «Списания»</b>«По этой категории пока нет операций» — на личном счёте списаний действительно нет.</figcaption>
+    </figure>
+  </div>
+
+  <div class="fig-row">
+    <figure>
+      <img src="assets/beh-points-out.png" alt="Балловый контур, фильтр «Списания» — пусто">
+      <figcaption><b>Баллы · пустое состояние</b>«В этом периоде операций нет» — списаний баллов на счёте нет, текст честный.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/profile-bottom-light.png" alt="Низ профиля">
+      <figcaption><b>Низ профиля</b>Одна юридическая карточка, порядок блоков и ритм не поехали.</figcaption>
+    </figure>
+  </div>
+
+  <div class="prose">
+    <p>Файлы реализации, к которым относятся отклонения: <code>src/modules/profile-balance/ProfileWallet.vue</code> (экран и его стили), <code>src/components/Ui/AppSegmentControl.vue</code> (сегмент контура), <code>src/modules/profile-module/ProfileModule.vue</code> (профиль-вход), <code>src/router/index.ts</code> (редиректы), <code>src/modules/profile-balance/helpers/feed-period.ts</code>, <code>helpers/wallet-history.ts</code>, <code>helpers/entries.ts</code>.</p>
+  </div>
+</section>
+
+</div>
+</div>
+
+<p class="colophon">Визуальная приёмка · сессия 109 · 2026-09-16 · lovii-app @ 3ecaccc · 74 кадра, 8 прогонов матрицы, 6 отклонений, 5 наблюдений</p>
+
+</div>
+</body>
+</html>

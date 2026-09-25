@@ -1,0 +1,277 @@
+{
+  "id": "guest-price-only",
+  "title": "Гость без LOVII в счастливые часы: скидка применяется, наград и кэшбэка нет (guest)",
+  "kind": "quote",
+  "campaigns": [
+    {
+      "campaign_id": "cmp_happy",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-05-happy-hours.json"
+    },
+    {
+      "campaign_id": "cmp_stamps",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-06-stamps.json"
+    },
+    {
+      "campaign_id": "cmp_cashback",
+      "version": 1,
+      "status": "active",
+      "published_at": "2026-09-01T00:00:00+03:00",
+      "spec_file": "../campaigns/lm-04-cashback-flat.json"
+    }
+  ],
+  "settings": {},
+  "context": {
+    "merchant_id": "mrc_daily",
+    "location_id": "loc_tverskoy",
+    "order_id": "ord_guest_1",
+    "channel": "qr",
+    "now": "2026-09-22T19:30:00+03:00",
+    "customer": null,
+    "items": [
+      {
+        "sku": "cd7",
+        "name": "Слойка с вишней",
+        "category": "bakery",
+        "price_minor": 18000,
+        "qty": 1,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd1",
+        "name": "Капучино",
+        "category": "coffee",
+        "price_minor": 22000,
+        "qty": 1,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      }
+    ],
+    "coupon_code": null,
+    "redeem_points": 0,
+    "state": {
+      "stamps": {},
+      "counters": {},
+      "subscriptions": [],
+      "challenges": {},
+      "coupons": [],
+      "lots": []
+    },
+    "catalog": [
+      {
+        "sku": "cd1",
+        "name": "Капучино",
+        "category": "coffee",
+        "price_minor": 22000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd2",
+        "name": "Латте",
+        "category": "coffee",
+        "price_minor": 25000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd3",
+        "name": "Эспрессо",
+        "category": "coffee",
+        "price_minor": 15000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd4",
+        "name": "Раф",
+        "category": "coffee",
+        "price_minor": 29000,
+        "tags": [
+          "drink"
+        ]
+      },
+      {
+        "sku": "cd5",
+        "name": "Чай",
+        "category": "tea",
+        "price_minor": 18000,
+        "tags": [
+          "drink",
+          "hot"
+        ]
+      },
+      {
+        "sku": "cd6",
+        "name": "Круассан",
+        "category": "bakery",
+        "price_minor": 16400,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd7",
+        "name": "Слойка с вишней",
+        "category": "bakery",
+        "price_minor": 18000,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd8",
+        "name": "Чизкейк",
+        "category": "dessert",
+        "price_minor": 32000,
+        "tags": [
+          "food",
+          "sweet"
+        ]
+      },
+      {
+        "sku": "cd9",
+        "name": "Тирамису",
+        "category": "dessert",
+        "price_minor": 35000,
+        "tags": [
+          "food",
+          "sweet"
+        ]
+      },
+      {
+        "sku": "cd10",
+        "name": "Сырники",
+        "category": "breakfast",
+        "price_minor": 34000,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "cd11",
+        "name": "Сэндвич",
+        "category": "breakfast",
+        "price_minor": 29000,
+        "tags": [
+          "food"
+        ]
+      },
+      {
+        "sku": "gc2000",
+        "name": "Сертификат 2 000 ₽",
+        "category": "gift_card",
+        "price_minor": 200000,
+        "tags": [
+          "gift"
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "after_discounts_minor": 34600,
+    "applied": [
+      {
+        "action_index": 0,
+        "action_type": "discount",
+        "campaign_id": "cmp_happy",
+        "campaign_version": 1,
+        "cost_minor": 5400,
+        "details": {
+          "mode": "percent",
+          "scope": "items",
+          "value": 30
+        },
+        "discount_minor": 5400,
+        "funding": "merchant",
+        "items": [
+          {
+            "discount_minor": 5400,
+            "qty": 1,
+            "sku": "cd7"
+          }
+        ],
+        "mechanic": "happy_hours",
+        "points": 0,
+        "title": "Выпечка −30 % ежедневно 19:00–21:00",
+        "ttl_days": null
+      }
+    ],
+    "cost_minor": 5400,
+    "coupon": null,
+    "coupons_issued": [],
+    "deferred": [],
+    "discount_total_minor": 5400,
+    "explain": [
+      {
+        "campaign_id": "cmp_happy",
+        "name": "Выпечка −30 % ежедневно 19:00–21:00",
+        "result": "applied"
+      },
+      {
+        "campaign_id": "cmp_cashback",
+        "name": "Кэшбэк 5 % баллами",
+        "reason": "guest",
+        "result": "skipped"
+      },
+      {
+        "campaign_id": "cmp_stamps",
+        "name": "6-й напиток бесплатно",
+        "reason": "guest",
+        "result": "skipped"
+      }
+    ],
+    "gross_total_minor": 40000,
+    "hints": [],
+    "lines": [
+      {
+        "category": "bakery",
+        "discount_minor": 5400,
+        "final_minor": 12600,
+        "name": "Слойка с вишней",
+        "price_minor": 18000,
+        "qty": 1,
+        "sku": "cd7"
+      },
+      {
+        "category": "coffee",
+        "discount_minor": 0,
+        "final_minor": 22000,
+        "name": "Капучино",
+        "price_minor": 22000,
+        "qty": 1,
+        "sku": "cd1"
+      }
+    ],
+    "local": {
+      "date": "2026-09-22",
+      "time": "19:30",
+      "timezone": "Europe/Moscow",
+      "weekday": 2
+    },
+    "lots_to_accrue": [],
+    "lots_to_redeem": [],
+    "notifications": [],
+    "paid_money_minor": 34600,
+    "points_redeem_max": 0,
+    "points_redeemed": 0,
+    "points_to_accrue": 0,
+    "reward_base_minor": 34600,
+    "stamps": []
+  }
+}
