@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LOVII · Конвейер: demo → локальный стенд → staging</title>
+<style>
+  :root{
+    --ink:#16130f; --ink-2:#4b443c; --ink-3:#857c71;
+    --paper:#faf8f4; --panel:#fff;
+    --rule:#ded7cb; --rule-2:#c6bdae;
+    --accent:#c02a63; --accent-soft:#f7e7ee;
+    --ok:#1c6f57; --wait:#a2621f; --bad:#a33232; --lab:#3a5f8a;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+       font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px 96px}
+  header.top{padding:56px 0 24px;border-bottom:1px solid var(--rule-2)}
+  .eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(26px,4.4vw,40px);line-height:1.08;margin:16px 0 14px;letter-spacing:-.02em;font-weight:700;max-width:24ch}
+  .lede{font-size:17px;color:var(--ink-2);max-width:76ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:22px;font-size:13px;color:var(--ink-3)}
+  .meta b{color:var(--ink-2);font-weight:600}
+  h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+     margin:52px 0 16px;font-weight:700;border-top:1px solid var(--rule);padding-top:24px}
+  h3{font-size:16px;margin:0 0 6px;font-weight:650;letter-spacing:-.01em}
+  p{margin:0 0 12px;color:var(--ink-2);max-width:84ch}
+  code{font-family:var(--mono);font-size:.86em;background:#f1ece3;padding:1px 5px;border-radius:2px}
+  strong{color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 10px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;border-bottom:1px solid var(--rule-2)}
+  td code{background:none;padding:0}
+  .tag{display:inline-block;font:600 11px/1.6 var(--sans);padding:2px 8px;border-radius:2px;border:1px solid var(--rule-2);color:var(--ink-2);background:#fbf9f5;white-space:nowrap}
+  .tag.lab{color:var(--lab);border-color:#b9c9dc;background:#eef2f8}
+  .tag.assemble{color:var(--ok);border-color:#a8cfc0;background:#eef7f3}
+  .tag.stage{color:var(--wait);border-color:#e0c3a2;background:#fbf3e8}
+  .tag.canon{color:var(--accent);border-color:#e6bcd0;background:var(--accent-soft)}
+
+  ol.flow{list-style:none;margin:0;padding:0;counter-reset:f}
+  ol.flow li{position:relative;padding:14px 0 14px 54px;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--ink-2)}
+  ol.flow li:last-child{border-bottom:0}
+  ol.flow li::before{counter-increment:f;content:counter(f);position:absolute;left:0;top:14px;
+    width:34px;height:22px;font:700 12px/22px var(--mono);color:#fff;background:var(--ink);text-align:center;border-radius:2px}
+  ol.flow b{color:var(--ink)}
+  ol.flow .where{display:block;margin-top:3px;font:600 11px/1.6 var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+
+  .rules{border-top:1px solid var(--rule)}
+  .rule{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--rule)}
+  .rule .n{font:700 13px/24px var(--mono);color:var(--accent)}
+  .rule .t{font-weight:680;font-size:15.5px;letter-spacing:-.01em}
+  .rule .d{font-size:14.5px;color:var(--ink-2);margin-top:4px;max-width:80ch}
+
+  .callout{margin:22px 0 6px;padding:16px 18px;border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:#fbf9f5;font-size:14.5px;color:var(--ink-2);max-width:84ch}
+  .callout b{color:var(--ink)}
+  .warn{border-left-color:var(--bad)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3)}
+  @media (max-width:720px){ ol.flow li{padding-left:44px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">LOVII · процесс · дизайн-система на приложение</div>
+    <h1>Конвейер доставки дизайна: демо → локальный стенд → staging</h1>
+    <p class="lede">Да, схема верная — и порядок правильный: сначала дёшево проектируем визуал в демо,
+      потом собираем на реальных данных под гейтами, и только потом публикуем предрелиз на staging.
+      Ниже — точная карта носителей и три правила, без которых схема разъедется.</p>
+    <div class="meta">
+      <span><b>Составлено:</b> 25.09.2026</span>
+      <span><b>Демо:</b> lovii.mobiap.com (GitHub Pages)</span>
+      <span><b>Предрелиз:</b> app-staging.lovii.ru</span>
+    </div>
+  </header>
+
+  <h2>01 · Ответ коротко</h2>
+  <p><strong>Да, «Кошелёк/баланс/операции/переводы» правильно начинать в демо.</strong> Это дешёвый
+    носитель: правишь → сразу видишь → откатываешь, без сборки и без гейтов. Когда визуал зафиксирован,
+    его переносят в приложение на реальные данные, и уже там включаются гейты и приёмка. staging — не место
+    для экспериментов, а полка предрелизной версии.</p>
+  <p>Одно уточнение к формулировке: носителей <strong>не три, а четыре</strong>. Вы не назвали канон
+    дизайн-системы — а именно он держит демо и приложение от расхождения (у вас уже было «два словаря имён»:
+    <code>.row</code> в каноне против <code>.row-item</code> в демо).</p>
+
+  <h2>02 · Четыре носителя</h2>
+  <table>
+    <thead><tr><th>Носитель</th><th>Роль</th><th>Что можно / нельзя</th><th>Гейты и адрес</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag canon">Канон</span><br><code>lovii-design</code></td>
+        <td>Источник истины по <b>значениям</b>: токены, типографика, радиусы, тени, доки.</td>
+        <td>Меняется редко и осознанно. Сюда попадает то, что стало правилом системы, а не разовый приём.</td>
+        <td>Сборка + <code>check-sync</code>. Версия 1.17.x.</td>
+      </tr>
+      <tr>
+        <td><span class="tag lab">Лаборатория</span><br><code>lovii-demo</code></td>
+        <td>Быстрые правки визуала. Статика без API, данные и роли — мок.</td>
+        <td><b>Можно:</b> свободно итерировать вид и поведение. <b>Нельзя:</b> считать это продуктом — логики и реальных данных здесь нет.</td>
+        <td>3 лёгких стража: <code>check-theme</code>, <code>check-classes</code>, <code>check-dead-scope</code>. Адрес: lovii.mobiap.com; локально — <code>127.0.0.1:8090</code>.</td>
+      </tr>
+      <tr>
+        <td><span class="tag assemble">Сборка</span><br>локальный стенд <code>lovii-app</code></td>
+        <td>Перенос визуала демо на реальную логику и данные.</td>
+        <td><b>Здесь</b> включаются токены-стражи и требования проекта. Ветка <code>feat/sz-076-demo-skin</code>, worktree <code>lovii-app-sz074</code>.</td>
+        <td><code>yarn dev</code> → <code>localhost:5173</code>, API staging; <code>yarn test</code> + страж токенов.</td>
+      </tr>
+      <tr>
+        <td><span class="tag stage">Предрелиз</span><br><code>staging</code></td>
+        <td>Публикация принятой версии на стенд.</td>
+        <td><b>Только после приёмки владельцем.</b> Ничего не мержим и не публикуем до явного «принято».</td>
+        <td>push в <code>staging</code> → автодеплой <code>app-staging.lovii.ru</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Плюс прод: <code>master</code> → <code>app.lovii.ru</code>, деплой вручную (<code>workflow_dispatch</code>).</p>
+
+  <h2>03 · Поток на примере кошелька</h2>
+  <ol class="flow">
+    <li><b>Проектируем визуал в демо.</b> Экран кошелька/операций/переводов правим в <code>lovii-demo</code>:
+      карточка, история (<code>tl-item</code>), сегменты, тона. Смотрим на живом стенде, откатываем смело.
+      <span class="where">lovii-demo · 127.0.0.1:8090</span></li>
+    <li><b>Фиксируем то, что стало правилом, в каноне.</b> Новые значения/классы — не «на месте», а в систему,
+      чтобы приложение брало их, а не копировало. <span class="where">lovii-design</span></li>
+    <li><b>Переносим на реальные данные.</b> В приложении: <code>profile-balance/*</code> натягивается по
+      визуалу демо — на токенах, под гейтом. Локально, горячий перезапуск. <span class="where">lovii-app · localhost:5173</span></li>
+    <li><b>Гейты.</b> <code>yarn test</code> зелёный, страж токенов не вырос, скрин-пара приложение↔демо 390/1280.
+      <span class="where">lovii-app · worktree</span></li>
+    <li><b>Вы принимаете локально.</b> Правки — сразу, на hot-reload. <span class="where">localhost:5173</span></li>
+    <li><b>После «принято» — публикация.</b> Мерж в <code>staging</code> → CI → <code>app-staging.lovii.ru</code>.
+      <span class="where">staging</span></li>
+  </ol>
+
+  <h2>04 · Три правила, без которых схема разъедется</h2>
+  <div class="rules">
+    <div class="rule">
+      <div class="n">1</div>
+      <div>
+        <div class="t">Поток «демо → канон → приложение», а не «демо → приложение копипастом»</div>
+        <div class="d">Копипаст с демо плодит третий словарь классов, и через месяц никто не поймёт, что главное.
+          Закреплённый в демо приём сначала становится правилом системы, потом переносится в приложение.</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="n">2</div>
+      <div>
+        <div class="t">Демо — это мок. Продукт — только приложение</div>
+        <div class="d">Данные и роли в демо лежат в <code>localStorage</code>, сервера нет. В демо фиксируем
+          <b>вид и поведение</b>; данные, логика, состояния — только в <code>lovii-app</code>.</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="n">3</div>
+      <div>
+        <div class="t">staging — после приёмки, а не вместо неё</div>
+        <div class="d">Экран, который делается по указанию владельца, публикуется только после «принято».
+          В <code>staging</code> в один момент пушит один агент; правило уже отработало откатом «Главной».</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>05 · Где что запускается</h2>
+  <table>
+    <thead><tr><th>Что</th><th>Как поднять</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td>Демо локально (рабочая копия)</td><td><code>docker compose up -d</code> в каталоге превью</td><td><code>http://127.0.0.1:8090/</code></td></tr>
+      <tr><td>Мои отчёты и артефакты</td><td>там же</td><td><code>http://127.0.0.1:8091/</code></td></tr>
+      <tr><td>Приложение локально</td><td><code>yarn dev</code> в worktree</td><td><code>http://localhost:5173</code> (API staging)</td></tr>
+      <tr><td>Предрелиз</td><td>автодеплой на push в <code>staging</code></td><td><code>https://app-staging.lovii.ru</code></td></tr>
+      <tr><td>Проверки демо</td><td><code>python3 scripts/check-theme.py --strict</code> и др.</td><td>в корне <code>lovii-demo</code></td></tr>
+      <tr><td>Проверки приложения</td><td><code>yarn test</code></td><td>в корне <code>lovii-app</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>06 · Нюансы, которые стоит знать сейчас</h2>
+  <div class="callout"><b>Локальное превью показывает не свежую копию демо.</b> Превью на <code>:8090</code>
+    раздаёт копию <code>sz062-2026-09-20/lovii-demo</code>, ветка <code>sz062-ds</code> — она отстаёт от
+    <code>master</code> на 2 коммита (там новые механики: «штампы», «счастливые часы», бюджет акции).
+    Перед экраном кошелька это стоит синхронизировать, иначе будем проектировать по устаревшей витрине.</div>
+  <div class="callout"><b>Кэш демо.</b> После правок CSS/JS поднимайте <code>?v=N</code> в <code>index.html</code>
+    (сейчас <code>lovii.css?v=171</code>) — иначе service worker отдаст старую версию. Помогает и ⌘⇧R.</div>
+  <div class="callout warn"><b>Кошелёк — запретная зона по логике.</b> В демо визуал делаем свободно.
+    В приложении — только визуальный слой: <code>ProfileWallet</code>/<code>PayCard</code> и скины карт
+    правятся только по карточке zcode. Скины карт — отдельная задача, в кошелёк не зашивать.</div>
+
+  <h2>07 · Кто что делает</h2>
+  <p>Разделение — по природе работы: быстрые визуальные итерации (демо) — на дизайне; инженерия под
+    гейтами (приложение) — на кодере. Задачи ставит постановщик (я) на оба слоя.</p>
+  <table>
+    <thead><tr><th>Слой</th><th>Кто</th><th>Что именно</th><th>Артефакт</th></tr></thead>
+    <tbody>
+      <tr><td>Демо <span class="tag lab">лаборатория</span></td><td><b>Я</b></td>
+        <td>Правки <code>index.html</code>, <code>css/lovii.css</code>, <code>js/*</code>; подъём <code>?v=</code>;
+          прогон стражей <code>check-theme/-classes/-dead-scope</code>; кадры экрана.</td>
+        <td>Живой стенд <code>:8090</code> + скрин-пара</td></tr>
+      <tr><td>Канон <span class="tag canon">система</span></td><td><b>Я</b> (предложение)</td>
+        <td>То, что стало правилом, фиксируется в системе — чтобы приложение брало, а не копировало.</td>
+        <td>Предложение в <code>lovii-design</code></td></tr>
+      <tr><td>ТЗ <span class="tag canon">постановка</span></td><td><b>Я</b></td>
+        <td>ТЗ по шаблону: эталон, точные файлы, токены, состояния, гейты. На демо — и на перенос.</td>
+        <td>Бриф / карточка задачи</td></tr>
+      <tr><td>Приложение <span class="tag assemble">сборка</span></td><td><b>Кодер</b></td>
+        <td>Vue-модуль и стили по визуалу демо, на токенах; <code>yarn test</code> + страж; скрин-пара; session-док.</td>
+        <td>Коммит в <code>feat/sz-076-demo-skin</code></td></tr>
+      <tr><td>Приёмка</td><td><b>Владелец</b></td><td>Смотрит локально, даёт правки или «принято».</td><td>«Принято» по экрану</td></tr>
+      <tr><td>Предрелиз <span class="tag stage">staging</span></td><td><b>Авто</b></td><td>Мерж принятого → CI → деплой.</td><td><code>app-staging.lovii.ru</code></td></tr>
+    </tbody>
+  </table>
+  <p><strong>Параллельность на один экран:</strong> пока кодер переносит уже принятый визуал в приложение,
+    я проектирую следующий экран в демо. Демо всегда идёт на шаг впереди приложения.</p>
+  <div class="callout warn"><b>Чего я не делаю:</b> не публикую демо на GitHub Pages без вашего «го»
+    (это внешняя публикация), не пушу и не мержу в <code>staging</code>, не трогаю запретные зоны
+    (логика кошелька, биллинг, чарджбэк).</div>
+
+  <footer>LOVII · конвейер дизайна · 25.09.2026 · lovii-design + lovii-demo + lovii-app</footer>
+</div>
+</body>
+</html>
