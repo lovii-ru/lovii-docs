@@ -6,6 +6,7 @@
 > роутинг заявки по промокоду профиля, кабинеты платформы). Рабочая заметка
 > (класс W), не канон. Числа (доли 40/40/20, подписка 599/199) — канон
 > `PARAMS.md`. Формат — [README](README.md).
+> **2026-09-25** (дельта 23–25.09: см. раздел ниже).
 
 ## Что это
 
@@ -208,6 +209,30 @@ failed, expired`.
 - ~~Верификация заявки (invoice → verified) не автоматизирована~~ — **закрыто
   20.09**: три пути (см. раздел «Заявка МСП»); вне кода остались только боевой
   банк (см. Б-5 в [00](00-zapusk-chego-ne-hvataet.md)) и инвойс PDF.
+
+## Дельта 23–25.09
+
+### `staging`: заявка МСП и настройки приложения
+
+- **Контракт `activity_type` в core сделан необязательным.** Валидация принимает `sometimes|nullable` и enum (`lovii-core/app/Http/Requests/Api/V1/CreatePartnerApplicationRequest.php:26-28`), а оба пути создания записи сохраняют отсутствующее значение как `null` (`lovii-core/app/Domain/Business/Actions/CreatePartnerApplicationAction.php:120-123,306-310`); миграция `activity_type` в `nullable` — `lovii-core/database/migrations/2026_09_25_100000_make_partner_application_activity_type_nullable.php:9-21`.
+  - Это изменение **не доведено до staging-app**: форма всё ещё показывает «Тип деятельности» (`lovii-app/src/modules/business-module/BusinessApply.vue:171-176`), делает выбор обязательным (`lovii-app/src/modules/business-module/composables/use-business-form.ts:83-85`) и отправляет значение в payload (`lovii-app/src/modules/business-module/composables/use-business-form.ts:110-115`; тип клиента остаётся non-nullable — `lovii-app/src/modules/business-module/api/business-api.ts:37-46`).
+  - Ресурсы core пока не приспособлены к `null`: `PartnerApplicationResource.php:29-30` и `PartnerApplicationApprovalResource.php:29-30` обращаются к `->value`/`->label()` без guard. Это риск несогласованного nullable-контракта, а не подтверждение, что весь путь заявки уже синхронизирован.
+
+- **DaData INN-lookup есть на backend staging.** `GET /business/inn-lookup` объявлен с `throttle:business-apply` в `lovii-core/routes/api.php:282-285`; контроллер принимает ИНН из 10 или 12 цифр, вызывает `findParty()` и возвращает ИНН, название, юридическую форму и адрес либо `404 party_not_found` / `503 lookup_unavailable` (`lovii-core/app/Http/Controllers/Api/V1/Business/LookupPartnerByInnController.php:27-58`).
+  - В staging-app отдельного вызова lookup нет: `BusinessApply.vue:126-137` отправляет только заявку через store, а API-файл перечисляет submit и получение текущей заявки (`lovii-app/src/modules/business-module/api/business-api.ts:61-75`). Поэтому подтверждено наличие backend-эндпоинта, но не автозаполнение поля в мобильной форме.
+
+- **Экран «Настройки» есть в staging-app.** Это отдельный `ProfileSettings` с разделами «Экран», «Приложение», «Уведомления» и «Безопасность» (`lovii-app/src/modules/profile-settings/ProfileSettings.vue:30-35`); пункт нижнего меню выводится в `NavBar.vue:39-43`, а маршрут `/settings` вложен в `MainLayout` (`lovii-app/src/router/index.ts:443-455`).
+  - В staging-сторе нет `activeMerchantId`, `activeMerchant` или `setActiveMerchant`: state и getters содержат только выборы точки/юрлица и списки партнёров/мерчантов (`lovii-app/src/modules/roles-module/store/msp.store.ts:45-99`).
+
+### Только feature-worktree: SZ-063, включение/выключение точки
+
+> **Не относится к staging.** Ниже только код worktree `lovii-core-sz063` и `lovii-app-sz063` (`feat/sz063-branch-on-off`); карточка SZ-063 открыта, отдельного отчёта и приёмки нет. В staging-контрактах этих полей и методов нет: `lovii-app/src/modules/roles-module/api/roles-api.ts:332-382`, а валидация staging-core не содержит `status`/`pause_minutes` (`lovii-core/app/Http/Controllers/Api/V1/Msp/UpdateMspBranchSettingsController.php:79-133`).
+
+- **App-контракт и UI.** `lovii-app-sz063/src/modules/roles-module/api/roles-api.ts:333-376` добавляет `status`, `paused_until_at`, `paused_until_local`, `availability` и `pause_options_minutes`; методы `mspSetBranchStatus()` и `mspPauseBranch()` — там же `:664-704`. Экран скрывает секцию состояния, если старый core не прислал `status` (`MspBranchSettings.vue:369-379`), и показывает включение, выключение и временное закрытие только при поддержке контракта (`MspBranchSettings.vue:1110-1201`).
+
+- **Core-правила.** `lovii-core-sz063/app/Http/Controllers/Api/V1/Msp/UpdateMspBranchSettingsController.php:134-175` принимает из приложения только `active`/`inactive` или `pause_minutes`; одновременная передача обоих полей даёт конфликт. `applyStatus()` сбрасывает срок закрытия, а `applyPause()` ставит `closed` и `paused_until_at` после проверки активности (`:216-223,297-342`). Платформа отдаёт варианты `[30, 60]` минут (`lovii-core-sz063/config/branches.php:5-20`), а колонка срока добавлена как nullable с индексом (`lovii-core-sz063/database/migrations/2026_09_21_180000_add_paused_until_at_to_merchant_branches_table.php:10-31`). Для покупателя статус точки сильнее расписания (`lovii-core-sz063/app/Domain/Merchant/Services/BranchAvailabilityResolver.php:14-33`).
+
+- **Отдельная feature-only работа SZ-076 — не часть SZ-063.** В `lovii-app-sz074` (ветка `feat/sz-076-demo-skin`) `msp.store.ts:22-24,48-53,110-120` добавляет `activeMerchantId` и `activeMerchant`, а `CabinetLayout.vue:5-6,222-226` подключает `MerchantSwitcher`/`BranchSwitcher`. Эти свитчеры нельзя приписывать SZ-063 или staging.
 
 ## Кандидаты в «не хватает» (решает владелец)
 
