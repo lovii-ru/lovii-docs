@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SZ-076 · Как ставить задачи кодеру — регламент и шаблон</title>
+<style>
+  :root{
+    --ink:#16130f; --ink-2:#4b443c; --ink-3:#857c71;
+    --paper:#faf8f4; --panel:#fff;
+    --rule:#ded7cb; --rule-2:#c6bdae;
+    --accent:#c02a63; --accent-soft:#f7e7ee;
+    --ok:#1c6f57; --wait:#a2621f; --bad:#a33232;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+       font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px 96px}
+  header.top{padding:56px 0 24px;border-bottom:1px solid var(--rule-2)}
+  .eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(26px,4.4vw,40px);line-height:1.08;margin:16px 0 14px;letter-spacing:-.02em;font-weight:700;max-width:22ch}
+  .lede{font-size:17px;color:var(--ink-2);max-width:74ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:22px;font-size:13px;color:var(--ink-3)}
+  .meta b{color:var(--ink-2);font-weight:600}
+  h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+     margin:52px 0 16px;font-weight:700;border-top:1px solid var(--rule);padding-top:24px}
+  h3{font-size:16px;margin:0 0 6px;font-weight:650;letter-spacing:-.01em}
+  p{margin:0 0 12px;color:var(--ink-2);max-width:82ch}
+  code{font-family:var(--mono);font-size:.86em;background:#f1ece3;padding:1px 5px;border-radius:2px}
+  .num{font-family:var(--mono);white-space:nowrap}
+  strong{color:var(--ink)}
+
+  .diag{display:grid;gap:0;border-top:1px solid var(--rule)}
+  .diag .row{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--rule)}
+  .diag .n{font:700 13px/24px var(--mono);color:var(--accent)}
+  .diag .t{font-weight:680;font-size:15.5px;letter-spacing:-.01em}
+  .diag .d{font-size:14.5px;color:var(--ink-2);margin-top:4px;max-width:78ch}
+  .diag em{color:var(--bad);font-style:normal;border-bottom:1px solid rgba(163,50,50,.35)}
+
+  .flow{list-style:none;margin:0;padding:0;counter-reset:f}
+  .flow li{position:relative;padding:14px 0 14px 52px;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--ink-2)}
+  .flow li:last-child{border-bottom:0}
+  .flow li::before{counter-increment:f;content:counter(f);position:absolute;left:0;top:14px;
+    width:32px;height:22px;font:700 12px/22px var(--mono);color:#fff;background:var(--ink);text-align:center;border-radius:2px}
+  .flow b{color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 8px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;border-bottom:1px solid var(--rule-2)}
+  td code{background:none;padding:0}
+
+  pre{margin:4px 0 8px;background:#fbf9f5;border:1px solid var(--rule-2);padding:16px 18px;overflow:auto;
+      font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--ink-2)}
+  pre b{color:var(--accent);font-weight:700}
+
+  .blocks{border-top:1px solid var(--rule)}
+  .blk{display:grid;grid-template-columns:200px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--rule)}
+  .blk .k{font-weight:680;font-size:14.5px;letter-spacing:-.01em}
+  .blk .k span{display:block;font:600 11px/1.6 var(--mono);color:var(--accent);margin-top:3px}
+  .blk .v{font-size:14px;color:var(--ink-2);max-width:70ch}
+  .blk .v code{font-size:.85em}
+
+  .flags{border-top:1px solid var(--rule)}
+  .flag{display:grid;grid-template-columns:1fr;gap:4px;padding:16px 0;border-bottom:1px solid var(--rule)}
+  .flag .h{display:flex;align-items:baseline;gap:10px}
+  .flag .b{font:600 11px/1 var(--sans);padding:3px 8px;border-radius:2px;border:1px solid var(--rule-2);color:var(--ink-2);background:#fbf9f5;text-transform:uppercase;letter-spacing:.06em}
+  .flag .b.bad{color:var(--bad);border-color:#e0bcbc;background:#fbeeee}
+  .flag .b.ok{color:var(--ok);border-color:#a8cfc0;background:#eef7f3}
+  .flag .txt{font-size:14.5px;color:var(--ink-2);max-width:80ch}
+  .flag .txt b{color:var(--ink)}
+
+  .callout{margin:22px 0 6px;padding:16px 18px;border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:#fbf9f5;font-size:14.5px;color:var(--ink-2);max-width:82ch}
+  .callout b{color:var(--ink)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3)}
+  @media (max-width:720px){
+    .blk{grid-template-columns:1fr;gap:6px}
+    .diag .row{grid-template-columns:32px 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">LOVII · SZ-076 · шкурка демо на приложение</div>
+    <h1>Как ставить задачи кодеру, чтобы экран принимался с первого раза</h1>
+    <p class="lede">Регламент постановки задач для кодинг-агента + рабочий шаблон ТЗ + заполненный
+      пример. Цель одна: убрать из задачи все решения, которые агент иначе примет сам —
+      а владелец потом будет разгребать руками.</p>
+    <div class="meta">
+      <span><b>Составлено:</b> 25.09.2026</span>
+      <span><b>Репозиторий:</b> lovii-app</span>
+      <span><b>Ветка:</b> feat/sz-076-demo-skin</span>
+      <span><b>Стенд:</b> localhost:5173 · API staging</span>
+    </div>
+  </header>
+
+  <h2>01 · Почему задача «не доделывается»</h2>
+  <p>Три причины, все видны в истории SZ-076. Каждая лечится одним и тем же — предзаполненным ТЗ.</p>
+  <div class="diag">
+    <div class="row">
+      <div class="n">1</div>
+      <div>
+        <div class="t">Агент решает за владельца — и решает «как быстрее»</div>
+        <div class="d">Когда в задаче не сказано <em>из чего</em> и <em>чем</em>, агент берёт привычное:
+          свой радиус, свой цвет, свой текст, свою иконку. Отсюда «выпадающий список» на 2 часа:
+          агент собрал контрол по-своему, а не по канону.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="n">2</div>
+      <div>
+        <div class="t">Не зафиксирована граница «что НЕ входит»</div>
+        <div class="d">Срез «Главной» был сделан и <em>откачен</em>: владелец про Главную не просил,
+          а структура в приложении другая — переносить 1:1 было нельзя. Это не ошибка кода — это
+          пропущенный блок «объём и решение».</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="n">3</div>
+      <div>
+        <div class="t">Нет гейта и нет приёмки — «готово» на глаз</div>
+        <div class="d">Экран считается сделанным только когда: <code>yarn test</code> зелёный,
+          DS-guard не вырос, есть скрин-пара 390/1280, и владелец сказал «принято». Без этого
+          «сделано» возвращается трижды.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>02 · Роли и цикл</h2>
+  <p>Разделение: постановщик (я) превращает указание владельца в точное ТЗ с путями, классами и
+    гейтами; кодер реализует ровно это и отчитывается артефактами; владелец принимает один раз.</p>
+  <ol class="flow">
+    <li><b>Владелец называет экран и порядок.</b> Без явного указания экран не берём — это уже стоило откатом Главной.</li>
+    <li><b>Постановщик пишет ТЗ</b> по шаблону: паспорт, решение, эталон демо, точные файлы, токены, состояния, гейты.</li>
+    <li><b>Кодер кодит в worktree</b> локально (<code>yarn dev</code>, API staging), ничего не мержит.</li>
+    <li><b>Гейты:</b> <code>yarn test</code> + DS-guard + скрин-пара приложение↔демо на 390 и 1280.</li>
+    <li><b>Владелец смотрит локально</b> и либо принимает, либо даёт правки — правки сразу на hot-reload.</li>
+    <li><b>После «принято»</b> — мерж в <code>staging</code> → CI → деплой. Раньше — нельзя.</li>
+  </ol>
+
+  <h2>03 · Анатомия ТЗ — 10 обязательных блоков</h2>
+  <p>Пустой блок = агент поставит туда своё допущение. Это и есть источник переделок.</p>
+  <div class="blocks">
+    <div class="blk"><div class="k">0. Паспорт<span>что/где/как</span></div>
+      <div class="v">ID и номер экрана, репозиторий, ветка, worktree, база (<code>origin/staging @ хеш</code>),
+        команда запуска стенда, <b>и чьё это указание с датой</b>.</div></div>
+    <div class="blk"><div class="k">1. Решение<span>in / out of scope</span></div>
+      <div class="v">Цель одним абзацем, что входит, <b>что НЕ входит</b> (явно), запретные зоны платформы
+        (кошелёк/биллинг/чарджбэк — только zcode).</div></div>
+    <div class="blk"><div class="k">2. Эталон<span>источник истины</span></div>
+      <div class="v">Файл и функция демо (<code>js/&lt;файл&gt;.js → &lt;render…&gt;</code>), список
+        классов к переносу, кадры-эталоны. Таблица соответствия «демо → приложение».</div></div>
+    <div class="blk"><div class="k">3. Целевые файлы<span>точные пути</span></div>
+      <div class="v">Таблица: путь в <code>src/</code> → что именно делаем. Не «экран заказов», а
+        <code>profile-orders/components/OrderPreview.vue</code>.</div></div>
+    <div class="blk"><div class="k">4. Переиспользовать<span>не изобретать</span></div>
+      <div class="v">Конкретные компоненты кита (<code>Ui/AppBadge</code>, <code>AppPagination</code>…),
+        примитивы шкуры (<code>scss/demo-skin/*</code>), иконки <code>LvIcon</code>. Правило: перед новым
+        контролом — grep по <code>src/components/Ui/</code>.</div></div>
+    <div class="blk"><div class="k">5. Токены и запреты<span>DS-guard</span></div>
+      <div class="v">Только токены; в новом коде нет <code>#hex</code>, <code>box-shadow:…</code>,
+        <code>border-radius:Npx</code>. Акцент выбора — <code>--lv-accent*</code>. Ритм:
+        <code>--lv-block-gap</code> (16) / <code>--lv-section-gap</code> (24).</div></div>
+    <div class="blk"><div class="k">6. Состояния + адаптив<span>3 состояния, 2 ширины</span></div>
+      <div class="v">loading / empty / error — что видит юзер в каждом. Ширины 390 и 1280; где демо
+        даёт 2 колонки — воспроизводим. Тап-таргет ≥44, обе темы.</div></div>
+    <div class="blk"><div class="k">7. Гейты<span>обязательны</span></div>
+      <div class="v"><code>yarn test</code> (format→lint→unit→type-check→build + DS-guard), скрин-пара,
+        тесты при изменении контрактов/тестидат.</div></div>
+    <div class="blk"><div class="k">8. Приёмка<span>процесс владельца</span></div>
+      <div class="v">Локально → владелец смотрит → «принято» → мерж. В <code>staging</code> раньше нельзя.</div></div>
+    <div class="blk"><div class="k">9. Отчёт<span>в том же цикле</span></div>
+      <div class="v">Session-док <code>docs/sessions/NNN-…</code>, отчёт в карточке SZ-076, коммит-нейминг,
+        строка в трекере. Что прислать на проверку: diff --stat, скрины, хвост <code>yarn test</code>.</div></div>
+  </div>
+
+  <h2>04 · Шаблон (копировать целиком)</h2>
+  <p>Файл шаблона: <code>deliverables/sz076-task-spec/TASK-template.md</code>. Каркас:</p>
+<pre><b>## 0. Паспорт</b>
+ID / экран · репо · ветка · worktree · база · запуск стенда · откуда указание
+
+<b>## 1. Решение</b>
+цель · in scope · OUT of scope · запретные зоны
+
+<b>## 2. Эталон</b>
+демо: js/&lt;файл&gt;.js → &lt;render…&gt; · классы к переносу · кадры · таблица «демо → приложение»
+
+<b>## 3. Целевые файлы</b>   (таблица: путь → что делаем)
+<b>## 4. Переиспользовать</b> (кит Ui/*, demo-skin/*, LvIcon)
+<b>## 5. Токены и запреты</b> (DS-guard: нет #hex / box-shadow / Npx)
+<b>## 6. Состояния + адаптив</b> (loading/empty/error · 390/1280)
+<b>## 7. Гейты</b>             (yarn test + скрин-пара + тесты)
+<b>## 8. Приёмка</b>           (локально → «принято» → мерж)
+<b>## 9. Отчёт</b>             (session-док · карточка · коммит)
+<b>## 10. Что прислать на проверку</b></pre>
+
+  <h2>05 · Пример — №8 «Заказы / карточка заказа»</h2>
+  <p>Как выглядит точное ТЗ в объёме. Полная версия — <code>deliverables/sz076-task-spec/example-orders.md</code>.</p>
+  <table>
+    <thead><tr><th>Блок</th><th>Содержимое примера</th></tr></thead>
+    <tbody>
+      <tr><td>Эталон</td><td><code>js/orders.js</code> → <code>renderOrdersMirror()</code>, <code>oOrderCard()</code>,
+        <code>renderOrderDetailMirror()</code>; классы <code>orders__list</code>, <code>order-preview__footer</code>,
+        <code>cart-info__products</code>, <code>row-item</code>, <code>cart-summary</code>, <code>sum-total</code></td></tr>
+      <tr><td>Файлы</td><td><code>profile-orders/OrdersModule.vue</code>, <code>components/OrderPreview.vue</code>,
+        <code>components/OrdersEmpty.vue</code>, <code>profile-order/ProfileOrder.vue</code>,
+        <code>components/OrderInfo.vue</code>, <code>OrderProducts.vue</code></td></tr>
+      <tr><td>Переиспользовать</td><td><code>Ui/AppBadge</code> (статус-чип), <code>Ui/AppPagination</code> (не трогать),
+        <code>Ui/AppSkeleton</code>, <code>LvIcon name="chev-right"</code></td></tr>
+      <tr><td>Открытый вопрос<br>владельцу</td><td>Текст пустого состояния: сейчас «Пока ничего нет» + кнопка;
+        в демо — «Заказов пока нет / Оформите первый заказ — история появится здесь». Предложение: текст по демо
+        (закон демо), кнопку оставить. Это единственное решение — и оно вынесено явно, а не оставлено агенту.</td></tr>
+      <tr><td>Найденный долг</td><td>В <code>OrdersEmpty.vue</code> литерал <code>border-radius:16px</code> —
+        заменить на <code>var(--lv-r-lg)</code> (понижение долга DS-guard).</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">Обрати внимание: в примере <b>один</b> открытый вопрос — и он вынесен в ТЗ как решение,
+    а не отдан агенту. Всё остальное предопределено кодом и демо. Именно это убирает «2 часа на список».</div>
+
+  <h2>06 · Красные флаги из истории</h2>
+  <div class="flags">
+    <div class="flag">
+      <div class="h"><span class="b bad">откат</span><h3 style="margin:0">Главная: сделали — откатили</h3></div>
+      <div class="txt">Причина: экран не был назван владельцем, а структура в приложении отличается от демо.
+        <b>Лечение:</b> блок 1 «откуда указание» + явный out-of-scope. Экран без указания не берём.</div>
+    </div>
+    <div class="flag">
+      <div class="h"><span class="b bad">2 часа</span><h3 style="margin:0">«Выпадающий список»</h3></div>
+      <div class="txt">Каскад юрлицо→мерчант→точка: агент собрал контрол без эталона (чип + шит-список),
+        владелец доделывал вручную. <b>Лечение:</b> блок 2 «эталон + классы» + блок 4 «переиспользовать
+        AppBottomSheet/примитивы». Такой контрол специфицируется один раз как шаблон-паттерн и переиспользуется.</div>
+    </div>
+    <div class="flag">
+      <div class="h"><span class="b ok">текущий долг</span><h3 style="margin:0">Словарь классов</h3></div>
+      <div class="txt">Демо и приложение называют одно и то же по-разному (<code>row-item</code> ↔ <code>.row</code>).
+        <b>Лечение:</b> в блоке 2 всегда указывать, какой словарь целевой (для SZ-076 — классы демо, порт в
+        <code>scss/demo-skin/</code>), чтобы агент не плодил третий.</div>
+    </div>
+  </div>
+
+  <footer>LOVII · SZ-076 · регламент постановки задач · 25.09.2026 · lovii-app / feat/sz-076-demo-skin</footer>
+</div>
+</body>
+</html>

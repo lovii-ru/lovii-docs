@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LOVII · «Перевод» в витрине — точный калькулятор и выбор источника</title>
+<style>
+  :root{
+    --ink:#16130f; --ink-2:#4b443c; --ink-3:#857c71;
+    --paper:#faf8f4; --rule:#ded7cb; --rule-2:#c6bdae;
+    --accent:#c02a63; --ok:#1c6f57; --wait:#a2621f; --bad:#a33232;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 24px 96px}
+  header.top{padding:56px 0 24px;border-bottom:1px solid var(--rule-2)}
+  .eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(26px,4.4vw,38px);line-height:1.1;margin:16px 0 14px;letter-spacing:-.02em;font-weight:700;max-width:26ch}
+  .lede{font-size:17px;color:var(--ink-2);max-width:78ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:22px;font-size:13px;color:var(--ink-3)}
+  .meta b{color:var(--ink-2);font-weight:600}
+  h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:50px 0 16px;font-weight:700;border-top:1px solid var(--rule);padding-top:24px}
+  p{margin:0 0 12px;color:var(--ink-2);max-width:84ch}
+  code{font-family:var(--mono);font-size:.86em;background:#f1ece3;padding:1px 5px;border-radius:2px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 12px}
+  th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;border-bottom:1px solid var(--rule-2)}
+  td code{background:none;padding:0}
+  .ok{color:var(--ok);font-weight:600}
+  .bad{color:var(--bad);font-weight:700}
+  .figs{display:flex;flex-wrap:wrap;gap:16px;margin:8px 0 4px}
+  figure{margin:0;border:1px solid var(--rule-2);border-radius:2px;background:#fff;padding:8px}
+  figure img{display:block;width:100%;max-width:230px;height:auto}
+  figcaption{font-size:12px;color:var(--ink-3);margin-top:6px}
+  .callout{margin:20px 0 6px;padding:16px 18px;border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:#fbf9f5;font-size:14.5px;color:var(--ink-2);max-width:86ch}
+  .callout.warn{border-left-color:var(--bad)}
+  .callout b{color:var(--ink)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">LOVII · SZ-076 · витрина · блок «Кошелёк»</div>
+    <h1>«Перевод» в витрине: точный калькулятор, промокод из 6 знаков, выбор источника</h1>
+    <p class="lede">Второй заход по вашим замечаниям. Калькулятор больше ничего не подменяет — считает ровно по введённой сумме
+      и показывает превышение явным сообщением. Промокод определяется как 6 знаков (цифры, буквы или смесь).
+      Источник перевода выбирается одним выпадающим списком.</p>
+    <div class="meta">
+      <span><b>Дата:</b> 25.09.2026</span>
+      <span><b>Стенд:</b> http://127.0.0.1:8090/#/transfer</span>
+      <span><b>Сборка витрины:</b> 126</span>
+    </div>
+  </header>
+
+  <h2>01 · Что исправлено и добавлено</h2>
+  <table>
+    <thead><tr><th>Замечание</th><th>Что сделано</th></tr></thead>
+    <tbody>
+      <tr><td>«1% от 1500 — не 10 ₽»</td>
+          <td>Верно, и это моя ошибка: в прошлой версии сумма <b>молча ужималась</b> до 1 000 ₽ (на демо-кошельке было 1 250 ₽, резерв 100 ₽), поэтому и считалось для 1000. Теперь калькулятор считает <b>ровно по введённой сумме</b>: <b>1 500 ₽ → 1,5% → 22,50 ₽</b>, спишется 1 522,50 ₽</td></tr>
+      <tr><td>«максимум 3000 за раз, а ты всё для другой суммы»</td>
+          <td>Подмены нет: при 3 500 ₽ считаем 3,5% = 122,50 ₽ и отдельно пишем «Максимум за раз — 3 000 ₽», кнопка заблокирована. Демо-баланс поднят до 4 800 ₽, чтобы лимит 3 000 ₽ можно было проверить</td></tr>
+      <tr><td>«промокод = 6 символов, может быть и цифрами»</td>
+          <td>Определение исправлено: 6 знаков любой природы → <b>Промокод</b> (проверено: <code>AB12CD</code>, <code>123456</code>, <code>ABCDEF</code>). 11 цифр → Телефон, 13+ → Карта LOVII PAY</td></tr>
+      <tr><td>«переводы — отдельный экран, нужен выбор источника»</td>
+          <td>Верно. Добавлен один выпадающий список <b>Откуда</b>: Личный счёт (PAY) · Счёт компании. Выбор «Способ» убран (определяется по вводу)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>02 · Точная сетка комиссии (из config/transfers.php)</h2>
+  <table>
+    <thead><tr><th>Сумма</th><th>Ступень</th><th>Комиссия</th><th>Спишется</th></tr></thead>
+    <tbody>
+      <tr><td>100 ₽</td><td>0,5%</td><td>0,50 ₽</td><td>100,50 ₽</td></tr>
+      <tr><td>450 ₽</td><td>0,5%</td><td>2,25 ₽</td><td>452,25 ₽</td></tr>
+      <tr><td>1 000 ₽</td><td>1,0%</td><td>10,00 ₽</td><td>1 010,00 ₽</td></tr>
+      <tr><td><b>1 500 ₽</b></td><td><b>1,5%</b></td><td><b>22,50 ₽</b></td><td><b>1 522,50 ₽</b></td></tr>
+      <tr><td>2 000 ₽</td><td>2,0%</td><td>40,00 ₽</td><td>2 040,00 ₽</td></tr>
+      <tr><td>3 000 ₽</td><td>3,0%</td><td>90,00 ₽</td><td>3 090,00 ₽</td></tr>
+      <tr><td>свыше 3 000</td><td>—</td><td>считаем, но кнопка заблокирована</td><td>«Максимум за раз — 3 000 ₽»</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn"><b>Расхождение с прежним каноном.</b> 24.09 было решено «не отвергать сумму, а мягко доводить до
+    корректной». Ваше сегодняшнее требование — точный калькулятор — противоречит этому. Я выбрал точность: считаем по введённой
+    сумме и пишем, что не так. Если вернуть «мягкое доведение» — одно слово.</div>
+
+  <h2>03 · Проверка (прогон)</h2>
+  <table>
+    <thead><tr><th>Проверка</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr><td>Форма</td><td class="ok">1 выпадающий список (источник) + 2 поля ввода</td></tr>
+      <tr><td>Промокод</td><td class="ok">AB12CD · 123456 · ABCDEF → «Промокод»</td></tr>
+      <tr><td>Телефон / карта</td><td class="ok">11 цифр → Марина К.; 13+ → Игорь В.</td></tr>
+      <tr><td>Комиссия по сумме</td><td class="ok">450 → 2,25 ₽ · 1000 → 10 ₽ · 1500 → 22,50 ₽ · 3000 → 90 ₽</td></tr>
+      <tr><td>Лимит</td><td class="ok">3500 ₽ — расчёт показан, кнопка выключена, сообщение о максимуме</td></tr>
+      <tr><td>Источник «Счёт компании»</td><td class="ok">поле получателя скрыто, комиссия 0 ₽, CTA «Зачислить баллы»</td></tr>
+      <tr><td>Экран успеха</td><td class="ok">«Перевод выполнен» · «Сергей П. · +7 ••••-••-88 · комиссия 22,50 ₽» · «−1 522,50 ₽»</td></tr>
+      <tr><td>Стражи витрины / рантайм</td><td class="ok">тема · классы · мёртвые привязки · скобки — зелёные; 0 ошибок, 0 переполнений</td></tr>
+    </tbody>
+  </table>
+
+  <div class="figs">
+    <figure><img src="assets/transfer4-filled-390.png" alt="Форма с точным расчётом"><figcaption>Точный расчёт · 390</figcaption></figure>
+    <figure><img src="assets/transfer4-done-390.png" alt="Экран успеха"><figcaption>Успех · 390</figcaption></figure>
+    <figure><img src="assets/transfer4-business-390.png" alt="Источник — счёт компании"><figcaption>Источник: счёт компании · 390</figcaption></figure>
+  </div>
+
+  <h2>04 · Где какая операция живёт</h2>
+  <table>
+    <thead><tr><th>Операция</th><th>Где на экране</th></tr></thead>
+    <tbody>
+      <tr><td>Личный счёт (PAY) → другому пользователю</td><td>основной сценарий (источник = Личный счёт)</td></tr>
+      <tr><td>Счёт компании → себе в PAY (0%)</td><td>источник = Счёт компании (поле получателя исчезает)</td></tr>
+      <tr><td>PAY → себе на счёт компании (по сетке)</td><td>тихая ссылка внизу: «Себе: PAY → счёт компании»</td></tr>
+    </tbody>
+  </table>
+
+  <footer>LOVII · SZ-076 · «Перевод» · точный калькулятор · 25.09.2026</footer>
+</div>
+</body>
+</html>

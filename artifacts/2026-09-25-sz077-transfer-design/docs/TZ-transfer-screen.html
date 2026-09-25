@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LOVII · ТЗ: экран «Перевод» + единый узел переводов</title>
+<style>
+  :root{
+    --ink:#16130f; --ink-2:#4b443c; --ink-3:#857c71;
+    --paper:#faf8f4; --rule:#ded7cb; --rule-2:#c6bdae;
+    --accent:#c02a63; --ok:#1c6f57; --wait:#a2621f; --bad:#a33232;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px 96px}
+  header.top{padding:56px 0 24px;border-bottom:1px solid var(--rule-2)}
+  .eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(26px,4.4vw,38px);line-height:1.1;margin:16px 0 14px;letter-spacing:-.02em;font-weight:700;max-width:28ch}
+  .lede{font-size:17px;color:var(--ink-2);max-width:80ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:22px;font-size:13px;color:var(--ink-3)}
+  .meta b{color:var(--ink-2);font-weight:600}
+  h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:52px 0 16px;font-weight:700;border-top:1px solid var(--rule);padding-top:24px}
+  h3{font-size:15.5px;margin:22px 0 8px;font-weight:680;letter-spacing:-.01em}
+  p{margin:0 0 12px;color:var(--ink-2);max-width:84ch}
+  code{font-family:var(--mono);font-size:.86em;background:#f1ece3;padding:1px 5px;border-radius:2px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 12px}
+  th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;border-bottom:1px solid var(--rule-2)}
+  td code{background:none;padding:0}
+  ul,ol{margin:6px 0 12px;padding-left:20px;color:var(--ink-2);max-width:86ch}
+  li{margin:3px 0}
+  .yes{color:var(--ok);font-weight:700}
+  .no{color:var(--bad);font-weight:700}
+  .flow{border:1px solid var(--rule-2);background:#fbf9f5;padding:18px;margin:8px 0 12px;font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--ink-2);overflow:auto;white-space:pre}
+  .flow b{color:var(--accent);font-family:var(--sans);font-weight:700}
+  .callout{margin:20px 0 6px;padding:16px 18px;border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:#fbf9f5;font-size:14.5px;color:var(--ink-2);max-width:86ch}
+  .callout.warn{border-left-color:var(--bad)}
+  .callout b{color:var(--ink)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">LOVII · SZ-076 · ТЗ для кодинг-агента</div>
+    <h1>Экран «Перевод» + единый узел переводов (обход невозможен)</h1>
+    <p class="lede">Задача на два слоя: привести экран перевода в приложении к эталону витрины и закрыть систему
+      так, чтобы перевод существовал ровно в одной точке — с тремя обязательными проверками, инвариантом
+      транзитного счёта и детектором обхода.</p>
+    <div class="meta">
+      <span><b>Дата:</b> 25.09.2026</span>
+      <span><b>Репозитории:</b> lovii-app · lovii-core · lovii-admin</span>
+      <span><b>Эталон:</b> витрина <code>#/transfer</code> (сборка 126)</span>
+      <span><b>Исполнитель:</b> zcode (зона кошелька/балансов)</span>
+    </div>
+  </header>
+
+  <h2>01 · Суть задачи</h2>
+  <table>
+    <thead><tr><th>Слой</th><th>Что делаем</th></tr></thead>
+    <tbody>
+      <tr><td>Приложение <code>lovii-app</code></td><td>Экран перевода по витрине: одно поле адресата, сумма, точный авто-расчёт, выпадающий выбор источника, экран успеха</td></tr>
+      <tr><td>Бэкенд <code>lovii-core</code></td><td>Единый узел <code>TransferService</code>: три проверки, идемпотентность, инвариант транзита, одна точка подписи</td></tr>
+      <tr><td>Админка <code>lovii-admin</code></td><td>Закрыть обходной путь правки баланса; расширить настройку комиссий по типам переводов</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn"><b>Ограничение зоны.</b> Кошелёк и балансы — зона <b>zcode</b>
+    (канон <code>WORK_PROTOCOL.md §1.2</code>): правки по своей карточке с приёмкой владельца.
+    Другому агенту эту задачу отдавать нельзя.</div>
+
+  <h2>02 · Обходные пути, которые нужно найти и закрыть</h2>
+  <p>Инвентаризация проведена по коду. Каждую точку исполнитель подтверждает сам и даёт решение.</p>
+  <table>
+    <thead><tr><th>Место</th><th>Что делает</th><th>Решение</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>lovii-admin/…/DatabaseWalletService.php</code> → <code>adjustBalance()</code></td>
+        <td><b>Прямой</b> <code>wallets.balance += X</code> + запись <code>WalletTransaction(adjustment)</code> — в обход узла, лимитов, резерва и транзитного номинала</td>
+        <td class="no">Закрыть: удалить либо провести через единый узел с причиной, аудитом и ledger</td>
+      </tr>
+      <tr><td><code>TransferService.php</code></td><td>единый узел (3 направления)</td><td class="yes">Оставить единственным создателем переводов</td></tr>
+      <tr><td><code>LoyaltyService</code> (earn/spend/refund)</td><td>начисления/списания за заказы</td><td>Оставить, явно отделить от переводов</td></tr>
+      <tr><td><code>SubscriptionBillingService</code></td><td>списание подписки</td><td>Оставить (не перевод), через тот же номинал</td></tr>
+      <tr><td><code>PayoutService</code></td><td>вывод с PAY</td><td>Оставить; проверить путь через <code>platform_nominal</code></td></tr>
+      <tr><td><code>AccrualRouter</code></td><td>маршрутизация начислений</td><td>Оставить (начисления)</td></tr>
+      <tr><td><code>ConvertUserLedgerTailsCommand</code>, <code>BackfillCashbackLegsCommand</code></td><td>разовые исторические команды</td><td>Пометить историческими: запуск только по карточке</td></tr>
+      <tr><td>Админ-лента <code>AccountTransfers</code></td><td>просмотр переводов</td><td>Оставить <b>только чтение</b> — без действий, меняющих баланс</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>Правило, которое закрепляем:</b> <code>AccountTransfer</code> и
+    <code>WalletTransaction</code> типов <code>transfer</code>/<code>fee</code> создаются <b>только</b> внутри
+    <code>TransferService</code>. Всё остальное — нарушение, которое ловит страж-тест.</div>
+
+  <h2>03 · Три проверки в момент перевода</h2>
+  <p>Всё — в одной <code>DB::transaction</code>, до записи. Нарушение любой → <code>422</code> и ни одной записи.</p>
+  <ol>
+    <li><b>Балансы.</b> Источник под <code>lockForUpdate</code>. PAY: <code>сумма + комиссия ≤ баланс − 100 ₽</code>.
+      Счёт компании: <code>сумма ≤ баланс</code>. Проверка <b>под блокировкой</b>, а не до неё — защита от гонки.</li>
+    <li><b>Дубли (идемпотентность).</b> Поле <code>idempotency_key</code> + unique-индекс. Повторный запрос с тем же
+      ключом возвращает <b>тот же</b> перевод и не создаёт второй транзакции. Плюс запрет перевода самому себе.</li>
+    <li><b>Правила.</b> <code>100 ₽ ≤ сумма ≤ 3 000 ₽</code>; тариф по ступеням; направление из белого списка;
+      получатель найден и не является отправителем.</li>
+  </ol>
+
+  <h2>04 · Инвариант транзитного счёта</h2>
+  <p>Любой перевод идёт через <code>platform_nominal</code>; по каждой транзакции номинал — в ноль:</p>
+  <div class="flow">с комиссией:   +(сумма + комиссия)  − сумма  − комиссия  = 0
+без комиссии:  +сумма             − сумма              = 0   ← <b>сколько пришло, столько ушло</b></div>
+  <ul>
+    <li>Проверка-тест: сумма проводок <code>platform_nominal</code> по <code>transfer_id</code> = 0.</li>
+    <li>Расхождение → инцидент P1, алерт админу (канон <code>FINANCIAL_CONTOUR.md §5.4</code>, допуск 0).</li>
+  </ul>
+
+  <h2>05 · Одна точка подписи и детектор обхода</h2>
+  <ul>
+    <li>Все записи одного перевода — <code>AccountTransfer</code> + <code>WalletTransaction</code> + проводки ledger —
+      в <b>одной</b> транзакции и в <b>одном</b> месте, с <code>transfer_id</code> и <code>split_role</code> у каждой ноги.</li>
+    <li>Перевод, созданный не через узел (остаточный интерфейс, консоль, админка), должен <b>не создавать транзакцию</b>,
+      а возвращать пользователя с ошибкой <code>transfer_unknown_origin</code>.</li>
+    <li><b>Страж-тест:</b> скан кода падает, если <code>AccountTransfer::query()->create</code> или
+      <code>WalletTransaction::query()->create</code> с типом transfer/fee встречается вне <code>TransferService</code>.</li>
+  </ul>
+
+  <h2>06 · Гейты</h2>
+  <table>
+    <thead><tr><th>Слой</th><th>Проверка</th></tr></thead>
+    <tbody>
+      <tr><td>app</td><td><code>yarn test</code> (format → lint → unit → type-check → build + DS-guard) — зелёный</td></tr>
+      <tr><td>core</td><td><code>AccountTransferTest</code>, <code>TransferInvariantsTest</code> + новые на идемпотентность и инвариант номинала</td></tr>
+      <tr><td>страж</td><td>«единый узел» — зелёный; старый <code>adjustBalance</code> недоступен</td></tr>
+      <tr><td>визуал</td><td>скрин-пара приложение ↔ витрина на 390 и 1280</td></tr>
+    </tbody>
+  </table>
+
+  <h2>07 · Приёмка и отчёт</h2>
+  <ul>
+    <li>Локально → владелец смотрит → «принято» → мерж в <code>staging</code>. Раньше — нельзя.</li>
+    <li>Session-док <code>lovii-app/docs/sessions/NNN-…</code> + отчёт в карточке <code>SZ-076-demo-skin-restyle.md</code>.</li>
+    <li>Прислать: <code>git diff --stat</code>, скрин-пары 390/1280, хвост <code>yarn test</code>, вывод core-тестов,
+      список закрытых обходных путей и перечень оставленного с обоснованием.</li>
+  </ul>
+
+  <div class="callout"><b>Первый шаг исполнителя — до кода.</b> Найти <b>все</b> точки, двигающие балансы и создающие
+    переводы, и вернуть список с решением по каждой (закрыть / оставить и почему). Ожидаемые находки — в §02,
+    но их нужно подтвердить по факту, а не по этому документу.</div>
+
+  <footer>LOVII · SZ-076 · ТЗ: экран «Перевод» + единый узел · 25.09.2026</footer>
+</div>
+</body>
+</html>

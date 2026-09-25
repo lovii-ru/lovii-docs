@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LOVII · Переводы: направления, типы, пути, чарджбэк-аналог</title>
+<style>
+  :root{
+    --ink:#16130f; --ink-2:#4b443c; --ink-3:#857c71;
+    --paper:#faf8f4; --rule:#ded7cb; --rule-2:#c6bdae;
+    --accent:#c02a63; --ok:#1c6f57; --wait:#a2621f; --bad:#a33232; --lab:#3a5f8a;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px 96px}
+  header.top{padding:56px 0 24px;border-bottom:1px solid var(--rule-2)}
+  .eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(26px,4.4vw,38px);line-height:1.1;margin:16px 0 14px;letter-spacing:-.02em;font-weight:700;max-width:26ch}
+  .lede{font-size:17px;color:var(--ink-2);max-width:78ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:22px;font-size:13px;color:var(--ink-3)}
+  .meta b{color:var(--ink-2);font-weight:600}
+  h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:52px 0 16px;font-weight:700;border-top:1px solid var(--rule);padding-top:24px}
+  h3{font-size:15.5px;margin:22px 0 8px;font-weight:680;letter-spacing:-.01em}
+  p{margin:0 0 12px;color:var(--ink-2);max-width:84ch}
+  code{font-family:var(--mono);font-size:.86em;background:#f1ece3;padding:1px 5px;border-radius:2px}
+  ul{margin:6px 0 12px;padding-left:20px;color:var(--ink-2);max-width:84ch}
+  li{margin:3px 0}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 12px}
+  th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;border-bottom:1px solid var(--rule-2)}
+  td code{background:none;padding:0}
+  .yes{color:var(--ok);font-weight:700}
+  .no{color:var(--bad);font-weight:700}
+  .part{color:var(--wait);font-weight:700}
+  .flow{border:1px solid var(--rule-2);background:#fbf9f5;padding:18px;margin:8px 0 12px;font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--ink-2);overflow:auto;white-space:pre}
+  .flow b{color:var(--accent);font-family:var(--sans);font-weight:700}
+  .num{font-family:var(--mono);white-space:nowrap}
+  .callout{margin:20px 0 6px;padding:16px 18px;border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:#fbf9f5;font-size:14.5px;color:var(--ink-2);max-width:86ch}
+  .callout.warn{border-left-color:var(--bad)}
+  .callout b{color:var(--ink)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">LOVII · домен · переводы PAY-баллов</div>
+    <h1>Переводы: направления, типы транзакций, пути и чарджбэк-аналог</h1>
+    <p class="lede">Разбор по коду и канону (не по памяти): какие направления реально работают,
+      какие только в схеме, как деньги и баллы идут через транзитный счёт, и что нужно,
+      чтобы перевод можно было развернуть «аналогом чарджбэка». Ниже — проверка каждого вашего тезиса.</p>
+    <div class="meta">
+      <span><b>Источники:</b> lovii-core (TransferService, TransferResolver, config/transfers.php, миграции)</span>
+      <span><b>Канон:</b> PAY_POINTS_MODEL.md §1,§5 · FINANCIAL_CONTOUR.md §5.3,§5.5</span>
+      <span><b>Дата:</b> 25.09.2026</span>
+    </div>
+  </header>
+
+  <h2>01 · Проверка ваших тезисов</h2>
+  <table>
+    <thead><tr><th>Ваш тезис</th><th>Вердикт</th><th>Как в коде/каноне</th></tr></thead>
+    <tbody>
+      <tr><td>Перевод кому-то по номеру карты или телефона</td><td class="yes">верно, +1 способ</td>
+        <td>Три способа адресации: <code>phone</code> (11 цифр), <code>promo</code> (промокод представителя), <code>card</code> (13+ цифр). Все ведут к <b>пользователю</b> (<code>TransferResolver</code>).</td></tr>
+      <tr><td>Если карта отправителя pay/pass/vip — по правилам перевода баллов</td><td class="yes">верно по сути</td>
+        <td>pay/pass/vip — это <b>один</b> личный балловый кошелёк (<code>wallets</code>), скины косметические. Источник всегда — кошелёк; правила — тарифная сетка.</td></tr>
+      <tr><td>Тип карты получателя не влияет</td><td class="yes">верно</td>
+        <td>P2P всегда зачисляет <b>баллы в кошелёк</b> получателя (<code>execute()</code> → <code>toWallet</code>). Карта — лишь идентификатор владельца, тип скина в переводе не участвует. (Различие «деньги/баллы по типу получателя» — только для начислений, §1 канона, не для P2P.)</td></tr>
+      <tr><td>Бизнес → бизнес без комиссии</td><td class="no">не реализовано</td>
+        <td>Такого направления <b>нет ни в коде, ни в каноне</b>. Есть только Business → PAY своего профиля. Схема БД допускает (<code>from_account_id</code>+<code>to_account_id</code>), но сервиса нет — нужно ваше решение.</td></tr>
+      <tr><td>Бизнес → pay/pass/vip «по своим правилам»</td><td class="part">неточно</td>
+        <td>Канон: <b>Business → PAY = 0%</b> (это «свои деньги, свой счёт», единственный легальный путь «деньги → баллы»). Если имелось в виду «бизнес → чужому пользователю» — этого направления нет, нужен новый сервис.</td></tr>
+      <tr><td>Всегда есть конкретная карта, с которой отправляем</td><td class="part">верно для UI, не для модели</td>
+        <td>В модели источник — <b>кошелёк</b> (личный) или <b>счёт</b> (компании). Карта в отправке — только визуальный выбор. Две категории: пользовательская (кошелёк) и бизнес (счёт партнёра).</td></tr>
+      <tr><td>Тип транзакции «перевод»</td><td class="yes">верно</td>
+        <td><code>wallet_transactions.type = transfer</code> (+ <code>fee</code> — комиссия отдельной строкой, решение 24.09). В ledger отдельного типа нет: используется <code>adjustment</code> с <code>split_role</code>.</td></tr>
+      <tr><td>Всё через транзитный счёт платформы; с него — получателю и комиссия оператору</td><td class="yes">точно так</td>
+        <td>Счёт <code>platform_nominal</code> (номинальный, SZ-043). На каждой транзакции номинал nets to 0; комиссия уходит на счёт <b>оператора</b> (<code>payments.split.operator_partner_id</code>, «АКСИОМА»).</td></tr>
+      <tr><td>Запускать «аналог чарджбэка» для переводов</td><td class="no">не реализовано</td>
+        <td>Чарджбэк-контур привязан к <code>order_id</code>/<code>payment_id</code> (Order/Payment). У <code>account_transfers</code> есть поле <code>status</code>, но <b>нет разворота</b>. Ниже — предложение.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>02 · Матрица направлений</h2>
+  <p>«Реализовано» = есть метод сервиса и проводки. «Схема» = таблица может выразить, сервиса нет.</p>
+  <table>
+    <thead><tr><th>Откуда → Куда</th><th>Комиссия</th><th>Статус</th><th>Где</th></tr></thead>
+    <tbody>
+      <tr><td>Личный кошелёк (PAY) → другой пользователь</td><td>сетка 0,5–3,5%</td><td class="yes">реализовано</td><td><code>execute()</code>, <code>source_type=pay</code></td></tr>
+      <tr><td>Личный кошелёк (PAY) → свой счёт компании</td><td>сетка 0,5–3,5%</td><td class="yes">реализовано</td><td><code>executePayToBusiness()</code>, <code>pay_to_business</code></td></tr>
+      <tr><td>Счёт компании → свой кошелёк (PAY)</td><td><b>0%</b></td><td class="yes">реализовано</td><td><code>executeBusinessToPay()</code>, <code>business</code></td></tr>
+      <tr><td>Счёт компании → другой бизнес</td><td>—</td><td class="no">отказано</td><td>решение владельца 25.09</td></tr>
+      <tr><td>Счёт компании → чужому пользователю (PAY)</td><td>—</td><td class="no">отказано</td><td>решение владельца 25.09</td></tr>
+      <tr><td>Бизнес-карта → бизнес-карта (в т.ч. B2B по номеру карты)</td><td>настраивается в админке</td><td class="part">на уточнении</td><td>«Бизнес → бизнес = надо» ↔ «счёт компании → другой бизнес = отказать» — противоречие, нужен выбор</td></tr>
+      <tr><td>Личный кошелёк → карта партнёра/МСП</td><td>—</td><td class="no">нет</td><td>резолвер карт ведёт только к <code>user_id</code> (можно расширить до <code>partner_id</code>)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn"><b>Поправка:</b> «бизнес → бизнес» сейчас — не правило, а отсутствующее направление. Владелец
+    25.09 сказал «надо», но тут же отказал «счёт компании → другой бизнес» — это противоречие, зафиксировано выше и вынесено
+    в уточнение. Если направление делаем: комиссия — настраиваемая, получатель — бизнес по номеру карты (см. §07).</div>
+
+  <h2>03 · Типы и сущности</h2>
+  <table>
+    <thead><tr><th>Слой</th><th>Значения</th></tr></thead>
+    <tbody>
+      <tr><td><code>wallet_transactions.type</code> (баллы)</td><td><code>earn</code> · <code>spend</code> · <code>refund</code> · <code>adjustment</code> · <b><code>transfer</code></b> · <b><code>fee</code></b> (комиссия отдельной строкой)</td></tr>
+      <tr><td><code>account_transfers.source_type</code></td><td><code>pay</code> · <code>business</code> · <code>pay_to_business</code></td></tr>
+      <tr><td><code>account_transfers.status</code></td><td><code>completed</code> (по умолчанию). <b>Разворота нет</b></td></tr>
+      <tr><td><code>account_transfers</code> — счёт-источник/получатель</td><td><code>from_wallet_id</code> / <code>to_wallet_id</code> (nullable) · <code>from_account_id</code> / <code>to_account_id</code> (nullable)</td></tr>
+      <tr><td><code>ledger_entries</code> — тип проводок перевода</td><td><code>adjustment</code> (отдельного «transfer» нет), разложен по <code>split_role</code>: <code>transfer_from</code>, <code>transfer_nominal_in</code>, <code>transfer_to</code>, <code>transfer_nominal_out</code>, <code>transfer_commission</code>, <code>transfer_nom_comm</code></td></tr>
+      <tr><td>API</td><td><code>GET /account/transfer/quote</code> · <code>GET /account/transfer/resolve</code> · <code>POST /account/transfer</code></td></tr>
+      <tr><td>Админка</td><td>лента <code>AccountTransfers</code> (фильтр по источнику, суммы, %) + страница лимитов <code>TransferSettings</code> (min/max/резерв)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>04 · Путь денег и баллов (транзит)</h2>
+  <p>Любой перевод — это 4 зеркальные ноги через номинальный счёт платформы; комиссия уходит оператору.
+    Номинал по транзакции всегда в нуле.</p>
+  <div class="flow">P2P: PAY → другому (комиссия = c)
+  отправитель   −(X + c)   wallets          →  ledger(отправитель)
+  номинал       +(X + c)   platform_nominal  ←  <b>транзит: вход</b>
+  получатель    +X         wallets          →  ledger(получатель)
+  номинал       −X         platform_nominal  ←  <b>транзит: выплата</b>
+  оператор      +c         partner(АКСИОМА)  ←  <b>комиссия</b>
+  номинал       −c         platform_nominal  ←  <b>транзит: комиссия</b>
+  ── номинал: +(X+c) −X −c = 0</div>
+  <p>Тот же каркас у Business → PAY (0%) и PAY → Business (сетка). Именно поэтому «развернуть» перевод
+    технически можно зеркально — все ноги трассируемы по <code>source='transfer'</code> + <code>id</code> перевода.</p>
+
+  <h2>05 · Чарджбэк-аналог для переводов — предложение</h2>
+  <p>Принцип канона §5.3 — «обратный след»: списываем с того счёта, куда пришло. Применяем к переводу.</p>
+  <h3>Сущность и статус</h3>
+  <ul>
+    <li>Добавить <code>status ∈ {completed, reversed}</code> и ссылку <code>reversed_by_transfer_id</code> (или журнал
+      <code>account_transfer_reversals</code> — аналог <code>chargeback_logs</code> с теми же полями трассируемости).</li>
+    <li>Идемпотентность: unique по <code>original_transfer_id</code> — повторный разворот блокируется, как у чарджбэка.</li>
+  </ul>
+  <h3>Зеркальные ноги (в одной транзакции)</h3>
+  <ul>
+    <li>Отправителю: <code>+X + c</code> обратно в кошелёк (или на счёт, если источник — бизнес).</li>
+    <li>Получателю: <code>−X</code> из кошелька. Если у получателя не хватает баллов — «долг» и блокировка исходящих
+      (по аналогии с §5.5 Правило 3, но для баллов — тут нужно ваше решение).</li>
+    <li>Номинал: разворот пар транзита; оператор: <code>−c</code> (возврат комиссии) — если комиссия возвращается.</li>
+    <li>Wallet-история: новые строки <code>type=transfer/fee</code> с признаком <code>reversal_of</code> (не удаляем оригинал).</li>
+  </ul>
+  <h3>Решения, нужные от владельца</h3>
+  <ol>
+    <li>Кто инициирует разворот: только админка (как чарджбэк) или ещё и заявка от пользователя?</li>
+    <li>Возвращается ли комиссия отправителю при развороте?</li>
+    <li>Что с получателем в минусе: долг + блокировка исходящих, или разворот невозможен без достатка баллов?</li>
+    <li>Есть ли «комиссия банка»-аналог (Dispute Fee) — платформа удерживает что-то за разворот?</li>
+    <li>Окно разворота (в течение N дней) и лимит частоты.</li>
+  </ol>
+  <div class="callout">Технически всё сходится: ноги перевода уже лежат в <code>ledger_entries</code> с
+    <code>split_role</code> и ссылкой на перевод — данных для зеркала достаточно, как и требует канон перед
+    внедрением чарджбэка («сначала докажи трассируемость»).</div>
+
+  <h2>06 · Что это значит для UI (решение 25.09: ещё проще)</h2>
+  <p>Итоговое решение владельца — не дропдауны, а максимальное упрощение основного сценария:</p>
+  <ul>
+    <li><b>Одно поле</b> «Телефон, карта или промокод» — тип определяется по вводу (как <code>TransferResolver</code>).</li>
+    <li><b>Поле «Сумма»</b>; под ним — авто-описание операции и математика (комиссия, «спишется всего»).</li>
+    <li><b>Экран успеха</b> после отправки: «Ещё перевод» или «На главную».</li>
+    <li>Направления «себе» (PAY ↔ счёт компании) — <b>не в основном экране</b>, а тихими ссылками внизу: они без получателя.</li>
+  </ul>
+  <p>Реализовано в витрине (сборка 125), проверено прогоном. Что нужно на стороне приложения: сервер должен принимать
+    <code>destination</code> без <code>destination_type</code> (или клиент определяет тип, как витрина); успех — экран, а не только тост.</p>
+
+  <h2>07 · Решения владельца (25.09)</h2>
+  <table>
+    <thead><tr><th>Решение</th><th>Статус</th></tr></thead>
+    <tbody>
+      <tr><td>Комиссия — <b>управляемая в админке для каждого типа переводов</b> (зачатки интерфейса есть: <code>TransferSettings</code>)</td><td class="yes">принято</td></tr>
+      <tr><td>Сам себе <b>Business → PAY = 0%</b> (человек тратит баллы в системе — поэтому бесплатно); настройка тоже в админке</td><td class="yes">принято</td></tr>
+      <tr><td>С бизнес-карты — <b>только себе, на карту PAY</b></td><td class="yes">принято</td></tr>
+      <tr><td>Отправляем со <b>счёта кошелька или счёта компании</b></td><td class="yes">принято</td></tr>
+      <tr><td>Счёт компании → другой бизнес — <b>отказать</b></td><td class="no">принято</td></tr>
+      <tr><td>Счёт компании → чужому пользователю (PAY) — <b>отказать</b></td><td class="no">принято</td></tr>
+      <tr><td>«Бизнес → бизнес = надо» — <b>противоречит</b> отказу «счёт компании → другой бизнес»</td><td class="part">уточняется</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>Про отправку по номеру карты.</b> Сейчас отправка по номеру карты <b>работает — но только
+    к пользователю</b>: <code>TransferResolver::byCard()</code> читает <code>cards.user_id</code>. Карта бизнеса хранится
+    через <code>cards.partner_id</code>, и её резолвер не смотрит вовсе. То есть если «бизнес → бизнес» нужен, адресация
+    получателя <b>по номеру бизнес-карты</b> — самый чистый путь: расширяем резолвер до <code>partner_id</code> и зачисляем
+    на счёт партнёра. Технически это уже возможно на уровне модели — карта и есть связка «карта ↔ владелец».</div>
+
+  <h2>08 · Что настроить в админке</h2>
+  <p>Расширить <code>TransferSettings</code> из «min / max / резерв» в матрицу правил по типу перевода:</p>
+  <table>
+    <thead><tr><th>Тип перевода</th><th>Комиссия (правится)</th><th>Лимиты/резерв</th></tr></thead>
+    <tbody>
+      <tr><td>PAY → другому пользователю</td><td>сетка 0,5–3,5%</td><td>min/max/резерв (есть)</td></tr>
+      <tr><td>PAY → свой счёт компании</td><td>сетка 0,5–3,5%</td><td>min/max/резерв</td></tr>
+      <tr><td>Business → PAY (себе)</td><td><b>0%</b></td><td>—</td></tr>
+      <tr><td>Business → Business (если оставляем)</td><td><b>настраивается отдельно</b></td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <footer>LOVII · разбор домена переводов · 25.09.2026 · lovii-core + canon/PAY_POINTS_MODEL.md + FINANCIAL_CONTOUR.md</footer>
+</div>
+</body>
+</html>
