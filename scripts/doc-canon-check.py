@@ -38,6 +38,16 @@ STALE_PATTERNS = [
     ("OLD_MODEL_250", r"2[.,]50\s*%", "возможно старая модель 2,50% (проверить контекст)", "low"),
 ]
 
+# Контекст легитимных P2P-тарифов переводов (решение A4: ступени 0,5–3,5%,
+# config/transfers.php, business_to_pay 0%): упоминание 3,5%/2,50% в таком
+# контексте — НЕ старая финмодель, STALE для OLD_MODEL_* не засчитывается.
+# High-паттерны (НДС 20%, 3,108%, 6,892%) этим исключением НЕ покрываются.
+TRANSFER_TARIFF_CTX_RE = re.compile(
+    r"ступен|тариф|transfer|перевод|business|commission|свыше|p2p",
+    re.IGNORECASE,
+)
+TRANSFER_TARIFF_PIDS = {"OLD_MODEL_35", "OLD_MODEL_250"}
+
 # 2) Дрейф версии money_flow_public (канон: v2.0.3)
 VERSION_EXPECTED = "2.0.3"
 VERSION_RE = re.compile(r"money_flow_public[^\n]{0,120}?v(\d+\.\d+(?:\.\d+)?)", re.IGNORECASE)
@@ -73,6 +83,12 @@ def scan_stale(path, text):
             # Historical audit rows and explicitly documented variants may
             # mention an old value without asserting it as current canon.
             if 0 < line <= len(lines) and "doc-canon: historical" in lines[line - 1]:
+                continue
+            if (
+                pid in TRANSFER_TARIFF_PIDS
+                and 0 < line <= len(lines)
+                and TRANSFER_TARIFF_CTX_RE.search(lines[line - 1])
+            ):
                 continue
             hits.append((pid, sev, line, m.group(0).strip(), desc))
     return hits
