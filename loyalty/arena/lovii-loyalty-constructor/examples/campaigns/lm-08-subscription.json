@@ -1,0 +1,119 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "subscription",
+  "name": "Абонемент: 10 напитков за 1 800 ₽",
+  "priority": 200,
+  "stacking": {
+    "group": "item_price",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "subscription.active.plan_coffee10",
+      "op": "==",
+      "value": true
+    },
+    {
+      "field": "basket.items",
+      "op": "any",
+      "match": {
+        "category": {
+          "in": [
+            "coffee",
+            "tea"
+          ]
+        }
+      },
+      "min_qty": 1
+    }
+  ],
+  "actions": [
+    {
+      "type": "redeem_subscription_unit",
+      "plan_id": "plan_coffee10",
+      "units": 1,
+      "filter": {
+        "category": {
+          "in": [
+            "coffee",
+            "tea"
+          ]
+        }
+      },
+      "cost_model": "zero"
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 2,
+      "period": "day"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Абонемент: 10 напитков за 1 800 ₽",
+    "badge": "Абонемент",
+    "subtitle": "10 единиц · 60 дней · до 2 в день",
+    "cta": "Купить абонемент",
+    "terms": "Абонемент действует 60 дней с покупки, не более 2 списаний в день. Неиспользованный остаток возвращается по заявлению."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-08",
+    "template_params": {
+      "plan_name": "10 напитков",
+      "categories": [
+        "coffee",
+        "tea"
+      ],
+      "units": 10,
+      "price_minor": 180000,
+      "validity_days": 60,
+      "daily_limit": 2,
+      "giftable": true,
+      "plan_id": "coffee10"
+    },
+    "plan": {
+      "plan_id": "plan_coffee10",
+      "name": "10 напитков",
+      "units": 10,
+      "price_minor": 180000,
+      "validity_days": 60,
+      "daily_limit": 2,
+      "giftable": true,
+      "filter": {
+        "category": {
+          "in": [
+            "coffee",
+            "tea"
+          ]
+        }
+      }
+    }
+  }
+}

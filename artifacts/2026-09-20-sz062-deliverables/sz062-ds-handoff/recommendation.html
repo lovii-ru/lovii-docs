@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOVII · сколько CSS нужно на самом деле</title>
+<style>
+  :root{--ink:#17131a;--ink2:#4a444e;--ink3:#7d7681;--paper:#faf7f4;--paper2:#f2ece7;--rule:#ded5cc;--accent:#c92a6a;--ok:#2f7d4f;--warn:#a8641a;--mono:ui-monospace,Menlo,Consolas,monospace;--serif:"Iowan Old Style",Palatino,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:52px 26px 92px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:30px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.13;margin:0 0 12px}
+  .lede{font-size:17px;color:var(--ink2);max-width:74ch;margin:0}
+  h2{font-family:var(--serif);font-weight:600;font-size:23px;margin:44px 0 6px;padding-top:16px;border-top:1px solid var(--rule)}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent);margin-right:8px}
+  p{margin:10px 0;max-width:78ch} code{font-family:var(--mono);font-size:13px;background:var(--paper2);padding:1.5px 5px;border-radius:4px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1.5px solid var(--ink)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+  .two>div{background:var(--paper);padding:16px 18px}
+  .two h4{margin:0 0 8px;font-size:13px;font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink3)}
+  .two ul{margin:6px 0;padding-left:18px} .two li{margin:4px 0;font-size:13.5px}
+  .callout{border-left:3px solid var(--accent);background:#fde8f1;padding:14px 18px;margin:20px 0;font-size:14.5px}
+  .callout.ok{border-color:var(--ok);background:#eef7e6} .callout.warn{border-color:var(--warn);background:#fdf3e7}
+  .num{font-family:var(--serif);font-size:30px;color:var(--accent)}
+  footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink3);font-family:var(--mono)}
+  @media(max-width:640px){h1{font-size:26px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+  <p class="kicker">LOVII · разбор размера CSS</p>
+  <h1>Можно ли 3804 строки свести к 500?</h1>
+  <p class="lede">Короткий ответ: <b>да — но не на всю витрину</b>. 500 строк — это нормальная цель для <b>ядра дизайн-системы</b>, а не для экранного CSS продукта. Ниже почему, и как масштабироваться без роста правил.</p>
+</header>
+
+<h2><span class="n">01</span>Ключевое различие: ДС ≠ экранный CSS</h2>
+<p>Сейчас в одном файле смешаны две разные сущности:</p>
+<div class="two">
+  <div><h4>Ядро дизайн-системы</h4><ul>
+    <li>Токены (цвет/радиус/тень/типографика) — <b>уже есть</b>, ~250 строк.</li>
+    <li>Примитивы и компоненты: кнопка, чип, карточка, поле, бейдж, список.</li>
+    <li>Масштабируется бесконечно за счёт <b>вариантов и токенов</b>.</li>
+    <li>Цель 500 строк — <b>вот сюда</b> и она реалистична.</li>
+  </ul></div>
+  <div><h4>Экранный (продуктовый) CSS</h4><ul>
+    <li>Витрина: десятки экранов (главная, точка, товар, корзина, заказы, кошелёк, адреса, настройки, дашборды 5 ролей, кабинеты, чаты, МСП).</li>
+    <li>~1700 правил — это <b>число уникальных визуальных узлов</b>, а не «дубли».</li>
+    <li>Сворачивается только двумя путями: переиспользование компонентов и утилиты.</li>
+  </ul></div>
+</div>
+<div class="callout warn"><b>Физика CSS.</b> Токены дают бесконечную <i>вариативность</i> при постоянном числе правил. Компоненты дают масштаб за счёт <i>переиспользования</i>. Но каждый <b>новый уникальный визуальный узел всё равно стоит нескольких правил</b>. «500 строк и ни строки больше при росте продукта» возможно только если все экраны собираются из одних и тех же компонентов.</div>
+
+<h2><span class="n">02</span>Сколько на самом деле где</h2>
+<table>
+  <thead><tr><th>Слой</th><th>Сейчас</th><th>Цель</th></tr></thead>
+  <tbody>
+    <tr><td>Токены (канон)</td><td>253 строки</td><td>~250 — <b>ок</b></td></tr>
+    <tr><td>Компоненты канона</td><td>593 строки / 461 правило</td><td>~150–300 — <b>сжать через варианты</b></td></tr>
+    <tr><td>Продуктовый CSS витрины</td><td>3804 / 1701</td><td>~600–1200 — <b>через переиспользование</b></td></tr>
+  </tbody>
+</table>
+<p>То есть реалистичная цель: <b>ядро ~500 строк</b>, а витрина — тонкий слой поверх него (в идеале максимум — утилиты + layout-клей). Полностью 500 на всё — только при радикальном переходе к утилитам (Tailwind-подход), но это переносит сложность в разметку (сотни классов в HTML) — не факт, что вам это нужно.</p>
+
+<h2><span class="n">03</span>Как масштабироваться без роста правил</h2>
+<p><b>Комбинирование вместо новых правил:</b></p>
+<table>
+  <thead><tr><th>Механика</th><th>Что даёт</th><th>Пример</th></tr></thead>
+  <tbody>
+    <tr><td>Токены (custom properties)</td><td>темы/бренд без новых правил</td><td><code>--lv-card</code>, <code>--lv-line</code></td></tr>
+    <tr><td>Компонент + варианты</td><td>10 вида кнопки = 1 правило + модификаторы</td><td><code>.btn</code> + <code>[data-variant=ghost|solid]</code></td></tr>
+    <tr><td>Комбинация на месте</td><td>новый экран = существующие компоненты</td><td><code>&lt;div class="card"&gt;&lt;button class="btn"&gt;</code></td></tr>
+    <tr><td>Минимум утилит</td><td>layout-клей без новых сущностей</td><td><code>.stack</code>, <code>.row</code>, <code>.grid-2</code></td></tr>
+    <tr><td><code>@layer</code></td><td>порядок каскада без <code>!important</code></td><td><code>tokens→base→components→utilities</code></td></tr>
+  </tbody>
+</table>
+<div class="callout ok"><b>Что уже сделано в эту сторону:</b> 206 сырых значений теней/радиусов сведены в токены; тени карточек — единый <code>--lv-shadow-soft</code>; границы — <code>--lv-line</code> (единая на тему). То есть «параметризация» уже началась, и это самый масштабируемый путь.</div>
+
+<h2><span class="n">04</span>Что предлагаю сделать</h2>
+<ol>
+  <li><b>Зафиксировать «компоненты» в каноне:</b> карточка, кнопка, чип, поле, бейдж, строка-список, KPI — по одному правилу + варианты. Экранные стили тогда ссылаются на них.</li>
+  <li><b>Витрина</b> оставляет себе только раскладку экранов (grid/flex/отступы) и редкие исключения.</li>
+  <li><b>Ограничить вариативность контуров</b> 3 токенами (line / line-2 / strong) + активные (pink/tiffany).</li>
+  <li><b>Слойность</b> через <code>@layer</code>, чтобы не плодить «патчи».</li>
+</ol>
+<p>Порядок безопасный: идём по экранам, меняем бесшумно (замерами и скриншотами), правило-за-правилом переводим на компоненты.</p>
+
+<footer>LOVII · разбор CSS · 2026-09-20 · lovii.css = 3804 строки / 1701 правило / 205 КБ</footer>
+</div></body></html>

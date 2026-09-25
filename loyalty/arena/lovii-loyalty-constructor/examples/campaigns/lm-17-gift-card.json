@@ -1,0 +1,103 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "gift_card",
+  "name": "Подарочные сертификаты 2 000 ₽ / 3 000 ₽ / 5 000 ₽",
+  "priority": 10,
+  "stacking": {
+    "group": "custom",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "purchase"
+  },
+  "conditions": [
+    {
+      "field": "basket.items",
+      "op": "any",
+      "match": {
+        "category": {
+          "in": [
+            "gift_card"
+          ]
+        }
+      },
+      "min_qty": 1
+    }
+  ],
+  "actions": [
+    {
+      "type": "notify",
+      "channel": "inapp",
+      "template": "gift_card_issued",
+      "params": {
+        "validity_days": 365
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": null,
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Подарочные сертификаты 2 000 ₽ / 3 000 ₽ / 5 000 ₽",
+    "badge": "🎁",
+    "subtitle": "Действует 365 дней · можно частями",
+    "cta": "Подарить",
+    "terms": "Сертификат — предоплата (аванс) за товары точки. Неиспользованный остаток возвращается по заявлению покупателя. На часть чека, оплаченную сертификатом, промо-баллы не начисляются."
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": false,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-17",
+    "template_params": {
+      "denominations": [
+        {
+          "amount_minor": 200000
+        },
+        {
+          "amount_minor": 300000
+        },
+        {
+          "amount_minor": 500000
+        }
+      ],
+      "validity_days": 365,
+      "partial_use": true,
+      "top_up_allowed": true,
+      "cashback_on_gift_payment": false
+    },
+    "gift_card": {
+      "denominations_minor": [
+        200000,
+        300000,
+        500000
+      ],
+      "validity_days": 365,
+      "partial_use": true,
+      "top_up_allowed": true,
+      "cashback_on_gift_payment": false
+    },
+    "notes": "Балансы сертификатов — сущность gift_cards; в чеке оплата сертификатом уменьшает paid_money до расчёта наград (settings.exclude_categories_from_rewards)."
+  }
+}

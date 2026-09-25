@@ -10,9 +10,10 @@
 |---|---|---|
 | `REPO_ID` | `bestdeejay-design/lovii_docs` | каноничный GitHub-репозиторий в переходный период |
 | `REPO_DIR` | `lovii_docs` | имя checkout/каталога этого репозитория |
-| `WORKSPACE_DIR` | `LOVII/lovii-docs` | алиас локального workspace, **не** имя GitHub-репозитория |
+| `WORKSPACE_DIR` | `lovii_docs/workspace/` | оперативные черновики сессии внутри этого репозитория |
 | `PUBLIC_REPO` | `axiiom-ru/lovii` | публичное зеркало документов (лендинг, 4 файла) |
-| `PUSH_REPO` | `lovii-ru/lovii-docs` | публичный хаб-зеркало полного корпуса; **единственный рабочий пуш-путь при F-051** (SSH-ключ `lovii_ru_ed25519`, Host `github.com-lovii-ru`) |
+| `PUSH_REPO` | `lovii-ru/lovii-docs` | публичный корпус + Pages; автосинк из `REPO_ID` (Actions `sync-mirror`, пн/чт) — решение владельца 25.09, F-062 |
+| локальный архив | `LOVII/lovii-docs` (удаляется 25.09 после зелёного прогона) | бывшее файловое хранилище; бэкап `LOVII/Backups/lovii-docs-2026-09-25.zip`; её `status.md` — архив |
 | будущий alias | `lovii-docs` | только план миграции, не заменять им текущие имена автоматически |
 
 **Профиль `lovii-ru` — выделенный и изолированный** (решение владельца,
@@ -55,7 +56,7 @@ workspace-путь, будущий alias или конкретный репоз�
 | Очередь и решение владельца | `canon/BACKLOG.md` | статус задачи или session-док |
 | Карта всех документов/репозиториев | `canon/REFERENCE.md` / `REGISTRY.md` | случайный README |
 | Инженерная история исполнения | `docs/sessions/` соответствующего кодового репозитория | `canon/STATUS.md` как единственный отчёт |
-| Оперативная работа workspace | `LOVII/lovii-docs/` и его `status.md`/`decisions-needed.md` | канон; workspace не становится SSOT |
+| Оперативная работа workspace | `lovii_docs/workspace/` (черновик сессии; канал фиксации — карточка канона + session-док) | канон; workspace не становится SSOT (F-057; локальная папка `LOVII/lovii-docs/` удалена 25.09, F-062) |
 | Юридическая публикация | `public/` и зеркало `axiiom-ru/lovii` | `archive/`, task-spec или workspace |
 
 `canon/TASKS/` находится внутри канона только для удобства доступа; сами

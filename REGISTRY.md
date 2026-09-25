@@ -10,9 +10,10 @@
 > `canon/FINDINGS.md` — журнал находок инженерии. Карта не дублирует карточки — она ведёт к ним.
 >
 > **Ведётся вручную** (`scripts/gen_registry.py` — DEPRECATED, не запускать).
-> Обновлено: 2026-09-12. GitHub-идентификатор хаба в переходный период:
-> `bestdeejay-design/lovii_docs`; checkout — `lovii_docs`; workspace-алиас —
-> `LOVII/lovii-docs`; будущий alias `lovii-docs` не является текущим slug.
+> Обновлено: 2026-09-22. GitHub-идентификатор хаба: `bestdeejay-design/lovii_docs`;
+> checkout — `lovii_docs`; workspace-алиас — `LOVII/lovii-docs` (черновик сессии,
+> канал фиксации — карточки канона, F-057); будущий alias `lovii-docs` не является
+> текущим slug.
 
 ---
 
@@ -44,8 +45,8 @@
 
 | Репозиторий | Роль | Каталог доков |
 |:---|:---|:---|
-| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Рабочий публичный хаб**: полный корпус (канон, as-is, artifacts, оферты), живой пуш, Pages, CI-гейты. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9) | §2 |
-| [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | Приватное зеркало канона — аккаунт suspended с 2026-09-13 (F-051), догнать при возврате доступа | §2 |
+| [`lovii-ru/lovii-docs`](https://github.com/lovii-ru/lovii-docs) | **Резервный бэкап-хаб**: полный корпус (канон, as-is, artifacts, оферты), Pages, CI-гейты. Роль (решение владельца 22.09, F-057 закрыт): синк по вехам — закрытие волны приёмок, значимое слияние, срез ревизии; не оперативный пуш-путь. Профиль `lovii-ru` — выделенный и изолированный (правила: `canon/WORK_PROTOCOL.md` §9) | §2 |
+| [`bestdeejay-design/lovii_docs`](https://github.com/bestdeejay-design/lovii_docs) | **Основной канон-репозиторий** — F-051 закрыт 2026-09-22 (доступ восстановлен, корпус на HEAD) | §2 |
 
 ### Продуктовые репозитории (организация [`lovii-tech`](https://github.com/lovii-tech))
 
@@ -92,6 +93,7 @@ lovii_docs/
 ├── archive/                  # остальные устаревшие документы и версии
 ├── contracts/openapi/        # машиночитаемый API-контракт
 ├── artifacts/ / marketing/  # рабочие и маркетинговые артефакты
+├── loyalty/                 # наработки по лояльности/промо партнёра (дизайн + прототипы), не канон
 ├── tbank/                    # терминал-анкета; публичная база знаний API Мультисплита (docs/notes/openapi); договор — вне VCS
 ├── scripts/                  # проверки и публикация
 └── .github/workflows/        # docs-governance и sync-public

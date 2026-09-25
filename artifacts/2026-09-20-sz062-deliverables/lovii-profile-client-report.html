@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOVII · Профиль в клиенте — перенос из демо</title>
+<style>
+  :root {
+    --ink: #141414;
+    --ink-2: #4a4a4a;
+    --ink-3: #7c7c7c;
+    --paper: #faf9f7;
+    --rule: #e2ded7;
+    --rule-soft: #efece6;
+    --accent: #c92a6a;
+    --good: #2f6f5e;
+    --warn: #8a6a25;
+    --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 56px 32px 72px; }
+  header.doc { border-bottom: 1px solid var(--ink); padding-bottom: 24px; }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  h1 {
+    font-family: var(--mono);
+    font-size: 40px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    margin: 14px 0 10px;
+    max-width: 24ch;
+  }
+  .lede { max-width: 68ch; font-size: 18px; line-height: 1.5; color: var(--ink-2); margin: 0; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 28px;
+    margin-top: 22px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .meta b { color: var(--ink); font-weight: 600; }
+  section { margin-top: 56px; }
+  h2 {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--ink);
+  }
+  h2 + .sub { color: var(--ink-3); font-size: 14px; margin: 0 0 22px; font-family: var(--mono); }
+  h3 { font-family: var(--mono); font-size: 15px; font-weight: 600; margin: 26px 0 8px; letter-spacing: -0.01em; }
+  p { max-width: 72ch; margin: 0 0 14px; }
+  ul, ol { max-width: 72ch; padding-left: 20px; margin: 0 0 14px; }
+  li { margin-bottom: 7px; }
+  code { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }
+  hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 32px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  caption {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-bottom: 10px;
+  }
+  th, td { text-align: left; padding: 11px 14px 11px 0; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--rule); font-weight: 600; }
+  td:first-child { padding-left: 0; }
+  .state { font-family: var(--mono); font-size: 11.5px; white-space: nowrap; }
+  .state--done { color: var(--good); }
+  .state--part { color: var(--warn); }
+  .state--was { color: var(--ink-3); }
+  .metrics { display: flex; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .metric { flex: 1 1 160px; padding: 18px 20px 18px 0; border-right: 1px solid var(--rule-soft); }
+  .metric:last-child { border-right: 0; }
+  .metric .v { font-family: var(--mono); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; display: block; }
+  .metric .l { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+  .flow { margin: 8px 0 6px; }
+  .flow svg { width: 100%; height: auto; display: block; }
+  .flow figcaption { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); margin-top: 10px; max-width: 78ch; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 32px; }
+  .gap { border-top: 1px solid var(--rule); padding-top: 12px; margin-top: 18px; }
+  .gap h3 { margin-top: 0; }
+  .gap .need { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+  .note { border-left: 1px solid var(--accent); padding-left: 14px; color: var(--ink-2); max-width: 72ch; font-size: 14.5px; }
+  footer.colophon { margin-top: 64px; border-top: 1px solid var(--ink); padding-top: 16px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 4px 24px; }
+  @media (max-width: 720px) {
+    .wrap { padding: 32px 18px 48px; }
+    h1 { font-size: 28px; }
+    .metric { flex-basis: 100%; border-right: 0; border-bottom: 1px solid var(--rule-soft); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <p class="kicker">LOVII · PWA-клиент · профиль</p>
+  <h1>Профиль из демо переехал в клиент</h1>
+  <p class="lede">Перенос раздела «Профиль» из демо-сборки в Vue-клиент: сворачиваемые блоки LOVII PAY, экран «Все операции» с пагинацией, мультикарта с подсказками под картой и кабинеты ролей со статусами. Работа лежит в рабочей копии <code>lovii-app</code> — не закоммичена.</p>
+  <div class="meta">
+    <span><b>Дата</b> 14.09.2026</span>
+    <span><b>Источник</b> lovii-demo → lovii-app</span>
+    <span><b>Проверки</b> тесты · типы · lint · сборка</span>
+    <span><b>Статус</b> первый проход собран</span>
+  </div>
+</header>
+
+<section>
+  <h2>Что сделано</h2>
+  <p class="sub">по пунктам спецификации переноса §9</p>
+  <table>
+    <caption>Семь пунктов §9 — состояние и адрес в клиенте</caption>
+    <thead>
+      <tr><th>Пункт</th><th>Состояние</th><th>Где в клиенте</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1 · Две колонки: слева клиент, справа роли</td>
+        <td class="state state--was">было · сохранено</td>
+        <td><code>ProfileModule.vue</code> — сетка 5fr / 6fr от 640px</td>
+      </tr>
+      <tr>
+        <td>2 · Сворачиваемые блоки: Счёт, История, Статус, Привилегии, Избранные МСП</td>
+        <td class="state state--done">сделано</td>
+        <td><code>ProfileCollapse.vue</code> + блоки в <code>ProfileModule.vue</code></td>
+      </tr>
+      <tr>
+        <td>3 · История: 8 последних + «Все операции · N» → экран с фильтрами и пагинацией по 25</td>
+        <td class="state state--done">сделано</td>
+        <td><code>WalletHistoryList.vue</code>, <code>ProfileOperations.vue</code>, маршрут <code>/profile/operations</code></td>
+      </tr>
+      <tr>
+        <td>4 · Мультикарта: личная и бизнес-карта, карусель с затухающим краем; под картой — поворот и «Скопировать номер»</td>
+        <td class="state state--done">сделано</td>
+        <td><code>ProfileModule.vue</code>, <code>PayCard.vue</code></td>
+      </tr>
+      <tr>
+        <td>5 · Низ профиля: документы, поддержка, реквизиты</td>
+        <td class="state state--was">было · по канону стейджинга</td>
+        <td><code>ProfileFooter.vue</code></td>
+      </tr>
+      <tr>
+        <td>6 · Кабинеты: признак роли, статусы, плашка «Нужен промокод»</td>
+        <td class="state state--done">сделано</td>
+        <td><code>ProfileCabinets.vue</code></td>
+      </tr>
+      <tr>
+        <td>7 · Ширина и адаптив: телефон, ПК, фолд</td>
+        <td class="state state--was">было · сведено к канону демо</td>
+        <td><code>ProfileModule.vue</code></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Как устроен экран</h2>
+  <p class="sub">порядок блоков и ветка «Все операции»</p>
+  <figure class="flow">
+    <svg viewBox="0 0 1120 400" role="img" aria-label="Схема профиля: карты и счета, блоки LOVII PAY, навигация клиента в левой колонке; кабинеты и настройки в правой; блок истории открывает отдельный экран операций">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0 L10 5 L0 10 z" fill="#7c7c7c"/>
+        </marker>
+      </defs>
+      <!-- колонки -->
+      <text x="24" y="24" font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="1.6" fill="#7c7c7c">ЛЕВАЯ КОЛОНКА · КЛИЕНТ</text>
+      <text x="640" y="24" font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="1.6" fill="#7c7c7c">ПРАВАЯ КОЛОНКА · РОЛЕВОЕ</text>
+      <line x1="608" y1="16" x2="608" y2="360" stroke="#efece6" stroke-width="1"/>
+
+      <!-- карты -->
+      <rect x="24" y="40" width="560" height="56" fill="#fff" stroke="#e2ded7"/>
+      <text x="40" y="64" font-family="-apple-system, Segoe UI, sans-serif" font-size="14" fill="#141414">Карты и счета — личная, компания, номинал</text>
+      <text x="40" y="82" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#7c7c7c">карусель · затухающий край · подсказки: поворот + копировать номер</text>
+
+      <!-- блоки -->
+      <rect x="24" y="112" width="560" height="150" fill="#fff" stroke="#e2ded7"/>
+      <text x="40" y="134" font-family="-apple-system, Segoe UI, sans-serif" font-size="14" fill="#141414">Блоки LOVII PAY — раскрытие на месте</text>
+      <g font-family="-apple-system, Segoe UI, sans-serif" font-size="13" fill="#4a4a4a">
+        <rect x="40" y="146" width="256" height="30" fill="#faf9f7" stroke="#efece6"/>
+        <text x="52" y="166">Счёт LOVII PAY</text>
+        <rect x="308" y="146" width="256" height="30" fill="#faf9f7" stroke="#efece6"/>
+        <text x="320" y="166">История операций · 8</text>
+        <rect x="40" y="184" width="256" height="30" fill="#faf9f7" stroke="#efece6"/>
+        <text x="52" y="204">Статус LOVII PAY</text>
+        <rect x="308" y="184" width="256" height="30" fill="#faf9f7" stroke="#efece6"/>
+        <text x="320" y="204">Привилегии статуса</text>
+        <rect x="40" y="222" width="256" height="30" fill="#faf9f7" stroke="#efece6"/>
+        <text x="52" y="242">Избранные МСП</text>
+      </g>
+
+      <!-- навигация клиента -->
+      <rect x="24" y="278" width="560" height="48" fill="#fff" stroke="#e2ded7"/>
+      <text x="40" y="300" font-family="-apple-system, Segoe UI, sans-serif" font-size="13" fill="#141414">Навигация: кошелёк · баллы · адреса · заказы</text>
+      <text x="40" y="317" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#7c7c7c">существующие экраны клиента — сохранены</text>
+
+      <!-- правая колонка -->
+      <rect x="640" y="40" width="456" height="180" fill="#fff" stroke="#e2ded7"/>
+      <text x="656" y="64" font-family="-apple-system, Segoe UI, sans-serif" font-size="14" fill="#141414">Кабинеты — 6 ролей</text>
+      <g font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#4a4a4a">
+        <text x="656" y="88">МСП · точка — В РАБОТЕ — нужен промокод</text>
+        <text x="656" y="108">Представитель — В РАБОТЕ — нужен промокод</text>
+        <text x="656" y="128">Амбассадор — ДОРАБОТКА — нужен промокод</text>
+        <text x="656" y="148">Владелец / Инвестор — ЕСТЬ РЕШЕНИЯ</text>
+        <text x="656" y="168">Сотрудник точки — НОВОЕ</text>
+      </g>
+      <text x="656" y="196" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#7c7c7c">признак роли = флаг из GET /profile</text>
+
+      <rect x="640" y="232" width="456" height="94" fill="#fff" stroke="#e2ded7"/>
+      <text x="656" y="256" font-family="-apple-system, Segoe UI, sans-serif" font-size="13" fill="#141414">Быстрый вход · оповещения · настройки · выход</text>
+      <text x="656" y="278" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#7c7c7c">Face ID / ПИН · push · email-согласие</text>
+      <text x="656" y="310" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#7c7c7c">подвал: документы · поддержка · реквизиты</text>
+
+      <!-- ветка: все операции -->
+      <path d="M584 161 C 620 161, 620 350, 660 350" fill="none" stroke="#7c7c7c" stroke-width="1" marker-end="url(#ar)"/>
+      <rect x="668" y="330" width="428" height="42" fill="#fff" stroke="#141414"/>
+      <text x="684" y="356" font-family="-apple-system, Segoe UI, sans-serif" font-size="13" fill="#141414">Экран «Все операции» — фильтры, страницы по 25</text>
+    </svg>
+    <figcaption>История в профиле ограничена восемью последними проводками и кнопкой «Все операции · N»; полный список живёт на отдельном экране с фильтрами и постраничным переходом.</figcaption>
+  </figure>
+
+  <h3>Раскрытие блоков — без перерисовки вида</h3>
+  <p>Шапка карточки сама работает переключателем: тело блока всегда остаётся в разметке, а раскрытие анимируется переходом <code>grid-template-rows</code> с <code>0fr</code> на <code>1fr</code>. Экран не перерисовывается, позиция скролла не срывается, при системной настройке «меньше движения» анимация выключается.</p>
+</section>
+
+<section>
+  <h2>Проверки</h2>
+  <p class="sub">прогон на рабочей копии клиента</p>
+  <div class="metrics">
+    <div class="metric"><span class="v">448 / 448</span><span class="l">тестов зелёные (75 файлов)</span></div>
+    <div class="metric"><span class="v">0</span><span class="l">ошибок типов (vue-tsc)</span></div>
+    <div class="metric"><span class="v">0 / 0</span><span class="l">warnings / errors lint</span></div>
+    <div class="metric"><span class="v">✓</span><span class="l">vite build собирается</span></div>
+  </div>
+  <p style="margin-top:20px">Новое покрыто тестами: раскрытие пяти блоков, суммы и знаки проводок, пагинация 25 + 5 и фильтр «Списания» на экране операций, счётчик доступных кабинетов и плашка «Нужен промокод», логика уровней и прогресса.</p>
+  <p class="note">Визуальная сверка на живом стенде не выполнена: профиль открывается только с авторизованной сессией, а автопроверка без входа показывает экран входа. Проверку в браузере нужно сделать из-под вашей сессии — включая тёмную тему.</p>
+</section>
+
+<section>
+  <h2>Открытые места</h2>
+  <p class="sub">что перенести нельзя, пока нет данных</p>
+  <div class="cols">
+    <div class="gap">
+      <h3>1 · Подписка и оборот по карте</h3>
+      <p>Уровень программы (PAY → PASS → VIP) и прогресс до следующего уровня зависят от признака подписки и оборота за период. Пока блок честно показывает базовый уровень PAY, а PASS и VIP — как цели с условиями перехода.</p>
+      <p class="need">нужен источник: признак подписки + оборот за период</p>
+    </div>
+    <div class="gap">
+      <h3>2 · Избранные МСП</h3>
+      <p>В клиенте нет ни списка избранного, ни действия «в избранное» у партнёра. Блок собран вместе с пустым состоянием, но наполняться ему пока нечем.</p>
+      <p class="need">нужно: действие у партнёра + хранение списка</p>
+    </div>
+    <div class="gap">
+      <h3>3 · История за всё время</h3>
+      <p>API отдаёт проводки одним запросом, максимум 48 штук, без параметра страницы. Страницы по 25 считаются на клиенте — глубже 48 записей экран не уйдёт.</p>
+      <p class="need">нужна серверная постраничность истории</p>
+    </div>
+    <div class="gap">
+      <h3>4 · Третий показатель счёта</h3>
+      <p>В демо рядом с балансом стоит «Выведено через СБП»; в клиенте таких данных нет, поэтому на третьем месте — «Операций в истории».</p>
+      <p class="need">нужны данные по выводам через СБП</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Что дальше</h2>
+  <p class="sub">порядок, в котором это разворачивается без переделок вида</p>
+  <ol>
+    <li>Отдать блоку статуса реальные данные (подписка, оборот) — тогда личная карта получит скин по статусу: PAY, PASS или VIP.</li>
+    <li>Добавить действие «в избранное» у партнёра и хранение списка — блок «Избранные МСП» заработает без правок вёрстки.</li>
+    <li>Перевести историю операций на серверную постраничность вместо клиентской по 48.</li>
+    <li>Перенести остальные паттерны демо — сворачивание, карточки, токены — в другие разделы клиента, за пределами профиля.</li>
+    <li>Визуальная сверка профиля из-под авторизованной сессии, в двух темах.</li>
+  </ol>
+  <hr class="rule">
+  <p>Ход работ и открытые места дописаны в <code>HANDOFF.md</code> демо-сборки — отдельным разделом и строкой в журнале изменений.</p>
+</section>
+
+<footer class="colophon">
+  <span>LOVII · профиль в клиенте</span>
+  <span>14.09.2026</span>
+  <span>источник: lovii-demo → lovii-app</span>
+  <span>рабочая копия, без коммита</span>
+</footer>
+
+</div>
+</body>
+</html>

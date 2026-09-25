@@ -1,0 +1,26 @@
+name: sync-mirror
+
+# Автосинк публичного зеркала lovii-ru/lovii-docs (Pages).
+# Решение владельца 2026-09-25 (F-062): источник — main этого репо.
+# Пуш только fast-forward: при расхождении джоба падает и шлёт письмо,
+# история зеркала никогда не переписывается.
+
+on:
+  schedule:
+    - cron: "30 4 * * 1,4" # пн и чт, 07:30 МСК
+  workflow_dispatch: {}
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.MIRROR_SSH_KEY }}
+      - run: |
+          git remote add mirror git@github.com:lovii-ru/lovii-docs.git
+          git push mirror main

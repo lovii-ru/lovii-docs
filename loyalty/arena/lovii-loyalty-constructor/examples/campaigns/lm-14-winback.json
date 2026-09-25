@@ -1,0 +1,103 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "winback",
+  "name": "Мы скучали: +300 баллов на 10 дней",
+  "priority": 100,
+  "stacking": {
+    "group": "bonus",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 10
+  },
+  "trigger": {
+    "type": "inactivity",
+    "params": {
+      "days": 45,
+      "min_orders": 2,
+      "step": 1
+    }
+  },
+  "conditions": [
+    {
+      "field": "customer.orders_at_merchant",
+      "op": ">=",
+      "value": 2
+    },
+    {
+      "field": "customer.days_since_last_purchase",
+      "op": ">=",
+      "value": 45
+    }
+  ],
+  "actions": [
+    {
+      "type": "accrue_points",
+      "mode": "fixed",
+      "amount": 300,
+      "ttl_days": 10,
+      "funding": "merchant",
+      "lot_label": "Мы скучали"
+    },
+    {
+      "type": "notify",
+      "channel": "push",
+      "template": "winback_step1",
+      "params": {
+        "reward": "+300 баллов",
+        "ttl_days": 10
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "campaign"
+    },
+    "total_uses": null,
+    "budget_total_minor": 2000000,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Мы скучали: +300 баллов на 10 дней",
+    "badge": "+300 б.",
+    "subtitle": "Для тех, кто не был 45 дней",
+    "terms": "Стимул выдаётся один раз клиентам без покупок 45 и более дней, действует 10 дней.",
+    "push": {
+      "title": "Мы скучали 💛",
+      "body": "Вам начислено 300 баллов — действуют 10 дней"
+    }
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": true,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-14",
+    "template_params": {
+      "days": 45,
+      "min_orders": 2,
+      "reward_type": "points",
+      "points": 300,
+      "discount_pct": 20,
+      "ttl_days": 10,
+      "channel": "push",
+      "holdout_pct": 10,
+      "budget_total_minor": 2000000
+    }
+  }
+}

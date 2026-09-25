@@ -1,0 +1,128 @@
+{
+  "spec_version": "1.0",
+  "mechanic": "birthday",
+  "name": "Десерт в подарок ко дню рождения",
+  "priority": 100,
+  "stacking": {
+    "group": "bonus",
+    "mode": "stackable"
+  },
+  "schedule": {
+    "starts_at": null,
+    "ends_at": null,
+    "timezone": "Europe/Moscow",
+    "windows": []
+  },
+  "audience": {
+    "segments": [
+      "all"
+    ],
+    "statuses": [],
+    "tiers": [],
+    "exclude_staff": true,
+    "holdout_pct": 0
+  },
+  "trigger": {
+    "type": "birthday",
+    "params": {
+      "days_before": 5,
+      "window_days": 10,
+      "requires_consent": "birthday_use"
+    }
+  },
+  "conditions": [
+    {
+      "field": "customer.birthday_in_days",
+      "op": "<=",
+      "value": 5
+    }
+  ],
+  "actions": [
+    {
+      "type": "coupon_issue",
+      "ttl_days": 10,
+      "to": "customer",
+      "inline": {
+        "conditions": [
+          {
+            "field": "basket.items",
+            "op": "any",
+            "match": {
+              "category": {
+                "in": [
+                  "coffee"
+                ]
+              }
+            },
+            "min_qty": 1
+          }
+        ],
+        "actions": [
+          {
+            "type": "free_item",
+            "filter": {
+              "category": {
+                "in": [
+                  "dessert"
+                ]
+              }
+            },
+            "pick": "cheapest",
+            "qty": 1,
+            "requires_purchase_of": {
+              "category": {
+                "in": [
+                  "coffee"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "notify",
+      "channel": "push",
+      "template": "birthday_gift",
+      "params": {
+        "window_days": 10
+      }
+    }
+  ],
+  "limits": {
+    "per_customer": {
+      "count": 1,
+      "period": "campaign"
+    },
+    "total_uses": null,
+    "budget_total_minor": null,
+    "budget_daily_minor": null
+  },
+  "content": {
+    "title": "Десерт в подарок ко дню рождения",
+    "badge": "🎂",
+    "subtitle": "Действует 10 дней",
+    "terms": "Подарок выдаётся раз в год при согласии на использование даты рождения, при покупке из категории «кофе».",
+    "push": {
+      "title": "С наступающим! 🎂",
+      "body": "Десерт в подарок к напитку — 10 дней"
+    }
+  },
+  "channels": {
+    "showcase": true,
+    "checkout": true,
+    "push": true,
+    "cashier": true
+  },
+  "meta": {
+    "template_id": "lm-15",
+    "template_params": {
+      "days_before": 5,
+      "window_days": 10,
+      "gift_type": "free_item",
+      "gift_category": "dessert",
+      "requires_category": "coffee",
+      "points": 300
+    }
+  }
+}

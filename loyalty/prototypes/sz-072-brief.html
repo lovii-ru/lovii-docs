@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZ-072 — применение промо-механик в lovii-app</title>
+<style>
+  :root{
+    --paper:#f7f6f3; --ink:#16150f; --ink-2:#4b4842; --ink-3:#8b8680;
+    --line:#e0dcd4; --line-2:#eae6de; --accent:#b8315f; --accent-soft:rgba(184,49,95,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --m:70ch;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px 96px}
+  .cover{padding:76px 0 44px;border-bottom:1px solid var(--ink);margin-bottom:8px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+  .cover h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.6vw,60px);line-height:1.04;letter-spacing:-.02em;margin:18px 0 0;max-width:24ch}
+  .cover .lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:58ch;margin:22px 0 0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:32px;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+  .meta b{display:block;font-weight:400;color:var(--ink-3);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:3px}
+  .doc{display:grid;grid-template-columns:212px 1fr;gap:56px;align-items:start;margin-top:44px}
+  .toc{position:sticky;top:34px;font-family:var(--mono);font-size:12.5px;line-height:1.9}
+  .toc .t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .toc a{display:block;color:var(--ink-2);text-decoration:none;border-left:1px solid var(--line);padding-left:13px}
+  .toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+  main{max-width:var(--m);min-width:0}
+  section{padding-top:46px}
+  h2{font-family:var(--serif);font-weight:400;font-size:31px;line-height:1.15;letter-spacing:-.01em;margin:0 0 6px;display:flex;gap:16px;align-items:baseline}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.06em;padding-top:6px}
+  .rule{height:1px;background:var(--line);width:64px;margin:14px 0 20px}
+  h3{font-family:var(--sans);font-weight:600;font-size:16.5px;margin:30px 0 8px}
+  p{margin:0 0 14px}
+  .muted{color:var(--ink-3)}
+  code{font-family:var(--mono);font-size:.87em;background:var(--accent-soft);border:1px solid var(--line-2);padding:.5px 5px;border-radius:3px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0 18px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:400;border-bottom:1px solid var(--ink-2)}
+  td .f{font-family:var(--mono);font-size:12px;color:var(--accent)}
+  ol,ul{margin:0 0 16px;padding-left:22px}
+  li{margin:5px 0}
+  figure{margin:18px 0 22px}
+  figure svg{width:100%;height:auto;display:block;border:1px solid var(--line);background:#fbfaf8}
+  figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:8px}
+  .note{border-left:2px solid var(--accent);padding:4px 0 4px 14px;color:var(--ink-2);font-size:14.5px;margin:16px 0}
+  .colophon{margin-top:64px;padding-top:20px;border-top:1px solid var(--ink);font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  @media (max-width:900px){.doc{grid-template-columns:1fr;gap:0}.toc{position:static;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="cover">
+    <div class="kicker">LOVII · canon/TASKS · SZ-072 · P1</div>
+    <h1>Промо-механики в приложении: акция → точка → корзина → чекаут</h1>
+    <p class="lede">Задание на реализацию: базовый конструктор живёт в приложении и настраивается из кабинета точки, сложные механики — в b2b. Покупатель видит акцию и приходит в конкретную торговую точку, где всё отображается и работает.</p>
+    <div class="meta">
+      <div><b>Статус</b>Открыта, исполнитель не назначен</div>
+      <div><b>Репозитории</b>lovii-core · lovii-app (+b2b, admin)</div>
+      <div><b>Источник</b>демо lovii-demo · дизайн loyalty/</div>
+      <div><b>Дата</b>2026-09-22</div>
+    </div>
+  </header>
+
+  <div class="doc">
+    <nav class="toc" aria-label="Содержание">
+      <div class="t">Содержание</div>
+      <a href="#s1">1 · Цель</a>
+      <a href="#s2">2 · Механики</a>
+      <a href="#s3">3 · Поток данных</a>
+      <a href="#s4">4 · Объём по репозиториям</a>
+      <a href="#s5">5 · Требование «акция → точка»</a>
+      <a href="#s6">6 · Критерии приёмки</a>
+      <a href="#s7">7 · Гейты</a>
+      <a href="#s8">8 · Решения владельца</a>
+    </nav>
+
+    <main>
+      <section id="s1">
+        <h2><span class="n">01</span>Цель</h2>
+        <div class="rule"></div>
+        <p>Партнёр настраивает акции, покупатель в <code>lovii-app</code> их видит и приходит в точку. Документ — постановка; канонические факты живут в <code>canon/BRD.md</code>, <code>canon/PARAMS.md</code>, <code>canon/DATA_MODEL.md</code>, <code>canon/API_SPEC.md</code>.</p>
+        <div class="note">Ключевое требование владельца: «акции вели к торговой точке и там всё это корректно отображалось, и всё работало».</div>
+      </section>
+
+      <section id="s2">
+        <h2><span class="n">02</span>Механики в объёме</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Механика</th><th>Триггер</th><th>Что видит покупатель</th></tr></thead>
+          <tbody>
+            <tr><td>Кэшбэк по умолчанию / группы</td><td class="f">item</td><td>процент на карточке, сумма в корзине</td></tr>
+            <tr><td>Порог чека</td><td class="f">cart_sum</td><td>«Кэшбэк +N%» / «Подарок от N ₽»</td></tr>
+            <tr><td>Комбо</td><td class="f">combo</td><td>товар-комбо с составом и скидкой</td></tr>
+            <tr><td>Штампы «N-й в подарок»</td><td class="f">nth</td><td>«Штампы 2 из 6», подарок</td></tr>
+            <tr><td>Счастливые часы</td><td class="f">time</td><td>«Счастливые часы · +N%»</td></tr>
+            <tr><td>Бюджет + авто-стоп</td><td class="f">limits</td><td>акция тихо выключается</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="s3">
+        <h2><span class="n">03</span>Поток данных</h2>
+        <div class="rule"></div>
+        <figure>
+          <svg viewBox="0 0 900 320" role="img" aria-label="Поток: конструктор → core → API → app → кошелёк">
+            <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#4b4842" stroke-width="1"/></marker></defs>
+            <g font-family="ui-monospace,monospace" font-size="12" fill="#16150f">
+              <rect x="20" y="20" width="190" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="38" y="42">lovii-b2b / admin</text><text x="38" y="58" fill="#8b8680" font-size="10.5">конструктор акций</text>
+
+              <rect x="250" y="20" width="230" height="52" fill="none" stroke="#b8315f" stroke-width="1"/>
+              <text x="268" y="42">lovii-core</text><text x="268" y="58" fill="#8b8680" font-size="10.5">promo_rules + PromoResolver</text>
+
+              <rect x="520" y="20" width="160" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="538" y="42">API</text><text x="538" y="58" fill="#8b8680" font-size="10.5">/promos · /storefront</text>
+
+              <rect x="20" y="130" width="190" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="38" y="152">Главная (app)</text><text x="38" y="168" fill="#8b8680" font-size="10.5">промо-блок</text>
+
+              <rect x="250" y="130" width="190" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="268" y="152">Точка /stores/:id</text><text x="268" y="168" fill="#8b8680" font-size="10.5">акции + бейджи</text>
+
+              <rect x="480" y="130" width="200" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="498" y="152">Корзина · чекаут</text><text x="498" y="168" fill="#8b8680" font-size="10.5">выгода до оплаты</text>
+
+              <rect x="720" y="130" width="158" height="52" fill="none" stroke="#16150f" stroke-width="1"/>
+              <text x="738" y="152">Кошелёк</text><text x="738" y="168" fill="#8b8680" font-size="10.5">+ баллы</text>
+
+              <line x1="210" y1="46" x2="246" y2="46" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="480" y1="46" x2="516" y2="46" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="600" y1="72" x2="600" y2="126" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="120" y1="126" x2="120" y2="76" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="210" y1="156" x2="246" y2="156" stroke="#b8315f" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="440" y1="156" x2="476" y2="156" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+              <line x1="680" y1="156" x2="716" y2="156" stroke="#4b4842" stroke-width="1" marker-end="url(#a)"/>
+
+              <text x="20" y="230" fill="#b8315f" font-size="10.5" letter-spacing="1.2">ПЕРЕХОД К ТОЧКЕ: КАРТОЧКА АКЦИИ НЕСЁТ branch_id → /stores/{branch_id}</text>
+              <text x="20" y="262" fill="#8b8680" font-size="10.5">Если задан только merchant_id — на ближайшую точку мерчанта (данные /home → near_you).</text>
+              <text x="20" y="292" fill="#8b8680" font-size="10.5">Идемпотентность кошелька и возвраты сохраняются (wallet_transactions).</text>
+            </g>
+          </svg>
+          <figcaption>Акция рождается в кабинете, живёт в core, показывается в app и приводит покупателя в точку</figcaption>
+        </figure>
+      </section>
+
+      <section id="s4">
+        <h2><span class="n">04</span>Объём по репозиториям</h2>
+        <div class="rule"></div>
+        <h3>lovii-core</h3>
+        <table>
+          <thead><tr><th>Что</th><th>Точки</th></tr></thead>
+          <tbody>
+            <tr><td>Модель</td><td class="f">promo_rules, loyalty_product_groups (+пивоты), merchant_offer_bundle_items</td></tr>
+            <tr><td>Движок</td><td class="f">App\Domain\Promo\PromoResolver; контракт LoyaltyService сохранить</td></tr>
+            <tr><td>API</td><td class="f">GET /promos · GET /storefront/promos · расширение StorefrontOfferCard · /orders/preview · /orders/checkout</td></tr>
+          </tbody>
+        </table>
+        <h3>lovii-app</h3>
+        <table>
+          <thead><tr><th>Экран</th><th>Файлы</th></tr></thead>
+          <tbody>
+            <tr><td>Кабинет точки → «Акции»</td><td class="f">roles-module/msp/MspLoyalty.vue (+ маршрут и вкладка в cabinetTabs)</td></tr>
+            <tr><td>Главная (ротация промо)</td><td class="f">home-module/HomeModule.vue, HomeBanner.vue → API-блок акций</td></tr>
+            <tr><td>Точка</td><td class="f">store-module/StoreModule.vue (branch_id из route), StoreProducts.vue</td></tr>
+            <tr><td>Товар</td><td class="f">store-product/StoreProduct.vue, ProductPreview.vue</td></tr>
+            <tr><td>Корзина / чекаут</td><td class="f">cart-module/CartInfo.vue, CartProduct.vue; create-order/CreateOrder.vue</td></tr>
+            <tr><td>Типы</td><td class="f">package/global-types/api/catalog.ts (StorefrontOfferCard)</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Смежное: <code>lovii-b2b</code> пишет правила (дизайн — <code>loyalty/promo-constructor.md</code>), <code>lovii-admin</code> держит потолки и модерацию.</p>
+      </section>
+
+      <section id="s5">
+        <h2><span class="n">05</span>Требование «акция → торговая точка»</h2>
+        <div class="rule"></div>
+        <ul>
+          <li>Каждая карточка акции на главной несёт <code>branch_id</code> и ведёт на <code>/stores/{branch_id}</code>; промо-блок ротируется.</li>
+          <li>Если задан только <code>merchant_id</code> — ведём на ближайшую точку мерчанта; если точки рядом нет — честный текст, а не битая ссылка.</li>
+          <li>На странице точки есть блок «Акции точки»; на товарах — бейджи («Кэшбэк N%», «Комбо −X%»).</li>
+          <li>Комбо живёт в авто-категории «Комбо» — она всегда первая в списке категорий точки.</li>
+          <li>Комбо-товар — обычный оффер каталога точки: одна позиция в заказе, состав в карточке.</li>
+        </ul>
+      </section>
+
+      <section id="s6">
+        <h2><span class="n">06</span>Критерии приёмки</h2>
+        <div class="rule"></div>
+        <ol>
+          <li>Включённая акция появляется у точки в приложении (норма задержки — согласовать).</li>
+          <li>Карточка акции ведёт на точку; блок акций и бейджи видны; битых ссылок нет.</li>
+          <li>Товар из группы — свой процент; вне групп — умолчание.</li>
+          <li>Комбо — состав и цена со скидкой, одна позиция в заказе.</li>
+          <li>Корзина и чекаут показывают одинаковую разбивку, совпадающую с начислением.</li>
+          <li>Штампы: подарок применяется один раз на N-й позиции.</li>
+          <li>Бюджет: исчерпание — акция гаснет без ошибок у покупателя.</li>
+          <li>Отмена/возврат возвращает начисленное.</li>
+          <li>Три состояния и адаптив 390px+ везде; гейты зелёные; сессия-док и <code>status.md</code> обновлены.</li>
+        </ol>
+      </section>
+
+      <section id="s7">
+        <h2><span class="n">07</span>Гейты</h2>
+        <div class="rule"></div>
+        <table>
+          <thead><tr><th>Репозиторий</th><th>Команда</th></tr></thead>
+          <tbody>
+            <tr><td>lovii-core</td><td class="f">docker exec lovii-core-app-1 composer test</td></tr>
+            <tr><td>lovii-app</td><td class="f">yarn test (format → lint → unit → type-check → build)</td></tr>
+            <tr><td>lovii-app e2e</td><td class="f">yarn test:e2e · E2E_TARGET=staging yarn test:e2e:scenarios</td></tr>
+            <tr><td>Страж SZ-060</td><td class="f">STRESS_BASE=http://localhost:3000 python3 scripts/stress/stress.py read 10 25 50 100</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Стенд-приёмка — <code>app-staging.lovii.ru</code> / <code>api-staging.lovii.ru</code>; поток веток: фича → <code>staging</code> → <code>master</code> (прод вручную).</p>
+      </section>
+
+      <section id="s8">
+        <h2><span class="n">08</span>Решения владельца (2026-09-22)</h2>
+        <div class="rule"></div>
+        <p>Зафиксированы в каноне <code>canon/BRD.md</code> §7.3.1.</p>
+        <table>
+          <thead><tr><th>Вопрос</th><th>Решение</th></tr></thead>
+          <tbody>
+            <tr><td>Потолки %</td><td>платформа не ставит — решает точка (+ модерация в админке)</td></tr>
+            <tr><td>База кэшбэка</td><td>фактически оплаченная покупателем сумма (после скидок)</td></tr>
+            <tr><td>Комбо</td><td>авто-категория «Комбо» внутри витрины точки, всегда первая</td></tr>
+            <tr><td>Ротация</td><td>акции на главной ротируются</td></tr>
+            <tr><td>Задержка</td><td>без задержки — сразу после сохранения</td></tr>
+            <tr><td>Кто платит</td><td>скидки и натуральные акции — за счёт точки</td></tr>
+            <tr><td>Где настраивается</td><td>базовые механики — в приложении; сложные — в b2b</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Остаётся уточнить: учитывать ли списанные баллы в базе кэшбэка; право доступа к разделу «Акции» в приложении; нужна ли аналитика акции в приложении.</p>
+      </section>
+
+      <div class="colophon"><span>SZ-072 · применение промо в lovii-app · loyalty/</span><span>AutoClaw · 2026-09-22</span></div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

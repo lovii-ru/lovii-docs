@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZ-062 · фаза 3 — оптимизация CSS, транш 1</title>
+<style>
+  :root{--ink:#17131a;--ink2:#4a444e;--ink3:#7d7681;--paper:#faf7f4;--paper2:#f2ece7;--rule:#ded5cc;--accent:#c92a6a;--soft:#fde8f1;--ok:#2f7d4f;--warn:#a8641a;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--serif:"Iowan Old Style",Palatino,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:56px 28px 96px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:24px;margin-bottom:34px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.14;margin:0 0 12px}
+  .lede{font-size:17px;color:var(--ink2);max-width:74ch;margin:0}
+  h2{font-family:var(--serif);font-weight:600;font-size:23px;margin:46px 0 6px;padding-top:16px;border-top:1px solid var(--rule)}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent);margin-right:8px}
+  p{margin:10px 0;max-width:76ch}
+  code{font-family:var(--mono);font-size:13px;background:var(--paper2);padding:1.5px 5px;border-radius:4px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);border-bottom:1.5px solid var(--ink)}
+  tbody tr:hover{background:var(--paper2)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:4px;border:1px solid currentColor;text-transform:uppercase}
+  .ok{color:var(--ok)} .warn{color:var(--warn)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:20px 0}
+  .metric{background:var(--paper);padding:15px}
+  .metric .n{font-family:var(--serif);font-size:28px;line-height:1}
+  .metric .l{font-size:11px;color:var(--ink3);margin-top:6px;text-transform:uppercase;letter-spacing:.05em}
+  .metric .n.good{color:var(--ok)} .metric .n.acc{color:var(--accent)}
+  .callout{border-left:3px solid var(--accent);background:var(--soft);padding:14px 18px;margin:20px 0;font-size:14.5px}
+  .callout.warn{border-color:var(--warn);background:#fdf3e7}
+  .figs{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  figure{margin:0} figure img{width:100%;border:1px solid var(--rule);border-radius:6px;display:block}
+  figcaption{font-size:12px;color:var(--ink3);margin-top:6px}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink3);font-family:var(--mono)}
+  @media(max-width:640px){h1{font-size:26px}.wrap{padding:32px 18px 72px}.figs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">SZ-062 · фаза 3 · транш 1 применён и проверен</p>
+  <h1>Оптимизация CSS: что уже сделано</h1>
+  <p class="lede">Гейт №1 пройден, правки идут. Применены два транша: navbar-фикс + удаление мёртвого CSS + безопасная токенизация, затем — единая шкала размеров иконок <b>12/16/20/24/32</b> (утв. вариант B). Всё проверено на локальном стенде. Ниже результат и материал для Гейта №2.</p>
+</header>
+
+<h2><span class="n">01</span>Что применено</h2>
+<table>
+  <thead><tr><th>#</th><th>Изменение</th><th>Объём</th><th>Визуальный эффект</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Navbar-фикс: <code>--lv-navbar-height: 64px</code></td><td>1 объявление</td><td>+8px нижний отступ на экранах с таббаром (утверждено)</td></tr>
+    <tr><td>2</td><td>Удаление мёртвого CSS (38 классов, с составными селекторами)</td><td>59 правил, −119 строк</td><td>нет</td></tr>
+    <tr><td>3</td><td>Токенизация theme-стабильных цветов</td><td>35 вхождений hex → <code>var(--lv-*)</code></td><td>нет</td></tr>
+    <tr><td>4</td><td>Бамп кэша <code>?v=53 → 55</code></td><td>1 строка</td><td>нет</td></tr>
+    <tr><td>5</td><td>Шкала размеров иконок 12/16/20/24/32: нормализованы все svg-размеры (13→12, 14→16, 17→16, 18→20, 22→24) + классы шкалы</td><td>~110 значений</td><td>лёгкое изменение размера части иконок (утв. вариант B)</td></tr>
+  </tbody>
+</table>
+
+<div class="metrics">
+  <div class="metric"><div class="n">3915→3796</div><div class="l">строк lovii.css</div></div>
+  <div class="metric"><div class="n acc">59</div><div class="l">правил удалено</div></div>
+  <div class="metric"><div class="n">52→42</div><div class="l">hex вне токенов</div></div>
+  <div class="metric"><div class="n good">0</div><div class="l">ошибок рантайма</div></div>
+  <div class="metric"><div class="n good">0</div><div class="l">ошибок рантайма</div></div>
+  <div class="metric"><div class="n good">100%</div><div class="l">иконок на шкале</div></div>
+</div>
+<div class="callout">
+  <b>Транш 2 — шкала иконок.</b> После нормализации все видимые иконки строго <b>12/16/20/24/32</b> px (off-scale не осталось). Рантайм-обход 22 роутов × 3 вьюпорта × 2 темы: 0 ошибок консоли, 0 переполнений, 0 SVG 0×0. Регрессия vs исходник: home 1.45%, profile 0.83%, wallet-dark 1.08%, msp 2.34% — изменения мелкие и распределённые (сдвиг размеров иконок + navbar), поломок вёрстки нет.
+</div>
+
+<h2><span class="n">02</span>Верификация</h2>
+<table>
+  <thead><tr><th>Проверка</th><th>Результат</th></tr></thead>
+  <tbody>
+    <tr><td><code>node --check</code> (18 js + sw.js)</td><td><span class="badge ok">0 ошибок</span></td></tr>
+    <tr><td>Коллизии (<code>lv_collisions.py</code>)</td><td><span class="badge ok">0 фатальных</span></td></tr>
+    <tr><td>Рантайм: 22 роута × 390/768/1280 × светлая/тёмная</td><td><span class="badge ok">0 ошибок консоли · 0 переполнений · 0 SVG 0×0</span></td></tr>
+    <tr><td>Скриншот-регрессия «до/после» (4 кадра)</td><td><span class="badge ok">3 из 4 — 0 отличий; msp — только navbar (ожидаемо)</span></td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>Урок методики.</b> Наивная токенизация по значению ломает тёмную тему: <code>--lv-page</code>, <code>--lv-ink</code>, <code>--lv-dim</code>, <code>--lv-gold-text</code> инвертируются под <code>[data-theme="dark"]</code>, а исходные hex были фиксированными. Первый прогон дал регрессию кошелька в тёмной теме (10.5% пикселей). Правило: hex можно менять только на <b>theme-стабильный</b> токен, иначе это правка визуала и она идёт через таблицу правок.
+</div>
+
+<h2><span class="n">03</span>Кадры «до / после»</h2>
+<div class="figs">
+  <figure><img src="../sz062-gate1/assets/before-msp-1280-light.png" alt="Кабинет МСП до"><figcaption>МСП 1280 — до</figcaption></figure>
+  <figure><img src="../sz062-after/assets/after-msp-1280-light.png" alt="Кабинет МСП после"><figcaption>МСП 1280 — после (отличие только в зоне navbar)</figcaption></figure>
+  <figure><img src="../sz062-gate1/assets/before-wallet-390-dark.png" alt="Кошелёк тёмная до"><figcaption>Кошелёк 390 тёмная — до</figcaption></figure>
+  <figure><img src="../sz062-after/assets/after-wallet-390-dark.png" alt="Кошелёк тёмная после"><figcaption>Кошелёк 390 тёмная — после (0 отличий)</figcaption></figure>
+</div>
+
+<h2><span class="n">04</span>Материал для Гейта №2</h2>
+<div class="callout">
+  <b>42 hex остались вне токенов</b> — нужны новые (Гейт №2). Группы: 25 нейтральных (<code>#fff</code> ×22, <code>#fff…</code>, серые), 12 тёплых (золото-тинты, розовые тинты), 3 teal, 2 холодных. Предлагаю завести шкалу нейтральных + семантические токены (danger, info, tint-*).
+</div>
+<div class="callout">
+  <b>Шкала иконок.</b> Замер показал разброс <b>10, 12, 13, 14, 16, 17, 18, 20, 22, 24, 32, 70 px</b> — шкалы нет. Предложение: <code>16/20/24/32</code>, но фактические базовые — <b>16 и 18</b>. Нужно ваше решение по шкале, после чего проставлю явный размер всем вызовам.
+</div>
+
+<h2><span class="n">05</span>Дальше</h2>
+<p>Транш 2 фазы 3 — слияние 103 повторных селекторов и дублей медиа, декомпозиция по слоям <code>tokens→base→primitives→components→utilities</code>. Затем Гейт №2 (токены + шкала иконок), модуль иконок в <code>lovii-design</code>, фаза 4 (ДС), фаза 5 (валидация).</p>
+
+<footer>SZ-062 · фаза 3 транш 1 · demo a8a86be + локальные правки · стенд :8090 · лог: _audit/runtime-after.txt</footer>
+</div>
+</body>
+</html>
