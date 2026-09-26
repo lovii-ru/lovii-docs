@@ -45,6 +45,7 @@
 | `LoyaltyService` (earn/spend/refund) | кэшбэк → `wallets` | то же | ✅ |
 | `DistributeOrderPoolAction` | пул: точке 90% на partner-account; кэшбэк клиенту — ноги wallet+ledger; реп/амб доли → **user ledger accounts (₽)** | реп/амб без Business → **баллы на PAY**; с Business → partner-account | 🔶 переделать реп/амб-ноги |
 | `SubscriptionBillingService` | каскад Business (partner) → PAY (user ledger) | PAY-источник = `wallets` (баллы); user-ledger источник убрать | 🔶 |
+<!-- УТОЧНЕНО владельцем 2026-09-26 (решение №2, F-067): каскад подписки канонично = PAY (баллы, по умолчанию) → Business (фоллбэк). Порядок инвертирован относительно этой строки черновика; реализация — T-023 Фаза B; факт фоллбэка — отдельный тип транзакции. -->
 | `PayoutService::requestPull` | ручной вывод самозанятым с user ledger | ручной вывод с PAY (баллы → заявка); самозанятые без Business получают баллы — совместить с моделью | 🔶 пересобрать источник |
 | Ежедневный sweep Business → расчётный | push-выплаты самозанятым/ЮЛ есть (пул) | то же, распространить на все Business-начисления | 🔶 сверить полноту |
 | `BackfillCashbackLegsCommand` | разовое лечение, 23.09 | останется как прецедент | ✅ |
