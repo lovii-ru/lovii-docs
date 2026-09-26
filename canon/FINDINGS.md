@@ -100,6 +100,11 @@
 | F-059 | 2026-09-22 | `lovii-core` | Инцидент живой приёмки SZ-056 (сценарий 9): активация подписки → 422 `insufficient_funds` при видимой сумме на карте PAY. Две «казны»: карта PAY показывает балльный кошелёк `Core\Wallet` (начисления — LoyaltyService, `WalletTransactionType::Earn`), а подписка дебетит леджер-счёт `Domain\Billing\Account` (`findFundedSource`, каскад business→pay) — разные таблицы, леджер-счёт пользователя пуст. Штатного пополнения леджер-счёта нет (только adjustment-проводки). Реворк владельца в фин-контуре (`e74f484`: кэшбэк клиенту — нога через номинал на лицевой счёт) — в процессе | Open (решения владельца: что показывает карта PAY; судьба накопленных баллов; финансирование приёмки 9–13) | <!-- fact-guard: allow — суммы баланса из живой приёмки владельца и тестовых данных SZ-058; канон-дом чисел подписки: PARAMS §1.4 -->
 | F-060 | 2026-09-22 | `lovii-core` | SZ-073: при обобщении `loyalty_rules` → `promo_rules` (единая таблица правил промо) Filament-ресурс правил в `lovii-admin` читает таблицу `loyalty_rules` напрямую через `pgsql_core`; без совместимости выкат core уронил бы чужой кабинет. Решение: temporary read-only VIEW `loyalty_rules` над `promo_rules` (type='cashback'). Долг: снять после перевода админки на `/api/v1/loyalty/rules` | Open (view создан миграцией `2026_09_22_120300`; снять после миграции админки на API правил) |
 | F-061 | 2026-09-23 | `lovii-core` | Гейт карточки `docker exec lovii-core-app-1 composer test` **не включает PHPStan** (`composer.json` `test` = lint + type-coverage + pest + openapi; PHPStan — отдельный `test:types`/`test-strict`), а CI-джоб `checks` **включает** `vendor/bin/phpstan`. Итог: задача может быть «зелёной» локально по гейту карточки и красной в CI. Полный локальный эквивалент CI — `scripts/preflight.sh` (pint/rector/phpstan/pest vs базлайн) | Documented (урок SZ-073: локально гнать `phpstan`/`preflight.sh`, не только `composer test`) |
+| F-062 | 2026-09-25 | `lovii_docs` | mirror/main разошёлся с hub/main (конфликт в 5 индексах) + смена политики публикации: публичный дом = `lovii-ru/lovii-docs`, автосинк Actions | Resolved (мерж + автосинк) |
+| F-063 | 2026-09-25 | `lovii-app` + `lovii-b2b` | staging↔master расхождение 12/14 суток: локальные сборки мастера слепые (нет Настроек/Промо/Переводов/лояльности) | Resolved 26.09 (app PR #12 `bed9763`; b2b PR #1 `50f611c` — оба CI 🟢) |
+| F-064 | 2026-09-26 | `lovii-b2b` | CI-инструментарий сломан: pest 5.x-dev/paratest ронял воркеры, master красный с 11.09; дрейф PHP 8.5.11 усугубил (не корень) | Resolved 26.09 (pest 5.1.2 stable + пин php:8.5.10; хвост — ремонт SZ-025, карточка SZ-078) |
+| F-065 | 2026-09-26 | `lovii-app` | Роутер без auth-гарда: `/settings` и чекаут открыты гостю, после logout пользователь «остаётся в профиле» | Closed 26.09 (T-021 default-deny гард; принято владельцем; staging `e250f4c`, master `d3e35f1`) |
+| F-066 | 2026-09-26 | платформа | GitHub Actions `lovii-tech`: джобы не стартуют — биллинг org («recent account payments have failed or your spending limit needs to be increased») | Open (решение владельца: Billing & plans; до фикса CI-гейты и деплой-джобы в lovii-tech стоят) |
 ---
 
 ## Карточки
@@ -835,7 +840,7 @@ SZ-025»: разобрать краш воркера (pest 5.0.0-rc.6? расш�
 
 ### F-065 · `lovii-app` · Роутер без auth-гарда: `/settings` и чекаут открыты гостю, после logout пользователь остаётся «в профиле»
 
-**Дата:** 2026-09-26 (баг владельца 25.09; расследование и фикс — Super Z, T-021) · **Статус:** Closed — фикс в `t021-auth-guard` (`ac4c144`), unit/e2e в репо; приёмка на staging
+**Дата:** 2026-09-26 (баг владельца 25.09; расследование и фикс — Super Z, T-021) · **Статус:** Closed 26.09 — принято владельцем; staging `e250f4c` (PR #13, deploy 🟢), master `d3e35f1` (PR #14); прод-деплой ручной
 
 **Факты (было):**
 - `router.beforeEach` выполнял только `perfMark` — проверок сессии не было вовсе.
@@ -867,3 +872,30 @@ SZ-025»: разобрать краш воркера (pest 5.0.0-rc.6? расш�
 **Правило на будущее:** новый защищённый маршрут защищён по умолчанию (default-deny);
 публичность — только явным `meta.public: true` + запись в тест-контракт
 `auth-guard.test.ts`.
+
+### F-066 · платформа · GitHub Actions `lovii-tech`: CI-джобы не стартуют — биллинг org
+
+**Дата:** 2026-09-26 13:49 UTC · **Статус:** Open — за владельцем (Billing & plans)
+
+**Где стрельнуло:** push-прогон `lovii-app` master `d3e35f1` (merge PR #14, T-021):
+job `checks` → failure при нулевом времени выполнения; аннотация: «The job was not
+started because recent account payments have failed or your spending limit needs to
+be increased. Please check the 'Billing & plans' section in your settings».
+
+**Факты:**
+- Дерево того же коммита зелёно дважды до этого: push `staging` `e250f4c` (13:23 🟢)
+  и PR #14 `pull_request` (13:44 🟢) — красный master с кодом не связан, джоба не запускалась.
+- Последние зелёные прогоны org: app master `bed9763` 09:18, b2b master `50f611c` ~13:30
+  → лимит/оплата сломались между ~13:30 и 13:49 (приватные репо, включённые минуты).
+- Затронуты все репо `lovii-tech/*` до погашения/повышения лимита; `bestdeejay-design/*`
+  (канон) — отдельный аккаунт, не задействован.
+
+**Риски:** гейт WORK_PROTOCOL «CI зелёный с первого раза» непроверяем в lovii-tech;
+deploy-staging при пуше не выполняется — стенд перестаёт обновляться; очередь
+(T-018/T-019/T-020/T-022 у zcode) упирается в мёртвый CI; контрольный re-run
+master `d3e35f1` невозможен до починки.
+
+**Что нужно (решение владельца):** org `lovii-tech` → Settings → Billing & plans →
+погасить платёж / поднять spending limit. После — Re-run failed jobs на прогоне
+master `d3e35f1` (контрольный 🟢). Экономия: пока лимит впритык — не запускать
+дублирующие полные прогоны; PR-прогон уже покрывает дерево staging.
