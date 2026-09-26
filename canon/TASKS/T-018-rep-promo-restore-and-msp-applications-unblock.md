@@ -287,6 +287,73 @@
    перед пушем; для docs-правок в `lovii_docs` — `task_guard`/`doc-canon-check
    --strict`/`fact-guard` зелёные; `git diff --check` clean.
 
+## Отчёт расследования (Super Z, код-level Фазы А/Б, 2026-09-26)
+
+Независимое расследование по коду staging `lovii-core` `c3ef60c` — гипотезы сужены до
+**одного корневого артефакта** + двух сопутствующих проверок. Все ссылки — `файл:строка`:
+
+1. **Жалоба «не видит промокод в профиле»** = нет активной строки в
+   `representative_promo_codes` у user 51. `UserProfileResource.php:36` →
+   `activePromoCode()?->code` → `User.php:97–101` (`hasOne` + `is_active=true`).
+2. **Жалоба «не может ввести новый»** = 409 `promo_already_bound`
+   (`BindProfilePromoController.php:45`) при непустом `users.promo_code`; перепривязка
+   в MVP не реализована (`BindReferralPromoCodeAction.php:53` — пишет только при null/''.
+   **Механизм подтверждён кодом** — это дизайн-MVP, а не поломка.
+3. **Жалоба «заявки от МСП не приходят»** = каскад `CreatePartnerApplicationAction.php:211`
+   → `ProfilePromoResolver::resolve()`: заявка МСП, зарегистрированного по амбассадорскому
+   коду `AA2222`, уходит user 51 лично ТОЛЬКО при (подписка `grantsBenefits()` =
+   Active/GracePeriod, `SubscriptionStatus.php:62–68`) **И** наличии его активного личного
+   реп-кода (`ProfilePromoResolver.php:61–77`); иначе fallback `founderRepCode()`
+   (`:79–92`) — а он читает тот же отсутствующий личный код Основателя → **null → заявка
+   уходит «общим путём» submitted без представителя** → в кабинете user 51 пусто.
+4. **Исторический корень (миграция G1, 19.09)**:
+   `database/migrations/2026_09_19_160000_add_code_to_ambassadors.php` — код `AA2222`
+   переехал из личных реп-кодов в `ambassadors.code`, **личная реп-строка Основателя
+   деактивирована** («личный код он получает на общих правилах: форма ввода → подписка →
+   выдача»). На общих правилах код не выдался (см. гипотезы Б1/Б2) — profile пуст,
+   резолвер заявок ломается.
+5. **`AA2222` ≠ личный код — это амбассадорский.** Основатель идентифицируется как
+   владелец `ambassadors.code = 'AA2222'` (`FounderQuery.php:19–31`, config
+   `payments.php:107` `fallback_rep_promo_code`). Если ambassadors-строка отсутствует /
+   неактивна / код другой → `FounderQuery::id() = null` → сыпется флаг `roles.founder`
+   (`UserProfileResource.php:53`), fallback резолвера и маршрут выплат
+   (`DistributeOrderPoolAction.php:425`). Точный код `AA2222` НЕ может быть выдан
+   artisan-командами: `RepresentativePromoService::issue()` и
+   `AssignAmbassadorCommand::generateCode()` генерируют случайный суффикс.
+6. **Фаза А — диагностический SQL (read-only, staging; 4 запроса перед любыми правками):**
+   ```sql
+   SELECT id, phone, promo_code FROM users WHERE id = 51;
+   SELECT id, user_id, prefix, code, is_active FROM ambassadors WHERE user_id = 51;
+   SELECT id, code, prefix, suffix, is_active FROM representative_promo_codes WHERE user_id = 51 ORDER BY id DESC;
+   SELECT id, status, current_period_ends_at FROM subscriptions WHERE user_id = 51;
+   ```
+   Ожидание по коду: п.3 — все строки `is_active=false` (жертва G1-миграции); п.2 — строка
+   с `code='AA2222'` скорее всего на месте (перенос G1), но проверить обязательно.
+7. **Фаза В — рецепт фиксa (artisan-only, порядок важен):**
+   ```bash
+   # Б1. Гарантировать ambassadors-строку (если п.2 пуст/неактивен):
+   php artisan roles:assign-ambassador +79119287478 AA
+   #   updateOrCreate по user_id; существующий code НЕ трогает.
+   #   ⚠️ Если code ≠ AA2222 — FounderQuery не увидит Основателя; ручная правка
+   #   ambassadors.code='AA2222' (tinker, 1 строка) — ТОЛЬКО с явного «го» владельца
+   #   (стоп-лист карточки, п. «не перезаписывать без решения»).
+   # Б2. Ядро фикса — личный реп-код (закрывает жалобы 1 и 3):
+   php artisan roles:issue-promo +79119287478 --prefix=AA
+   #   → AA + случайный суффикс (например AA7K2M); фактический код ЗАДОКУМЕНТИРОВАТЬ
+   #   в отчёте исполнителя. Личный код = AA2222 выдать нельзя (случайная генерация) —
+   #   владелец подтверждает новый код как личный, AA2222 остаётся амбассадорским.
+   # Б3. Только если в диагностике статус ≠ Active/GracePeriod:
+   php artisan subscription:reset +79119287478 --reissue-promo
+   ```
+8. **Проверка после фикса (Фаза Г карточки):** `GET /api/v1/profile` → `promo_code` =
+   новый AA-код, `roles.founder=true`, `roles.msp=true`; тестовая заявка МСП,
+   зарегистрированного по `AA2222` → приходит user 51 (`representative_user_id=51`).
+   Резолвер покрывает дважды: по подписке+личному коду (`:61–77`) и по fallback
+   Основателя (`:79–92`).
+
+Верификация zcode на сервере (Фаза А SQL) подтверждает/опровергает п.6 — далее Фаза В
+по рецепту, без отступлений.
+
 ## Отчёт исполнителя
 
 _(заполняет zcode: таблица «было/стало», artisan-команды с выводом, результаты
