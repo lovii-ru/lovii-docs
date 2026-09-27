@@ -23,8 +23,10 @@
   репо + Dockerfile core/b2b/admin): `--network-alias pgsql-testing` для
   тестовой Postgres (DB_HOST из phpunit.xml), gai.conf IPv4-приоритет + 5
   ретраев `install-php-extensions` (pecl CDN с РФ-сервера достижим «через
-  раз», v6 хостинга мёртв). Разбор: `lovii-core/docs/sessions/063-…`;
-  короткие сессионки b2b 007 / admin 012 / app 135.
+  раз», v6 хостинга мёртв). Канон и все инструкции:
+  **`canon/CI_RUNNERS_SELFHOSTED.md`**; разбор: `lovii-core/docs/sessions/063-…`;
+  короткие сессионки b2b 007 / admin 012 / app 135. Указатели обновлены в
+  корневом `CLAUDE.md` (п.4) и `CLAUDE.md` всех 4 репо.
 - Все 4 репо: checks 🟢 + deploy-staging 🟢, стенды healthy.
 
 ## 2026-09-25 — публичное зеркало на автосинке, локальная `lovii-docs/` удалена
