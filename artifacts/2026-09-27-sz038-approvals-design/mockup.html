@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Макет · Апрув точки — карточка представителя</title>
+<style>
+  :root{
+    --lv-pink:#f64a8a; --lv-pink-dark:#c92a6a; --lv-tiffany:#0abab5; --lv-tiffany-text:#07726f;
+    --lv-gold:#d4a854; --lv-gold-text:#8a6a25;
+    --lv-ink:#1a1a1a; --lv-dim:#6b6b6b; --lv-card:#fff; --lv-surface:#f8f8f8;
+    --lv-line:#ece5da; --lv-line-2:#f6f1e8; --lv-bg:#f8f5f0; --lv-page:#fff;
+    --lv-soft-pink:rgba(246,74,138,.12); --lv-soft-tiffany:rgba(10,186,181,.12); --lv-soft-gold:rgba(212,168,84,.16);
+    --lv-r-sm:12px; --lv-r-md:14px; --lv-r-lg:16px; --lv-r-pill:999px; --lv-pad-x:16px;
+    --lv-shadow-soft:0 1px 3px rgba(26,26,26,.06); --lv-shadow-lift:0 12px 32px -12px rgba(201,42,106,.22);
+    --lv-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --doc-line:#e7e1d8; --doc-dim:#6b6b6b; --doc-accent:#c92a6a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--lv-bg);color:var(--doc-ink,#151114);font-family:var(--lv-font);line-height:1.5}
+  .page{max-width:1100px;margin:0 auto;padding:44px 24px 80px}
+  header.doc{border-bottom:1px solid var(--doc-line);padding-bottom:22px;margin-bottom:26px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--doc-accent);font-weight:700}
+  header.doc h1{font-size:28px;margin:8px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--doc-dim);max-width:70ch}
+  .cols{display:grid;grid-template-columns:400px 1fr;gap:34px;align-items:start}
+  @media(max-width:860px){.cols{grid-template-columns:1fr}}
+  /* ===== телефон ===== */
+  .phone{width:390px;max-width:100%;background:var(--lv-page);border:1px solid var(--lv-line);border-radius:26px;overflow:hidden;box-shadow:0 18px 50px -22px rgba(26,26,26,.25)}
+  .subheader{height:52px;display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid var(--lv-line);position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(1.2) blur(6px)}
+  .back{width:40px;height:40px;display:grid;place-items:center;border:0;background:none;color:var(--lv-ink);cursor:pointer}
+  .subheader h1{font-size:16px;margin:0;font-weight:700}
+  .screen{padding:14px 16px 24px;display:flex;flex-direction:column;gap:12px}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;padding:0}
+  .sec-head h2{font-size:15px;margin:0;font-weight:800}
+  .sec-head .sub{font-size:12px;color:var(--lv-dim);font-weight:600}
+  /* карточка */
+  .card{background:var(--lv-card);border:1px solid var(--lv-line);border-radius:var(--lv-r-lg);box-shadow:var(--lv-shadow-soft);overflow:hidden}
+  .card-head{display:flex;align-items:flex-start;gap:12px;padding:14px 16px 12px}
+  .tile{flex:0 0 auto;width:38px;height:38px;border-radius:var(--lv-r-md);display:grid;place-items:center;background:var(--lv-soft-pink);color:var(--lv-pink-dark)}
+  .tile svg{width:20px;height:20px}
+  .mid{flex:1 1 auto;min-width:0}
+  .org{font-size:14.5px;font-weight:800;color:var(--lv-ink);line-height:1.32;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto}
+  .brand{font-size:12.5px;color:var(--lv-dim);margin-top:3px;overflow-wrap:break-word}
+  .brand b{color:var(--lv-ink);font-weight:600}
+  .badge{flex:0 0 auto;align-self:flex-start;font-size:11px;font-weight:700;padding:3px 9px;border-radius:var(--lv-r-pill);color:var(--lv-gold-text);background:var(--lv-soft-gold);white-space:nowrap}
+  /* мета */
+  .meta{border-top:1px solid var(--lv-line-2);padding:6px 16px 2px;display:flex;flex-direction:column}
+  .row{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--lv-line-2);font-size:13px}
+  .row:last-child{border-bottom:0}
+  .row dt{flex:0 0 96px;color:var(--lv-dim);font-size:12px;margin:0;padding-top:1px}
+  .row dd{flex:1 1 auto;margin:0;color:var(--lv-ink);overflow-wrap:anywhere}
+  .row dd .mono{font-variant-numeric:tabular-nums;letter-spacing:.01em}
+  .row dd .muted{color:var(--lv-dim)}
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:var(--lv-r-pill);background:var(--lv-surface);border:1px solid var(--lv-line);color:var(--lv-dim)}
+  /* действия */
+  .actions{display:flex;gap:8px;padding:12px 16px 16px}
+  .btn{flex:1 1 0;min-height:44px;border-radius:var(--lv-r-md);font-size:14px;font-weight:700;border:1px solid transparent;cursor:pointer;font-family:inherit}
+  .btn-primary{color:#fff;background:linear-gradient(135deg,var(--lv-pink) 0%,var(--lv-pink-dark) 100%)}
+  .btn-ghost{background:var(--lv-surface);color:var(--lv-ink);border-color:var(--lv-line)}
+  /* ===== аннотации ===== */
+  .notes{display:flex;flex-direction:column;gap:18px}
+  .note{background:#fff;border:1px solid var(--doc-line);border-radius:14px;padding:16px 18px}
+  .note h3{margin:0 0 8px;font-size:15px}
+  .note h3 .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+  .tag.now{color:var(--doc-dim);background:#f1efe9;border:1px solid #e3ded4}
+  .tag.new{color:var(--lv-tiffany-text);background:var(--lv-soft-tiffany)}
+  .tag.api{color:var(--doc-accent);background:var(--lv-soft-pink)}
+  .note ul{margin:6px 0 0;padding-left:18px}
+  .note li{margin:5px 0;font-size:13.5px}
+  .note p{margin:6px 0 0;font-size:13.5px;color:#3a3a3a}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .k{font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .legend{font-size:12.5px;color:var(--doc-dim);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="doc">
+    <div class="kicker">LOVII · кабинет представителя · макет</div>
+    <h1>Апрув точки — карточка заявки</h1>
+    <p class="lead">Предлагаемый вид очереди апрува. Главное изменение — карточка показывает <b>юрлицо</b> (наименование из DaData), а не только название точки. Справа — что показываем и чего не хватает в API.</p>
+  </header>
+
+  <div class="cols">
+    <!-- ======== МАКЕТ ЭКРАНА ======== -->
+    <div class="phone">
+      <div class="subheader">
+        <button class="back" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <h1>Апрув точки</h1>
+      </div>
+
+      <div class="screen">
+        <div class="sec-head"><h2>Очередь</h2><span class="sub">2 заявки</span></div>
+
+        <!-- Карточка 1 -->
+        <section class="card">
+          <div class="card-head">
+            <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg></span>
+            <div class="mid">
+              <div class="org">Продукты у дома</div>
+              <div class="brand">ООО «Пивоваренная компания «Балтика»»</div>
+            </div>
+          </div>
+          <dl class="meta">
+            <div class="row"><dt>ИНН</dt><dd class="mono">7802849641</dd></div>
+            <div class="row"><dt>ОГРН</dt><dd class="mono">1147847032838</dd></div>
+            <div class="row"><dt>Точка</dt><dd>Санкт-Петербург,<br>улица Белы Куна, 1к1</dd></div>
+            <div class="row"><dt>Контакт</dt><dd><a href="tel:+70000000001" style="color:var(--lv-pink-dark);text-decoration:none">+7 000 000-00-01</a></dd></div>
+            <div class="row"><dt>Промокод</dt><dd><span class="pill">AA2BTK</span></dd></div>
+            <div class="row"><dt>Подана</dt><dd>27 сентября, 16:25</dd></div>
+          </dl>
+          <div class="actions">
+            <button class="btn btn-primary">Подтвердить</button>
+            <button class="btn btn-ghost">Отклонить</button>
+          </div>
+        </section>
+
+        <!-- Карточка 2 (сокращённо, для контекста очереди) -->
+        <section class="card">
+          <div class="card-head">
+            <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg></span>
+            <div class="mid">
+              <div class="org">Пекарня «Пышка»</div>
+              <div class="brand">ООО «АТМОСФЕРА»</div>
+            </div>
+          </div>
+          <dl class="meta">
+            <div class="row"><dt>ИНН</dt><dd class="mono">7842216839</dd></div>
+            <div class="row"><dt>ОГРН</dt><dd class="mono">—</dd></div>
+            <div class="row"><dt>Точка</dt><dd>Санкт-Петербург</dd></div>
+            <div class="row"><dt>Контакт</dt><dd><a href="tel:+79119287478" style="color:var(--lv-pink-dark);text-decoration:none">+7 911 928-74-78</a></dd></div>
+            <div class="row"><dt>Подана</dt><dd>27 сентября, 01:08</dd></div>
+          </dl>
+          <div class="actions">
+            <button class="btn btn-primary">Подтвердить</button>
+            <button class="btn btn-ghost">Отклонить</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ======== АННОТАЦИИ ======== -->
+    <div class="notes">
+      <div class="note">
+        <h3>Сейчас <span class="tag now">как есть</span></h3>
+        <p>Карточка показывает только название точки для каталога (<span class="k">application.name</span> — «Продукты у дома») и город/адрес. Наименования юрлица нет вообще.</p>
+        <p class="legend">Причина: в ответе API (ресурс очереди апрува) просто нет поля с юрлицом — фронт физически нечего показать.</p>
+      </div>
+
+      <div class="note">
+        <h3>Предлагаем <span class="tag new">макет</span></h3>
+        <ul>
+          <li><b>Шапка карточки:</b> название мерчанта (бренда) крупно, под ним — юрлицо. Так сразу видно, что за бренд подключаем.</li>
+          <li><b>Реквизиты:</b> ИНН и ОГРН — отдельными строками, проверяемость (КПП не показываем).</li>
+          <li><b>Что подключаем:</b> адрес точки, контакт, промокод (кто привёл), дата подачи.</li>
+          <li><b>Действия:</b> один главный акцент — «Подтвердить», рядом вторичное «Отклонить».</li>
+        </ul>
+        <p class="legend">Порядок очереди — по дате подачи; карточки одного типа, уровни иерархии не смешиваются.</p>
+      </div>
+
+      <div class="note">
+        <h3>Что нужно от API <span class="tag api">в работу</span></h3>
+        <ul>
+          <li>добавить в ресурс очереди апрува поля юрлица: наименование, <span class="k">ogrn</span> (КПП не показываем; источник — снимок DaData в заявке, уже сохраняется);</li>
+          <li>название бренда/мерчанта по заявке;</li>
+          <li>если реквизитов нет (ИП без КПП / внешний источник недоступен) — показывать «—», а не пустоту.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

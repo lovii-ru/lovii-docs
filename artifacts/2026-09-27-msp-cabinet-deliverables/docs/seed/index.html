@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МСП · сид данных и путь верификации</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--card:#fff;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:30px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:30px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:36px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .note{border-left:3px solid var(--accent);background:var(--acc-soft);padding:12px 16px;margin:16px 0;font-size:14px}
+  ol{padding-left:22px}li{margin:8px 0}
+  figure{margin:18px 0}img{width:100%;border:1px solid var(--line);background:#fff}
+  figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .ok{color:var(--ok);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · кабинет МСП · локальный стенд</div>
+    <h1>Сид данных и путь верификации МСП</h1>
+    <p class="lead">Что заведено в базу, почему раньше было «непонятно что происходит» и где нажать «Я оплатил, проверьте».</p>
+  </header>
+
+  <h2>Что заведено</h2>
+  <table>
+    <thead><tr><th>Юрлицо (партнёр)</th><th>ИНН</th><th>Состав</th></tr></thead>
+    <tbody>
+      <tr><td>ООО «Ромашка» <span class="mono">#806</span></td><td>7801234567</td><td>мерчант «Ромашка» + 2 точки (Невский, Лиговский)</td></tr>
+      <tr><td>ООО «Василёк» <span class="mono">#807</span></td><td>7809876543</td><td>только юрлицо</td></tr>
+      <tr><td>ООО «Лютик» <span class="mono">#808</span></td><td>7812345678</td><td>только юрлицо</td></tr>
+    </tbody>
+  </table>
+  <p>Все три привязаны к вашему аккаунту (<span class="mono">+79119287478</span>) через членство владельца. Плюс заявка <span class="mono">#27</span> по «Ромашке» на стадии <b>выданного счёта</b> — чтобы кнопка оплаты появилась сразу. Мерчант «Ромашка» — в статусе <span class="mono">pending_moderation</span>: именно его активирует оплата.</p>
+
+  <h2>Почему раньше было непонятно</h2>
+  <div class="note">
+    Таблица <span class="mono">partner_memberships</span> была <b>пустой</b> — а кабинет МСП ищет юрлица именно по ней, не по владельцу. Поэтому кабинет показывал пустоту. Вдобавок ваша последняя заявка была в статусе <span class="mono">submitted</span> (без счёта) — кнопка оплаты в принципе не могла появиться.
+  </div>
+
+  <h2>Путь верификации — где нажимать</h2>
+  <ol>
+    <li>Войти как <span class="mono">+79119287478</span>, открыть кабинет МСП, раздел <b>«Счёт верификации»</b>.</li>
+    <li>Проверить: статус «Счёт выдан», код <span class="mono">VER-806-SZ077</span>, сумма 1 ₽.</li>
+    <li>Нажать <b>«Я оплатил, проверьте»</b> — платёжка уходит в банк (на стенде это <span class="mono">tbank-mock</span>).</li>
+    <li>Мок создаёт поступление и шлёт вебхук; ядро матчит код + ИНН + сумму → точка верифицируется, мерчант <span class="mono">pending_moderation → active</span> — <span class="ok">автоматически</span>, без ручного апрува.</li>
+  </ol>
+  <p>Ручной шаг в цепочке ровно один — апрув представителя, и только если заявка подана с его промокодом. После верификационного рубля ничего подтверждать не нужно.</p>
+
+  <figure><img src="assets/msp-cabinet.png" alt="Кабинет МСП"><figcaption>Кабинет МСП — юрлица и мерчант с точками (390px).</figcaption></figure>
+  <figure><img src="assets/msp-payment.png" alt="Счёт верификации"><figcaption>«Счёт верификации»: статус «Счёт выдан», код VER, кнопка «Я оплатил, проверьте».</figcaption></figure>
+</div>
+</body>
+</html>
