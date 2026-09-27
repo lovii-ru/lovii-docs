@@ -42,6 +42,23 @@ Self-hosted минуты GitHub не расходуют — пайплайн п�
 Аварийно, мимо CI: на сервере в `/opt/lovii-<repo>-staging` —
 `git fetch origin && git reset --hard origin/staging@{1} && docker compose -f docker-compose.prod.yml build && up -d`.
 
+## Версионность: что сейчас на стейджинге
+
+Версия стенда = git SHA ветки `staging`. Одной командой (локально):
+
+```sh
+bash ~/LOVII/tools/staging-status.sh
+```
+
+Показывает по всем 4 репо: tip `staging` в GitHub, HEAD на сервере, совпадение
+и возраст контейнеров. Нюансы:
+- **Доки не деплоятся** (`paths-ignore: '**/*.md'`): сервер может быть позади
+  GitHub на доковые коммиты — статус «✓ (доки)», это норма. «⚠ СЕРВЕР ПОЗАДИ» —
+  разбираться.
+- **Архив-ветки («для хранения») на GitHub НЕ деплоятся** — на стенд попадает
+  только ветка `staging`. Это норма хранения, а не потеря изменений.
+  Влить ветку на стенд — осознанный шаг владельца/агента (merge → пуш → CI).
+
 ## Возврат к GitHub-hosted (после сброса лимита биллинга)
 
 1. `gh api -X PATCH repos/lovii-tech/<repo>/actions/variables/CI_RUNNER -f value=ubuntu-latest`
