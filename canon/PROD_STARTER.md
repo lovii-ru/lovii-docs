@@ -15,7 +15,16 @@
 - `ambassadors`: prefix `AA`, код `AA2222`, is_active (платформенный код основателя).
 - `representative_promo_codes`: `AA2222` (is_active=false — платформенный дубль)
   и **`AA2BTK` (is_active=true — личный код основателя)**.
-- НЕТ: юрлиц, мерчантов, точек, товаров, заявок, заказов, кошельков, прочих юзеров.
+- **ООО «АКСИОМА» — оператор платформы (КРИТИЧНО, канон FINANCIAL_CONTOUR.md):**
+  `lovii_b2b.partners.id=265` (ИНН 7842223709, active) + b2b-юзер 258 (телефон
+  владельца) + membership owner + `accounts` (owner_type=partner, owner_id=265,
+  balance=0). Получатель доли пула (40/40/20 → Компания) и подписочных списаний,
+  сторона договора с Т-Банком №МР-08.26/АКС_01. **ID зафиксирован**: подписки и
+  переводы резолвят оператора через `payments.split.operator_partner_id`
+  (env `OPERATOR_PARTNER_ID`) — в .env прода обязательно `OPERATOR_PARTNER_ID=265`,
+  иначе биллинг падает с RuntimeException.
+- Схемы: `public` (core) + `lovii_b2b` (юрлица) — обе включены.
+- НЕТ: прочих юрлиц, мерчантов, точек, товаров, заявок, заказов, кошельков, прочих юзеров.
 
 ## Как применить на прод (при старте)
 
@@ -32,5 +41,7 @@ gunzip -c lovii-prod-starter_2026-09-27.dump.gz | \
 
 Скриптом повторить: createdb `lovii-core-light` → load `database/schema/pgsql_core-schema.sql`
 через psql-КОНТЕЙНЕР (в app-образе psql нет!) → `artisan migrate --force` (app-образ,
-env с `DB_DATABASE=lovii-core-light`) → скопировать cities/users/ambassadors/
-representative_promo_codes со staging → pg_dump -Fc.
+env с `DB_DATABASE=lovii-core-light`) → schema-only `lovii_b2b` из staging (схема юрлиц,
+без данных) → скопировать cities/users/ambassadors/representative_promo_codes +
+partner_users 258 + partners 265 АКСИОМА + membership 268 + accounts(partner,265,0)
+→ pg_dump -Fc. Дата актуальной версии: 2026-09-27 20:58 (52 КБ).
