@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заявки «ЛОВИ Бизнес»: одна заявка на точку и лимит пяти по пользователю</title>
+<style>
+  :root{
+    --ink:#171419; --ink-2:#4a444d; --ink-3:#7d7581;
+    --line:#ddd7dd; --line-2:#efeaf0; --paper:#fdfcfc; --accent:#c92a6a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:880px;margin:0 auto;padding:56px 24px 96px}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 14px}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:38px;line-height:1.14;margin:0 0 16px;font-weight:400;letter-spacing:-.01em}
+  .lead{color:var(--ink-2);font-size:18px;margin:0;max-width:68ch}
+  h2{font-family:Georgia,"Times New Roman",serif;font-size:23px;font-weight:400;margin:52px 0 6px}
+  h2 .num{color:var(--accent);font-family:-apple-system,sans-serif;font-size:13px;font-weight:700;display:block;letter-spacing:.1em;margin-bottom:6px}
+  h3{font-size:15px;margin:26px 0 8px}
+  p{margin:12px 0;max-width:72ch}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--line-2);vertical-align:top}
+  th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line);font-weight:700}
+  .fail{color:var(--accent)}
+  .ok{color:#3f7a33}
+  .kpi{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);margin:24px 0}
+  .kpi div{padding:16px 18px;border-right:1px solid var(--line)}
+  .kpi div:last-child{border-right:0}
+  .kpi .v{font-family:Georgia,serif;font-size:27px;line-height:1;display:block}
+  .kpi .k{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:7px;display:block}
+  .call{border-left:2px solid var(--accent);padding:2px 0 2px 16px;margin:20px 0}
+  .call p{margin:8px 0}
+  .warn{border-left:2px solid #d4a854;padding:2px 0 2px 16px;margin:20px 0}
+  .warn p{margin:8px 0}
+  pre{background:#f7f4f6;border:1px solid var(--line-2);padding:14px 16px;overflow:auto;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;margin:16px 0}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--line-2);padding:1px 5px}
+  ul{margin:12px 0;padding-left:20px}
+  li{margin:7px 0}
+  footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+  @media (max-width:640px){.kpi{grid-template-columns:1fr}.kpi div{border-right:0;border-bottom:1px solid var(--line)}.kpi div:last-child{border-bottom:0}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">LOVII · заявки «ЛОВИ Бизнес»</p>
+  <h1>Одна заявка на точку и лимит пяти заявок по пользователю</h1>
+  <p class="lead">Разбор по обращению владельца: одна и та же заявка занимала место в лимите при повторных отказах. Модель уточнена владельцем — заявка живёт по своему идентификатору, а лимит считается по пользователю, который её заводит. Код перестроен под эту модель, проверен собственными тестами и независимым разбором. Отдельным разделом — честно про аварию на локальном стенде.</p>
+</header>
+
+<h2><span class="num">01</span>Вердикт</h2>
+<div class="kpi">
+  <div><span class="v fail">5 / 5</span><span class="k">лимит выбирала одна точка</span></div>
+  <div><span class="v fail">11</span><span class="k">заявок на один ИНН</span></div>
+  <div><span class="v ok">216</span><span class="k">тестов зелёные</span></div>
+</div>
+<p><strong>Обращение подтвердилось.</strong> Отказ по заявке не освобождал место в лимите, а повторная подача создавала новую заявку и нового партнёра-черновика. Точка, которую отклонили пять раз, выбирала лимит целиком.</p>
+<p>При этом сам лимит был устроен не так, как нужно: он считал <em>партнёров</em> с активным членством владельца. Правильная мера — заявки, ожидающие подтверждения, у конкретного пользователя. На этой модели код теперь и стоит.</p>
+
+<h2><span class="num">02</span>Что происходило в коде</h2>
+<h3>Дедупликация работала только до верификации</h3>
+<p>При подаче ядро искало существующую заявку по паре «пользователь + ИНН» — но только среди статусов «до верификации». Статус «заявку отклонили» финальный, в поиск не попадал: та же точка заводилась заново.</p>
+<h3>Отказ менял только статус заявки</h3>
+<p>Черновик партнёра, мерчант, точка и членство владельца оставались как были.</p>
+<h3>Лимит считал не то</h3>
+<pre>// PartnerUser::countUnverifiedOwnedPartners() — порог 5
+return Partner::query()
+    ->whereNull('verified_at')
+    ->whereHas('memberships', fn ($q) => $q
+        ->where('partner_user_id', $this->id)
+        ->where('role', PartnerRole::Owner)
+        ->where('status', 'active'))
+    ->count();</pre>
+<p>Считались партнёры-черновики, а не заявки. Одна точка = один лимит за попытку.</p>
+
+<h2><span class="num">03</span>Доказательство на данных стенда</h2>
+<p>ИНН <code>7842216839</code> (точка на Белы Куна 4к1) — каждая повторная подача дала отдельного партнёра:</p>
+<table>
+  <thead><tr><th>Заявки (id)</th><th>Статус</th><th>Партнёр-черновик</th><th>Имя черновика</th></tr></thead>
+  <tbody>
+    <tr><td>6, 8, 9</td><td class="ok">verified</td><td>263</td><td>—</td></tr>
+    <tr><td>28, 29</td><td class="fail">failed</td><td>809, 810</td><td>Пекарня «Пышечная», «Пышка»</td></tr>
+    <tr><td>31, 32, 33, 34</td><td class="fail">failed</td><td>812–815</td><td>ООО «АТМОСФЕРА» ×4</td></tr>
+    <tr><td>35–39</td><td class="fail">failed</td><td>816–820</td><td>ИП Тест Лимит ×4, ИП Тест Идемпотент</td></tr>
+  </tbody>
+</table>
+<p>Один ИНН → одиннадцать заявок и одиннадцать отдельных партнёров. Состояние лимита: <code>5 / 5</code> — занято целиком, и держали его партнёры 816–820, за каждым из которых заявка в отказе.</p>
+<div class="call">
+  <p><strong>Почему нельзя склеивать по одному ИНН.</strong> Под этим ИНН лежат минимум три <em>разные</em> точки по разным адресам (Белы Куна 4к1, 6 и 16). Ключ обязательно включает место точки.</p>
+</div>
+
+<h2><span class="num">04</span>Модель</h2>
+<p>Формулировка владельца, по которой перестроен код:</p>
+<ul>
+  <li>у заявки есть идентификатор, и <strong>в рамках этого идентификатора</strong> заявка может отправляться и отклоняться сколько угодно раз — это смена статуса, а не новая заявка;</li>
+  <li><strong>лимит пяти</strong> считается <strong>не по ИНН и не по id заявки, а по заявкам пользователя</strong>, который их заводит, и только по тем, что ожидают подтверждения;</li>
+  <li>отказ — это отмена: заявка уходит со счёта и освобождает слот.</li>
+</ul>
+<pre>// лимит: заявки на подтверждении у конкретного пользователя
+$awaiting = PartnerApplication::query()
+    ->where('user_id', $user->id)
+    ->whereIn('status', PartnerApplicationStatus::awaitingConfirmationValues())
+    ->when($exceptApplicationId !== null, fn ($q) => $q->where('id', '!=', $exceptApplicationId))
+    ->count();
+
+throw_if($awaiting >= self::MAX_AWAITING_APPLICATIONS, ...);  // 5</pre>
+<p>Статусы, занимающие слот: <code>submitted</code>, <code>awaiting_rep_approval</code>, <code>invoice_issued</code>, <code>awaiting_payment</code>, <code>verifying</code>. Черновик и финальные статусы слот не держат.</p>
+
+<h2><span class="num">05</span>Что изменено</h2>
+<table>
+  <thead><tr><th>Файл</th><th>Что делает</th></tr></thead>
+  <tbody>
+    <tr><td><code>Support/PartnerApplicationIdentity.php</code> (новый)</td><td>Ключ точки: ИНН + место — координаты (точность ~11 м), иначе город + нормализованный адрес, иначе только ИНН</td></tr>
+    <tr><td><code>CreatePartnerApplicationAction</code></td><td>Повторная подача находит ту же заявку по ключу точки и правит её — id сохраняется; лимит проверяется и при переоткрытии, сама заявка из счёта исключена</td></tr>
+    <tr><td><code>RejectPartnerApplicationAction</code></td><td>Отказ остаётся сменой статуса; лимит снимается автоматически, потому что считает заявки, а не партнёров</td></tr>
+    <tr><td><code>PartnerApplicationStatus</code></td><td>Признак «ждёт подтверждения» + список значений для счётчика; правило ИНН (SZ-050) старше переоткрытия</td></tr>
+    <tr><td>Миграция <code>add_identity_key…</code></td><td>Колонка ключа, индекс, заполнение существующих строк</td></tr>
+    <tr><td><code>PartnerApplicationTest</code></td><td>Повторная подача правит ту же заявку; лимит по пользователю и переоткрытие не превышает пять; черновики партнёров лимит не занимают</td></tr>
+  </tbody>
+</table>
+<p>Итог проверок: <strong>18 тестов</strong> набора заявок зелёные, смежные кабинеты — <strong>216 тестов, 1106 утверждений</strong>, стиль чистый. Обработка партнёрских членств из правки убрана целиком — она больше не нужна и не вводит новых значений статусов.</p>
+
+<h2><span class="num">06</span>Независимый разбор правки</h2>
+<p>Отдельный разбор (только чтение, состязательная роль) проверял, не сломала ли правка существующие сценарии, и не тавтологичны ли тесты.</p>
+<table>
+  <thead><tr><th>Пункт</th><th>Что нашёл разбор</th><th>Состояние</th></tr></thead>
+  <tbody>
+    <tr><td>Тесты ловят именно баг</td><td>При откате правки оба новых теста падают по правильным причинам (создан дубль; слот не освобождён)</td><td class="ok">подтверждено</td></tr>
+    <tr><td>Отказ освобождал слот</td><td>Подтверждено и кодом, и падением теста без правки</td><td class="ok">закрыто</td></tr>
+    <tr><td>Переоткрытие обходило лимит</td><td>Переоткрытие не проверяло лимит — можно было получить шесть ожидающих заявок</td><td class="ok">закрыто проверкой лимита при переоткрытии</td></tr>
+    <tr><td>Переоткрытие перехватывало правило ИНН</td><td>Если под ИНН уже есть подтверждённое юрлицо, заявка оживляла старый черновик вместо привязки к нему</td><td class="ok">закрыто: правило ИНН старше</td></tr>
+    <tr><td>Новые статусы членств вне канона</td><td>Правка писала членству значение, которого нет в каноне</td><td class="ok">снято вместе с обработкой членств</td></tr>
+    <tr><td>Нормализация адреса</td><td>«4к1» и «4 к 1» давали разные ключи — точка расщеплялась</td><td class="fail">остаётся: нужно добить нормализацию (в связке с координатами расхождение почти не встречается)</td></tr>
+    <tr><td>Черновик не создался при первой подаче</td><td>Если на момент подачи партнёрская схема была недоступна, переоткрытие не создаёт черновик</td><td class="fail">остаётся: редкий случай среды</td></tr>
+    <tr><td>Повторная подача по уже подтверждённой точке</td><td>Уходит в правило ИНН и создаёт новую заявку под подтверждённым партнёром</td><td class="fail">остаётся: нужно продуктовое решение</td></tr>
+    <tr><td>Смена адреса при переоткрытии</td><td>Адрес заявки обновляется, точка мерчанта остаётся прежней</td><td class="fail">остаётся: синхронизировать точку</td></tr>
+    <tr><td>Уникальность на уровне базы</td><td>Индекс не уникальный: исторические дубли не сведены</td><td class="fail">следующий шаг — свести дубли и включить уникальность</td></tr>
+    <tr><td>След переоткрытия и отказа</td><td>История смены статусов в ядре не пишется</td><td class="fail">остаётся: observability</td></tr>
+  </tbody>
+</table>
+<p>Отдельно: разбор отметил, что заявка ищется среди заявок того же пользователя. Одинаковая точка у двух разных людей — это конфликт владения, а не дубль, и решать его продуктово.</p>
+
+<h2><span class="num">07</span>Авария на локальном стенде и восстановление</h2>
+<p>Во время проверки я запустил тесты ядра и попал в известную ловушку проекта: прогон не применил переменные окружения и ушёл в живую базу локального стенда, где схема была пересоздана. Это моя ошибка — в репозитории есть штатный скрипт для тестов, который прямо предупреждает об этом случае и сверяет адрес базы перед запуском.</p>
+<table>
+  <thead><tr><th>Контур</th><th>Состояние</th></tr></thead>
+  <tbody>
+    <tr><td>Общий staging</td><td class="ok">не затронут</td></tr>
+    <tr><td>Партнёрский контур локально</td><td class="ok">уцелел полностью</td></tr>
+    <tr><td>Основная схема локального стенда</td><td class="fail">стёрта и восстановлена</td></tr>
+  </tbody>
+</table>
+<p>Восстановлено штатным скриптом проекта со staging: профиль владельца и МСП, 121 заказ, 1183 строки леджера, 97 операций кошелька, 35 мерчантов, 123 предложения, промокоды. Дополнительно воссоздано вручную то, чего на staging нет: партнёры МСП и пять заявок (три в очереди апрувов представителя, одна со счётом, одна в отказе). Проверено по API: профиль, баланс, история заказов и очередь апрувов отвечают.</p>
+<div class="call">
+  <p><strong>Чтобы это не повторилось:</strong> рабочая копия привязана к тестовому контуру в самом файле окружения, тесты запускаются только штатным скриптом проекта, который падает при неверном адресе базы и не оставляет кэш конфигурации.</p>
+</div>
+
+<h3>Последствие, которое владелец заметил 28 сентября: 7 карт против 3 ИНН</h3>
+<p>Профиль показывал семь бизнес-карт, кабинет МСП — три юрлица. Это не порча базы: экраны читают разные связи.</p>
+<table>
+  <thead><tr><th>Экран</th><th>Откуда берёт список</th></tr></thead>
+  <tbody>
+    <tr><td>Бизнес-карты в профиле</td><td>партнёры, привязанные к пользователю как владельцу (<code>owner_user_id</code>)</td></tr>
+    <tr><td>Юрлица в кабинете МСП</td><td>партнёры, у которых есть <em>активная строка членства</em> пользователя</td></tr>
+  </tbody>
+</table>
+<p>После аварии партнёры восстановились вместе с владением, а строки членств — нет: в кабинете остались только три юрлица, заведённые мной вручную при восстановлении. Отсюда 7 против 3.</p>
+<p><strong>Исправлено:</strong> владельцу восстановлены активные членства по всем его юрлицам. Проверено по API — оба экрана показывают одни и те же семь: ООО «АТМОСФЕРА», ООО «АКСИОМА», Grand, ПАФФО и три демонстрационных (Ромашка, Василёк, Лютик), которые я завёл при восстановлении и которых в реальных данных нет.</p>
+<footer>
+  Разбор и правка — 27–28 сентября 2026 года. Ветка <code>t027-application-identity</code> от staging, коммит <code>c18137ac</code>, не опубликована. Патч и отчёт — в папке поставки.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,642 @@
+diff --git a/app/Domain/Business/Actions/CreatePartnerApplicationAction.php b/app/Domain/Business/Actions/CreatePartnerApplicationAction.php
+index 79967517..c64a64c6 100644
+--- a/app/Domain/Business/Actions/CreatePartnerApplicationAction.php
++++ b/app/Domain/Business/Actions/CreatePartnerApplicationAction.php
+@@ -5,6 +5,7 @@
+ namespace App\Domain\Business\Actions;
+ 
+ use App\Domain\Business\Enums\PartnerApplicationStatus;
++use App\Domain\Business\Support\PartnerApplicationIdentity;
+ use App\Domain\Geo\Services\CityNameNormalizer;
+ use App\Domain\Merchant\Enums\BranchStatus;
+ use App\Domain\Merchant\Enums\MerchantStatus;
+@@ -57,6 +58,9 @@
+  */
+ final readonly class CreatePartnerApplicationAction
+ {
++    /** Владелец, 2026-09-27: максимум заявок на подтверждении у одного пользователя. */
++    private const MAX_AWAITING_APPLICATIONS = 5;
++
+     public function __construct(
+         private DadataClientContract $dadata,
+     ) {}
+@@ -68,9 +72,25 @@ public function execute(User $user, array $data): CreatePartnerApplicationResult
+     {
+         $inn = (string) preg_replace('/\D+/', '', (string) $data['inn']);
+ 
++        // Ключ идентичности точки/МСП (владелец, 2026-09-27): одна точка —
++        // одна заявка. Держится на ИНН + месте (координаты или адрес).
++        $identityKey = PartnerApplicationIdentity::forApplication(
++            $inn,
++            $data['lat'] ?? null,
++            $data['lon'] ?? null,
++            is_string($data['city_name'] ?? null) ? $data['city_name'] : null,
++            is_string($data['address_line'] ?? null) ? $data['address_line'] : null,
++        );
++
+         $existing = PartnerApplication::query()
+             ->where('user_id', $user->id)
+-            ->where('inn', $inn)
++            ->where(function ($query) use ($identityKey, $inn): void {
++                $query->where('identity_key', $identityKey)
++                    ->orWhere(function ($legacy) use ($inn): void {
++                        // Строки, созданные до появления ключа.
++                        $legacy->whereNull('identity_key')->where('inn', $inn);
++                    });
++            })
+             ->get()
+             ->first(fn (PartnerApplication $application): bool => $application->status->isPreVerification());
+ 
+@@ -85,18 +105,45 @@ public function execute(User $user, array $data): CreatePartnerApplicationResult
+         // заявку не роняет — она уходит общим путём (submitted).
+         $explicitPromo = ((string) ($data['promo'] ?? '')) !== '';
+         $profilePromo = $explicitPromo ? null : $this->resolveProfilePromo($user);
++        $promoPath = $explicitPromo || $profilePromo instanceof RepresentativePromoCode;
+ 
+         // SZ-050 Ф2 (правило ИНН, решение владельца 2026-09-17): заявка с ИНН
+         // уже верифицированного СВОЕГО юрлица — это новый бренд, а не новое
+-        // МСП. Дубли юрлиц (кейс «Пончики») больше не создаются: бренд уходит
+-        // под существующего партнёра, заявка сразу Verified — без счёта 1 ₽,
+-        // компания уже проверена. С промокодом пути представителя не трогаем.
+-        if (! $explicitPromo && ! $profilePromo instanceof RepresentativePromoCode) {
+-            $verifiedPartner = $this->findOwnedVerifiedPartnerByInn($user, $inn);
+-
+-            if ($verifiedPartner instanceof Partner) {
+-                return $this->attachBrandToVerifiedPartner($user, $data, $inn, $verifiedPartner);
+-            }
++        // МСП. Бренд уходит под существующего партнёра, заявка сразу Verified.
++        // Правило ИНН старше переоткрытия (разбор T-027): если под этим ИНН
++        // уже есть подтверждённое юрлицо, точка идёт под него, а не оживляет
++        // отклонённый черновик.
++        $verifiedPartner = $promoPath ? null : $this->findOwnedVerifiedPartnerByInn($user, $inn);
++
++        if ($verifiedPartner instanceof Partner) {
++            return $this->attachBrandToVerifiedPartner($user, $data, $inn, $verifiedPartner);
++        }
++
++        // Отказ и истечение — состояние прежней заявки, а не повод завести
++        // вторую: повторная подача правит ту же запись, жизнь заявки идёт по
++        // её идентификатору (владелец, 2026-09-27: «это по факту отмена»).
++        $reopenable = PartnerApplication::query()
++            ->where('user_id', $user->id)
++            ->where(function ($query) use ($identityKey, $inn): void {
++                $query->where('identity_key', $identityKey)
++                    ->orWhere(function ($legacy) use ($inn): void {
++                        $legacy->whereNull('identity_key')->where('inn', $inn);
++                    });
++            })
++            ->get()
++            ->first(fn (PartnerApplication $application): bool => $application->status->isReopenable());
++
++        if ($reopenable instanceof PartnerApplication) {
++            // Заявка живёт по своему идентификатору: переоткрытие — это снова
++            // «ждём подтверждения», поэтому лимит проверяется и здесь, иначе
++            // переоткрытием можно было бы превысить пять ожидающих заявок.
++            // Саму заявку из счёта исключаем — она уже существует.
++            $this->assertUnverifiedPartnerCap($user, $reopenable->id);
++
++            return new CreatePartnerApplicationResult(
++                $this->reopen($user, $reopenable, $data, $identityKey),
++                created: false,
++            );
+         }
+ 
+         $this->assertUnverifiedPartnerCap($user);
+@@ -111,12 +158,13 @@ public function execute(User $user, array $data): CreatePartnerApplicationResult
+ 
+         $party = $this->enrichByInn($inn);
+ 
+-        $application = DB::transaction(function () use ($user, $data, $inn, $party, $promo): PartnerApplication {
++        $application = DB::transaction(function () use ($user, $data, $inn, $identityKey, $party, $promo): PartnerApplication {
+             /** @var PartnerApplication $application */
+             $application = PartnerApplication::query()->create([
+                 'user_id' => $user->id,
+                 'name' => (string) $data['name'],
+                 'inn' => $inn,
++                'identity_key' => $identityKey,
+                 // SZ-076 (владелец 2026-09-25): тип вырезан из формы — null.
+                 'activity_type' => isset($data['activity_type'])
+                     ? (string) $data['activity_type']
+@@ -351,13 +399,86 @@ private function attachBrandToVerifiedPartner(
+         return new CreatePartnerApplicationResult($application, created: true);
+     }
+ 
+-    private function assertUnverifiedPartnerCap(User $user): void
++    /**
++     * Повторная подача по той же точке: правим прежнюю заявку и возвращаем
++     * ей слот лимита. Новых партнёра, мерчанта и филиала не создаём —
++     * переиспользуем уже материализованный черновик.
++     *
++     * @param  array<string, mixed>  $data
++     */
++    private function reopen(User $user, PartnerApplication $application, array $data, string $identityKey): PartnerApplication
+     {
+-        $partnerUser = PartnerUser::query()
+-            ->where('core_user_id', $user->id)
+-            ->first();
++        $inn = (string) $application->inn;
++        $party = $this->enrichByInn($inn);
++        $promo = ((string) ($data['promo'] ?? '')) !== ''
++            ? $this->resolvePromoCode($data['promo'])
++            : $this->resolveProfilePromo($user);
++
++        return DB::transaction(function () use ($application, $data, $identityKey, $party, $promo): PartnerApplication {
++            $application->forceFill([
++                'name' => (string) $data['name'],
++                'identity_key' => $identityKey,
++                'activity_type' => isset($data['activity_type'])
++                    ? (string) $data['activity_type']
++                    : null,
++                'address_line' => (string) $data['address_line'],
++                'city_name' => $data['city_name'] ?? null,
++                'city_id' => $this->resolveCityId($data),
++                'lat' => $data['lat'] ?? null,
++                'lon' => $data['lon'] ?? null,
++                'phone' => (string) $data['phone'],
++                'email' => $data['email'] ?? null,
++                // Промокод может смениться правкой — привязка пересчитывается.
++                'status' => $promo instanceof RepresentativePromoCode
++                    ? PartnerApplicationStatus::AwaitingRepApproval
++                    : PartnerApplicationStatus::Submitted,
++                'promo_code' => $promo?->code,
++                'representative_user_id' => $promo?->user_id,
++                'dadata_party' => $party instanceof PartyResult
++                    ? ($party->raw['data'] ?? $party->raw)
++                    : $application->dadata_party,
++                'rep_approved_at' => null,
++                'rep_rejected_at' => null,
++                'rep_reject_reason' => null,
++            ])->save();
+ 
+-        throw_if($partnerUser !== null && $partnerUser->hasReachedUnverifiedOwnedCap(), BusinessException::class, 'partner_application_cap_reached', 'Достигнут лимит неподтверждённых точек на пользователя.', 422);
++            $this->syncDraftName($application);
++
++            return $application;
++        });
++    }
++
++    /** Имя точки в черновике мерчанта следует за правкой заявки. */
++    private function syncDraftName(PartnerApplication $application): void
++    {
++        if ($application->merchant_id === null) {
++            return;
++        }
++
++        Merchant::query()->whereKey($application->merchant_id)->update(['name' => $application->name]);
++    }
++
++    /**
++     * Лимит владельца (2026-09-27): считаем не партнёров и не ИНН, а заявки
++     * на подтверждении у конкретного пользователя, который их заводит.
++     * Отказ снимает заявку со счёта, повторная подача той же заявки снова
++     * его занимает. Максимум ожидающих заявок — пять.
++     */
++    private function assertUnverifiedPartnerCap(User $user, ?int $exceptApplicationId = null): void
++    {
++        $awaiting = PartnerApplication::query()
++            ->where('user_id', $user->id)
++            ->whereIn('status', PartnerApplicationStatus::awaitingConfirmationValues())
++            ->when($exceptApplicationId !== null, fn ($query) => $query->where('id', '!=', $exceptApplicationId))
++            ->count();
++
++        throw_if(
++            $awaiting >= self::MAX_AWAITING_APPLICATIONS,
++            BusinessException::class,
++            'partner_application_cap_reached',
++            'Достигнут лимит заявок, ожидающих подтверждения: '.self::MAX_AWAITING_APPLICATIONS.'.',
++            422,
++        );
+     }
+ 
+     /**
+diff --git a/app/Domain/Business/Actions/RejectPartnerApplicationAction.php b/app/Domain/Business/Actions/RejectPartnerApplicationAction.php
+index 7da4c302..cc8461c1 100644
+--- a/app/Domain/Business/Actions/RejectPartnerApplicationAction.php
++++ b/app/Domain/Business/Actions/RejectPartnerApplicationAction.php
+@@ -12,9 +12,13 @@
+ 
+ /**
+  * SZ-038 фаза 1: отклонение заявки представителем (реп-кабинет SZ-034B
+- * «Апрув точки»). Отклонённая заявка финальна (isFinal) — повторная
+- * подача с тем же ИНН создаёт новую заявку; карточка возвращается
+- * владельцу на правку через новую подачу.
++ * «Апрув точки»).
++ *
++ * Модель владельца (2026-09-27): отказ — это отмена, а не новая заявка.
++ * Заявка живёт по своему идентификатору: повторная подача по той же точке
++ * (ИНН + место) правит эту же запись (CreatePartnerApplicationAction::reopen),
++ * а лимит пяти заявок на подтверждении считается по заявкам пользователя —
++ * отклонённая заявка в него больше не входит.
+  */
+ final readonly class RejectPartnerApplicationAction
+ {
+diff --git a/app/Domain/Business/Enums/PartnerApplicationStatus.php b/app/Domain/Business/Enums/PartnerApplicationStatus.php
+index dfa4a9c8..ac1d0bb1 100644
+--- a/app/Domain/Business/Enums/PartnerApplicationStatus.php
++++ b/app/Domain/Business/Enums/PartnerApplicationStatus.php
+@@ -36,6 +36,19 @@ enum PartnerApplicationStatus: string
+ 
+     case Expired = 'expired';
+ 
++    /**
++     * Значения статусов «ждёт подтверждения» — для счётчика лимита заявок.
++     *
++     * @return list<string>
++     */
++    public static function awaitingConfirmationValues(): array
++    {
++        return array_values(array_map(
++            static fn (self $status): string => $status->value,
++            array_filter(self::cases(), static fn (self $status): bool => $status->isAwaitingConfirmation()),
++        ));
++    }
++
+     /** Человекочитаемая подпись для мобильного клиента. */
+     public function label(): string
+     {
+@@ -62,9 +75,35 @@ public function isPreVerification(): bool
+         );
+     }
+ 
+-    /** Финальные статусы: повторная подача с тем же ИНН создаёт новую заявку. */
++    /**
++     * Заявка ждёт подтверждения и потому занимает слот лимита (владелец,
++     * 2026-09-27). Черновик и финальные статусы слот не держат.
++     */
++    public function isAwaitingConfirmation(): bool
++    {
++        return in_array(
++            $this,
++            [self::Submitted, self::AwaitingRepApproval, self::InvoiceIssued, self::AwaitingPayment, self::Verifying],
++            true,
++        );
++    }
++
++    /** Финальные статусы: заявка закрыта, повторная подача правит её же. */
+     public function isFinal(): bool
+     {
+         return in_array($this, [self::Verified, self::Failed, self::Expired], true);
+     }
++
++    /**
++     * Повторная подача по той же точке (ИНН + место) правит эту заявку,
++     * а не создаёт новую. Подтверждённая заявка — не переоткрывается.
++     */
++    public function isReopenable(): bool
++    {
++        if ($this->isPreVerification()) {
++            return true;
++        }
++
++        return in_array($this, [self::Failed, self::Expired], true);
++    }
+ }
+diff --git a/app/Domain/Business/Support/PartnerApplicationIdentity.php b/app/Domain/Business/Support/PartnerApplicationIdentity.php
+new file mode 100644
+index 00000000..91a5844b
+--- /dev/null
++++ b/app/Domain/Business/Support/PartnerApplicationIdentity.php
+@@ -0,0 +1,100 @@
++<?php
++
++declare(strict_types=1);
++
++namespace App\Domain\Business\Support;
++
++use App\Domain\Geo\Services\CityNameNormalizer;
++
++/**
++ * Ключ идентичности заявки «ЛОВИ Бизнес».
++ *
++ * Решение владельца (2026-09-27): одна точка или одно МСП — это одна заявка.
++ * Отказ — не повод завести вторую заявку на ту же точку, а её состояние;
++ * повторная подача правит прежнюю запись. Без ключа каждая повторная подача
++ * создавала нового партнёра-черновика и съедала слот лимита (доходило до
++ * блокировки владельца пятью отказами по одной и той же точке).
++ *
++ * Ключ = нормализованный ИНН + место точки:
++ *  - координаты (обычный путь мобильного клиента) — сетка ~11 м;
++ *  - координат нет, но есть адрес — город + нормализованный адрес;
++ *  - адресуемой точки нет — МСП-ключ, только ИНН.
++ *
++ * Почему не по одному ИНН: у одного юрлица бывает несколько точек по разным
++ * адресам (подтверждено стендом — под одним ИНН три разных адреса). Склейка
++ * по ИНН их бы уничтожила.
++ */
++final class PartnerApplicationIdentity
++{
++    /** Заявка без адресуемой точки: идентичность держится на ИНН. */
++    public const string NO_POINT = 'no-point';
++
++    /** Ключ заявки: sha256 от «ИНН | место». */
++    public static function forApplication(
++        string $inn,
++        mixed $lat,
++        mixed $lon,
++        ?string $cityName,
++        ?string $addressLine,
++    ): string {
++        return hash('sha256', self::innKey($inn).'|'.self::placeKey($lat, $lon, $cityName, $addressLine));
++    }
++
++    /** ИНН без разделителей — та же нормализация, что и в экшене создания. */
++    public static function innKey(string $inn): string
++    {
++        return (string) preg_replace('/\D+/', '', $inn);
++    }
++
++    /** Ключ места: координаты старше адреса, адрес старше «нет точки». */
++    public static function placeKey(mixed $lat, mixed $lon, ?string $cityName, ?string $addressLine): string
++    {
++        if (is_numeric($lat) && is_numeric($lon)) {
++            return 'geo:'.number_format((float) $lat, 4, '.', '').','.number_format((float) $lon, 4, '.', '');
++        }
++
++        $address = self::normalizeAddress($addressLine);
++
++        if ($address === '') {
++            return self::NO_POINT;
++        }
++
++        $city = $cityName !== null && mb_trim($cityName) !== ''
++            ? CityNameNormalizer::key($cityName)
++            : '—';
++
++        return 'addr:'.$city.'|'.$address;
++    }
++
++    /**
++     * Детерминированная нормализация адреса: регистр, ё→е, пунктуация и
++     * типовые слова («город», «улица», «дом», «корпус», «Россия») уходят,
++     * пробелы схлопываются. Одинаковая точка, записанная по-разному
++     * («ул. Белы Куна, 4к1» и «Белы Куна 4 к 1»), даёт один ключ.
++     */
++    public static function normalizeAddress(?string $address): string
++    {
++        if ($address === null) {
++            return '';
++        }
++
++        $value = mb_strtolower(mb_trim($address));
++
++        $value = str_replace(
++            ['ё', '«', '»', '"', "'", '№', '.', ',', ';', '(', ')'],
++            ['е', '', '', '', '', '', ' ', ' ', ' ', ' ', ' '],
++            $value,
++        );
++
++        $value = (string) preg_replace(
++            '/\b(россия|рф|город|г|улица|ул|дом|д|корпус|корп|к|строение|стр|офис|помещение|пом|этаж|литера)\b/u',
++            ' ',
++            $value,
++        );
++
++        $value = (string) preg_replace('/[^0-9a-zа-я\s\/-]+/u', ' ', $value);
++        $value = (string) preg_replace('/\s+/u', ' ', $value);
++
++        return mb_trim($value);
++    }
++}
+diff --git a/app/Models/Core/PartnerApplication.php b/app/Models/Core/PartnerApplication.php
+index f46a301c..d7aca015 100644
+--- a/app/Models/Core/PartnerApplication.php
++++ b/app/Models/Core/PartnerApplication.php
+@@ -19,6 +19,7 @@
+  * @property int $user_id
+  * @property string $name
+  * @property string $inn
++ * @property string|null $identity_key
+  * @property PartnerActivityType|null $activity_type
+  * @property string $address_line
+  * @property string|null $city_name
+diff --git a/database/migrations/2026_09_27_120000_add_identity_key_to_partner_applications_table.php b/database/migrations/2026_09_27_120000_add_identity_key_to_partner_applications_table.php
+new file mode 100644
+index 00000000..1dc87dd9
+--- /dev/null
++++ b/database/migrations/2026_09_27_120000_add_identity_key_to_partner_applications_table.php
+@@ -0,0 +1,55 @@
++<?php
++
++declare(strict_types=1);
++
++use App\Domain\Business\Support\PartnerApplicationIdentity;
++use App\Models\Core\PartnerApplication;
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++/**
++ * Ключ идентичности заявки (владелец, 2026-09-27): одна точка или одно МСП —
++ * одна заявка. Ключ позволяет повторной подаче править прежнюю запись вместо
++ * создания новой заявки и нового партнёра-черновика.
++ *
++ * Индекс НЕ уникальный: в существующих данных есть дубли по одной точке
++ * (шесть отклонённых заявок на адрес «Белы Куйа 4к1»), их сначала нужно
++ * свести. Уникальность включается отдельно, после сведения данных.
++ */
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::table('partner_applications', function (Blueprint $table): void {
++            $table->string('identity_key', 64)->nullable()->after('inn')->index();
++        });
++
++        // Бэкфилл существующих строк тем же правилом, что и в экшене.
++        PartnerApplication::query()
++            ->select(['id', 'inn', 'lat', 'lon', 'city_name', 'address_line'])
++            ->chunkById(200, function ($applications): void {
++                foreach ($applications as $application) {
++                    PartnerApplication::query()
++                        ->whereKey($application->id)
++                        ->update([
++                            'identity_key' => PartnerApplicationIdentity::forApplication(
++                                (string) $application->inn,
++                                $application->lat,
++                                $application->lon,
++                                $application->city_name,
++                                $application->address_line,
++                            ),
++                        ]);
++                }
++            });
++    }
++
++    public function down(): void
++    {
++        Schema::table('partner_applications', function (Blueprint $table): void {
++            $table->dropIndex(['identity_key']);
++            $table->dropColumn('identity_key');
++        });
++    }
++};
+diff --git a/tests/Feature/Business/PartnerApplicationTest.php b/tests/Feature/Business/PartnerApplicationTest.php
+index b53aa283..e6020ed0 100644
+--- a/tests/Feature/Business/PartnerApplicationTest.php
++++ b/tests/Feature/Business/PartnerApplicationTest.php
+@@ -2,6 +2,7 @@
+ 
+ declare(strict_types=1);
+ 
++use App\Domain\Business\Actions\RejectPartnerApplicationAction;
+ use App\Domain\Business\Enums\PartnerApplicationStatus;
+ use App\Domain\Roles\Services\RepresentativePromoService;
+ use App\Enums\PartnerRole;
+@@ -17,12 +18,17 @@
+ use App\Models\Core\PartnerOfferAcceptance;
+ use App\Models\Core\User;
+ use Illuminate\Foundation\Testing\RefreshDatabase;
++use Illuminate\Routing\Middleware\ThrottleRequests;
+ use Illuminate\Support\Facades\DB;
+ 
+ uses(RefreshDatabase::class);
+ 
+ beforeEach(function (): void {
+     usesB2bSchema();
++
++    // Сценарии лимита подаются серией: антиспам-ограничитель частоты
++    // относится к живому трафику, в тестах он только мешает.
++    $this->withoutMiddleware(ThrottleRequests::class);
+ });
+ 
+ /** Валидная контрольная сумма (ПАО Сбербанк). */
+@@ -268,11 +274,14 @@ function bindDadata(?PartyResult $party, ?DadataException $exception = null): vo
+     expect($merchant->inn)->toBe(VALID_INN_10);
+ });
+ 
+-it('enforces the unverified-partner cap', function (): void {
++it('counts the limit by applications, not by partner drafts', function (): void {
+     bindDadata(fakeParty());
+     $user = User::factory()->create();
+     $partnerUser = PartnerUser::factory()->create(['core_user_id' => $user->id]);
+ 
++    // Пять неверифицированных черновиков партнёров, но ни одной заявки:
++    // лимит владельца (2026-09-27) считается по заявкам на подтверждении,
++    // поэтому черновики сами по себе подачу не блокируют.
+     for ($i = 0; $i < 5; $i++) {
+         $partner = Partner::factory()->unverified()->create();
+         PartnerMembership::query()->create([
+@@ -285,8 +294,7 @@ function bindDadata(?PartyResult $party, ?DadataException $exception = null): vo
+ 
+     $this->actingAs($user)
+         ->postJson('/api/v1/business/applications', applicationPayload())
+-        ->assertStatus(422)
+-        ->assertJsonPath('error.code', 'partner_application_cap_reached');
++        ->assertCreated();
+ });
+ 
+ it('exposes the latest application via the current endpoint', function (): void {
+@@ -342,3 +350,113 @@ function bindDadata(?PartyResult $party, ?DadataException $exception = null): vo
+     // а после верификации гейт I-5 требует partners.verified_at.
+     expect($merchant->shouldBeSearchable())->toBeFalse();
+ });
++
++it('corrects the previous application after a rejection instead of creating a new one', function (): void {
++    bindDadata(fakeParty());
++    $user = User::factory()->create();
++
++    $first = $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', applicationPayload())
++        ->assertCreated();
++
++    // Представитель отклонил заявку: статус финальный, но заявка та же.
++    PartnerApplication::query()->whereKey($first->json('data.id'))
++        ->update(['status' => PartnerApplicationStatus::Failed]);
++
++    $second = $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', applicationPayload(['name' => 'Пышка у дома']))
++        ->assertOk();
++
++    expect($second->json('data.id'))->toBe($first->json('data.id'));
++    expect(PartnerApplication::query()->count())->toBe(1);
++    expect(Partner::query()->count())->toBe(1);
++    expect(PartnerApplication::query()->findOrFail($first->json('data.id'))->name)->toBe('Пышка у дома');
++});
++
++it('frees the cap slot on rejection and reuses it on resubmit', function (): void {
++    bindDadata(fakeParty());
++    $user = User::factory()->create();
++
++    $created = $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', applicationPayload())
++        ->assertCreated();
++
++    $application = PartnerApplication::query()->findOrFail($created->json('data.id'));
++
++    $representative = User::factory()->create();
++    $application->forceFill([
++        'status' => PartnerApplicationStatus::AwaitingRepApproval,
++        'representative_user_id' => $representative->id,
++    ])->save();
++
++    resolve(RejectPartnerApplicationAction::class)->execute($representative, $application, 'адрес не тот');
++
++    $application->refresh();
++    expect($application->status)->toBe(PartnerApplicationStatus::Failed);
++
++    $second = $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', applicationPayload())
++        ->assertOk();
++
++    // Заявка живёт по своему идентификатору: правка идёт в ту же запись,
++    // новых заявок и черновиков не появляется.
++    expect($second->json('data.id'))->toBe($application->id);
++    expect(PartnerApplication::query()->count())->toBe(1);
++    expect(Partner::query()->count())->toBe(1);
++});
++
++it('counts the awaiting limit per submitting user and blocks a reopen over the cap', function (): void {
++    bindDadata(fakeParty());
++    $user = User::factory()->create();
++    $other = User::factory()->create();
++
++    $point = fn (string $name, float $lat): array => applicationPayload([
++        'name' => $name,
++        'address_line' => 'Санкт-Петербург, '.$name,
++        'lat' => $lat,
++        'lon' => 30.35,
++    ]);
++
++    // Пять заявок на подтверждении — предел владельца.
++    foreach (range(1, 5) as $index) {
++        $this->actingAs($user)
++            ->postJson('/api/v1/business/applications', $point('Точка '.$index, 59.80 + $index / 100))
++            ->assertCreated();
++    }
++
++    // Шестая у того же пользователя — сверх лимита.
++    $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', $point('Шестая точка', 60.10))
++        ->assertStatus(422)
++        ->assertJsonPath('error.code', 'partner_application_cap_reached');
++
++    // Лимит персональный: заявки другого пользователя в него не входят.
++    $this->actingAs($other)
++        ->postJson('/api/v1/business/applications', $point('Чужая точка', 60.20))
++        ->assertCreated();
++
++    // Отказ — отмена: заявка уходит со счёта, слот освобождается.
++    $victim = PartnerApplication::query()->where('user_id', $user->id)->orderBy('id')->firstOrFail();
++    $representative = User::factory()->create();
++    $victim->forceFill([
++        'status' => PartnerApplicationStatus::AwaitingRepApproval,
++        'representative_user_id' => $representative->id,
++    ])->save();
++    resolve(RejectPartnerApplicationAction::class)->execute($representative, $victim, 'не то');
++
++    // Освободившийся слот занимает новая точка.
++    $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', $point('Заняли слот', 60.30))
++        ->assertCreated();
++
++    // А переоткрытие отклонённой заявки теперь само упирается в лимит.
++    $this->actingAs($user)
++        ->postJson('/api/v1/business/applications', $point('Точка 1', 59.81))
++        ->assertStatus(422);
++
++    // Пять заявок ждут подтверждения — предел соблюдён, шестая не завелась.
++    expect(PartnerApplication::query()
++        ->where('user_id', $user->id)
++        ->whereIn('status', PartnerApplicationStatus::awaitingConfirmationValues())
++        ->count())->toBe(5);
++});

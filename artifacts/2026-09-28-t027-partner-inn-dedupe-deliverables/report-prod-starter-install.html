@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прод-стартер на локальном стенде: результат проверки</title>
+<style>
+  :root{--ink:#171419;--ink-2:#4a444d;--ink-3:#7d7581;--line:#ddd7dd;--line-2:#efeaf0;--paper:#fdfcfc;--accent:#c92a6a;--ok:#3f7a33}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:840px;margin:0 auto;padding:52px 24px 88px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:34px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 12px}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:34px;line-height:1.15;margin:0 0 14px;font-weight:400}
+  .lead{color:var(--ink-2);font-size:17px;margin:0;max-width:66ch}
+  h2{font-family:Georgia,"Times New Roman",serif;font-size:21px;font-weight:400;margin:44px 0 6px}
+  p{margin:12px 0;max-width:70ch}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--line-2);vertical-align:top}
+  th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line);font-weight:700}
+  .ok{color:var(--ok);font-weight:600}
+  .yes{color:var(--accent);font-weight:600}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--line-2);padding:1px 5px}
+  .call{border-left:2px solid var(--accent);padding:2px 0 2px 16px;margin:18px 0}
+  .call p{margin:6px 0}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">LOVII · локальный стенд</p>
+  <h1>Прод-стартер поставлен, проверка совпала с каноном</h1>
+  <p class="lead">Дамп чистого старта развёрнут на локальную базу, приложение и поиск приведены в порядок, откат проверен и лежит на месте. Ниже — что сошлось по пунктам и два расхождения с инструкцией.</p>
+</header>
+
+<h2>Проверка по пунктам канона</h2>
+<table>
+  <thead><tr><th>Что проверялось</th><th>Ожидание</th><th>Факт</th></tr></thead>
+  <tbody>
+    <tr><td>Пользователь</td><td>один, id 1, +79119287478, промокод AAAAAA</td><td class="ok">совпало</td></tr>
+    <tr><td>Амбассадор</td><td>AA / AAAAAA активен</td><td class="ok">совпало</td></tr>
+    <tr><td>Юрлицо</td><td>id 1, ООО «АКСИОМА», ИНН 7842223709</td><td class="ok">совпало</td></tr>
+    <tr><td>Счета</td><td>partner/1 = 0 и platform_nominal/0 = 0, RUB</td><td class="ok">совпало</td></tr>
+    <tr><td>Правила кэшбэка</td><td>пусто</td><td class="ok">0</td></tr>
+    <tr><td>Города</td><td>46</td><td class="ok">46</td></tr>
+    <tr><td>Мерчанты, заявки, заказы</td><td>пусто</td><td class="ok">0 / 0 / 0</td></tr>
+    <tr><td>Вход через приложение</td><td>попадает в существующий аккаунт id 1</td><td class="ok">id 1, Сергей</td></tr>
+    <tr><td>Кабинет МСП</td><td>одно юрлицо «АКСИОМА»</td><td class="ok">роль owner, 1 юрлицо</td></tr>
+    <tr><td>Команда юрлица</td><td>одна строка: юзер 1 → партнёр 1, владелец</td><td class="ok">совпало</td></tr>
+    <tr><td>Витрина: призраки</td><td>поиск не находит старых точек и товаров</td><td class="ok">пусто</td></tr>
+    <tr><td>b2b-кабинет</td><td>тот же номер видит юрлицо</td><td class="ok">отвечает, юрлицо в базе</td></tr>
+  </tbody>
+</table>
+
+<h2>Два расхождения с инструкцией — доложено, не «починено молча»</h2>
+<table>
+  <thead><tr><th>Пункт</th><th>Что было</th><th>Что сделал</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Чистка поискового индекса (§5)</td>
+      <td>в инструкции указан только индекс предложений — он пуст, а призраки сидели в индексах точек (890) и товаров (361)</td>
+      <td class="yes">очистил и их; после этого все три индекса пусты, витрина по запросу «Ромашка» не находит ничего</td>
+    </tr>
+    <tr>
+      <td>Рабочее дерево ядра (§1)</td>
+      <td>три файла с чужими незакоммиченными правками, ветка <code>ci-self-hosted-runner</code></td>
+      <td class="yes">ветки не переключал, правки не трогал — только фиксирую факт</td>
+    </tr>
+  </tbody>
+</table>
+<p>Восстановление прошло с 21 нефатальной ошибкой — все про выдачу прав несуществующей роли; на данные они не влияют. Приложение на порту 5174 не поднималось: по инструкции его открывает владелец, поэтому живую проверку я делал через API ядра.</p>
+
+<h2>Откат</h2>
+<p>Бэкап прежнего содержимого базы снят до восстановления, проверен и лежит по пути:</p>
+<p><code>~/LOVII/Backups/local-laravel-before-starter_2026-09-28_0057.dump</code></p>
+<p>Он содержит 989 объектов и включает все схемы — основную, контур юрлиц и админскую. То есть откат вернёт и прежние данные, и админку целиком. Откат не применялся: проверка прошла штатно, стенд оставлен в состоянии чистого старта.</p>
+
+<h2>Почему на стенде оказались две «АКСИОМЫ»</h2>
+<p>Через десять минут после установки дампа в приложении была подана заявка на точку — и вместе с ней появилось второе юрлицо. Это не порча дампа и не ошибка установки: так сработал поток подачи заявки.</p>
+<table>
+  <thead><tr><th>Запись</th><th>Что это</th><th>Когда</th></tr></thead>
+  <tbody>
+    <tr><td>Юрлицо 1, ООО «АКСИОМА», ИНН 7842223709</td><td>из стартового дампа, подтверждения нет</td><td>в дампе</td></tr>
+    <tr><td>Юрлицо 2, ООО «АКСИОМА», ИНН 7842223709</td><td>создано заявкой как черновик</td><td>01:10</td></tr>
+    <tr><td>Заявка «Пышка», адрес Белы Куна 6к1</td><td>подана из приложения, статус «отправлена»</td><td>01:10</td></tr>
+    <tr><td>Точка «Пышка»</td><td>черновик точки при этой заявке</td><td>01:10</td></tr>
+  </tbody>
+</table>
+<p>Причина: правило «одно юрлицо — один партнёр» включается только когда у владельца уже есть <em>подтверждённое</em> юрлицо с таким ИНН. В стартовом дампе «АКСИОМА» — оператор без подтверждения, поэтому правило не сработало и поток создал второй черновик. Имя юрлицу присваивается обогащением по ИНН, поэтому оба черновика называются «АКСИОМА», хотя заявка и точка — «Пышка».</p>
+<p>Следствие для правки заявок: она закрывает дублирование по точке, но не по ИНН, когда юрлицо ещё не подтверждено. Это отдельный вывод, требующий решения владельца.</p>
+<footer>Стенд: локальный контур, приложение ядра на 80, b2b на 8002, поиск Meilisearch. 28 сентября 2026.</footer>
+</div>
+</body>
+</html>
