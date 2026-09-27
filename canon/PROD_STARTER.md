@@ -21,6 +21,8 @@
 | 6 | **Оператор платформы**: `lovii_b2b.partners.id=1` ООО «АКСИОМА» (ИНН 7842223709, active) + b2b-юзер 1 (`osnovatel`, core_user_id=1) + membership owner | FINANCIAL_CONTOUR §2 (спец-счёт АКСИОМА, договор №МР-08.26/АКС_01) |
 | 7 | **Счёт оператора** `accounts(partner, 1, 0)` | FINANCIAL_CONTOUR: пул 40/40/20 → Компания |
 | 8 | **Транзитный счёт** `accounts(platform_nominal, 0, 0)` | SZ-077: «транзит по транзакции строго в ноль» (`AccountOwnerType::PlatformNominal`) |
+| 9 | **Кошелёк Основателя: 10 000₽** — строка `wallets` + `wallet_transactions(type=adjustment)` + зеркальная ledger-проводка (`wallet_adjustment`, split_role=adjustment) | чтобы сразу работали «купить подписку» (списание PAY → оператору) и тестовые сценарии; добавлено канон-проводкой, инвариант §5.2 сходится |
+| 10 | **Стартовый баланс оператора: 100 000₽** на счёте АКСИОМА — ledger-проводка `adjustment/starter_opening` | решение владельца 28.09: стартовая оборотка оператора для настроек и тестов пула/переводов |
 
 ## Чего НЕТ (намеренно)
 
@@ -69,4 +71,8 @@ createdb `lovii_core_light` (владелец роли — `"lovii-core"`) →
 DROP пустой `lovii_b2b` + schema-only `lovii_b2b` из staging → сид (файл
 `/tmp/prod-starter-seed.sql` по образцу канона: users 1/AAAAAA, ambassadors 1,
 partner_users 1, partners 1, membership 1, accounts operator+nominal, setval'ы
-последовательностей) → cities из staging → pg_dump -Fc.
+последовательностей) → cities из staging → **балансы** (SQL-зеркало
+`AdjustWalletBalanceController`/`LedgerService::post`: wallets 1 000 000 коп +
+wallet_transactions adjustment + ledger wallet_adjustment; accounts partner/1
+10 000 000 коп + ledger starter_opening; проверка инварианта «balance = Σ ledger»
+→ 0 строк) → pg_dump -Fc. Актуальная версия: 27.09 22:21, 50 КБ.
