@@ -1,0 +1,40 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прогон сценария МСП: состояние и следующий шаг</title>
+<style>
+:root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--accent:#c92a6a;--acc:rgba(246,74,138,.1);--ok:#07726f;--warn:#8a6a25;--mono:ui-monospace,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding:50px 24px 80px}
+header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:26px}
+.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:28px;margin:10px 0 6px}h2{font-size:19px;margin:30px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.lead{color:var(--dim)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+code{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+.st{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+.st.ok{color:var(--ok);border-color:rgba(7,114,111,.35)}.st.w{color:var(--warn);border-color:rgba(138,106,37,.35)}
+ol{padding-left:20px}li{margin:6px 0}figure{margin:16px 0}img{width:100%;border:1px solid var(--line);background:#fff}
+figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+</style></head><body><div class="wrap">
+<header><div class="kicker">LOVII · прогон сценария МСП · 27.09</div>
+<h1>Где мы сейчас и что дальше</h1>
+<p class="lead">Снято по базе (только чтение) во время твоего прогона.</p></header>
+
+<h2>Заявки в работе</h2>
+<table><tr><th>№</th><th>Заявка</th><th>Статус</th><th>Причина отказа</th></tr>
+<tr><td>31</td><td>Пекарня «Пышка» (вы)</td><td>отклонена</td><td>«проверка уведом…»</td></tr>
+<tr><td>30</td><td>Продукты у дома (тестовый)</td><td>ждёт апрува</td><td>—</td></tr>
+<tr><td>29</td><td>Пекарня «Пышка» (вы)</td><td>отклонена</td><td>«переподайте за…»</td></tr>
+<tr><td>28</td><td>Пекарня «Пышечная» (вы)</td><td>отклонена</td><td>«привет»</td></tr>
+</table>
+
+<h2>Следующий шаг и что ждать</h2>
+<ol>
+<li><b>Апрув заявки</b> (кабинет представителя → «Заявки»): статус станет «Счёт выдан», у владельца в кабинете МСП появится кнопка <b>«Счёт на 1 ₽ — перейти к оплате»</b>.</li>
+<li><b>Экран счёта</b> <code>/cabinet/msp/payment</code>: код вида <code>VER-&lt;id&gt;-&lt;suffix&gt;</code>, сумма 1 ₽, кнопка «Я оплатил, проверьте». Проверено — экран живой, ошибок нет.</li>
+<li><b>Оплата</b> → статус «Проверяем точку» → мок банка → «Точка активна», бренд становится активным, открывается полная витрина.</li>
+</ol>
+<p>Отклонённая заявка остаётся закрытой — для повторного прохода нужна новая подача (данные подставляются из прошлой).</p>
+
+<figure><img src="assets/msp-payment-state.png" alt="Экран счёта верификации"><figcaption>Экран «Счёт верификации» — сейчас показывает состояние текущей (отклонённой) заявки; ошибок нет.</figcaption></figure>
+</div></body></html>

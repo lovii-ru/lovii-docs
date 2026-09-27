@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Уведомления: контраст по темам исправлен</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--bad:#b3202b;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:940px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:28px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:29px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:34px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}
+  .note{border-left:3px solid var(--accent);background:var(--acc-soft);padding:12px 16px;margin:16px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · уведомления (тосты) · норма AA</div>
+    <h1>Тост при отклонении не читался: контраст по темам</h1>
+    <p class="lead">Проверил все тоны в обеих темах. Часть пар «текст на фоне» проваливала норму AA, а в тёмной теме негативный и финансовый тосты почти сливались.</p>
+  </header>
+
+  <div class="note">
+    Причина: тоны рисовались <b>цветным текстом на мягком тонированном фоне</b>. В светлой теме пары давали 3.4–4.2 (норма — от 4.5), а в тёмной части токенов
+    (негатив, розовый) вообще не переключались на тёмный вариант — фон и текст становились одного тона.
+  </div>
+
+  <h2>Замеры (контраст, норма AA ≥ 4.5)</h2>
+  <table>
+    <thead><tr><th>Тон</th><th>Светлая: было → стало</th><th>Тёмная: было → стало</th></tr></thead>
+    <tbody>
+      <tr><td>Стандартный</td><td>17.4</td><td>14.4</td></tr>
+      <tr><td>Положительный</td><td><span class="bad">4.78</span> → <span class="ok">5.55</span></td><td><span class="ok">7.30</span> → <span class="ok">7.74</span></td></tr>
+      <tr><td>Важный</td><td><span class="bad">4.18</span> → <span class="ok">5.69</span></td><td><span class="ok">6.99</span> → <span class="ok">7.82</span></td></tr>
+      <tr><td>Негативный</td><td><span class="bad">3.43</span> → <span class="ok">7.28</span></td><td><span class="bad">4.24</span> → <span class="ok">5.49</span></td></tr>
+      <tr><td>Ошибка</td><td><span class="bad">4.09</span> → <span class="ok">6.67</span></td><td><span class="ok">5.13</span> → <span class="ok">5.13</span></td></tr>
+      <tr><td>Финансовый</td><td><span class="bad">4.17</span> → <span class="ok">5.70</span></td><td><span class="bad">2.75</span> → <span class="ok">7.06</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Что сделано</h2>
+  <table>
+    <thead><tr><th>Слой</th><th>Файл</th><th>Что</th></tr></thead>
+    <tbody>
+      <tr><td>Приложение</td><td class="mono">src/components/Ui/AppToast.vue</td><td>палитра тонов: тёмные оттенки в светлой теме, светлые — в тёмной (через базовые токены-рампы)</td></tr>
+      <tr><td>Демо (канон правил)</td><td class="mono">css/lovii.css</td><td>те же правила + явные переопределения для тёмной темы (негатив, ошибка, финансовый)</td></tr>
+    </tbody>
+  </table>
+  <p>Проверено замером на обоих стендах: в приложении все тоны ≥ 5.1, в демо ≥ 5.3 — в обеих темах.</p>
+
+  <h2>Настоящая причина «чёрной тучки» (найдено позже)</h2>
+  <div class="note">
+    У самого тоста цвет был правильный, а вот <b>текст сообщения</b> внутри брал цвет из глобального <span class="mono">normalize</span>
+    (там цвет задаётся каждому элементу). Из-за этого в стандартном тосте текст совпадал с фоном — <b>тёмный на тёмном</b>
+    (в тёмной теме — светлый на светлом): тост выглядел «просто чёрной тучкой».
+  </div>
+  <p>Правка: <span class="mono">.app-toast__m { color: inherit }</span> — сообщение наследует цвет тоста, включая тон (негатив/ошибка/финансовый).</p>
+  <p>Проверено замером: светлая — фон <span class="mono">#1a1a1a</span>, текст <span class="mono">#ffffff</span>; тёмная — фон <span class="mono">#f3ebf0</span>, текст <span class="mono">#211b26</span>. Тосты при отмене читаются в обеих темах.</p>
+  <figure><img src="assets/reject-toast-both.png" alt="Тост при отмене: светлая и тёмная темы"><figcaption>Тост «Заявка возвращена владельцу точки» — слева светлая тема, справа тёмная.</figcaption></figure>
+
+</div>
+</body>
+</html>

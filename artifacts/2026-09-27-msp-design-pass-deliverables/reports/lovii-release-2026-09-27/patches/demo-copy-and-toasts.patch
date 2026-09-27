@@ -1,0 +1,372 @@
+diff --git a/css/lovii.css b/css/lovii.css
+index e59a1c0..00b227d 100755
+--- a/css/lovii.css
++++ b/css/lovii.css
+@@ -549,16 +549,16 @@ main#view{ flex: 1; }
+    иначе длинный текст растягивался на всё окно. Тоны — на семантике канона. */
+ .toast{ width: max-content; max-width: min(100%, var(--lv-container, 480px)); display: flex; flex-flow: column; gap: 2px; background: var(--lv-ink); color: var(--lv-card); border: 1px solid transparent; border-radius: var(--lv-r-lg); padding: 12px 16px; font-size: 13px; font-weight: 600; line-height: 1.35; text-align: center; box-shadow: var(--lv-shadow-toast); animation: toast-in .25s ease-out; }
+ .toast .d{ font-size: 11px; color: var(--lv-toast-d); font-weight: 400; }
+-.toast_t-positive{ background: var(--lv-soft-tiffany); color: var(--lv-tiffany-text); border-color: var(--lv-tiffany-text); }
+-.toast_t-positive .d{ color: var(--lv-tiffany-text); opacity: .85; }
+-.toast_t-important{ background: var(--lv-soft-gold); color: var(--lv-gold-text); border-color: var(--lv-gold-text); }
+-.toast_t-important .d{ color: var(--lv-gold-text); opacity: .85; }
+-.toast_t-negative{ background: var(--lv-negative-soft); color: var(--lv-negative); border-color: var(--lv-negative); }
+-.toast_t-negative .d{ color: var(--lv-negative); opacity: .85; }
+-.toast_t-error{ background: var(--lv-negative); color: var(--lv-white, #fff); border-color: var(--lv-negative); }
++.toast_t-positive{ background: var(--lv-soft-tiffany); color: color-mix(in srgb, var(--lv-tiffany-text) 88%, var(--lv-ink)); border-color: color-mix(in srgb, var(--lv-tiffany-text) 88%, var(--lv-ink)); }
++.toast_t-positive .d{ color: color-mix(in srgb, var(--lv-tiffany-text) 88%, var(--lv-ink)); opacity: .85; }
++.toast_t-important{ background: var(--lv-soft-gold); color: color-mix(in srgb, var(--lv-gold-text) 76%, var(--lv-ink)); border-color: color-mix(in srgb, var(--lv-gold-text) 76%, var(--lv-ink)); }
++.toast_t-important .d{ color: color-mix(in srgb, var(--lv-gold-text) 76%, var(--lv-ink)); opacity: .85; }
++.toast_t-negative{ background: var(--lv-negative-soft); color: color-mix(in srgb, var(--lv-negative) 62%, var(--lv-ink)); border-color: color-mix(in srgb, var(--lv-negative) 62%, var(--lv-ink)); }
++.toast_t-negative .d{ color: color-mix(in srgb, var(--lv-negative) 62%, var(--lv-ink)); opacity: .85; }
++.toast_t-error{ background: color-mix(in srgb, var(--lv-negative) 80%, var(--lv-ink)); color: var(--lv-white, #fff); border-color: color-mix(in srgb, var(--lv-negative) 80%, var(--lv-ink)); }
+ .toast_t-error .d{ color: var(--lv-white, #fff); opacity: .85; }
+-.toast_t-financial{ background: var(--lv-soft-pink); color: var(--lv-pink-dark); border-color: var(--lv-pink-dark); }
+-.toast_t-financial .d{ color: var(--lv-pink-dark); opacity: .85; font-variant-numeric: tabular-nums; }
++.toast_t-financial{ background: var(--lv-soft-pink); color: color-mix(in srgb, var(--lv-pink-dark) 82%, var(--lv-ink)); border-color: color-mix(in srgb, var(--lv-pink-dark) 82%, var(--lv-ink)); }
++.toast_t-financial .d{ color: color-mix(in srgb, var(--lv-pink-dark) 82%, var(--lv-ink)); opacity: .85; font-variant-numeric: tabular-nums; }
+ @layer base{
+ 
+ @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@@ -933,7 +933,7 @@ main#view{ flex: 1; }
+ .step.done{ background: var(--lv-soft-tiffany); border-color: color-mix(in srgb, var(--lv-tiffany) 24%, transparent); color: var(--lv-tiffany-text); }
+ .step.done span{ background-image: linear-gradient(135deg, var(--lv-tiffany), #078d89); color: var(--lv-on-brand); border-color: transparent; }
+ .step.current{ box-shadow: 0 0 0 2px rgba(246,74,138,.16); }
+-.approval-card, .empty-state-card, .checklist-card{ margin: 10px 16px 0; padding: 12px; border-radius: 18px; background: var(--lv-card); border: 1px solid var(--lv-line); box-shadow: var(--lv-shadow-soft); }
++.approval-card, .empty-state-card, .checklist-card{ margin: 10px 16px 0; padding: 12px; border-radius: var(--lv-r-lg); background: var(--lv-card); border: 1px solid var(--lv-line); box-shadow: var(--lv-shadow-soft); }
+ .empty-state-card{ text-align: center; padding: 26px 16px; }
+ .empty-state-card .big-emoji{ font-size: 36px; }
+ .empty-state-card h3{ margin: 8px 0 0; font-size: 18px; font-weight: 800; }
+@@ -945,6 +945,14 @@ main#view{ flex: 1; }
+ .review-grid span{ display: block; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--lv-dim); }
+ .review-grid b{ display: block; margin-top: 3px; font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+ .approval-actions{ display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
++.rep-cabinet .approval-card{ padding: 14px 16px 16px; }
++.rep-cabinet .approval-head{ gap: 12px; }
++.rep-cabinet .review-grid{ margin-top: 14px; gap: 8px; }
++/* Короткие реквизиты — в две колонки; длинные (адрес, контакт) — на всю ширину. */
++.rep-cabinet .review-grid > div:nth-child(3), .rep-cabinet .review-grid > div:nth-child(4){ grid-column: 1 / -1; }
++@media (max-width: 430px){ .rep-cabinet .review-grid{ grid-template-columns: 1fr 1fr; } }
++.rep-cabinet .review-grid div{ padding: 12px; }
++.rep-cabinet .review-grid b{ margin-top: 4px; }
+ .status-flow-card p{ margin: 8px 0 0; font-size: 13px; color: var(--lv-dim); line-height: 1.55; }
+ .checklist-card{ padding: 4px 12px; }
+ .cl-row{ position: relative; padding: 12px 0 12px 24px; border-left: 2px dashed var(--lv-line); }
+@@ -3922,3 +3930,11 @@ body:has(#view .create-order) .create-order__cta{
+ .transfer__done-sum{ margin:10px 0 0; font-size:14px; font-weight:700; color:var(--lv-tiffany-text); }
+ 
+ .transfer__home{ display:block; width:100%; margin-top:8px; height:44px; }
++
++/* Тёмная тема: тосты негатива/ошибки/финансов — тёмный фон и светлый текст (норма AA). */
++[data-theme="dark"] .toast_t-negative{ background: color-mix(in srgb, var(--lv-negative) 30%, var(--lv-bg)); color: color-mix(in srgb, var(--lv-negative) 40%, var(--lv-ink)); border-color: color-mix(in srgb, var(--lv-negative) 40%, var(--lv-ink)); }
++[data-theme="dark"] .toast_t-negative .d{ color: color-mix(in srgb, var(--lv-negative) 40%, var(--lv-ink)); opacity: .85; }
++[data-theme="dark"] .toast_t-error{ background: color-mix(in srgb, var(--lv-negative) 70%, var(--lv-ink)); color: var(--lv-bg); border-color: color-mix(in srgb, var(--lv-negative) 70%, var(--lv-ink)); }
++[data-theme="dark"] .toast_t-error .d{ color: var(--lv-bg); opacity: .85; }
++[data-theme="dark"] .toast_t-financial{ color: color-mix(in srgb, var(--lv-pink) 55%, var(--lv-white)); border-color: color-mix(in srgb, var(--lv-pink) 55%, var(--lv-white)); }
++[data-theme="dark"] .toast_t-financial .d{ color: color-mix(in srgb, var(--lv-pink) 55%, var(--lv-white)); opacity: .85; }
+diff --git a/index.html b/index.html
+index c3957f2..dc84e9f 100755
+--- a/index.html
++++ b/index.html
+@@ -56,7 +56,7 @@
+   <!-- Токены — из фреймворка lovii-design (снапшот, --lv-* + compat-алиасы легаси-имён).
+        Правка стилей витрины теперь в одном месте: репо lovii-design → tools/propagate.py --push -->
+   <link rel="stylesheet" href="assets/lovii-tokens.css?v=27">
+-  <link rel="stylesheet" href="css/lovii.css?v=173">
++  <link rel="stylesheet" href="css/lovii.css?v=179">
+   <link rel="stylesheet" href="css/loyalty.css?v=3">
+ </head>
+ <body>
+@@ -167,13 +167,13 @@
+   <script src="js/transfer.js?v=10"></script>
+   <script src="js/storefront.js?v=9"></script>
+   <script src="js/orders.js?v=21"></script>
+-  <script src="js/msp.js?v=14"></script>
++  <script src="js/msp.js?v=15"></script>
+   <script src="js/loyalty.js?v=3"></script>
+-  <script src="js/roles.js?v=4"></script>
++  <script src="js/roles.js?v=19"></script>
+   <script src="js/account.js?v=3"></script>
+   <script src="js/auth.js?v=11"></script>
+   <script src="js/photos.js?v=5"></script>
+   <script src="js/app.js?v=32"></script>
+-  <script src="js/settings.js?v=9"></script>
++  <script src="js/settings.js?v=10"></script>
+ </body>
+ </html>
+diff --git a/js/msp.js b/js/msp.js
+index eef85bf..49857ef 100644
+--- a/js/msp.js
++++ b/js/msp.js
+@@ -462,7 +462,7 @@ function mspTeam() {
+         </div>
+         <div style="padding:12px 16px 16px">
+           <button type="button" class="acct__btn acct__btn_brand" data-action="msp-invite">${icon('plus')} Пригласить сотрудника</button>
+-          <p class="tier__cta-note">По телефону · роль выбирается при приглашении (SZ-047)</p>
++          <p class="tier__cta-note">По телефону · роль выбирается при приглашении.<!-- канон: SZ-047 --></p>
+         </div>
+       </section>
+     </div>`;
+diff --git a/js/roles.js b/js/roles.js
+index 1b6ddae..165046a 100644
+--- a/js/roles.js
++++ b/js/roles.js
+@@ -15,7 +15,7 @@ const rolesUi = { rep: 'overview', amb: 'overview', owner: 'overview', investor:
+ 
+ function rolesShell(role, inner) {
+   const CFG = {
+-    rep: { title: 'Представитель', note: 'Развитие сети представителей · промокод AA2222', icon: 'sparkles', cls: 'rep-cabinet' },
++    rep: { title: 'Представитель', note: `Открываете бизнесу района выход на Лови · промокод ${REP_SEED.promo}`, icon: 'sparkles', cls: 'rep-cabinet' },
+     amb: { title: 'Амбассадор', note: 'Развитие района · обучение представителей', icon: 'sparkles', cls: 'amb-cabinet' },
+     owner: { title: 'Владелец', note: 'Платформа целиком · LOVII', icon: 'crown', cls: 'owner-cabinet' },
+     investor: { title: 'Инвестор', note: 'Рост и доходность платформы', icon: 'trending-up', cls: 'investor-cabinet' },
+@@ -24,7 +24,7 @@ function rolesShell(role, inner) {
+   document.body.classList.add('cabinet-mode');
+ 
+   const TABS = {
+-    rep: [['overview', 'Обзор', 'bar-chart'], ['points', 'Точки', 'store'], ['approvals', 'Заявки', 'check-circle'], ['income', 'Доход', 'wallet'], ['profile', 'Профиль', 'user']],
++    rep: [['overview', 'Обзор', 'bar-chart'], ['points', 'Торговые точки', 'store'], ['approvals', 'Заявки', 'check-circle'], ['income', 'Доход', 'wallet'], ['profile', 'Профиль', 'user']],
+     amb: [['overview', 'Обзор', 'bar-chart'], ['reps', 'Структура', 'users'], ['training', 'Обучение', 'star'], ['income', 'Доход', 'wallet']],
+     owner: [['overview', 'Обзор', 'bar-chart'], ['finance', 'Финансы', 'banknote'], ['structure', 'Структура', 'network']],
+     investor: [['growth', 'Рост', 'trending-up'], ['sales', 'Продажи', 'bag'], ['money', 'Доходность', 'wallet']],
+@@ -60,13 +60,25 @@ function rolesShell(role, inner) {
+ 
+ /* ---------- Сид representative / ambassador ---------- */
+ 
++const REP_PROMO = 'AA2BTK'; // единый промокод кабинета представителя (совпадает с карточками заявок)
++
+ const REP_SEED = {
+-  promo: 'AA2222',
++  promo: REP_PROMO,
+   applications: 3,
+   activePoints: 2,
+   queue: [
+-    { name: 'Пекарня «Пышки»', status: 'На модерации' },
+-    { name: 'Салон «Красота»', status: 'На модерации' },
++    {
++      merchant: 'Продукты у дома', legal: 'ООО «Пивоваренная компания «Балтика»»',
++      inn: '7802849641', ogrn: '1147847032838',
++      point: 'Санкт-Петербург, улица Белы Куна, 1к1',
++      phone: '+7 000 000-00-01', promo: REP_PROMO, date: '27 сентября, 16:25', emoji: '🍺',
++    },
++    {
++      merchant: 'Пекарня «Пышка»', legal: 'ООО «АТМОСФЕРА»',
++      inn: '7842216839', ogrn: '',
++      point: 'Санкт-Петербург',
++      phone: '+7 911 928-74-78', promo: REP_PROMO, date: '27 сентября, 01:08', emoji: '🥐',
++    },
+   ],
+   points: [
+     { name: 'Пекарня «Пышки»', status: 'Активна', address: 'Столешников пер., 7' },
+@@ -80,11 +92,11 @@ const AMB_SEED = {
+   training: [
+     { name: 'Старт: как работает LOVII', done: true, lessons: '4 урока' },
+     { name: 'Промокод и заявки МСП', done: true, lessons: '3 урока' },
+-    { name: 'Ведение точки после запуска', done: false, lessons: '5 уроков' },
++    { name: 'Ведение торговой точки после запуска', done: false, lessons: '5 уроков' },
+   ],
+   repsList: [
+-    { name: 'Представитель · Тверская', note: '2 активные точки' },
+-    { name: 'Представитель · Патриаршие', note: '1 активная точка' },
++    { name: 'Представитель · Тверская', note: '2 активные торговые точки' },
++    { name: 'Представитель · Патриаршие', note: '1 активная торговая точка' },
+   ],
+ };
+ 
+@@ -99,7 +111,7 @@ function repKpi() {
+         <span class="role-kpi__sub">по вашему промокоду</span>
+       </div>
+       <div class="card role-kpi">
+-        <span class="role-kpi__label">Активные точки</span>
++        <span class="role-kpi__label">Активные торговые точки</span>
+         <span class="role-kpi__value">${REP_SEED.activePoints}</span>
+         <span class="role-kpi__sub">подтверждены платформой</span>
+       </div>
+@@ -111,7 +123,7 @@ function repKpi() {
+       <div class="card role-kpi">
+         <span class="role-kpi__label">Уровень</span>
+         <span class="role-kpi__value">—</span>
+-        <span class="role-kpi__sub">откроется с первыми точками</span>
++        <span class="role-kpi__sub">откроется с первыми торговыми точками</span>
+       </div>
+     </section>`;
+ }
+@@ -120,11 +132,11 @@ function repOverview() {
+   return `
+     <div class="rep-overview cabinet-screen">
+       ${repKpi()}
+-      <a href="#/dash/rep" class="card role-next" data-testid="rep-overview-next" onclick="return false">
++      <a href="#/dash/rep" class="card role-next" data-testid="rep-overview-next" data-action="roles-tab" data-role="rep" data-tab="approvals" onclick="return false">
+         <span class="role-next__icon">${icon(REP_SEED.queue.length > 0 ? 'check-circle' : 'sparkles')}</span>
+         <span class="role-next__body">
+           <span class="role-next__title">${REP_SEED.queue.length > 0 ? `${REP_SEED.queue.length} заявки ждут решения` : 'Очередь пуста — новых заявок нет'}</span>
+-          <span class="role-next__desc">${REP_SEED.queue.length > 0 ? 'Подтвердите заявку — точка получит верификационный счёт' : 'Заявка появится здесь, как только владелец точки введёт ваш промокод'}</span>
++          <span class="role-next__desc">${REP_SEED.queue.length > 0 ? 'Подтвердите заявку — торговая точка получит верификационный счёт' : 'Заявка появится здесь, как только владелец торговой точки введёт ваш промокод'}</span>
+         </span>
+         <span class="role-next__arrow">${icon('chev-right')}</span>
+       </a>
+@@ -135,10 +147,10 @@ function repOverview() {
+             <div class="msp-order-row">
+               <span class="sr-ico t-gold">${icon('store')}</span>
+               <div class="ri-mid">
+-                <div class="nm">${mEsc2(q.name)}</div>
+-                <div class="sb">${mEsc2(q.status)}</div>
++                <div class="nm">${mEsc2(q.merchant)}</div>
++                <div class="sb">${mEsc2(q.legal)}</div>
+               </div>
+-              <span class="role-tag">${mEsc2(q.status)}</span>
++              <span class="role-tag">Ждёт решения</span>
+             </div>`).join('')}
+         </div>
+       </section>
+@@ -149,7 +161,7 @@ function repPoints() {
+   return `
+     <div class="rep-points cabinet-screen">
+       <section class="card role-card">
+-        <div class="role-section-head"><h2>Мои точки</h2><span class="role-section-head__sub">${REP_SEED.points.length}</span></div>
++        <div class="role-section-head"><h2>Мои торговые точки</h2><span class="role-section-head__sub">${REP_SEED.points.length}</span></div>
+         <div class="msp-orders__list">
+           ${REP_SEED.points.map((p) => `
+             <div class="msp-order-row">
+@@ -166,23 +178,33 @@ function repPoints() {
+ }
+ 
+ function repApprovals() {
+-  return `
+-    <div class="rep-approvals cabinet-screen">
+-      <section class="card role-card">
+-        <div class="role-section-head"><h2>Заявки по промокоду ${REP_SEED.promo}</h2><span class="role-section-head__sub">${REP_SEED.applications}</span></div>
+-        <div class="msp-orders__list">
+-          ${REP_SEED.queue.concat(REP_SEED.points.map((p) => ({ name: p.name, status: 'Одобрена' }))).map((q) => `
+-            <div class="msp-order-row">
+-              <span class="sr-ico t-gold">${icon('store')}</span>
+-              <div class="ri-mid">
+-                <div class="nm">${mEsc2(q.name)}</div>
+-                <div class="sb">${mEsc2(q.status)}</div>
+-              </div>
+-              <span class="role-tag">${mEsc2(q.status)}</span>
+-            </div>`).join('')}
++  const cell = (label, value) => `<div><span>${label}</span><b>${value ? mEsc2(value) : '—'}</b></div>`;
++  const card = (a) => `
++    <div class="approval-card">
++      <div class="approval-head">
++        <span class="sr-ico t-tiffany">${icon('store')}</span>
++        <div class="ri-mid">
++          <div class="nm">${mEsc2(a.merchant)}</div>
++          <div class="sb">${mEsc2(a.legal)}</div>
+         </div>
+-        <p class="tier__cta-note" style="padding:0 16px 14px">Подтверждение заявки — верификационный счёт точке (FINANCIAL_CONTOUR §2)</p>
+-      </section>
++      </div>
++      <div class="review-grid">
++        ${cell('ИНН', a.inn)}
++        ${cell('ОГРН', a.ogrn)}
++        ${cell('Адрес торговой точки', a.point)}
++        ${cell('Контакт', a.phone)}
++        ${cell('Промокод', a.promo)}
++        ${cell('Подана', a.date)}
++      </div>
++      <div class="approval-actions">
++        <button type="button" class="cta-btn brand-gradient" data-action="rep-approve">Подтвердить</button>
++        <button type="button" class="ghost-btn" data-action="rep-reject">Отклонить</button>
++      </div>
++    </div>`;
++  return `
++    <div class="rep-approvals cabinet-screen" style="padding-top:6px">
++      ${REP_SEED.queue.map(card).join('')}
++      <p class="tier__cta-note" style="padding:10px 16px 14px;margin:0">Подтверждение заявки выдаёт верификационный счёт торговой точке.<!-- канон: FINANCIAL_CONTOUR §2 --></p>
+     </div>`;
+ }
+ 
+@@ -387,7 +409,7 @@ function ownerOverview() {
+         <div class="card role-kpi role-kpi_accent">
+           <span class="role-kpi__label">GMV · период</span>
+           <span class="role-kpi__value">${rolesMoney(f.gmv)}</span>
+-          <span class="role-kpi__sub">оборот всех точек</span>
++          <span class="role-kpi__sub">оборот всех торговых точек</span>
+         </div>
+         <div class="card role-kpi">
+           <span class="role-kpi__label">Комиссия · 10%</span>
+@@ -419,7 +441,7 @@ function ownerOverview() {
+               <span class="sr-ico t-gold">${icon('building')}</span>
+               <div class="ri-mid">
+                 <div class="nm">${mEsc2(l.name)}</div>
+-                <div class="sb">суммарная выручка точек</div>
++                <div class="sb">суммарная выручка торговых точек</div>
+               </div>
+               <span class="role-tag">${rolesMoney(l.gmv)}</span>
+             </div>`).join('')}
+@@ -440,7 +462,7 @@ function ownerFinance() {
+       <section class="card role-card" style="padding:16px">
+         <div class="role-section-head" style="padding:0"><h2>Финансы периода</h2><span class="role-section-head__sub">${(ROLES_PERIODS.find((p) => p.id === rolesUi.ownerPeriod) || ROLES_PERIODS[0]).label}</span></div>
+         <div style="margin-top:10px">
+-          ${row('Выручка по точкам (GMV)', rolesMoney(f.gmv))}
++          ${row('Выручка по торговым точкам (GMV)', rolesMoney(f.gmv))}
+           ${row('Комиссия платформы · 10%', '+ ' + rolesMoney(f.commission), 'var(--lv-tiffany-text)')}
+           ${row('Списания за подписку LOVII PASS', '+ ' + rolesMoney(f.pass), 'var(--lv-tiffany-text)')}
+           ${row('Выплаты представителям · 4%', '− ' + rolesMoney(f.payouts), 'var(--lv-pink-dark)')}
+@@ -462,7 +484,7 @@ function ownerStructure() {
+   return `
+     <div class="msp-overview cabinet-screen">
+       <section class="card role-card">
+-        <div class="role-section-head"><h2>Точки платформы</h2><span class="role-section-head__sub">${rows.length}</span></div>
++        <div class="role-section-head"><h2>Торговые точки платформы</h2><span class="role-section-head__sub">${rows.length}</span></div>
+         <div class="msp-orders__list">
+           ${rows.map((r) => `
+             <div class="msp-order-row">
+@@ -490,7 +512,7 @@ function investorGrowth() {
+         <div class="card role-kpi role-kpi_accent">
+           <span class="role-kpi__label">GMV · период</span>
+           <span class="role-kpi__value">${rolesMoney(f.gmv)}</span>
+-          <span class="role-kpi__sub">оборот всех точек</span>
++          <span class="role-kpi__sub">оборот всех торговых точек</span>
+         </div>
+         <div class="card role-kpi">
+           <span class="role-kpi__label">Пользователи</span>
+@@ -498,7 +520,7 @@ function investorGrowth() {
+           <span class="role-kpi__sub">всего на платформе</span>
+         </div>
+         <div class="card role-kpi">
+-          <span class="role-kpi__label">Точки</span>
++          <span class="role-kpi__label">Торговые точки</span>
+           <span class="role-kpi__value">${inv.points[inv.points.length - 1]}</span>
+           <span class="role-kpi__sub">на витрине платформы</span>
+         </div>
+@@ -521,7 +543,7 @@ function investorSales() {
+     <div class="msp-overview cabinet-screen">
+       ${rolesPeriodChipRow('investor')}
+       <section class="card role-card">
+-        <div class="role-section-head"><h2>Топ точки · месяц</h2></div>
++        <div class="role-section-head"><h2>Топ торговых точек · месяц</h2></div>
+         <div class="msp-orders__list">
+           ${LOVII_DATA.stores.slice(0, 3).map((s) => `
+             <div class="msp-order-row">
+@@ -597,6 +619,15 @@ document.addEventListener('click', (e) => {
+     renderViewPreserveScroll();
+     return;
+   }
++  const act = e.target.closest('[data-action="rep-approve"], [data-action="rep-reject"]');
++  if (act) {
++    const isApprove = act.dataset.action === 'rep-approve';
++    if (isApprove) toast('Торговая точка подтверждена', 'Выдан счёт верификации', 'positive');
++    else toast('Заявка отклонена', 'Владелец получит уведомление', 'negative');
++    const card = act.closest('.approval-card');
++    if (card) card.remove();
++    return;
++  }
+   const per = e.target.closest('[data-action="roles-period"]');
+   if (per) {
+     rolesUi[per.dataset.role + 'Period'] = per.dataset.period;
+diff --git a/js/settings.js b/js/settings.js
+index 5085961..80dd16e 100644
+--- a/js/settings.js
++++ b/js/settings.js
+@@ -464,7 +464,7 @@ async function renderSettingsHtml() {
+     <div class="seg-row">${seg(FONT_SCALE_OPTIONS.map(([v, l]) => [v, l]), s.fontScale || 'normal', 'set-font', 'Размер текста')}</div>
+     <div class="row-item switch-row">
+       <span class="sr-ico t-gold">${icon('sparkles')}</span>
+-      <div class="ri-mid"><div class="nm">Анимации</div><div class="sb">Выключите, если движение некомфортно (SZ-030)</div></div>
++      <div class="ri-mid"><div class="nm">Анимации</div><div class="sb">Выключите, если движение некомфортно.<!-- канон: SZ-030 --></div></div>
+     </div>
+     <div class="seg-row">${seg(MOTION_OPTIONS, s.motion || 'system', 'set-motion', 'Анимации')}</div>
+   </div>

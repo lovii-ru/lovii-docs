@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Уведомления: тоны, когда и как выглядят</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--accent:#c92a6a;--acc:rgba(246,74,138,.1);--ok:#07726f;--mono:ui-monospace,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:26px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:29px;margin:10px 0 6px}h2{font-size:20px;margin:32px 0 12px;padding-top:18px;border-top:1px solid var(--line)}
+  .lead{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .sw{display:inline-block;width:12px;height:12px;border-radius:4px;border:1px solid rgba(0,0,0,.12);vertical-align:-2px;margin-right:6px}
+  figure{margin:18px 0}img{width:100%;border:1px solid var(--line);background:#fff}
+  figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--accent);background:var(--acc);padding:12px 16px;margin:16px 0;font-size:14px}
+  ul{padding-left:20px}li{margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · уведомления (тосты) · канон</div>
+    <h1>Какие бывают тоны и когда их ждать</h1>
+    <p class="lead">Шесть визуальных тонов. Тон выбирается по ситуации; текст — по матрице голоса (canon docs/11 §2, §5). Проверено в двух темах.</p>
+  </header>
+
+  <h2>Тоны</h2>
+  <table>
+    <thead><tr><th>Тон</th><th>Цвет</th><th>Когда</th><th>Пример текста</th></tr></thead>
+    <tbody>
+      <tr><td><b>neutral</b> (без тона)</td><td><span class="sw" style="background:#1a1a1a"></span>тёмная плашка</td><td>нейтральное подтверждение действия</td><td>«Ссылка скопирована» · «Тёмная тема включена»</td></tr>
+      <tr><td><b>positive</b></td><td><span class="sw" style="background:#0abab5"></span>бирюза</td><td>успех: добавили, начислили, подтвердили</td><td>«Добавили в корзину»</td></tr>
+      <tr><td><b>important</b></td><td><span class="sw" style="background:#d4a854"></span>золото</td><td>важное, но не ошибка: срок, лимит, внимание</td><td>«Бонус сгорит 30 сентября»</td></tr>
+      <tr><td><b>negative</b></td><td><span class="sw" style="background:#ed3244"></span>мягкий красный</td><td>отказ по решению человека: заявку отклонили</td><td>«Заявку отклонили»</td></tr>
+      <tr><td><b>error</b></td><td><span class="sw" style="background:#b81222"></span>плотный красный</td><td>сбой: нет сети, ошибка сервера, не сохранилось</td><td>«Нет сети» + «Покажем сохранённое»</td></tr>
+      <tr><td><b>financial</b></td><td><span class="sw" style="background:#c92a6a"></span>розовый</td><td>деньги: выплаты, кэшбэк, комиссии</td><td>«Выплата придёт до 5 числа»</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">Тон — про <b>цвет и срочность</b>. Формулировка — по матрице голоса (docs/11 §2): успех — тепло и коротко; ошибка — спокойно и с альтернативой; деньги — точно, без шуток. Восклицательный знак: не более одного на экран, а в ошибках и деньгах — ноль.</div>
+
+  <h2>Как выглядит (обе темы)</h2>
+  <p>Слева — светлая тема, справа — тёмная. Порядок строк: neutral, positive, important, negative, error, financial.</p>
+  <figure><img src="assets/sheet.png" alt="Тосты: шесть тонов в двух темах"><figcaption>Шесть тонов в светлой и тёмной темах.</figcaption></figure>
+
+  <h2>Где это применяется</h2>
+  <ul>
+    <li>действия в кабинетах: апрув/отказ заявки, сохранение настроек;</li>
+    <li>кошелёк: начисления, выплаты (<code>financial</code>);</li>
+    <li>системные: сеть (<code>error</code>), копирование, тема (<code>neutral</code>).</li>
+  </ul>
+  <p>Ограничение: тон применяется к <b>тосту</b>. Для постоянных состояний на экране (как блок отклонённой заявки) используется канонный <code>role-status[data-tone]</code>, а не плашка тоста.</p>
+</div>
+</body>
+</html>

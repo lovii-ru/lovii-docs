@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дизайн-аудит: форма заявки «Добавить точку»</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--accent:#c92a6a;--acc:rgba(246,74,138,.1);--ok:#07726f;--bad:#b3202b;--mono:ui-monospace,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:940px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:26px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:29px;margin:10px 0 6px}h2{font-size:20px;margin:32px 0 12px;padding-top:18px;border-top:1px solid var(--line)}
+  .lead{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}
+  ul{padding-left:20px}li{margin:6px 0}
+  figure{margin:18px 0}img{width:100%;border:1px solid var(--line);background:#fff}
+  figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--accent);background:var(--acc);padding:12px 16px;margin:16px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · приложение · форма заявки · 390px</div>
+    <h1>Дизайн-аудит: отступы, поля, кнопки, тап-таргеты</h1>
+    <p class="lead">Замеры с живого экрана и сверка с нормативами ДС. Было → стало, и что осталось.</p>
+  </header>
+
+  <h2>Замеры</h2>
+  <table>
+    <thead><tr><th>Элемент / метрика</th><th>Норма</th><th>Факт</th></tr></thead>
+    <tbody>
+      <tr><td>Боковой гуттер <code>main</code></td><td>16 (<code>--lv-pad-x</code>)</td><td class="ok">16 ✓</td></tr>
+      <tr><td>Зазор формы между полями</td><td>16 (<code>--lv-block-gap</code>)</td><td class="ok">16 ✓</td></tr>
+      <tr><td>Поле: бордер</td><td>видимый, 1.5px</td><td class="ok">1px <code>#8f8578</code> ✓</td></tr>
+      <tr><td>Поле: радиус</td><td>14 (<code>--lv-r-md</code>)</td><td class="ok">14 ✓</td></tr>
+      <tr><td>Поле: высота (тап-таргет)</td><td>≥ 44</td><td class="bad">42 — чуть ниже нормы</td></tr>
+      <tr><td>Подпись поля</td><td>12</td><td class="ok">12 ✓</td></tr>
+      <tr><td>Строка согласия (чекбокс)</td><td>≥ 44</td><td class="ok">54 ✓</td></tr>
+      <tr><td>Кнопка «Отправить заявку»</td><td>≥ 44, на всю ширину</td><td class="ok">358×52, pill ✓</td></tr>
+      <tr><td>Нижний зазор до навигации</td><td>—</td><td class="ok">72px ✓</td></tr>
+      <tr><td><b>Крестик очистки поля</b></td><td>≥ 44</td><td class="bad">16×15 → <span class="ok">32 + зона 44</span></td></tr>
+      <tr><td>Кнопка «назад» в шапке</td><td>≥ 44</td><td class="bad">40 — общая шапка</td></tr>
+      <tr><td>«Выбрать адрес» в шапке</td><td>≥ 44, без обрезки</td><td class="bad">36×109, текст обрезан «Выбрат…» — общая шапка</td></tr>
+      <tr><td>Ссылки в тексте согласий</td><td>—</td><td>15–33px (строчные ссылки в предложении)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Что исправлено</h2>
+  <ul>
+    <li><b>Крестик очистки полей:</b> не имел стилей вовсе (16×15px). Задал вид и довёл зону нажатия до нормы 44px, не увеличивая саму иконку. На форме таких пять — теперь все тапабельны.</li>
+    <li>Ранее на этом экране: видимые рамки полей, заголовок в шапке по канону, высота сабхедера 49px (была 89), подсказки адреса не выкидываются при предзаполнении, кнопка на всю ширину.</li>
+  </ul>
+
+  <h2>Осталось — общая шапка (все экраны)</h2>
+  <ul>
+    <li>кнопка «назад» 40px и кнопка выбора адреса 36px — ниже нормы 44;</li>
+    <li>текст «Выбрать адрес» обрезается до «Выбрат…» — похоже на баг ширины, а не на замысел;</li>
+    <li>высота поля ввода 42px — на 2px ниже тап-нормы (сейчас это размер <code>m</code> во всей системе).</li>
+  </ul>
+  <div class="note">Это один общий компонент на всё приложение. Правка затронет все экраны, поэтому вынес отдельно и не трогаю молча — скажи, и приведу к норме разом.</div>
+
+  <figure><img src="assets/apply-form.png" alt="Форма заявки после аудита"><figcaption>Форма заявки: поля с видимыми рамками, кнопка на всю ширину, крестики очистки с нормальной зоной.</figcaption></figure>
+</div>
+</body>
+</html>

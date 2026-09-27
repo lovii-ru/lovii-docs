@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOVII · состояние системы</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--card:#fff;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--warn:#8a6a25;--bad:#b3202b;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:940px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:28px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:30px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:36px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .st{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+  .st.ok{color:var(--ok);border-color:rgba(7,114,111,.35);background:rgba(10,186,181,.08)}
+  .st.no{color:var(--bad);border-color:rgba(179,32,43,.3);background:rgba(179,32,43,.06)}
+  .st.w{color:var(--warn);border-color:rgba(138,106,37,.35);background:rgba(212,168,84,.10)}
+  ol,ul{padding-left:22px}li{margin:7px 0}
+  .note{border-left:3px solid var(--accent);background:var(--acc-soft);padding:12px 16px;margin:16px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · локальный стенд · сводка 27.09 (день)</div>
+    <h1>Состояние системы и где мы остановились</h1>
+    <p class="lead">Стенды подняты, разобрал, что сделал zcode за сутки, что мешает CI и пуши в прод.</p>
+  </header>
+
+  <h2>Стенды</h2>
+  <table>
+    <thead><tr><th>Что</th><th>Адрес</th><th>Статус</th></tr></thead>
+    <tbody>
+      <tr><td>Приложение (витрина-стенд)</td><td class="mono">localhost:5173</td><td><span class="st ok">поднято</span></td></tr>
+      <tr><td>Демо (дизайн-лаборатория)</td><td class="mono">localhost:8090</td><td><span class="st ok">поднято</span></td></tr>
+      <tr><td>Отчёты/артефакты</td><td class="mono">localhost:8091</td><td><span class="st ok">поднято</span></td></tr>
+      <tr><td>Сайт</td><td class="mono">localhost:8092</td><td><span class="st ok">поднято</span></td></tr>
+      <tr><td>Core API</td><td class="mono">localhost/api/v1</td><td><span class="st ok">отвечает</span></td></tr>
+      <tr><td>Мок банка</td><td class="mono">localhost:3100</td><td><span class="st ok">ok:true</span></td></tr>
+    </tbody>
+  </table>
+  <p>Docker (OrbStack) был выключен — после запуска контейнеры с <span class="mono">restart: unless-stopped</span> вернулись сами; dev-сервер приложения поднял вручную (<span class="mono">yarn dev</span>).</p>
+
+  <h2>Что zcode сделал за сутки (ветка t019g-p1-fixes)</h2>
+  <table>
+    <thead><tr><th>Коммит</th><th>Что</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">24a1f07</td><td>Каталог: экран «Товары» — кнопки «Товар | Категория» одной строкой, формы по режиму</td></tr>
+      <tr><td class="mono">7b06317</td><td>Стили кнопок «Товар | Категория» — раздельные табы вместо слипшегося текста</td></tr>
+      <tr><td class="mono">ab8ca2b</td><td>Бизнес: подпись поля «Название мерчанта», короткие адреса точек в каскаде</td></tr>
+      <tr><td class="mono">391c1dd</td><td>Бизнес: юрлицо по ИНН в карточке одобрения представителя (legal_name из DaData)</td></tr>
+      <tr><td class="mono">cc1a974…f762288</td><td>Откат спорных правок каталога (revert)</td></tr>
+      <tr><td>ранее</td><td>Правка заголовка карточек (<span class="mono">padding-inline</span> + <span class="mono">padding-block-start</span>) ушла в коммит; страж ДС с исправленной полярностью</td></tr>
+    </tbody>
+  </table>
+  <p>Есть ещё свежая локальная ветка <span class="mono">sz076-merchant-cascade-restore</span> (каскад юрлицо→мерчант→точка) — возможно, заготовка под наш второй экран.</p>
+
+  <h2>CI и деплой — что мешает</h2>
+  <div class="note">
+    Джобы обоих репозиториев (<span class="mono">lovii-app</span>, <span class="mono">lovii-core</span>) всё ещё идут на <b>GitHub-хостовом</b> раннере (<span class="mono">runs-on: ubuntu-latest</span>) и падают за 5 секунд — это блок биллинга организации. Self-hosted раннер заведён, но <b>только на core</b> (<span class="mono">gostiny-ci-core</span>, online); у app раннеров 0, а workflow на него не переключён.
+  </div>
+  <table>
+    <thead><tr><th>Пункт</th><th>Факт</th><th>Статус</th></tr></thead>
+    <tbody>
+      <tr><td>Раннеры core</td><td>1 online (self-hosted, Linux, X64, lovii)</td><td><span class="st ok">есть</span></td></tr>
+      <tr><td>Раннеры app</td><td>0</td><td><span class="st no">нет</span></td></tr>
+      <tr><td>Workflow: runs-on</td><td><span class="mono">ubuntu-latest</span> в обоих репо</td><td><span class="st w">не переключён</span></td></tr>
+      <tr><td>Последние раны CI</td><td>26.09, падение за ~5 с</td><td><span class="st no">блок</span></td></tr>
+      <tr><td>Прод (master)</td><td><span class="mono">d3e35f1</span>, не выкатывался</td><td><span class="st w">ждёт</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>План, чтобы «продолжить деплоить в прод»</h2>
+  <ol>
+    <li><b>Разбудить CI:</b> добавить self-hosted раннер для <span class="mono">lovii-app</span> (+ b2b/admin) и переключить <span class="mono">runs-on</span> на свои метки — тогда checks и деплой пойдут без GitHub-хоста. Это задача zcode; я готов собрать точную постановку и критерии.</li>
+    <li><b>Стартовый деплой на staging</b> из ветки <span class="mono">staging</span> с проверкой health — там вы принимаете работу.</li>
+    <li><b>Дизайн новых экранов</b> — на демо (<span class="mono">:8090</span>): следующий экран по списку; собранное переносим на стенд и в постановку zcode.</li>
+    <li><b>Прод</b> — только когда staging-приёмка пройдена (ручной запуск по канону).</li>
+  </ol>
+
+  <h2>Открытые пункты</h2>
+  <ul>
+    <li>«Промо» МСП: каскад юрлицо → бренд → точка (сейчас только юрлицо).</li>
+    <li>Экран успеха/неуспеха перевода.</li>
+    <li>Приёмка кабинетов на двойной инсет заголовка после системного фикса.</li>
+    <li>Написание бренда: ЛОВИ vs LOVII — вопрос к вам.</li>
+  </ul>
+</div>
+</body>
+</html>

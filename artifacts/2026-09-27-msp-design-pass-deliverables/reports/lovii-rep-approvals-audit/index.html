@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дизайн-аудит: экран «Заявки» кабинета представителя</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--accent:#c92a6a;--acc:rgba(246,74,138,.1);--ok:#07726f;--bad:#b3202b;--mono:ui-monospace,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:940px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:26px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:29px;margin:10px 0 6px}h2{font-size:20px;margin:32px 0 12px;padding-top:18px;border-top:1px solid var(--line)}
+  .lead{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}
+  ul{padding-left:20px}li{margin:6px 0}
+  figure{margin:18px 0}img{width:100%;border:1px solid var(--line);background:#fff}
+  figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--accent);background:var(--acc);padding:12px 16px;margin:16px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · приложение · кабинет представителя · экран «Заявки»</div>
+    <h1>Дизайн-аудит: отступы, кнопки, границы</h1>
+    <p class="lead">Замеры с живого экрана (390px) и сверка с нормативами дизайн-системы. Ниже — что было, что стало и что осталось.</p>
+  </header>
+
+  <h2>Замеры: метрика → норма → факт</h2>
+  <table>
+    <thead><tr><th>Метрика</th><th>Норма ДС</th><th>Было</th><th>Стало</th></tr></thead>
+    <tbody>
+      <tr><td>Боковой гуттер экрана</td><td>16 (<code>--lv-pad-x</code>)</td><td class="ok">16</td><td class="ok">16</td></tr>
+      <tr><td>Внутренний отступ карточки</td><td>16 — по сетке экрана</td><td class="bad">14 (сдвиг 2px)</td><td class="ok">16</td></tr>
+      <tr><td>Зазор внутри карточки</td><td>16 (<code>--lv-block-gap</code>)</td><td class="bad">12</td><td class="ok">16</td></tr>
+      <tr><td>Радиус карточки</td><td>16 (<code>--lv-r-lg</code>)</td><td class="ok">16</td><td class="ok">16</td></tr>
+      <tr><td>Радиус/отступ ячейки поля</td><td>12 / 12</td><td class="ok">12 / 12</td><td class="ok">12 / 12</td></tr>
+      <tr><td>Зазор сетки полей</td><td>8 (½ block-gap)</td><td class="ok">8</td><td class="ok">8</td></tr>
+      <tr><td>Высота кнопок</td><td>≥ 44 (тап-таргет)</td><td class="ok">44</td><td class="ok">44</td></tr>
+      <tr><td>Радиус кнопок</td><td>pill</td><td class="ok">pill</td><td class="ok">pill</td></tr>
+      <tr><td><b>Высота карточки заявки</b></td><td>сканируемость</td><td class="bad">557px (6 полей стопкой)</td><td class="ok">429px (пары + длинные на всю ширину)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Главная правка: плотность</h2>
+  <p> Карточка очереди весила 557px — почти две трети экрана на одну заявку. Сжал сетку полей: короткие реквизиты (ИНН/ОГРН, промокод/дата) — в две колонки, длинные (адрес, контакт) — на всю ширину. Стало 429px, при этом состав полей не изменился.</p>
+  <p>Заодно выровнял ритм: внутренний отступ карточки по сетке экрана (16) и зазор внутри карточки по токену <code>--lv-block-gap</code> (16).</p>
+
+  <h2>Осталось (вне этого экрана)</h2>
+  <ul>
+    <li><b>Шапка приложения:</b> кнопка «Выбрать адрес» обрезана («Выбрат…») и её высота 36px — меньше нормы 44. Это общая шапка — правка затронет все экраны, поэтому вынес отдельно;</li>
+    <li>иконки-кнопки в шапке той же высоты (36px) — тот же случай;</li>
+    <li>подписи 10–11.5px в служебных строках — это шкала ДС, не дефект, но при желании поднимем до 12.</li>
+  </ul>
+  <div class="note">Проверка по «прилипанию» к нижней навигации сделана замером: контент не уходит под бар (зазор 12px). «Перекрытие» на панорамных снимках — артефакт отрисовки фиксированной навигации.</div>
+
+  <figure><img src="assets/audit-rep-after.png" alt="Экран Заявки после аудита"><figcaption>Экран «Заявки» после сжатия карточки и выравнивания ритма.</figcaption></figure>
+</div>
+</body>
+</html>

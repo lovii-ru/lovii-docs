@@ -1,0 +1,53 @@
+diff --git a/app/Domain/Business/Enums/PartnerApplicationStatus.php b/app/Domain/Business/Enums/PartnerApplicationStatus.php
+index 6a8b5629..dfa4a9c8 100644
+--- a/app/Domain/Business/Enums/PartnerApplicationStatus.php
++++ b/app/Domain/Business/Enums/PartnerApplicationStatus.php
+@@ -47,7 +47,7 @@ public function label(): string
+             self::AwaitingPayment => 'Ожидаем оплату',
+             self::Verifying => 'Проверяем точку',
+             self::Verified => 'Точка активна',
+-            self::Failed => 'Не удалось подтвердить точку',
++            self::Failed => 'Заявку отклонили',
+             self::Expired => 'Счёт истёк',
+         };
+     }
+diff --git a/app/Http/Resources/Api/V1/PartnerApplicationApprovalResource.php b/app/Http/Resources/Api/V1/PartnerApplicationApprovalResource.php
+index b469a66b..508918f0 100644
+--- a/app/Http/Resources/Api/V1/PartnerApplicationApprovalResource.php
++++ b/app/Http/Resources/Api/V1/PartnerApplicationApprovalResource.php
+@@ -32,6 +32,11 @@ public function toArray(Request $request): array
+             'city_name' => $application->city_name,
+             'phone' => $application->phone,
+             'promo_code' => $application->promo_code,
++            // Юрлицо и ОГРН из снимка DaData: карточка апрува показывает компанию,
++            // а не только название торговой точки (решение владельца 2026-09-27).
++            'legal_name' => data_get($application->dadata_party, 'name.short_with_opf'),
++            'legal_name_full' => data_get($application->dadata_party, 'name.full_with_opf'),
++            'ogrn' => data_get($application->dadata_party, 'ogrn'),
+             'created_at' => $application->created_at?->toIso8601String(),
+             'rep_approved_at' => $application->rep_approved_at?->toIso8601String(),
+             'rep_rejected_at' => $application->rep_rejected_at?->toIso8601String(),
+diff --git a/app/Http/Resources/Api/V1/PartnerApplicationResource.php b/app/Http/Resources/Api/V1/PartnerApplicationResource.php
+index b62ebdc6..66f90383 100644
+--- a/app/Http/Resources/Api/V1/PartnerApplicationResource.php
++++ b/app/Http/Resources/Api/V1/PartnerApplicationResource.php
+@@ -30,12 +30,19 @@ public function toArray(Request $request): array
+             'activity_type_label' => $this->resource->activity_type?->label(),
+             'address_line' => $this->resource->address_line,
+             'city_name' => $this->resource->city_name,
++            // Координаты точки — чтобы повторная подача вернула адрес целиком
++            // (точка создаётся только при координатах).
++            'lat' => $this->resource->lat,
++            'lon' => $this->resource->lon,
+             'phone' => $this->resource->phone,
+             'email' => $this->resource->email,
+             // «VER-<partner_id>-<суффикс>» (FINANCIAL_CONTOUR §3.1) — null,
+             // пока черновик партнёра не материализован.
+             'verification_code' => $this->resource->verificationCode(),
+             'created_at' => $this->resource->created_at?->toIso8601String(),
++            // Причина отказа представителя — владелец должен видеть, что не так.
++            'rep_reject_reason' => $this->resource->rep_reject_reason,
++            'rep_rejected_at' => $this->resource->rep_rejected_at?->toIso8601String(),
+         ];
+     }
+ }

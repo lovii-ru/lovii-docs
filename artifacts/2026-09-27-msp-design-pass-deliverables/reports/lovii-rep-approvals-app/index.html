@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Апрув представителя в приложении + причина отказа владельцу</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--warn:#8a6a25;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:28px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:29px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:34px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .ok{color:var(--ok);font-weight:700}.warn{color:var(--warn);font-weight:700}
+  ul{padding-left:20px}li{margin:6px 0}
+  figure{margin:18px 0}img{width:100%;border:1px solid var(--line);background:#fff}
+  figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--accent);background:var(--acc-soft);padding:12px 16px;margin:16px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · приложение · кабинет представителя и МСП</div>
+    <h1>Апрув: юрлицо в карточке и причина отказа владельцу</h1>
+    <p class="lead">Согласованный вид карточки внесён в приложение; добавлены поля API, чтобы владелец МСП видел юрлицо и причину отказа.</p>
+  </header>
+
+  <h2>Что сделано</h2>
+  <table>
+    <thead><tr><th>Слой</th><th>Файл</th><th>Что</th></tr></thead>
+    <tbody>
+      <tr><td>Ядро</td><td class="mono">PartnerApplicationApprovalResource</td><td>отдаёт <span class="mono">legal_name</span>, <span class="mono">legal_name_full</span>, <span class="mono">ogrn</span> из снимка DaData</td></tr>
+      <tr><td>Ядро</td><td class="mono">PartnerApplicationResource</td><td>отдаёт владельцу <span class="mono">rep_reject_reason</span> и <span class="mono">rep_rejected_at</span></td></tr>
+      <tr><td>Приложение</td><td class="mono">RepresentativeApprovals.vue</td><td>карточка: мерчант крупно, юрлицо под ним; поля ИНН · ОГРН · Адрес торговой точки · Контакт · Промокод · Подана; бейдж статуса убран</td></tr>
+      <tr><td>Приложение</td><td class="mono">MspOverview.vue</td><td>блок «Заявка №…» показывает «Причина отказа: …»</td></tr>
+      <tr><td>Приложение</td><td class="mono">BusinessResult.vue</td><td>экран «Не удалось подтвердить точку» показывает причину от представителя</td></tr>
+      <tr><td>Типы</td><td class="mono">roles-api.ts · business-api.ts</td><td>добавлены <span class="mono">ogrn</span>, <span class="mono">rep_reject_reason</span>, <span class="mono">rep_rejected_at</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Проверка</h2>
+  <table>
+    <thead><tr><th>Проверка</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr><td>API апрува возвращает юрлицо</td><td class="ok">#30 → «ООО "ПИВОВАРЕННАЯ КОМПАНИЯ "БАЛТИКА"», ОГРН 1147847032838</td></tr>
+      <tr><td>Экран апрува в приложении</td><td class="ok">мерчант сверху, юрлицо под ним; поля на месте; бейджа нет</td></tr>
+      <tr><td>Перекрытие нижней навигацией</td><td class="ok">нет (карточка до 692px, навигация с 772px)</td></tr>
+      <tr><td>Типы</td><td class="ok">type-check зелёный</td></tr>
+      <tr><td>Юнит-тесты</td><td>339/340 зелёные; <span class="warn">1 падает до моих правок</span> — <span class="mono">roles-msp.test.ts</span> про кнопку «Добавить товар» (расхождение на ветке, не связанное с этой правкой)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    Данных по старой заявке #29 в снимке DaData нет — юрлицо по ней не показывается (это честное пустое состояние, а не баг).
+    Новая #30 создана с обогащением по ИНН, поэтому юрлицо на месте.
+  </div>
+
+  <figure><img src="assets/app-rep-approvals.png" alt="Апрув в приложении"><figcaption>Апрув представителя в приложении: карточки с мерчантом и юрлицом.</figcaption></figure>
+
+  <h2>Унификация демо ↔ приложение (по замечанию)</h2>
+  <p>Набор и порядок полей сведены, вид карточки приведён к одному эталону (демо — источник дизайна, приложение приведено к нему).</p>
+  <table>
+    <thead><tr><th>Что</th><th>Как</th></tr></thead>
+    <tbody>
+      <tr><td>Поля и порядок</td><td>ИНН · ОГРН · Адрес торговой точки · Контакт · Промокод · Подана — одинаково</td></tr>
+      <tr><td>Пустой ОГРН</td><td>показываем «—» (было скрытие)</td></tr>
+      <tr><td>Колонки</td><td>одна колонка до 430px, две выше — как в демо</td></tr>
+      <tr><td>Телефон</td><td>в маске «+7 000 000-00-01» (было сырое E.164)</td></tr>
+      <tr><td>Дата</td><td>с временем «27 сентября, 16:25» (было без времени)</td></tr>
+      <tr><td>Адрес</td><td>убран дубль города («Санкт-Петербург, Россия, Санкт-Петербург…»)</td></tr>
+      <tr><td>Кнопки</td><td>«Подтвердить» / «Отклонить» в обоих (в приложении было «Вернуть на правку»)</td></tr>
+      <tr><td>Плитка, жирность</td><td>единый тон плитки и вес значений</td></tr>
+      <tr><td>Карточка в демо</td><td>радиус приведён к токену ДС (было 18px литералом)</td></tr>
+    </tbody>
+  </table>
+  <p>Остаточные отличия — данные, не дизайн: регистр/кавычки юрлица из DaData, префикс «Россия» в адресе, фактическое время создания.</p>
+  <figure><img src="assets/compare-cards-same.png" alt="Демо и приложение: одна заявка"><figcaption>Одна и та же заявка: демо слева, приложение справа.</figcaption></figure>
+
+
+  <h2>Возврат к заявке после отказа (добавлено)</h2>
+  <p>Раньше после отказа вернуться в форму можно было только с экрана статуса. Добавил кнопку <b>«Отправить заявку заново»</b> прямо в кабинет МСП — в блок отказанной заявки.</p>
+  <table>
+    <thead><tr><th>Где</th><th>Что</th></tr></thead>
+    <tbody>
+      <tr><td>Кабинет МСП → блок «Заявка №…» (статус «Не удалось подтвердить точку»)</td><td>кнопка «Отправить заявку заново» → форма заявки</td></tr>
+      <tr><td>Экран статуса <span class="mono">/business/status</span></td><td>та же кнопка (была и раньше)</td></tr>
+      <tr><td>Что подставляется в форму</td><td><b>ИНН</b> из последней заявки (правится) + телефон и e-mail из профиля. Название точки и адрес — заполняются заново (канон «ЛОВИ Бизнес» §9.5)</td></tr>
+      <tr><td>Повторная подача</td><td>создаёт <b>новую</b> заявку; отклонённая остаётся закрытой</td></tr>
+    </tbody>
+  </table>
+  <p>Проверено кликом: кнопка ведёт на <span class="mono">/business/apply</span>, в поле ИНН уже стоит 7842216839 (из отклонённой заявки).</p>
+  <figure><img src="assets/msp-resubmit.png" alt="Кнопка возврата к заявке"><figcaption>Блок отказанной заявки с кнопкой «Отправить заявку заново».</figcaption></figure>
+
+
+  <h2>Предзаполнение формы при повторной подаче (расширено)</h2>
+  <p>Раньше форма возвращала только ИНН. Теперь подставляются все данные прошлой заявки — название точки, адрес (вместе с координатами), телефон, e-mail.</p>
+  <table>
+    <thead><tr><th>Поле</th><th>Источник</th></tr></thead>
+    <tbody>
+      <tr><td>Название точки</td><td>прошлая заявка</td></tr>
+      <tr><td>ИНН</td><td>прошлая заявка (правится)</td></tr>
+      <tr><td>Адрес</td><td>прошлая заявка + координаты (иначе точка не создастся)</td></tr>
+      <tr><td>Телефон, e-mail</td><td>прошлая заявка</td></tr>
+    </tbody>
+  </table>
+  <p>Проверено на форме: «Пекарня "Пышка"», ИНН 7842216839, адрес «Россия, Санкт-Петербург, улица Белы Куна, 4к1», телефон и e-mail — на месте.</p>
+  <figure><img src="assets/apply-prefilled.png" alt="Форма с данными прошлой заявки"><figcaption>Форма заявки, заполненная данными отклонённой заявки.</figcaption></figure>
+
+</div>
+</body>
+</html>

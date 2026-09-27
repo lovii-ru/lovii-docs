@@ -1,0 +1,923 @@
+diff --git a/src/components/Ui/AppInput.vue b/src/components/Ui/AppInput.vue
+index 5ddbc2a..2d4011d 100644
+--- a/src/components/Ui/AppInput.vue
++++ b/src/components/Ui/AppInput.vue
+@@ -132,7 +132,13 @@ const formattedValue = computed({
+ 				:data-maska-tokens="maskTokens"
+ 				:data-maska-reversed="dataMaskReversed"
+ 			/>
+-			<button v-if="modelValue && clear" type="button" @click="emit('update:modelValue', '')">
++			<button
++				v-if="modelValue && clear"
++				type="button"
++				class="app-input__clear"
++				aria-label="Очистить"
++				@click="emit('update:modelValue', '')"
++			>
+ 				<IconCloseRegular />
+ 			</button>
+ 		</span>
+@@ -235,7 +241,7 @@ const formattedValue = computed({
+ 
+ 	&__area {
+ 		width: 100%;
+-		border: 1.5px solid var(--border-normal-subtle);
++		border: 1.5px solid var(--border-normal-strong); /* видимый бордер контрола (ДС) — было subtle, поля сливались с фоном */
+ 		border-radius: var(--lv-r-md);
+ 		padding: 0 14px;
+ 		display: flex;
+@@ -301,6 +307,29 @@ const formattedValue = computed({
+ 		}
+ 	}
+ 
++	&__clear {
++		position: relative;
++		display: grid;
++		place-items: center;
++		flex: 0 0 auto;
++		width: 32px;
++		height: 32px;
++		/* Микро-сдвиг производный от токена (шкала ДС), литерал запрещён. */
++		margin: 0 calc(var(--lv-block-gap) * -0.375) 0 0;
++		padding: 0;
++		background: none;
++		border: 0;
++		color: var(--content-normal-tertiary);
++		cursor: pointer;
++
++		/* Зона нажатия доводится до нормы 44px без визуального роста кнопки. */
++		&::after {
++			content: "";
++			position: absolute;
++			inset: -6px;
++		}
++	}
++
+ 	&__message {
+ 		color: var(--content-normal-tertiary);
+ 		font-size: calc(var(--font-scale, 1) * 11px);
+diff --git a/src/components/Ui/AppToast.vue b/src/components/Ui/AppToast.vue
+index 8d4073c..7c051c8 100644
+--- a/src/components/Ui/AppToast.vue
++++ b/src/components/Ui/AppToast.vue
+@@ -62,6 +62,9 @@ defineOptions({ name: "AppToast" });
+ 
+ .app-toast__m {
+ 	display: block;
++	/* Наследуем цвет тоста: глобальный normalize задаёт цвет каждому элементу,
++	   и без этого сообщение брало цвет текста страницы (тёмный на тёмном тосте). */
++	color: inherit;
+ }
+ 
+ .app-toast__d {
+@@ -74,8 +77,8 @@ defineOptions({ name: "AppToast" });
+ /* Тоны — семантика канона (как в демо). */
+ .app-toast_t-positive {
+ 	background: var(--lv-soft-tiffany);
+-	color: var(--lv-tiffany-text);
+-	border-color: var(--lv-tiffany-text);
++	color: color-mix(in srgb, var(--lv-tiffany-text) 88%, var(--lv-ink));
++	border-color: color-mix(in srgb, var(--lv-tiffany-text) 88%, var(--lv-ink));
+ }
+ 
+ .app-toast_t-positive .app-toast__d {
+@@ -85,30 +88,30 @@ defineOptions({ name: "AppToast" });
+ 
+ .app-toast_t-important {
+ 	background: var(--lv-soft-gold);
+-	color: var(--lv-gold-text);
+-	border-color: var(--lv-gold-text);
++	color: color-mix(in srgb, var(--lv-gold-text) 76%, var(--lv-ink));
++	border-color: color-mix(in srgb, var(--lv-gold-text) 76%, var(--lv-ink));
+ }
+ 
+ .app-toast_t-important .app-toast__d {
+-	color: var(--lv-gold-text);
++	color: color-mix(in srgb, var(--lv-gold-text) 76%, var(--lv-ink));
+ 	opacity: 0.85;
+ }
+ 
+ .app-toast_t-negative {
+ 	background: var(--feedback-negative-subtle);
+-	color: var(--feedback-negative-solid);
+-	border-color: var(--feedback-negative-solid);
++	color: var(--basecolors-red-700);
++	border-color: var(--basecolors-red-700);
+ }
+ 
+ .app-toast_t-negative .app-toast__d {
+-	color: var(--feedback-negative-solid);
++	color: var(--basecolors-red-700);
+ 	opacity: 0.85;
+ }
+ 
+ .app-toast_t-error {
+-	background: var(--feedback-negative-solid);
++	background: var(--basecolors-red-600);
+ 	color: var(--lv-card);
+-	border-color: var(--feedback-negative-solid);
++	border-color: var(--basecolors-red-600);
+ }
+ 
+ .app-toast_t-error .app-toast__d {
+@@ -118,16 +121,37 @@ defineOptions({ name: "AppToast" });
+ 
+ .app-toast_t-financial {
+ 	background: var(--lv-soft-pink);
+-	color: var(--lv-pink-dark);
+-	border-color: var(--lv-pink-dark);
++	color: var(--basecolors-pink-700);
++	border-color: var(--basecolors-pink-700);
+ }
+ 
+ .app-toast_t-financial .app-toast__d {
+-	color: var(--lv-pink-dark);
++	color: var(--basecolors-pink-700);
+ 	opacity: 0.85;
+ 	font-variant-numeric: tabular-nums;
+ }
+ 
++
++/* Тёмная тема: светлые оттенки для читаемости (норма AA). */
++html[data-theme="dark"] .app-toast_t-negative,
++html[data-theme="dark"] .app-toast_t-negative .app-toast__d {
++	color: var(--basecolors-red-200);
++}
++html[data-theme="dark"] .app-toast_t-negative {
++	border-color: var(--basecolors-red-200);
++}
++html[data-theme="dark"] .app-toast_t-error {
++	background: var(--feedback-negative-solid);
++	border-color: var(--feedback-negative-solid);
++}
++html[data-theme="dark"] .app-toast_t-financial,
++html[data-theme="dark"] .app-toast_t-financial .app-toast__d {
++	color: var(--basecolors-pink-200);
++}
++html[data-theme="dark"] .app-toast_t-financial {
++	border-color: var(--basecolors-pink-200);
++}
++
+ .app-toast-enter-active,
+ .app-toast-leave-active {
+ 	transition:
+diff --git a/src/modules/business-module/BusinessApply.vue b/src/modules/business-module/BusinessApply.vue
+index 20bea0a..a294d99 100644
+--- a/src/modules/business-module/BusinessApply.vue
++++ b/src/modules/business-module/BusinessApply.vue
+@@ -50,6 +50,29 @@ watch(
+ 	{ immediate: true },
+ );
+ 
++// Канон «ЛОВИ Бизнес» §9.5 (расширено 2026-09-27 по решению владельца):
++// повторная подача возвращает данные прошлой заявки — название точки, адрес
++// (вместе с координатами, иначе точка не создастся), телефон и e-mail.
++// Заполняем один раз и только пока поля не тронуты руками.
++const prefilledFromApplication = ref(false);
++watch(
++	() => businessStore.application,
++	(a) => {
++		if (!a || prefilledFromApplication.value) return;
++		if (a.name && form.name === "") form.name = a.name;
++		if (a.address_line && form.addressLine === "") {
++			form.addressLine = a.address_line;
++			form.cityName = a.city_name ?? null;
++			form.lat = a.lat ?? null;
++			form.lon = a.lon ?? null;
++		}
++		if (a.phone) form.phone = phoneToMasked(a.phone);
++		if (a.email && form.email === "") form.email = a.email;
++		prefilledFromApplication.value = true;
++	},
++	{ immediate: true },
++);
++
+ // Гонка предзаполнения (Task 91): профиль приходит асинхронно и может
+ // опоздать к монтированию формы — тогда в поле остаётся пустая маска «+7»
+ // и валидация молча рубит сабмит («Введите номер полностью»). Дополняем
+@@ -150,10 +173,11 @@ const submit = async (): Promise<void> => {
+ </script>
+ 
+ <template>
+-	<main class="apply container">
+-		<AppPageHeader back-to="BusinessLandingView" />
++	<!-- Канон: сабхедер — вне контентного <main> (как в ProfileWallet/Перевод):
++	     внутри сетчатого контейнера он растягивался и давал лишнюю высоту. -->
++	<AppPageHeader title="Добавить точку" back-to="BusinessLandingView" />
+ 
+-		<h1 class="apply__title">Добавить точку</h1>
++	<main class="apply container">
+ 
+ 		<form class="apply__form" novalidate @submit.prevent="submit">
+ 			<AppInput
+@@ -199,7 +223,7 @@ const submit = async (): Promise<void> => {
+ 
+ 			<AppInput
+ 				v-model="form.email"
+-				label="Email торговой точки для уведомлений (необязательно)"
++				label="E-mail торговой точки для уведомлений (необязательно)"
+ 				placeholder="you@company.ru"
+ 				type="email"
+ 				input-mode="email"
+@@ -266,7 +290,8 @@ const submit = async (): Promise<void> => {
+ 	grid-template-columns: 1fr;
+ 	gap: 16px;
+ 	min-height: calc(100dvh - 56px);
+-	padding: 0 16px calc(var(--lv-navbar-offset) + 8px);
++	/* Верхний отступ — по канону (20px), иначе первый заголовок липнет к подшапке. */
++	padding: var(--lv-section-top) var(--lv-pad-x) calc(var(--lv-navbar-offset) + 8px);
+ 
+ 	&__title {
+ 		@include h1-bold();
+@@ -307,6 +332,8 @@ const submit = async (): Promise<void> => {
+ 	}
+ 
+ 	&__cta {
++		/* Главное действие формы — на всю ширину (как в остальных формах). */
++		display: grid;
+ 		position: sticky;
+ 		bottom: var(--lv-navbar-offset);
+ 		z-index: 5;
+diff --git a/src/modules/business-module/BusinessResult.vue b/src/modules/business-module/BusinessResult.vue
+index e9a9eb8..08df66d 100644
+--- a/src/modules/business-module/BusinessResult.vue
++++ b/src/modules/business-module/BusinessResult.vue
+@@ -68,6 +68,13 @@ const goHome = (): void => {
+ 				<li>Неверный ИНН</li>
+ 				<li>Банковский счёт не активен</li>
+ 			</ul>
++			<p
++				v-if="application.rep_reject_reason"
++				class="result__text"
++				data-testid="business-result-reason"
++			>
++				Причина от представителя: {{ application.rep_reject_reason }}
++			</p>
+ 			<p class="result__text">Проверьте данные или обратитесь в поддержку.</p>
+ 			<div class="result__actions">
+ 				<AppButton
+diff --git a/src/modules/business-module/BusinessStatus.vue b/src/modules/business-module/BusinessStatus.vue
+index babba6a..48c41f2 100644
+--- a/src/modules/business-module/BusinessStatus.vue
++++ b/src/modules/business-module/BusinessStatus.vue
+@@ -96,8 +96,10 @@ onBeforeUnmount(() => {
+ </script>
+ 
+ <template>
++	<!-- Канон: сабхедер — вне контентного <main> (как в ProfileWallet/Перевод). -->
++	<AppPageHeader title="Заявка" back-to="BusinessLandingView" />
++
+ 	<main class="status container">
+-		<AppPageHeader back-to="BusinessLandingView" />
+ 
+ 		<!-- Первичная загрузка: короткий честный спиннер, без обещаний «2 минуты». -->
+ 		<section
+@@ -148,6 +150,13 @@ onBeforeUnmount(() => {
+ 				<span class="status__icon status__icon_error"><IconCircleErrorThin /></span>
+ 				<h1 class="status__title">{{ view.title }}</h1>
+ 				<p class="status__text">{{ view.text }}</p>
++				<p
++					v-if="application.rep_reject_reason"
++					class="status__text"
++					data-testid="business-status-reason"
++				>
++					Причина от представителя: {{ application.rep_reject_reason }}
++				</p>
+ 				<div class="status__actions">
+ 					<AppButton
+ 						label="Отправить заявку заново"
+diff --git a/src/modules/business-module/api/business-api.ts b/src/modules/business-module/api/business-api.ts
+index 457bea9..4517adc 100644
+--- a/src/modules/business-module/api/business-api.ts
++++ b/src/modules/business-module/api/business-api.ts
+@@ -32,6 +32,12 @@ export interface BusinessApplication {
+ 	/** «VER-<partner_id>-<suffix>»; null, пока черновик партнёра не материализован. */
+ 	verification_code: string | null;
+ 	created_at: string | null;
++	/** Причина отказа представителя (status=failed) — показываем владельцу. */
++	rep_reject_reason: string | null;
++	rep_rejected_at: string | null;
++	/** Координаты точки (для возврата адреса при повторной подаче). */
++	lat: number | null;
++	lon: number | null;
+ }
+ 
+ export interface BusinessApplicationInput {
+diff --git a/src/modules/business-module/components/BusinessAddressInput.vue b/src/modules/business-module/components/BusinessAddressInput.vue
+index 15ce401..daaa67d 100644
+--- a/src/modules/business-module/components/BusinessAddressInput.vue
++++ b/src/modules/business-module/components/BusinessAddressInput.vue
+@@ -35,9 +35,17 @@ const address = ref("");
+ const suggestions = ref<SuggestItem[] | null>(null);
+ let lastQuery = "";
+ 
++// Значение, вернувшееся программно (предзаполнение из прошлой заявки),
++// не должно открывать список подсказок: его раскрывает только ручной ввод.
++let programmaticValue = false;
++
+ watchDebounced(
+ 	address,
+ 	async () => {
++		if (programmaticValue) {
++			programmaticValue = false;
++			return;
++		}
+ 		if (!address.value) {
+ 			suggestions.value = null;
+ 			return;
+@@ -96,6 +104,7 @@ watch(
+ 	() => props.modelValue,
+ 	(value) => {
+ 		if (value !== address.value) {
++			programmaticValue = true;
+ 			address.value = value ?? "";
+ 		}
+ 	},
+@@ -109,6 +118,7 @@ watch(
+ 			label="Адрес торговой точки"
+ 			placeholder="Город, улица, дом"
+ 			size="m"
++			clear
+ 			:error="error"
+ 			data-testid="business-address-input"
+ 		/>
+diff --git a/src/modules/business-module/package/business-status.ts b/src/modules/business-module/package/business-status.ts
+index 5ea8202..2954f33 100644
+--- a/src/modules/business-module/package/business-status.ts
++++ b/src/modules/business-module/package/business-status.ts
+@@ -110,8 +110,8 @@ const STATUS_VIEWS: Record<BusinessApplicationStatus, BusinessStatusView> = {
+ 	},
+ 	failed: {
+ 		tone: "failed",
+-		title: "Не удалось подтвердить точку",
+-		text: "Проверьте данные заявки или обратитесь в поддержку — разберёмся и поможем пройти подключение заново.",
++		title: "Заявку отклонили",
++		text: "Представитель не подтвердил подключение точки. Исправьте данные и отправьте заявку заново — или напишите в поддержку.",
+ 		progress: PROGRESS_BY_STATUS.failed,
+ 	},
+ 	expired: {
+diff --git a/src/modules/roles-module/__tests__/roles-representative.test.ts b/src/modules/roles-module/__tests__/roles-representative.test.ts
+index 3e55ef3..81d45ba 100644
+--- a/src/modules/roles-module/__tests__/roles-representative.test.ts
++++ b/src/modules/roles-module/__tests__/roles-representative.test.ts
+@@ -575,7 +575,7 @@ describe("RepresentativeApprovals — очередь, подтверждение
+ 
+ 		await wrapper.get('[data-testid="rep-reject-42"]').trigger("click");
+ 		await flushPromises();
+-		expect(sheetText()).toContain("Вернуть заявку на правку?");
++		expect(sheetText()).toContain("Отклонить заявку?");
+ 
+ 		const reason = document.querySelector<HTMLTextAreaElement>('[data-testid="rep-reject-reason"]');
+ 		expect(reason).not.toBeNull();
+diff --git a/src/modules/roles-module/api/roles-api.ts b/src/modules/roles-module/api/roles-api.ts
+index dc527ed..a758d74 100644
+--- a/src/modules/roles-module/api/roles-api.ts
++++ b/src/modules/roles-module/api/roles-api.ts
+@@ -67,7 +67,9 @@ export interface RepresentativeApproval {
+ 	created_at: string | null;
+ 
+ 	legal_name?: string | null;
+-	legal_name_full?: string | null;}
++	legal_name_full?: string | null;
++	ogrn?: string | null;
++}
+ 
+ export interface AmbassadorDashboard {
+ 	prefix: string;
+diff --git a/src/modules/roles-module/money.ts b/src/modules/roles-module/money.ts
+index 6bc203b..4a3a660 100644
+--- a/src/modules/roles-module/money.ts
++++ b/src/modules/roles-module/money.ts
+@@ -33,3 +33,29 @@ export function formatDateRu(iso: string | null): string {
+ 
+ 	return date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+ }
++
++/** Дата и время: «27 сентября, 16:25» — канон карточки апрува (как в демо). */
++export function formatDateTimeRu(iso: string | null): string {
++	if (!iso) return "";
++	const d = new Date(iso);
++	if (Number.isNaN(d.getTime())) return "";
++	const date = d.toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
++	const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
++	return `${date}, ${time}`;
++}
++
++/** Телефон в читаемой маске: «+7 000 000-00-01» (E.164 → маска). */
++export function formatPhoneRu(raw: string | null): string {
++	if (!raw) return "";
++	const digits = raw.replace(/\D/g, "");
++	if (digits.length === 11) {
++		return `+${digits[0]} ${digits.slice(1, 4)} ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`;
++	}
++	return raw;
++}
++
++/** Типографика набора: прямые кавычки в названиях → «ёлочки» (канон). */
++export function typoRu(value: string | null): string {
++	if (!value) return "";
++	return value.replace(/"([^"]+)"/g, "«$1»");
++}
+diff --git a/src/modules/roles-module/msp/MspOverview.vue b/src/modules/roles-module/msp/MspOverview.vue
+index 8d6f205..25ddc6c 100644
+--- a/src/modules/roles-module/msp/MspOverview.vue
++++ b/src/modules/roles-module/msp/MspOverview.vue
+@@ -5,6 +5,8 @@ import LvIcon from "@/components/icons/lv/LvIcon.vue";
+ import { formatMoney, plural } from "@/modules/roles-module/money.ts";
+ import { formatPrice } from "@/package/global-helpers/price-helpers.ts";
+ import { formatDateTimeRu } from "@/modules/roles-module/msp/order-status.ts";
++import { BUSINESS_SUPPORT_EMAIL } from "@/modules/business-module/package/const/business.ts";
++import { typoRu } from "@/modules/roles-module/money.ts";
+ import {
+ 	hasSchedule,
+ 	readinessProgress,
+@@ -65,6 +67,15 @@ const error = ref<"missing" | "network" | null>(null);
+ 
+ /** Фаза D (канон «ЛОВИ Бизнес» §9.1/§9.2): статус последней заявки из business-стора. */
+ const application = computed(() => businessStore.application);
++/** Отклонённая заявка: прогресс показывает проваленную веху, а не «идёт модерация». */
++const isFailed = computed(() => application.value?.status === "failed");
++
++/** Вехи для показа: при отказе — до проваленной включительно, дальше пути нет. */
++const milestones = computed(() =>
++	isFailed.value
++		? BUSINESS_MILESTONES.slice(0, (appProgress.value?.currentIndex ?? 0) + 1)
++		: BUSINESS_MILESTONES,
++);
+ const pendingApplication = computed(
+ 	() => application.value !== null && !businessStore.hasVerifiedApplication,
+ );
+@@ -449,62 +460,114 @@ function openB2b(): void {
+ 				v-if="pendingApplication && application && appView && appProgress"
+ 				class="role-section"
+ 			>
+-				<div class="role-section-head">
+-					<h2>Заявка №{{ application.id }}</h2>
+-					<span
+-						class="role-status"
+-						:data-tone="
+-							appView.tone === 'done' ? 'active' : appView.tone === 'failed' ? 'failed' : 'pending'
+-						"
+-						data-testid="msp-application-status"
+-					>
+-						<span class="role-status__label">{{ appView.title }}</span>
+-					</span>
+-				</div>
+-				<p class="msp-overview__apply-meta">ИНН {{ application.inn }} · {{ application.name }}</p>
+-				<ul class="role-list" data-testid="msp-apply-milestones">
+-					<li
+-						v-for="(m, index) in BUSINESS_MILESTONES"
+-						:key="m.title"
+-						class="role-row"
+-						:data-state="
+-							index < (appProgress?.doneCount ?? 0)
+-								? 'done'
+-								: index === appProgress?.currentIndex
+-									? 'current'
+-									: 'todo'
+-						"
+-					>
+-						<span class="role-step__tile" aria-hidden="true">
+-							<LvIcon v-if="index < (appProgress?.doneCount ?? 0)" name="check" />
+-							<template v-else>{{ index + 1 }}</template>
++				<!-- Отклонённая заявка — одна карточка состояния: статус, причина, действия, метаданные. -->
++				<template v-if="isFailed">
++					<div class="role-card msp-overview__failed" data-testid="msp-application-card">
++						<div class="msp-overview__failed-head">
++							<div class="msp-overview__failed-body">
++								<h2
++									class="msp-overview__failed-title"
++									data-testid="msp-application-status"
++								>
++									{{ appView.title }}
++								</h2>
++								<p class="msp-overview__failed-sub">{{ typoRu(application.name) }}</p>
++							</div>
++						</div>
++
++						<p
++							v-if="application.rep_reject_reason"
++							class="msp-overview__failed-reason"
++							data-testid="msp-application-reason"
++						>
++							<span class="msp-overview__failed-reason-label">Причина отказа</span>
++							«{{ application.rep_reject_reason }}»
++						</p>
++
++						<div class="msp-overview__failed-actions">
++							<!-- Возвращаем в форму: данные и ИНН подставляются из заявки (§9.5). -->
++							<AppButton
++								label="Исправить и отправить заново"
++								color="brand"
++								size="l"
++								:to="{ name: 'BusinessApplyView' }"
++								data-testid="msp-application-resubmit"
++							/>
++							<AppButton
++								label="Написать в поддержку"
++								color="outlined"
++								size="l"
++								:href="`mailto:${BUSINESS_SUPPORT_EMAIL}`"
++							/>
++						</div>
++
++						<p class="msp-overview__failed-meta">
++							Заявка №{{ application.id }} · ИНН {{ application.inn }}
++							<template v-if="application.created_at">
++								· подана {{ formatDateTimeRu(application.created_at) }}
++							</template>
++						</p>
++					</div>
++				</template>
++
++				<!-- Остальные состояния: вехи подключения и следующий шаг. -->
++				<template v-else>
++					<div class="role-section-head">
++						<h2>Заявка №{{ application.id }}</h2>
++						<span
++							class="role-status"
++							:data-tone="appView.tone === 'done' ? 'active' : 'pending'"
++							data-testid="msp-application-status"
++						>
++							<span class="role-status__label">{{ appView.title }}</span>
+ 						</span>
+-						<span class="role-row-mid">
+-							<span class="role-row-name"
+-								><span>{{ m.title }}</span></span
+-							>
+-							<span class="role-row-sub">
+-								{{ index === appProgress?.currentIndex ? appView.text : m.hint }}
++					</div>
++					<p class="msp-overview__apply-meta">ИНН {{ application.inn }} · {{ application.name }}</p>
++
++					<ul class="role-list" data-testid="msp-apply-milestones">
++						<li
++							v-for="(m, index) in milestones"
++							:key="m.title"
++							class="role-row"
++							:data-state="
++								index < (appProgress?.doneCount ?? 0)
++									? 'done'
++									: index === appProgress?.currentIndex
++										? 'current'
++										: 'todo'
++							"
++						>
++							<span class="role-step__tile" aria-hidden="true">
++								<LvIcon v-if="index < (appProgress?.doneCount ?? 0)" name="check" />
++								<template v-else>{{ index + 1 }}</template>
+ 							</span>
+-						</span>
+-					</li>
+-				</ul>
+-
+-				<div v-if="needsPayment && paymentReady" class="msp-overview__apply-action">
+-					<AppButton
+-						label="Счёт на 1 ₽ — перейти к оплате"
+-						size="l"
+-						@click="router.push({ name: 'MspPayment' })"
+-					/>
+-				</div>
+-				<div
+-					v-else-if="verifyingNow"
+-					class="msp-overview__wait"
+-					data-testid="msp-compliance-spinner"
+-				>
+-					<span class="role-pulse" aria-hidden="true" />
+-					<span class="role-pulse__text">Идёт комплаенс — банк подтверждает платёж</span>
+-				</div>
++							<span class="role-row-mid">
++								<span class="role-row-name"
++									><span>{{ m.title }}</span></span
++								>
++								<span class="role-row-sub">
++									{{ index === appProgress?.currentIndex ? appView.text : m.hint }}
++								</span>
++							</span>
++						</li>
++					</ul>
++
++					<div v-if="needsPayment && paymentReady" class="msp-overview__apply-action">
++						<AppButton
++							label="Счёт на 1 ₽ — перейти к оплате"
++							size="l"
++							@click="router.push({ name: 'MspPayment' })"
++						/>
++					</div>
++					<div
++						v-else-if="verifyingNow"
++						class="msp-overview__wait"
++						data-testid="msp-compliance-spinner"
++					>
++						<span class="role-pulse" aria-hidden="true" />
++						<span class="role-pulse__text">Идёт комплаенс — банк подтверждает платёж</span>
++					</div>
++				</template>
+ 			</section>
+ 
+ 			<section class="role-section" data-testid="msp-overview-orders">
+@@ -616,6 +679,86 @@ function openB2b(): void {
+ 	@include role-accent-vars(tiffany);
+ }
+ 
++.role-note__title {
++	@include role-note-title;
++	margin: 0 0 4px;
++}
++
++.msp-overview__failed {
++	display: flex;
++	flex-direction: column;
++	gap: var(--lv-block-gap);
++	padding: var(--lv-pad-x);
++}
++
++.msp-overview__failed-head {
++	display: flex;
++	align-items: center;
++	gap: calc(var(--lv-block-gap) * 0.75);
++}
++
++.msp-overview__failed-body {
++	min-width: 0;
++}
++
++.msp-overview__failed-reason {
++	margin: 0;
++	font-size: calc(var(--font-scale, 1) * 13px);
++	line-height: 1.5;
++	color: var(--lv-ink);
++}
++
++.msp-overview__failed-reason-label {
++	color: var(--lv-dim);
++	font-weight: 700;
++}
++
++.msp-overview__failed-actions {
++	display: flex;
++	flex-direction: column;
++	gap: calc(var(--lv-block-gap) / 2);
++}
++
++.msp-overview__failed-meta {
++	margin: 0;
++	padding-top: calc(var(--lv-block-gap) * 0.75);
++	border-top: 1px solid var(--lv-line-2);
++	font-size: calc(var(--font-scale, 1) * 12px);
++	color: var(--lv-dim);
++}
++
++.msp-overview__failed-title {
++	margin: 0;
++	font-size: calc(var(--font-scale, 1) * 18px);
++	font-weight: 800;
++	line-height: 1.25;
++}
++
++.msp-overview__failed-sub {
++	margin: calc(var(--lv-block-gap) / 4) 0 0;
++	font-size: calc(var(--font-scale, 1) * 13px);
++	color: var(--lv-dim);
++}
++
++.msp-overview__reason {
++	padding: calc(var(--lv-block-gap) * 0.75) var(--lv-pad-x);
++
++	.role-note__text {
++		color: var(--lv-ink);
++	}
++}
++
++.msp-overview__apply-reason {
++	margin: calc(var(--lv-block-gap) / 2) 0 0;
++	padding: calc(var(--lv-block-gap) * 0.75) var(--lv-pad-x);
++	border-radius: var(--lv-r-sm);
++	background: var(--feedback-negative-subtle);
++	color: color-mix(in srgb, var(--feedback-negative-solid) 72%, var(--lv-ink));
++	font-size: calc(var(--font-scale, 1) * 13px);
++	font-weight: 600;
++	line-height: 1.45;
++}
++
+ /* --- Состояния экрана --- */
+ .msp-overview__state {
+ 	@include role-state;
+@@ -815,6 +958,15 @@ function openB2b(): void {
+ }
+ 
+ /* Пройденная веха — акцент с галочкой. */
++.role-row[data-state="failed"] .role-step__tile {
++	border: 2px solid var(--role-accent-failed, var(--feedback-negative-solid));
++	color: var(--feedback-negative-solid);
++}
++
++.role-row[data-state="failed"] .role-row-name {
++	color: var(--feedback-negative-solid);
++}
++
+ .role-row[data-state="done"] .role-step__tile {
+ 	@include role-step-tile-done;
+ }
+diff --git a/src/modules/roles-module/representative/RepresentativeApprovals.vue b/src/modules/roles-module/representative/RepresentativeApprovals.vue
+index cba31af..a61a4e9 100644
+--- a/src/modules/roles-module/representative/RepresentativeApprovals.vue
++++ b/src/modules/roles-module/representative/RepresentativeApprovals.vue
+@@ -4,7 +4,7 @@ import AppButton from "@/components/Ui/AppButton.vue";
+ import AppSkeleton from "@/components/Ui/AppSkeleton.vue";
+ import LvIcon from "@/components/icons/lv/LvIcon.vue";
+ import { showToast } from "@/package/global-helpers/toast.ts";
+-import { formatDateRu, plural } from "@/modules/roles-module/money.ts";
++import { formatDateTimeRu, formatDateRu, formatPhoneRu, plural } from "@/modules/roles-module/money.ts";
+ import { rolesApi, type RepresentativeApproval } from "@/modules/roles-module/api/roles-api.ts";
+ import { computed, onMounted, ref } from "vue";
+ 
+@@ -127,22 +127,13 @@ async function confirm(): Promise<void> {
+ 					<header class="rep-approvals__card-head">
+ 						<span class="role-row-tile" aria-hidden="true"><LvIcon name="store" /></span>
+ 						<span class="role-row-mid">
++							<!-- Мерчант (бренд) крупно, под ним — юрлицо: решение принимается
++							     по компании, а не по названию витрины (канон 2026-09-27). -->
+ 							<span class="role-row-name">
+ 								<span>{{ application.name }}</span>
+ 							</span>
+-							<span class="role-row-sub">
+-								{{ application.activity_type_label }}
+-								<template v-if="formatDateRu(application.created_at)">
+-									· заявка от {{ formatDateRu(application.created_at) }}
+-								</template>
+-							</span>
+-							<!-- Статус — отдельной строкой под названием: самые длинные
+-							     метки ядра («Ждём подтверждения представителя») в одном
+-							     ряду с именем раздували карточку шире экрана 320px. -->
+-							<span class="rep-approvals__status">
+-								<span class="role-status" data-tone="pending">
+-									<span class="role-status__label">{{ application.status_label }}</span>
+-								</span>
++							<span v-if="application.legal_name" class="role-row-sub">
++								{{ application.legal_name }}
+ 							</span>
+ 						</span>
+ 					</header>
+@@ -152,22 +143,26 @@ async function confirm(): Promise<void> {
+ 							<dt>ИНН</dt>
+ 							<dd>{{ application.inn }}</dd>
+ 						</div>
+-						<div v-if="application.legal_name">
+-							<dt>Юрлицо (по ИНН)</dt>
+-							<dd>{{ application.legal_name }}</dd>
++						<div>
++							<dt>ОГРН</dt>
++							<dd>{{ application.ogrn || "—" }}</dd>
+ 						</div>
+ 						<div>
+-							<dt>Адрес</dt>
++							<dt>Адрес торговой точки</dt>
+ 							<dd>
+-								{{ application.city_name ? `${application.city_name}, ` : ""
+-								}}{{ application.address_line }}
++								{{
++									application.city_name &&
++									!application.address_line?.includes(application.city_name)
++										? `${application.city_name}, ${application.address_line}`
++										: application.address_line
++								}}
+ 							</dd>
+ 						</div>
+ 						<div class="rep-approvals__call">
+-							<dt>Телефон</dt>
++							<dt>Контакт</dt>
+ 							<dd>
+ 								<a class="rep-approvals__phone" :href="`tel:${application.phone}`">{{
+-									application.phone
++									formatPhoneRu(application.phone)
+ 								}}</a>
+ 							</dd>
+ 						</div>
+@@ -175,6 +170,10 @@ async function confirm(): Promise<void> {
+ 							<dt>Промокод</dt>
+ 							<dd>{{ application.promo_code }}</dd>
+ 						</div>
++						<div v-if="formatDateRu(application.created_at)">
++							<dt>Подана</dt>
++							<dd>{{ formatDateTimeRu(application.created_at) }}</dd>
++						</div>
+ 					</dl>
+ 
+ 					<div class="rep-approvals__actions">
+@@ -187,7 +186,7 @@ async function confirm(): Promise<void> {
+ 							@click="openSheet(application, 'approve')"
+ 						/>
+ 						<AppButton
+-							label="Вернуть на правку"
++							label="Отклонить"
+ 							color="outlined"
+ 							size="l"
+ 							:disabled="busyId === application.id"
+@@ -222,7 +221,7 @@ async function confirm(): Promise<void> {
+ 		     модалки и держать один сценарий подтверждения. -->
+ 		<AppBottomSheet
+ 			v-if="activeApplication"
+-			:title="isRejecting ? 'Вернуть заявку на правку?' : 'Подтвердить заявку?'"
++			:title="isRejecting ? 'Отклонить заявку?' : 'Подтвердить заявку?'"
+ 			@close="closeSheet"
+ 		>
+ 			<p class="rep-approvals__sheet-text">
+@@ -252,7 +251,7 @@ async function confirm(): Promise<void> {
+ 				<div class="rep-approvals__sheet-actions">
+ 					<AppButton label="Отмена" color="outlined" size="l" @click="closeSheet" />
+ 					<AppButton
+-						:label="isRejecting ? 'Вернуть на правку' : 'Подтвердить'"
++						:label="isRejecting ? 'Отклонить' : 'Подтвердить'"
+ 						color="brand"
+ 						size="l"
+ 						:loading="busyId !== null"
+@@ -322,8 +321,8 @@ async function confirm(): Promise<void> {
+ .rep-approvals__card {
+ 	display: flex;
+ 	flex-direction: column;
+-	gap: 12px;
+-	padding: 14px;
++	gap: var(--lv-block-gap);
++	padding: var(--lv-pad-x);
+ }
+ 
+ .rep-approvals__card-head {
+@@ -359,32 +358,46 @@ async function confirm(): Promise<void> {
+ }
+ 
+ .rep-approvals__meta {
+-	display: flex;
+-	flex-direction: column;
+-	gap: 6px;
++	display: grid;
++	/* Короткие реквизиты — в две колонки, длинные (адрес, контакт) — на всю ширину:
++	   карточка очереди должна сканироваться без прокрутки. */
++	grid-template-columns: 1fr 1fr;
++	gap: calc(var(--lv-block-gap) / 2);
+ 	margin: 0;
+ 	padding: 0;
+ 
+ 	div {
+-		display: flex;
+-		gap: 10px;
++		min-width: 0;
++		padding: calc(var(--lv-block-gap) * 0.75);
++		border-radius: var(--lv-r-sm);
++		background: var(--lv-card);
++		border: 1px solid var(--lv-line);
++		box-shadow: var(--lv-shadow-soft);
+ 	}
+ 
+ 	dt {
+-		flex: none;
+-		width: 72px;
+-		font-size: 11.5px;
++		font-size: calc(var(--font-scale, 1) * 10px);
++		font-weight: 800;
++		letter-spacing: 0.06em;
++		text-transform: uppercase;
+ 		color: var(--lv-dim);
+ 	}
+ 
+ 	dd {
+-		margin: 0;
++		margin: calc(var(--lv-block-gap) / 4) 0 0;
+ 		min-width: 0;
+-		font-size: 13px;
+-		line-height: 1.4;
++		font-size: calc(var(--font-scale, 1) * 12px);
++		font-weight: 600;
++		line-height: 1.35;
+ 		overflow-wrap: anywhere;
+ 		color: var(--lv-ink);
+ 	}
++
++	/* 3 — адрес, 4 — контакт: длинные значения на всю ширину. */
++	> div:nth-child(3),
++	> div:nth-child(4) {
++		grid-column: 1 / -1;
++	}
+ }
+ 
+ /* Телефон — тапаемый: представитель звонит владельцу до решения. Тап-таргет
+diff --git a/src/scss/main.scss b/src/scss/main.scss
+index af88420..1c4789c 100644
+--- a/src/scss/main.scss
++++ b/src/scss/main.scss
+@@ -114,6 +114,15 @@ html[data-theme="light"] {
+ 	--lv-block-gap: 16px;
+ }
+ 
++/* ============================================================
++   ВЕРХНИЙ ОТСТУП ЭКРАНА (канон docs/04-space-shape-motion.md):
++   отступ секции сверху — 20px. В коде токена не было, из-за чего
++   контент экранов прилипал к подшапке.
++   ============================================================ */
++:root {
++	--lv-section-top: 20px;
++}
++
+ /* ============================================================
+    РЕШЕНИЕ ПО КАНОНУ ОТСТУПОВ (аудит 2026-09-17).
+    В каноне гуляли три числа: 24px в docs/04, 28px в lovii.css, 14–16px в демо.

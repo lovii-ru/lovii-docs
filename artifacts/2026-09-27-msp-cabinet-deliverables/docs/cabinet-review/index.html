@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МСП · кабинет: демо vs стенд</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--card:#fff;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--warn:#8a6a25;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:28px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:30px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:36px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+  @media(max-width:680px){.cmp{grid-template-columns:1fr}}
+  .cmp figure{margin:0}
+  .cmp img{width:100%;border:1px solid var(--line);background:#fff}
+  .cmp figcaption{font-size:12.5px;color:var(--dim);margin-top:6px}
+  .ok{color:var(--ok);font-weight:700}.bad{color:var(--accent);font-weight:700}
+  ul{padding-left:20px}li{margin:6px 0}
+  .note{border-left:3px solid var(--accent);background:var(--acc-soft);padding:12px 16px;margin:16px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · кабинет МСП · 390px · светлая тема</div>
+    <h1>Кабинет МСП: демо против стенда</h1>
+    <p class="lead">Самый критичный экран. Слева — дизайн-демо, справа — как это собрано в приложении сейчас.</p>
+  </header>
+
+  <div class="cmp">
+    <figure><img src="assets/demo-msp-390.png" alt="Кабинет МСП в демо"><figcaption>Демо (витрина, <span class="mono">:8090/#/cab/msp</span>) — цельный обзор одной точки.</figcaption></figure>
+    <figure><img src="assets/app-msp-390.png" alt="Кабинет МСП в приложении"><figcaption>Стенд (app, <span class="mono">:5173/cabinet/msp</span>) — функционально полнее, но рыхлее.</figcaption></figure>
+  </div>
+
+  <h2>Что где</h2>
+  <table>
+    <thead><tr><th></th><th>Демо</th><th>Стенд (app)</th></tr></thead>
+    <tbody>
+      <tr><td>Фокус</td><td>одна точка, обзор</td><td>мультиточка + онбординг + быстрые действия</td></tr>
+      <tr><td>Иерархия</td><td>крупный заголовок «МСП · точка», ясные секции</td><td>много мелких серых капс-подписей, слабые якоря</td></tr>
+      <tr><td>Карточки</td><td>крупные, единый радиус и паддинг</td><td>много мелких вложенных карточек и плиток, система дробится</td></tr>
+      <tr><td>Плотность</td><td>свободно, ровный ритм</td><td>тесно, обрезанные подписи («На витри…», «Выбрать…»)</td></tr>
+      <tr><td>Состояния</td><td>всё по полочкам: чек-лист, KPI, заказы</td><td>много статусов сразу, конкурируют между собой</td></tr>
+      <tr><td>Нижняя навигация</td><td>Обзор · Заказы · Товары · Команда · Промо · Точка</td><td>набор/порядок другой, активный раздел слабо читается</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Вывод</h2>
+  <div class="note">
+    Демо <span class="ok">выигрывает по цельности</span>: единый ритм карточек, ясная типографика, спокойные акценты, читаемость. Приложение <span class="ok">выигрывает по функциональности</span> (мультиточка, заявка, быстрые действия), но <span class="bad">проигрывает по полировке</span>: дробление карточек, теснота, обрезка текста, конкурирующие CTA и статусы.
+  </div>
+
+  <h2>Что с этим делать</h2>
+  <ul>
+    <li><b>Заголовок и иерархия:</b> дать экрану крупный заголовок раздела и убрать лишние капс-подписи — оставить один уровень.</li>
+    <li><b>Карточки:</b> свести мелкие вложенные плитки к единому набору крупных карточек; один радиус, один паддинг.</li>
+    <li><b>Плотность и обрезка:</b> вернуть воздух; запретить обрыв подписей (перенос/эллипсис там, где уместно).</li>
+    <li><b>CTA:</b> один главный акцент на экране, остальное — вторично.</li>
+    <li><b>Нижняя навигация:</b> единый набор и порядок разделов, явный активный.</li>
+    <li><b>Порядок:</b> сначала правим в демо (канон), затем переносим на стенд и отдаём в постановку zcode.</li>
+  </ul>
+</div>
+</body>
+</html>

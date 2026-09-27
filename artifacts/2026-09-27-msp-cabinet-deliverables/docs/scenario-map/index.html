@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МСП · карта сценария подключения точки</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--card:#fff;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:880px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:28px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:29px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:36px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+  .steps li{position:relative;padding:0 0 20px 46px;margin:0}
+  .steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:999px;background:var(--acc-soft);color:var(--accent);font-weight:800;display:grid;place-items:center;border:1px solid rgba(201,42,106,.25)}
+  .steps li:not(:last-child)::after{content:"";position:absolute;left:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+  .steps b{display:block}
+  .st{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+  .note{border-left:3px solid var(--accent);background:var(--acc-soft);padding:12px 16px;margin:16px 0;font-size:14px}
+  .ok{color:var(--ok);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · кабинет МСП · сценарий подключения</div>
+    <h1>Как одна заявка собирает точку</h1>
+    <p class="lead">Роль и порядок шагов: что создаётся в базе, кого ждать, чем заканчивается.</p>
+  </header>
+
+  <h2>Что создаёт одна заявка (в одной транзакции)</h2>
+  <table>
+    <thead><tr><th>Сущность</th><th>Роль</th><th>Начальный статус</th></tr></thead>
+    <tbody>
+      <tr><td>Партнёр (юрлицо)</td><td>ИНН, название, DaData</td><td class="mono">active, но verified_at = null</td></tr>
+      <tr><td>Членство владельца</td><td>связка ваш аккаунт → юрлицо (роль owner)</td><td class="mono">active</td></tr>
+      <tr><td>Мерчант (бренд)</td><td>бренд под юрлицом</td><td class="mono">pending_moderation</td></tr>
+      <tr><td>Торговая точка</td><td>адрес, город, расписание</td><td class="mono">active — при наличии координат</td></tr>
+      <tr><td>Заявка</td><td>жизненный цикл подключения</td><td class="mono">awaiting_rep_approval</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    Нюанс: точка (филиал) создаётся <b>только если адрес выбран из подсказок</b> и пришли координаты. Если адрес вбит текстом без выбора — черновик точки не создаётся, заявка хранит адрес строкой.
+  </div>
+
+  <h2>Порядок шагов</h2>
+  <ol class="steps">
+    <li><b>Заявка</b> (владелец МСП) — «ЛОВИ Бизнес» → «Добавить точку» → ИНН, бренд, адрес, телефон. <span class="st">awaiting_rep_approval</span> — потому что профиль привязан к промокоду `AA2BTK`.</li>
+    <li><b>Апрув представителя</b> — его делает владелец промокода (`+79119287478`), в кабинете представителя. <span class="st">invoice_issued</span> — счёт выдан (+ выпуск бизнес-карты).</li>
+    <li><b>Оплата</b> (владелец МСП) — «Счёт верификации» → «Я оплатил, проверьте». <span class="st">verifying</span> — платёжка уходит в банк.</li>
+    <li><b>Мок банка → автомодерация</b> — поступление матчится по коду VER + ИНН + сумме. <span class="st">verified</span> — юрлицо верифицировано, мерчант становится <span class="ok">active</span>, открывается полная витрина.</li>
+  </ol>
+
+  <h2>Статусы заявки — шпаргалка</h2>
+  <table>
+    <thead><tr><th>Статус</th><th>Подпись в приложении</th><th>Кто двигает</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">submitted</td><td>Заявка отправлена</td><td>без промокода; счёт не выдаётся</td></tr>
+      <tr><td class="mono">awaiting_rep_approval</td><td>Ждём подтверждения представителя</td><td>представитель</td></tr>
+      <tr><td class="mono">invoice_issued</td><td>Счёт выдан</td><td>представитель</td></tr>
+      <tr><td class="mono">verifying</td><td>Проверяем точку</td><td>владелец МСП (кнопка оплаты)</td></tr>
+      <tr><td class="mono">verified</td><td>Точка активна</td><td>мок банка (автоматически)</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
