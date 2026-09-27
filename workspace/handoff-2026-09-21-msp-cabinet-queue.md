@@ -41,7 +41,7 @@
 | 2 | [`SZ-064`](../canon/TASKS/SZ-064-merchant-points-products-per-point.md) | Бренд → несколько точек → отключение любого товара на конкретной точке | core + app (+ b2b) |
 | 3 | [`SZ-065`](../canon/TASKS/SZ-065-product-sales-channels-pickup-delivery.md) | Два свитчера товара → каналы продаж: самовывоз / доставка | core + app + b2b |
 | 4 | [`SZ-066`](../canon/TASKS/SZ-066-branch-delivery-radius-app.md) | Зона доставки точки из приложения: радиус 300 м … 1 км | core + app (+ b2b) |
-| 5 | [`SZ-067`](../canon/TASKS/SZ-067-is24h-branch-closed-fix-and-data-repair.md) | Круглосуточная точка считается закрытой (is_24h) + ремонт данных | core + app |
+| 5 | `SZ-067` | Круглосуточная точка считается закрытой (is_24h) + ремонт данных | core + app |
 | 6 | [`SZ-068`](../canon/TASKS/SZ-068-point-basic-settings-in-app.md) | Базовый набор настроек точки в app: «точка запускается с телефона» | core + app (+ b2b) |
 
 Файлы карточек (в хаб-репозитории документации): `canon/TASKS/SZ-063-…` … `SZ-068-…`.
