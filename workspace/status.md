@@ -7,6 +7,26 @@
 > `canon/TASKS/`. Старые записи сжимаются до одной строки на дату.
 > Полная история до 20.09 — `../archive/old_versions/status-20260920-full.md`.
 
+## 2026-09-27 — CI/CD на self-hosted раннерах (пока лимит GitHub Actions исчерпан)
+
+- Решение владельца: «staging не прод, там только я, нужен накат/откат; через
+  GitHub безопаснее; возврат после сброса лимита — без хлопот».
+- На `gostiny-prod-01` стоят 4 раннера `gostiny-ci-*` (v2.337.0, автостарт
+  crontab `@reboot` под deploy), по одному на репо. Self-hosted минуты не
+  расходуют — пайплайн полностью рабочий: пуш в `staging` → checks 🟢 →
+  автодеплой стенда. Прод по-прежнему только вручную (workflow_dispatch).
+- Переключатель — переменная репо `CI_RUNNER` (`self-hosted` сейчас). Возврат к
+  GitHub-hosted после сброса лимита: `gh api -X PATCH repos/lovii-tech/<repo>/actions/variables/CI_RUNNER -f value=ubuntu-latest`
+  ×4, затем на сервере убрать 4 строки `@reboot … run.sh` из crontab deploy и
+  `pkill -f 'actions-runner.*/run.sh'`.
+- Попутно починены грабли, пойманные на живых прогонах (правки в ci.yml всех 4
+  репо + Dockerfile core/b2b/admin): `--network-alias pgsql-testing` для
+  тестовой Postgres (DB_HOST из phpunit.xml), gai.conf IPv4-приоритет + 5
+  ретраев `install-php-extensions` (pecl CDN с РФ-сервера достижим «через
+  раз», v6 хостинга мёртв). Разбор: `lovii-core/docs/sessions/063-…`;
+  короткие сессионки b2b 007 / admin 012 / app 135.
+- Все 4 репо: checks 🟢 + deploy-staging 🟢, стенды healthy.
+
 ## 2026-09-25 — публичное зеркало на автосинке, локальная `lovii-docs/` удалена
 
 - Решение владельца: доки живут в публичном `lovii-ru/lovii-docs` (Pages),
