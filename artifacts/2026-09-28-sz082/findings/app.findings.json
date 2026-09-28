@@ -1,0 +1,145 @@
+{
+  "repo": "app",
+  "meta": {
+    "head": "9cc3a6e9f45496249c80cb2da99fdac1cd0b99c2 (2026-09-28 22:14:51 +0300)",
+    "exclusions": "—",
+    "icon_usage_count": 249
+  },
+  "candidates": [
+    {
+      "cid": "app:vue:IconCoin2Fill",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/components/icons/shop-ecommerce/IconCoin2Fill.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:IconMoonRegular",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/components/icons/interface/IconMoonRegular.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:IconRefreshRegular",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/components/icons/arrows/IconRefreshRegular.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:IconSunRegular",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/components/icons/interface/IconSunRegular.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:MspGrowthSheet",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/modules/roles-module/components/MspGrowthSheet.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:PercentStepper",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/modules/roles-module/msp/loyalty/PercentStepper.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:ProfileBanner",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/modules/profile-module/components/ProfileBanner.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:ProfileCard",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/modules/profile-module/components/ProfileCard.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "app:vue:PromoBadge",
+      "repo": "app",
+      "kind": "vue-component",
+      "path": "src/modules/roles-module/msp/loyalty/PromoBadge.vue",
+      "why": ".vue файл: нет строгих импортов имени файла ни в одном src-файле",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_dyn_import": [],
+        "S3_template_tag": [],
+        "S4_global_reg": []
+      },
+      "verdict": "CANDIDATE"
+    }
+  ]
+}

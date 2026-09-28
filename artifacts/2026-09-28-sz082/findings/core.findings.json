@@ -1,0 +1,1214 @@
+{
+  "repo": "core",
+  "meta": {
+    "head": "dd4d38568614595b4a7807a9d373c32ff077c417 (2026-09-28 22:13:21 +0300)",
+    "exclusions": "database/migrations (hard rule), vendor, storage",
+    "clients": [
+      "/home/z/lovii/app",
+      "/home/z/lovii/b2b",
+      "/home/z/lovii/admin",
+      "/home/z/lovii/demo"
+    ]
+  },
+  "candidates": [
+    {
+      "cid": "core:command:BackfillCardsCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/BackfillCardsCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:command:ExportIntegrationMappingsCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/ExportIntegrationMappingsCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": [
+          "app/Console/Commands/ImportIntegrationMappingsCommand.php:22: protected $signature = 'mappings:import {file : JSON file from mappings:export}",
+          "tests/Feature/Console/MappingsExportImportTest.php:26: $this->artisan('mappings:export', ['--file' => $file])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:54: $this->artisan('mappings:export', ['--file' => $file])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:77: $this->artisan('mappings:export', ['--file' => $file])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:100: $this->artisan('mappings:export', ['--file' => $file])->assertSuccessful();"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:command:ImportIntegrationMappingsCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/ImportIntegrationMappingsCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": [
+          "tests/Feature/Console/MappingsExportImportTest.php:36: $this->artisan('mappings:import', ['file' => $file])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:57: $this->artisan('mappings:import', ['file' => $file])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:58: $this->artisan('mappings:import', ['file' => $file])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:81: $this->artisan('mappings:import', ['file' => $file, '--with-internal-ids' => true])->assertSuccessful();",
+          "tests/Feature/Console/MappingsExportImportTest.php:102: $this->artisan('mappings:import', ['file' => $file])->assertSuccessful();"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:command:LedgerTreeCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/LedgerTreeCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:command:RecalculateRequirementsCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/RecalculateRequirementsCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": [
+          "app/Console/Commands/ReconcileKuperCommand.php:72: $this->call('requirements:recalculate');",
+          "tests/Feature/Storefront/RestrictedOffersTest.php:150: // ── requirements:recalculate command ────────────────────────────────────────",
+          "tests/Feature/Storefront/RestrictedOffersTest.php:163: $this->artisan('requirements:recalculate')->assertSuccessful();"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:command:ResetRepresentativeSubscriptionCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/ResetRepresentativeSubscriptionCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": [
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:15: // T-016: subscription:reset — сброс подписки Представителя.",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:42: $this->artisan('subscription:reset', ['phone' => $this->phone])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:67: $this->artisan('subscription:reset', ['phone' => $this->phone])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:93: $this->artisan('subscription:reset', ['phone' => $this->phone])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:111: $this->artisan('subscription:reset', ['phone' => $this->phone])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:133: $this->artisan('subscription:reset', ['phone' => $this->phone, '--reissue-promo' => true])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:152: $this->artisan('subscription:reset', ['phone' => $this->phone, '--reissue-promo' => true])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:168: $this->artisan('subscription:reset', ['phone' => $this->phone, '--reissue-promo' => true])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:178: $this->artisan('subscription:reset', ['phone' => $this->phone])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:189: $this->artisan('subscription:reset', ['phone' => $this->phone, '--reissue-promo' => true])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:204: $this->artisan('subscription:reset', ['phone' => '+79009999999'])",
+          "tests/Feature/Console/ResetRepresentativeSubscriptionCommandTest.php:212: $this->artisan('subscription:reset', ['phone' => $this->phone])"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:command:RestrictionsReportCommand",
+      "repo": "core",
+      "kind": "php-command",
+      "path": "app/Console/Commands/RestrictionsReportCommand.php",
+      "why": "PHP command: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [],
+        "S_schedule": [],
+        "S_sig_str": [
+          "app/Domain/Catalog/Services/PlatformRestrictions.php:104: // не сработавшим; restrictions:report предупредит.",
+          "config/restrictions.php:23: // Отчёт «сколько скрыто по каждому правилу»: php artisan restrictions:report.",
+          "tests/Feature/Catalog/PlatformRestrictionsTest.php:180: $this->artisan('restrictions:report')"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:listener:LogPromoApplied",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/LogPromoApplied.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:listener:LogPromoRulePublished",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/LogPromoRulePublished.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:listener:NotifyMerchantOnOrderPlacedViaMaxBot",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/NotifyMerchantOnOrderPlacedViaMaxBot.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Listeners/NotifyMerchantOnOrderPlacedViaTelegramBot.php:16: * Telegram-зеркало NotifyMerchantOnOrderPlacedViaMaxBot (решение владельца"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:listener:NotifyMerchantOnOrderPlacedViaTelegramBot",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/NotifyMerchantOnOrderPlacedViaTelegramBot.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:listener:NotifyMerchantOnOrderStatusChangedViaMaxBot",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/NotifyMerchantOnOrderStatusChangedViaMaxBot.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Listeners/NotifyMerchantOnOrderPlacedViaMaxBot.php:17: * («Новый заказ»), зеркально NotifyMerchantOnOrderStatusChangedViaMaxBot.",
+          "app/Listeners/NotifyMerchantOnOrderStatusChangedViaTelegramBot.php:17: * NotifyMerchantOnOrderStatusChangedViaMaxBot, resolving the dialog link by"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:listener:NotifyMerchantOnOrderStatusChangedViaTelegramBot",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/NotifyMerchantOnOrderStatusChangedViaTelegramBot.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:listener:ReturnSpentPointsOnOrderCancellation",
+      "repo": "core",
+      "kind": "php-listener",
+      "path": "app/Listeners/ReturnSpentPointsOnOrderCancellation.php",
+      "why": "PHP listener: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:ApiResourceCollection",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/ApiResourceCollection.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/ApiResource.php:11: final public static function newCollection(mixed $resource): ApiResourceCollection",
+          "app/Http/Resources/Api/V1/ApiResource.php:13: return new ApiResourceCollection($resource, static::class);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:CartItemResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/CartItemResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/CartResource.php:71: 'items' => CartItemResource::collection($this->whenLoaded('items')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:CartSummaryResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/CartSummaryResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:MerchantSummaryResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/MerchantSummaryResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/CartResource.php:31: 'merchant' => new MerchantSummaryResource($this->whenLoaded('merchant')),",
+          "app/Http/Resources/Api/V1/OrderDetailResource.php:23: 'merchant' => new MerchantSummaryResource($this->whenLoaded('merchant')),",
+          "app/Http/Resources/Api/V1/OrderListResource.php:21: 'merchant' => new MerchantSummaryResource($this->whenLoaded('merchant')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:NearbyBranchResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/NearbyBranchResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/HomeResource.php:39: 'near_you' => NearbyBranchResource::collection($data['near_you']),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OfferModifierGroupResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/OfferModifierGroupResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/MerchantOfferResource.php:43: 'modifier_groups' => OfferModifierGroupResource::collection($this->whenLoaded('modifierGroups')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OfferModifierResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/OfferModifierResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/OfferModifierGroupResource.php:24: 'modifiers' => OfferModifierResource::collection($this->whenLoaded('modifiers')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OrderItemResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/OrderItemResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/OrderDetailResource.php:25: 'items' => OrderItemResource::collection($this->whenLoaded('items')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OrderListItemResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/OrderListItemResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/OrderListResource.php:23: 'items' => OrderListItemResource::collection($this->whenLoaded('items')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:ProductRequirementResource",
+      "repo": "core",
+      "kind": "php-class",
+      "path": "app/Http/Resources/Api/V1/ProductRequirementResource.php",
+      "why": "PHP class: нет ни imports (use), ни FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/MerchantOfferResource.php:42: 'requirements' => ProductRequirementResource::collection($this->whenLoaded('requirements')),",
+          "app/Http/Resources/Api/V1/StorefrontOfferCardResource.php:37: 'requirements' => ProductRequirementResource::collection($this->whenLoaded('requirements')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:auth",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/auth.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php:5: namespace App\\Application\\Auth\\Actions;",
+          "app/Application/Auth/Actions/BindReferralPromoCodeAction.php:5: namespace App\\Application\\Auth\\Actions;",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:5: namespace App\\Application\\Auth\\Actions;",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:7: use App\\Domain\\Auth\\Services\\OtpService;",
+          "app/Application/Auth/Actions/ConfirmOtpAction.php:5: namespace App\\Application\\Auth\\Actions;",
+          "app/Application/Auth/Actions/ConfirmOtpAction.php:7: use App\\Application\\Auth\\DTO\\ConfirmOtpData;",
+          "app/Application/Auth/Actions/ConfirmOtpAction.php:8: use App\\Domain\\Auth\\Services\\OtpService;",
+          "app/Application/Auth/Actions/RequestOtpAction.php:5: namespace App\\Application\\Auth\\Actions;",
+          "app/Application/Auth/Actions/RequestOtpAction.php:7: use App\\Domain\\Auth\\Contracts\\OtpChannelStrategyContract;",
+          "app/Application/Auth/Actions/RequestOtpAction.php:8: use App\\Domain\\Auth\\Enums\\OtpChannel;",
+          "app/Application/Auth/Actions/SendOtpAction.php:5: namespace App\\Application\\Auth\\Actions;",
+          "app/Application/Auth/Actions/SendOtpAction.php:7: use App\\Application\\Auth\\DTO\\SendOtpData;"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:cors",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/cors.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:config:essentials",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/essentials.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:config:filesystems",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/filesystems.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:config:horizon",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/horizon.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "app/Console/Commands/PruneDeadPushSubscriptionsCommand.php:15: * зря. Команда регулярная (Horizon scheduler/cron), идемпотентна.",
+          "app/Domain/Billing/Services/TransferSigningContext.php:18: * на запрос; Horizon сбрасывает scoped/singleton между задачами). Счётчик",
+          "app/Domain/Checkout/Services/MinOrderPolicy.php:44: * запрос»: у php-fpm контейнер на запрос свой, Horizon сбрасывает",
+          "app/Jobs/SendWebPushJob.php:20: * SZ-010 §1/§3: физическая отправка одного пуша — из core (Horizon),",
+          "app/Providers/AppServiceProvider.php:64: // контейнер и так на запрос свой, Horizon сбрасывает scoped-инстансы",
+          "app/Providers/HorizonServiceProvider.php:7: use Laravel\\Horizon\\HorizonApplicationServiceProvider;",
+          "routes/web.php:12: use Laravel\\Horizon\\Horizon;",
+          "routes/web.php:14: Horizon::auth(fn (Request $request): bool => app()->environment('local'));"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:logging",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/logging.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "config/queue.php:117: | These options configure the behavior of failed queue job logging so you"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:mail",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/mail.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php:61: // подтверждённый e-mail). Экшен — общий хвост всех веб-путей входа,",
+          "app/Application/User/Actions/SendEmailVerificationAction.php:9: use App\\Mail\\EmailVerificationMail;",
+          "app/Application/User/Actions/SendEmailVerificationAction.php:12: use Illuminate\\Support\\Facades\\Mail;",
+          "app/Application/User/Actions/SendEmailVerificationAction.php:34: throw_if($user->email === $email && $user->email_verified_at !== null, BusinessException::class, 'email_already_verified', 'Этот e-mail уже подтверждён.', 409);",
+          "app/Application/User/Actions/SendEmailVerificationAction.php:51: Mail::to($email)->queue(new EmailVerificationMail(",
+          "app/Domain/User/Services/EmailVerificationService.php:11: * SZ-009 E-1: код подтверждения владения e-mail. Паттерн OtpService",
+          "app/Events/NewDeviceLogin.php:14: * на подтверждённый e-mail.",
+          "app/Http/Controllers/Api/V1/Profile/ConfirmEmailVerificationController.php:14: * SZ-009 E-1: подтверждение владения e-mail кодом из письма.",
+          "app/Http/Controllers/Api/V1/Profile/ResendEmailVerificationController.php:27: throw_if($user->email === null, BusinessException::class, 'email_not_set', 'Сначала укажите e-mail в профиле.', 422);",
+          "app/Http/Controllers/Api/V1/Profile/SendEmailVerificationController.php:14: * SZ-009 E-1: задать/сменить e-mail и отправить код подтверждения.",
+          "app/Http/Requests/Api/V1/SendEmailVerificationRequest.php:29: 'email.required' => 'Укажите e-mail',",
+          "app/Http/Requests/Api/V1/SendEmailVerificationRequest.php:30: 'email.email' => 'Проверьте формат e-mail',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:queue",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/queue.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "app/Application/User/Actions/SendEmailVerificationAction.php:51: Mail::to($email)->queue(new EmailVerificationMail(",
+          "app/Events/NewDeviceLogin.php:9: use Illuminate\\Queue\\SerializesModels;",
+          "app/Infrastructure/Notification/EmailNotificationDispatcher.php:54: Mail::to($to)->queue($mail);",
+          "app/Jobs/DispatchPartnerNotificationJob.php:10: use Illuminate\\Contracts\\Queue\\ShouldQueue;",
+          "app/Jobs/DispatchPartnerNotificationJob.php:12: use Illuminate\\Queue\\InteractsWithQueue;",
+          "app/Jobs/DispatchPartnerNotificationJob.php:13: use Illuminate\\Queue\\SerializesModels;",
+          "app/Jobs/RunImportJob.php:12: use Illuminate\\Contracts\\Queue\\ShouldQueue;",
+          "app/Jobs/RunImportJob.php:14: use Illuminate\\Queue\\InteractsWithQueue;",
+          "app/Jobs/RunImportJob.php:15: use Illuminate\\Queue\\SerializesModels;",
+          "app/Jobs/SearchIndexJob.php:11: use Illuminate\\Contracts\\Queue\\ShouldQueue;",
+          "app/Jobs/SearchIndexJob.php:14: use Illuminate\\Queue\\InteractsWithQueue;",
+          "app/Jobs/SearchIndexJob.php:15: use Illuminate\\Queue\\SerializesModels;"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:sanctum",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/sanctum.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "_ide_helper_models.php:1399: * @property-read \\Illuminate\\Database\\Eloquent\\Collection<int, \\Laravel\\Sanctum\\PersonalAccessToken> $tokens",
+          "app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php:13: use Laravel\\Sanctum\\NewAccessToken;",
+          "app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php:18: * guest cart and issues the Sanctum access token.",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:11: use Laravel\\Sanctum\\NewAccessToken;",
+          "app/Application/Auth/Actions/ConfirmOtpAction.php:12: use Laravel\\Sanctum\\NewAccessToken;",
+          "app/Http/Requests/Api/V1/Concerns/HasCartActor.php:13: $user = $this->user('sanctum');",
+          "app/Models/Core/User.php:15: use Laravel\\Sanctum\\HasApiTokens;",
+          "app/Providers/AppServiceProvider.php:48: use Laravel\\Sanctum\\PersonalAccessToken;",
+          "app/Providers/AppServiceProvider.php:49: use Laravel\\Sanctum\\Sanctum;",
+          "app/Providers/AppServiceProvider.php:127: Sanctum::authenticateAccessTokensUsing(",
+          "config/cors.php:20: 'paths' => ['api/*', 'sanctum/csrf-cookie'],",
+          "routes/api.php:145: Route::post('/auth/logout', LogoutController::class)->middleware('auth:sanctum');"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:config:session",
+      "repo": "core",
+      "kind": "config-key",
+      "path": "config/session.php",
+      "why": "config-файл: ни config('file.…'), ни Config::get('file.…') в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_config_call": [],
+        "S2_config_facade": [],
+        "S3_name_ref": [
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:16: * Two confirmed-session paths (MAX): the session was confirmed server-side by",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:20: * Magic-link path (P-1, session 017): the token arrives from the Telegram",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:21: * URL-button while the session is still pending — possession of the binding",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:23: * OTP code delivered there, so the redemption confirms the session on the",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:25: * redemption, and the session's regular TTL caps the link's lifetime.",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:36: $session = $this->otpService->findConfirmedByBindingToken($bindingToken)",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:39: throw_if(! $session instanceof AuthOtpSession, BusinessException::class, 'otp_session_not_found', 'No active session found for this binding token (expired, alre",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:41: // Single use — burn the token immediately. A pending session is",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:44: $session->update([",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:45: 'confirmed_at' => $session->confirmed_at ?? now(),",
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:50: $user = User::query()->where('phone', $session->phone)->firstOrFail();",
+          "app/Application/Auth/Actions/ConfirmOtpAction.php:24: $session = $this->otpService->findActiveSession($data->phone);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/auth/max/webhook/{secret}",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /auth/max/webhook/{secret}",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:82: $response = $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', [",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:106: $this->postJson('/api/v1/auth/max/webhook/wrong-secret', [",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:150: $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', [",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:157: $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', maxContactPayload('+79001234567', 'test-bot-token'))",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:208: $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', [",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:239: $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', [",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:257: $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', [",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:309: $this->postJson('/api/v1/auth/max/webhook/test-webhook-secret', ["
+        ],
+        "S_docs": [
+          "docs/sessions/009-max-bot-staging-setup.md:19: 2. Вебхук: `php artisan max:setup-webhook --url=https://api-staging.lovii.ru/api/v1/auth/max/webhook/<secret>` — подписка зарегистрирована для «Лови». Случайной"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/bots/max/{bot}/webhook/{secret}",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /bots/max/{bot}/webhook/{secret}",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:16: * /api/v1/bots/max/{bot}/webhook/{secret}, config/maxbots.php.",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:45: $this->postJson('/api/v1/bots/max/orders/webhook/wrong-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:51: $this->postJson('/api/v1/bots/max/support/webhook/wrong-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:59: $this->postJson('/api/v1/bots/max/otp/webhook/otp-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:63: $this->postJson('/api/v1/bots/max/hacker/webhook/whatever', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:75: $response = $this->postJson('/api/v1/bots/max/support/webhook/support-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:108: $this->postJson('/api/v1/bots/max/support/webhook/support-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:125: $this->postJson('/api/v1/bots/max/support/webhook/support-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:162: $this->postJson('/api/v1/bots/max/orders/webhook/orders-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:184: $this->postJson('/api/v1/bots/max/orders/webhook/orders-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:213: $this->postJson('/api/v1/bots/max/orders/webhook/orders-secret', [",
+          "tests/Feature/MaxBot/MultiBotWebhookTest.php:244: $this->postJson('/api/v1/bots/max/orders/webhook/orders-secret', ["
+        ],
+        "S_docs": [
+          "docs/sessions/012-max-multibot-and-otp-security.md:45: - Дженерик-вебхук `POST /api/v1/bots/max/{bot}/webhook/{secret}`:",
+          "docs/sessions/012-max-multibot-and-otp-security.md:100: затем `php artisan max:setup-webhook --bot=orders --url=https://api-staging.lovii.ru/api/v1/bots/max/orders/webhook/<secret>`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/bots/telegram/{bot}/webhook",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /bots/telegram/{bot}/webhook",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:90: $this->postJson('/api/v1/bots/telegram/otp/webhook', [",
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:122: $this->postJson('/api/v1/bots/telegram/otp/webhook', [",
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:142: $this->postJson('/api/v1/bots/telegram/otp/webhook', [",
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:240: $this->postJson('/api/v1/bots/telegram/otp/webhook', [",
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:252: $this->postJson('/api/v1/bots/telegram/otp/webhook', telegramOtpContactPayload('89001234567', 777), [",
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:295: $this->postJson('/api/v1/bots/telegram/otp/webhook', [",
+          "tests/Feature/Auth/TelegramOtpAuthTest.php:317: $this->postJson('/api/v1/bots/telegram/otp/webhook', [",
+          "tests/Feature/TelegramBot/TelegramBotWebhookTest.php:17: * /api/v1/bots/telegram/{bot}/webhook, config/telegrambots.php. The secret",
+          "tests/Feature/TelegramBot/TelegramBotWebhookTest.php:47: $this->postJson('/api/v1/bots/telegram/orders/webhook', ['update_id' => 1], [",
+          "tests/Feature/TelegramBot/TelegramBotWebhookTest.php:53: $this->postJson('/api/v1/bots/telegram/orders/webhook', ['update_id' => 1])",
+          "tests/Feature/TelegramBot/TelegramBotWebhookTest.php:58: $this->postJson('/api/v1/bots/telegram/hacker/webhook', ['update_id' => 1], [",
+          "tests/Feature/TelegramBot/TelegramBotWebhookTest.php:73: $this->postJson('/api/v1/bots/telegram/otp/webhook', ["
+        ],
+        "S_docs": [
+          "docs/sessions/013-telegram-multibot.md:28: - Дженерик-вебхук `POST /api/v1/bots/telegram/{bot}/webhook`: секрет приходит в **заголовке**",
+          "docs/sessions/013-telegram-multibot.md:81: --url=https://api-staging.lovii.ru/api/v1/bots/telegram/orders/webhook` и `--bot=support`.",
+          "docs/sessions/015-support-bot-rotation.md:25: orders — вебхук уже зарегистрирован на `https://api-staging.lovii.ru/api/v1/bots/telegram/orders/webhook`",
+          "docs/sessions/015-support-bot-rotation.md:88: TELEGRAM_SUPPORT_BOT_WEBHOOK_URL=https://api-staging.lovii.ru/api/v1/bots/telegram/support/webhook"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/catalog/force-delete",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/internal.php → /catalog/force-delete",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Internal/ForceDeleteCatalogEntityControllerTest.php:17: '/api/internal/v1/catalog/force-delete',",
+          "tests/Feature/Internal/ForceDeleteCatalogEntityControllerTest.php:38: postJson('/api/internal/v1/catalog/force-delete', [",
+          "tests/Feature/Internal/ForceDeleteCatalogEntityControllerTest.php:46: '/api/internal/v1/catalog/force-delete',",
+          "tests/Feature/Internal/ForceDeleteCatalogEntityControllerTest.php:64: '/api/internal/v1/catalog/force-delete',",
+          "tests/Feature/Internal/ForceDeleteCatalogEntityControllerTest.php:79: '/api/internal/v1/catalog/force-delete',",
+          "tests/Unit/Http/Middleware/InternalAdminAuthTest.php:14: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "tests/Unit/Http/Middleware/InternalAdminAuthTest.php:24: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "tests/Unit/Http/Middleware/InternalAdminAuthTest.php:32: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "tests/Unit/Http/Middleware/InternalAdminAuthTest.php:42: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');"
+        ],
+        "S_docs": [
+          "docs/features/soft-deletes/2026-04-19-design.md:237: - First route: `Route::post('/catalog/force-delete', ForceDeleteCatalogEntityController::class)`.",
+          "docs/features/soft-deletes/2026-04-19-design.md:321: Core does **not** maintain an audit log for privileged actions; lovii-admin and lovii-b2b each own their own `audit_logs` table in their own schemas. When the a",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1411: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1421: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1429: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1439: $request = Request::create('/api/internal/v1/catalog/force-delete', 'POST');",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1538: Route::post('/catalog/force-delete', \\App\\Http\\Controllers\\Internal\\V1\\Catalog\\ForceDeleteCatalogEntityController::class);",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1565: Expected: one line — `POST  api/internal/v1/catalog/force-delete`.",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1602: '/api/internal/v1/catalog/force-delete',",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1623: postJson('/api/internal/v1/catalog/force-delete', [",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1631: '/api/internal/v1/catalog/force-delete',",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:1650: '/api/internal/v1/catalog/force-delete',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/cities/nearest",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /cities/nearest",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Geo/CitiesApiTest.php:51: $response = $this->getJson('/api/v1/cities/nearest?lat=59.95&lon=30.3')->assertOk();",
+          "tests/Feature/Geo/CitiesApiTest.php:67: $response = $this->getJson('/api/v1/cities/nearest?lat=38.7&lon=-9.1')->assertOk();",
+          "tests/Feature/Geo/CitiesApiTest.php:75: $this->getJson('/api/v1/cities/nearest?lat=200&lon=30')"
+        ],
+        "S_docs": [
+          "docs/backlog.md:11: новый endpoint GET /v1/cities/nearest?lat=X&lon=Y"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/healthz",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/web.php → /healthz",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Health/HealthTest.php:6: $this->getJson('/healthz')",
+          "tests/Feature/StagingNoIndexTest.php:8: $this->get('/healthz')->assertHeader('X-Robots-Tag', 'noindex, nofollow');",
+          "tests/Feature/StagingNoIndexTest.php:14: $this->get('/healthz')->assertHeaderMissing('X-Robots-Tag');"
+        ],
+        "S_docs": [
+          "docs/DEPLOY.md:495: curl -sf https://api.lovii.ru/healthz && echo \"OK\" || echo \"FAIL\"",
+          "docs/sessions/001-server-migration-cicd-github-actions.md:57: - **deploy** (только `workflow_dispatch`, `needs: checks`): SSH на сервер → `git fetch` + `reset --hard origin/master` → `compose build --pull` → `migrate --for",
+          "docs/sessions/001-server-migration-cicd-github-actions.md:89: **Проверки `https://api.lovii.ru` → 200:** `/healthz`, `/api/v1/cities`, `/api/v1/merchants`, `/api/v1/search/merchants`, `/api/v1/search/offers`.",
+          "docs/sessions/044-local-stand-reset-bootstrap.md:41: | `/healthz` core :80 | OK (API локально = http://localhost, не :3000) |",
+          "docs/sessions/057-sz073-loyalty-service-backend.md:102: - Живая проверка: `GET https://api-staging.lovii.ru/api/v1/loyalty/promos` → `200 {\"data\":[]}` (лента пуста — акций ещё не публиковали, честно); `GET /api/v1/lo",
+          "docs/sessions/063-ci-self-hosted-runners.md:89: - Внешние `curl https://api-staging.lovii.ru/healthz` с машины владельца могут",
+          "docs/sessions/065-tbank-mock-webhooks-stand-fix.md:75: из контейнера мока → 192.168.97.5, `/healthz` → 200 (у образа healthcheck'а",
+          "docs/sessions/065-tbank-mock-webhooks-stand-fix.md:138: curl -s -o /dev/null -w '%{http_code}\\n' https://api-staging.lovii.ru/healthz   # → 200",
+          "docs/superpowers/plans/2026-09-05-staging-environment.md:242: - [x] `GET /healthz` при `app.env=staging` → заголовок `X-Robots-Tag: noindex, nofollow`.",
+          "docs/superpowers/plans/2026-09-05-staging-environment.md:259: $this->get('/healthz')->assertHeader('X-Robots-Tag', 'noindex, nofollow');",
+          "docs/superpowers/plans/2026-09-05-staging-environment.md:265: $this->get('/healthz')->assertHeaderMissing('X-Robots-Tag');",
+          "docs/superpowers/plans/2026-09-05-staging-environment.md:473: if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/image-proxy/{path}",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/web.php → /image-proxy/{path}",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/E2e/ImageProxyE2eTest.php:29: expect($avatarUrl)->toContain('/image-proxy/avatars/');",
+          "tests/E2e/ImageProxyE2eTest.php:53: $response = $this->api()->get('/image-proxy/etc/passwd');",
+          "tests/E2e/ImageProxyE2eTest.php:63: $response = $this->api()->get('/image-proxy/avatars/0/nonexistent.jpg');",
+          "tests/Feature/Image/ServeImageTest.php:17: $this->getJson('/image-proxy/avatars/1/test.jpg')",
+          "tests/Feature/Image/ServeImageTest.php:24: $this->getJson('/image-proxy/avatars/999/missing.jpg')",
+          "tests/Feature/Image/ServeImageTest.php:31: $this->getJson('/image-proxy/secrets/data.jpg')",
+          "tests/Feature/Image/ServeImageTest.php:36: $this->getJson('/image-proxy/avatars/../secrets/data.jpg')",
+          "tests/Feature/Image/ServeImageTest.php:44: $this->getJson('/image-proxy/avatars/1/test.jpg?format=jpg')",
+          "tests/Feature/Image/ServeImageTest.php:53: $this->getJson('/image-proxy/avatars/1/test.jpg?format=bmp')",
+          "tests/Feature/Image/ServeImageTest.php:62: $this->getJson('/image-proxy/avatars/1/test.jpg')",
+          "tests/Feature/Image/ServeImageTest.php:73: $first = $this->getJson('/image-proxy/avatars/1/test.jpg')->assertOk();",
+          "tests/Feature/Image/ServeImageTest.php:74: $second = $this->getJson('/image-proxy/avatars/1/test.jpg')->assertOk();"
+        ],
+        "S_docs": []
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/loyalty/apply",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/internal.php → /loyalty/apply",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Loyalty/InternalPromoApplyTest.php:19: * SZ-073 §5: `POST /api/internal/v1/loyalty/apply` — применение промо к",
+          "tests/Feature/Loyalty/InternalPromoApplyTest.php:69: '/api/internal/v1/loyalty/apply',",
+          "tests/Feature/Loyalty/InternalPromoApplyTest.php:97: postJson('/api/internal/v1/loyalty/apply', $payload, $headers)->assertOk()->assertJsonPath('applied', true);",
+          "tests/Feature/Loyalty/InternalPromoApplyTest.php:98: postJson('/api/internal/v1/loyalty/apply', $payload, $headers)->assertOk()->assertJsonPath('applied', false);",
+          "tests/Feature/Loyalty/InternalPromoApplyTest.php:108: '/api/internal/v1/loyalty/apply',",
+          "tests/Feature/Loyalty/InternalPromoApplyTest.php:121: postJson('/api/internal/v1/loyalty/apply', ['order_id' => $fixture['order']->id])"
+        ],
+        "S_docs": [
+          "docs/sessions/057-sz073-loyalty-service-backend.md:53: | POST | `/api/internal/v1/loyalty/apply` | применение промо к заказу (`X-Internal-Secret`, идемпотентно по заказу) |"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/loyalty/effect",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /loyalty/effect",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [],
+        "S_docs": [
+          "docs/sessions/057-sz073-loyalty-service-backend.md:52: | GET | `/api/v1/loyalty/effect` | эффект акции (Ф2; только честно измеримые величины, `null` где данных нет) |",
+          "docs/sessions/057-sz073-loyalty-service-backend.md:89: - **`GET /loyalty/effect`** — каркас Ф2: отдаёт измеримое (заказы с промо, скидка, кэшбэк,"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/offers/{offer}/recommendations",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /offers/{offer}/recommendations",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Catalog/OfferRecommendationsGateTest.php:118: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsGateTest.php:130: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsGateTest.php:163: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:12: // Standalone endpoint: /offers/{offer}/recommendations",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:18: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:28: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=unknown', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:38: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like&limit=49', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:48: $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:72: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:110: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:135: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=may_like&limit=3', $offer->id))",
+          "tests/Feature/Catalog/OfferRecommendationsTest.php:179: $response = $this->getJson(sprintf('/api/v1/offers/%d/recommendations?type=other_store', $offer->id))"
+        ],
+        "S_docs": []
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/orders/{id}/chargeback",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/internal.php → /orders/{id}/chargeback",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [],
+        "S_docs": [
+          "docs/sessions/028-sz045-chargeback-mirror.md:41: **Задача 4 — мост lovii-admin → core:** `POST /api/internal/v1/orders/{id}/chargeback`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/orders/{id}/status-events",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/internal.php → /orders/{id}/status-events",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Internal/EmitOrderStatusEventTest.php:87: '/api/internal/v1/orders/999999/status-events',"
+        ],
+        "S_docs": []
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/partners/{id}/verify",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/internal.php → /partners/{id}/verify",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Business/PartnerAdminVerifyTest.php:117: '/api/internal/v1/partners/999999/verify',"
+        ],
+        "S_docs": [
+          "docs/sessions/047-b3-partner-verify-internal.md:19: - `POST /api/internal/v1/partners/{id}/verify` (`VerifyPartnerAction`,",
+          "docs/sessions/047-b3-partner-verify-internal.md:55: submitted) → `POST /api/internal/v1/partners/253/verify` → 200 verified +"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/payments/console",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /payments/console",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [],
+        "S_docs": [
+          "docs/runbooks/prod-payments-go-live.md:62: 1. Активный канал → `bank-test`: через консоль `GET /api/v1/payments/console`",
+          "docs/sessions/054-payment-channel-credentials-ca.md:22: - Консоль `/api/v1/payments/console` показывает маску терминала каждого"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/payments/tbank/incoming",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /payments/tbank/incoming",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Business/VerificationIncomingTest.php:93: $this->postJson('/api/v1/payments/tbank/incoming', incomingPayload($application))",
+          "tests/Feature/Business/VerificationIncomingTest.php:113: $this->postJson('/api/v1/payments/tbank/incoming', incomingPayload($application, [",
+          "tests/Feature/Business/VerificationIncomingTest.php:128: $this->postJson('/api/v1/payments/tbank/incoming', $payload)->assertStatus(403);",
+          "tests/Feature/Business/VerificationIncomingTest.php:153: $this->postJson('/api/v1/payments/tbank/incoming', incomingPayload($application))",
+          "tests/Feature/Business/VerificationIncomingTest.php:162: $this->postJson('/api/v1/payments/tbank/incoming', incomingPayload($application))",
+          "tests/Feature/Business/VerificationIncomingTest.php:169: $this->postJson('/api/v1/payments/tbank/incoming', incomingPayload($application))"
+        ],
+        "S_docs": [
+          "docs/sessions/047-offer-registry-promo-routing.md:39: `/payments/tbank/incoming` существуют в рабочей копии feat/sz061-referral-",
+          "docs/sessions/065-tbank-mock-webhooks-stand-fix.md:30: - `TBANK_INCOMING_NOTIFICATION_URL=http://lovii-core-app-t027:8080/api/v1/payments/tbank/incoming`",
+          "docs/sessions/065-tbank-mock-webhooks-stand-fix.md:90: `TBANK_INCOMING_NOTIFICATION_URL=https://api-staging.lovii.ru/api/v1/payments/tbank/incoming`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/payments/tbank/webhook",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /payments/tbank/webhook",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Payment/CreateOrderPaymentTest.php:26: 'payments.tbank.notification_url' => 'https://api-staging.lovii.ru/api/v1/payments/tbank/webhook',",
+          "tests/Feature/Payment/CreateOrderPaymentTest.php:64: && $request['NotificationURL'] === 'https://api-staging.lovii.ru/api/v1/payments/tbank/webhook');",
+          "tests/Feature/Payment/TBankWebhookTest.php:48: $response = $this->postJson('/api/v1/payments/tbank/webhook', [",
+          "tests/Feature/Payment/TBankWebhookTest.php:86: $this->postJson('/api/v1/payments/tbank/webhook', [",
+          "tests/Feature/Payment/TBankWebhookTest.php:112: $this->postJson('/api/v1/payments/tbank/webhook', $payload)->assertForbidden();",
+          "tests/Feature/Payment/TBankWebhookTest.php:141: $this->postJson('/api/v1/payments/tbank/webhook', $payload)->assertOk();",
+          "tests/Feature/Payment/TBankWebhookTest.php:162: $this->postJson('/api/v1/payments/tbank/webhook', [",
+          "tests/Feature/Payment/TBankWebhookTest.php:178: $this->postJson('/api/v1/payments/tbank/webhook', [",
+          "tests/Feature/Payment/TBankWebhookTest.php:216: $this->postJson('/api/v1/payments/tbank/webhook', $payload)->assertOk();",
+          "tests/Feature/Payment/TBankWebhookTest.php:217: $this->postJson('/api/v1/payments/tbank/webhook', $payload)->assertOk();",
+          "tests/Feature/Payment/TBankWebhookTest.php:246: $this->postJson('/api/v1/payments/tbank/webhook', [",
+          "tests/Feature/Payment/TBankWebhookTest.php:286: $this->postJson('/api/v1/payments/tbank/webhook', $confirm)->assertOk();"
+        ],
+        "S_docs": [
+          "docs/runbooks/prod-payments-go-live.md:107: | `TBANK_NOTIFICATION_URL` | `https://api.lovii.ru/api/v1/payments/tbank/webhook` |",
+          "docs/runbooks/prod-payments-go-live.md:131: | `POST /api/v1/payments/tbank/webhook` с `{}` | 404 (роутов нет) | `OK` 200, без записи в БД (пустой пейлоад только логируется — `TBankWebhookController`) |",
+          "docs/sessions/020-tbank-payments-phase1.md:25: - **`POST /api/v1/payments/tbank/webhook`** (публичный) — нотификации банка.",
+          "docs/sessions/020-tbank-payments-phase1.md:54: `TBANK_NOTIFICATION_URL=https://api-staging.lovii.ru/api/v1/payments/tbank/webhook`.",
+          "docs/sessions/053-msp-verification-status-flow.md:22: платёжный вебхук `/payments/tbank/webhook` (лог",
+          "docs/sessions/065-tbank-mock-webhooks-stand-fix.md:29: - `TBANK_NOTIFICATION_URL=http://lovii-core-app-t027:8080/api/v1/payments/tbank/webhook`",
+          "docs/specs/tbank-payments.md:40: - **`POST /api/v1/payments/tbank/webhook`** (публичный, банк → нас) — нотификации",
+          "docs/specs/tbank-payments.md:131: TBANK_NOTIFICATION_URL      — https://api-staging.lovii.ru/api/v1/payments/tbank/webhook",
+          "tbank-mock/README.md:45: TBANK_NOTIFICATION_URL=https://<домен ядра>/api/v1/payments/tbank/webhook"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/payout/request",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /payout/request",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Billing/PayoutTest.php:274: $this->postJson('/api/v1/payout/request', ['amount_kopecks' => 300000])",
+          "tests/Feature/Billing/PayoutTest.php:282: ->postJson('/api/v1/payout/request', ['amount_kopecks' => 300000])",
+          "tests/Feature/Billing/PayoutTest.php:296: ->postJson('/api/v1/payout/request', ['amount_kopecks' => 9900])"
+        ],
+        "S_docs": [
+          "docs/sessions/038-sz054-payouts.md:33: - **API** `POST /api/v1/payout/request` (throttle 10/мин) — 201 + payload"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/pep/reports/pending",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /pep/reports/pending",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Compliance/PepReportTest.php:68: ->getJson('/api/v1/pep/reports/pending')",
+          "tests/Feature/Compliance/PepReportTest.php:166: $this->getJson('/api/v1/pep/reports/pending')->assertStatus(401);"
+        ],
+        "S_docs": [
+          "docs/sessions/039-sz055-pep-reports.md:33: - **API**: `GET /pep/reports/pending` (текущий документ, data:null если нет),",
+          "docs/sessions/039-sz055-pep-reports.md:59: /pep/reports/pending` → 401 ✓."
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/pep/reports/{report}/confirm",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /pep/reports/{report}/confirm",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Compliance/PepReportTest.php:82: ->postJson(sprintf('/api/v1/pep/reports/%d/confirm', $report->id), ['code' => '123456'])",
+          "tests/Feature/Compliance/PepReportTest.php:100: ->postJson(sprintf('/api/v1/pep/reports/%d/confirm', $report->id), ['code' => '999999'])",
+          "tests/Feature/Compliance/PepReportTest.php:113: ->postJson(sprintf('/api/v1/pep/reports/%d/confirm', $report->id), ['code' => '123456'])",
+          "tests/Feature/Compliance/PepReportTest.php:126: ->postJson(sprintf('/api/v1/pep/reports/%d/confirm', $report->id), ['code' => '123456'])",
+          "tests/Feature/Compliance/PepReportTest.php:138: ->postJson(sprintf('/api/v1/pep/reports/%d/confirm', $report->id), ['code' => '123456'])",
+          "tests/Feature/Compliance/PepReportTest.php:142: ->postJson(sprintf('/api/v1/pep/reports/%d/confirm', $report->id), ['code' => '123456'])",
+          "tests/Feature/Compliance/PepReportTest.php:167: $this->postJson('/api/v1/pep/reports/1/confirm', ['code' => '123456'])->assertStatus(401);"
+        ],
+        "S_docs": [
+          "docs/sessions/039-sz055-pep-reports.md:34: `POST /pep/reports/{report}/confirm` (throttle 10/мин),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/pep/reports/{report}/resend",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /pep/reports/{report}/resend",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Compliance/PepReportTest.php:155: ->postJson(sprintf('/api/v1/pep/reports/%d/resend', $report->id))",
+          "tests/Feature/Compliance/PepReportTest.php:168: $this->postJson('/api/v1/pep/reports/1/resend')->assertStatus(401);"
+        ],
+        "S_docs": [
+          "docs/sessions/039-sz055-pep-reports.md:35: `POST /pep/reports/{report}/resend` (6/мин). Привязка интерфейса —"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/profile/deactivate",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /profile/deactivate",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Profile/DeactivateAccountTest.php:20: ->postJson('/api/v1/profile/deactivate', [",
+          "tests/Feature/Profile/DeactivateAccountTest.php:36: ->postJson('/api/v1/profile/deactivate', [",
+          "tests/Feature/Profile/DeactivateAccountTest.php:52: ->postJson('/api/v1/profile/deactivate', [",
+          "tests/Feature/Profile/DeactivateAccountTest.php:68: ->postJson('/api/v1/profile/deactivate', [",
+          "tests/Feature/Profile/DeactivateAccountTest.php:75: $this->postJson('/api/v1/profile/deactivate', ['otp_session_id' => 1])"
+        ],
+        "S_docs": []
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/readyz",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/web.php → /readyz",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Health/HealthTest.php:12: $this->getJson('/readyz')"
+        ],
+        "S_docs": [
+          "docs/DEPLOY.md:496: curl -sf https://api.lovii.ru/readyz && echo \"OK\" || echo \"FAIL\""
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/vk/callback",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/api.php → /vk/callback",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/VK/VKCallbackTest.php:57: $response = $this->postJson('/api/v1/vk/callback', [",
+          "tests/Feature/VK/VKCallbackTest.php:70: $this->postJson('/api/v1/vk/callback', vkCallbackPayload(['secret' => 'wrong']))",
+          "tests/Feature/VK/VKCallbackTest.php:79: $this->postJson('/api/v1/vk/callback', [",
+          "tests/Feature/VK/VKCallbackTest.php:90: $this->postJson('/api/v1/vk/callback', vkCallbackPayload([",
+          "tests/Feature/VK/VKCallbackTest.php:99: $this->postJson('/api/v1/vk/callback', vkCallbackPayload(['group_id' => 111222333]))",
+          "tests/Feature/VK/VKCallbackTest.php:111: $this->postJson('/api/v1/vk/callback', vkCallbackPayload([",
+          "tests/Feature/VK/VKCallbackTest.php:132: $this->postJson('/api/v1/vk/callback', vkCallbackPayload())",
+          "tests/Feature/VK/VKCallbackTest.php:150: $this->postJson('/api/v1/vk/callback', vkCallbackPayload([",
+          "tests/Feature/VK/VKCallbackTest.php:168: $this->postJson('/api/v1/vk/callback', [",
+          "tests/Feature/VK/VKCallbackTest.php:190: $this->postJson('/api/v1/vk/callback', $payload)->assertOk();",
+          "tests/Feature/VK/VKCallbackTest.php:193: $this->postJson('/api/v1/vk/callback', $payload)->assertOk();",
+          "tests/Feature/VK/VKOtpAuthTest.php:92: $this->postJson('/api/v1/vk/callback', ["
+        ],
+        "S_docs": [
+          "docs/specs/otp-delivery-channels.md:292: - `VKCallbackController` — `POST /api/v1/vk/callback` (вне auth-middleware):",
+          "docs/specs/otp-delivery-channels.md:332: `https://api-staging.lovii.ru/api/v1/vk/callback` с `{\"type\":\"confirmation\"}` →",
+          "docs/specs/otp-delivery-channels.md:335: URL = `https://api-staging.lovii.ru/api/v1/vk/callback` (прежний",
+          "docs/specs/otp-delivery-channels.md:336: `app-staging.lovii.ru/vk/callback` заменить), secret — тот же `VK_CALLBACK_SECRET`;"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:api:/wallet/adjustment",
+      "repo": "core",
+      "kind": "api-endpoint",
+      "path": "routes/internal.php → /wallet/adjustment",
+      "why": "маршрут не найден ни в одном клиентском репо (api-клиенты), ни в core-тестах",
+      "priority": "P2",
+      "strategies": {
+        "S_client_call": [],
+        "S_core_tests": [
+          "tests/Feature/Billing/InternalWalletAdjustmentTest.php:37: postJson('/api/internal/v1/wallet/adjustment', [",
+          "tests/Feature/Billing/InternalWalletAdjustmentTest.php:64: postJson('/api/internal/v1/wallet/adjustment', [",
+          "tests/Feature/Billing/InternalWalletAdjustmentTest.php:76: postJson('/api/internal/v1/wallet/adjustment', [",
+          "tests/Feature/Billing/InternalWalletAdjustmentTest.php:91: postJson('/api/internal/v1/wallet/adjustment', ["
+        ],
+        "S_docs": [
+          "docs/sessions/061-sz077-transfer-single-node.md:33: 7. **Закрыт обход в админке.** Новый внутренний `POST /api/internal/v1/wallet/adjustment`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    }
+  ]
+}

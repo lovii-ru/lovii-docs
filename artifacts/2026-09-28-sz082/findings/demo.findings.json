@@ -1,0 +1,160 @@
+{
+  "repo": "demo",
+  "meta": {
+    "head": "7d76150e91d22fadd0774619b0090a6be757aab8 (2026-09-28 23:59:21 +0300)",
+    "screens_map_names": [
+      "Главная",
+      "Поиск",
+      "Заказы",
+      "Профиль"
+    ],
+    "map_status": "Draft (prose) — машинная сверка 50 роутов невозможна, см. отчёт",
+    "html_files": 16,
+    "js_files": 21
+  },
+  "candidates": [
+    {
+      "cid": "demo:design-screen:playground-badges.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-badges.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-cart.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-cart.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-categories.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-categories.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-header.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-header.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-orders.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-orders.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-products-v9.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-products-v9.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-products.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-products.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-search.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-search.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-stores.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-stores.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground-top.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground-top.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "demo:design-screen:playground.html",
+      "repo": "demo",
+      "kind": "design-screen",
+      "path": "design/playground.html",
+      "why": "файл не упомянут ни одним другим html/js (включая index.html) — вне навигации",
+      "priority": "",
+      "strategies": {
+        "S1_crossref": [],
+        "S2_screen_map": []
+      },
+      "verdict": "CANDIDATE"
+    }
+  ]
+}

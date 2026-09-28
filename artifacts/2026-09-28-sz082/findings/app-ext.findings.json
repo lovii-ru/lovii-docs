@@ -1,0 +1,762 @@
+{
+  "repo": "app-ext",
+  "meta": {
+    "head": "9cc3a6e9f45496249c80cb2da99fdac1cd0b99c2 (2026-09-28 22:14:51 +0300)",
+    "pass": "audit_ext (расширенные проверки карточки SZ-082)"
+  },
+  "candidates": [
+    {
+      "cid": "helper:cashbackOperationSummary",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/entries.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:chainStats",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/entries.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:52: chainStats,",
+          "src/modules/profile-balance/ProfileWallet.vue:816: Поступления +{{ formatPrice(chainStats(chain.entries).income) }} ₽ · Списания",
+          "src/modules/profile-balance/ProfileWallet.vue:817: −{{ formatPrice(chainStats(chain.entries).spent) }} ₽"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:filterEntries",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/entries.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:48: filterEntries,",
+          "src/modules/profile-balance/ProfileWallet.vue:189: !isPoints.value ? filterEntries(ledgerEntries.value, txFilter.value) : [],",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:5: filterEntries,",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:56: expect(filterEntries(list, \"in\").map((e) => e.id)).toEqual([1]);",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:57: expect(filterEntries(list, \"out\").map((e) => e.id)).toEqual([2, 3]);",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:58: expect(filterEntries(list, \"all\")).toHaveLength(3);",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:195: expect(filterEntries([entry], \"out\")).toHaveLength(1);",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:196: expect(filterEntries([entry], \"in\")).toHaveLength(0);",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:203: expect(filterEntries([entry], \"in\")).toHaveLength(1);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:groupEntriesByDay",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/entries.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:49: groupEntriesByDay,",
+          "src/modules/profile-balance/ProfileWallet.vue:202: const entryGroups = computed(() => groupEntriesByDay(moneyRows.value));",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:6: groupEntriesByDay,",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:69: const groups = groupEntriesByDay(list);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:groupEntriesByOrder",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/entries.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:50: groupEntriesByOrder,",
+          "src/modules/profile-balance/ProfileWallet.vue:207: isNominal.value && moneyRows.value.length ? groupEntriesByOrder(moneyRows.value) : [],",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:7: groupEntriesByOrder,",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:121: const chains = groupEntriesByOrder([",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:173: const [chain] = groupEntriesByOrder(list);",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:241: const chains = groupEntriesByOrder(legs);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:monthStats",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/entries.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:51: monthStats,",
+          "src/modules/profile-balance/ProfileWallet.vue:183: isPoints.value ? walletMonthStats(walletMonth.value) : monthStats(ledgerMonth.value),",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:8: monthStats,",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:85: describe(\"monthStats · динамика месяца для карточки «Счёт» (демо .acct-card)\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:89: const stats = monthStats(",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:102: const stats = monthStats(",
+          "src/modules/profile-balance/helpers/__tests__/entries.test.ts:114: expect(monthStats([], now)).toEqual({ earned: 0, spent: 0, count: 0 });",
+          "src/modules/profile-balance/helpers/wallet-history.ts:63: * `monthStats` рублёвого ledger, чтобы сводка счёта выглядела одинаково в"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:FEED_PERIODS",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/feed-period.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:55: FEED_PERIODS,",
+          "src/modules/profile-balance/ProfileWallet.vue:747: v-for=\"item in FEED_PERIODS\"",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:3: FEED_PERIODS,",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:37: expect(FEED_PERIODS.map((item) => item.id)).toEqual([\"all\", \"month\", \"quarter\"]);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:38: expect(FEED_PERIODS.map((item) => item.label)).toEqual([\"Всё время\", \"Месяц\", \"3 месяца\"]);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:inPeriod",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/feed-period.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:56: inPeriod,",
+          "src/modules/profile-balance/ProfileWallet.vue:197: inPeriod(tx.created_at, period.value),",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:4: inPeriod,",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:44: expect(inPeriod(\"2026-09-15T10:00:00+00:00\", \"all\", NOW)).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:45: expect(inPeriod(\"не дата\", \"all\", NOW)).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:51: expect(inPeriod(monthStart, \"month\", NOW)).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:52: expect(inPeriod(new Date(2026, 7, 31, 23, 30).toISOString(), \"month\", NOW)).toBe(false);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:56: expect(inPeriod(new Date(2026, 6, 2).toISOString(), \"quarter\", NOW)).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:57: expect(inPeriod(new Date(2026, 5, 30).toISOString(), \"quarter\", NOW)).toBe(false);",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:61: expect(inPeriod(\"не дата\", \"month\", NOW)).toBe(false);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:toDateParam",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/feed-period.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:6: toDateParam,",
+          "src/modules/profile-balance/helpers/__tests__/feed-period.test.ts:33: expect(toDateParam(new Date(2026, 0, 5).getTime())).toBe(\"2026-01-05\");"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:cardNumberFor",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-card.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:41: cardNumberFor,",
+          "src/modules/profile-balance/ProfileWallet.vue:123: return account ? cardNumberFor(account) : \"\";",
+          "src/modules/profile-balance/ProfileWallet.vue:611: :number=\"cardNumberFor(account)\"",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:3: cardNumberFor,",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:12: const a = cardNumberFor({ account_id: 42, kind: \"personal\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:13: const b = cardNumberFor({ account_id: 42, kind: \"personal\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:18: const a = cardNumberFor({ account_id: 1, kind: \"personal\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:19: const b = cardNumberFor({ account_id: 2, kind: \"personal\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:20: const c = cardNumberFor({ account_id: 3, kind: \"personal\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:25: const num = cardNumberFor({ account_id: 7, kind: \"personal\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:30: const num = cardNumberFor({ account_id: 7, kind: \"company\", inn: \"7842216839\" });",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:37: expect(isLuhnValid(cardNumberFor({ account_id: id, kind }))).toBe(true);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:cardSkinFor",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-card.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:42: cardSkinFor,",
+          "src/modules/profile-balance/ProfileWallet.vue:537: if (account.kind !== \"personal\") return cardSkinFor(account);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:4: cardSkinFor,",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:61: expect(cardSkinFor({ kind: \"personal\" })).toBe(\"pay\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:62: expect(cardSkinFor({ kind: \"company\" })).toBe(\"biz\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:71: expect(cardSkinFor(account)).toBe(\"nominal\");",
+          "src/modules/profile-module/ProfileModule.vue:35: cardSkinFor,",
+          "src/modules/profile-module/ProfileModule.vue:321: if (account.kind !== \"personal\") return cardSkinFor(account);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:cardTagFor",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-card.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:43: cardTagFor,",
+          "src/modules/profile-balance/ProfileWallet.vue:543: if (account.kind !== \"personal\") return cardTagFor(account);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:5: cardTagFor,",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:63: expect(cardTagFor({ kind: \"personal\" })).toBe(\"LOVII PAY\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:64: expect(cardTagFor({ kind: \"company\" })).toBe(\"LOVII BUSINESS\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:72: expect(cardTagFor(account)).toBe(\"LOVII OPERATOR\");",
+          "src/modules/profile-module/ProfileModule.vue:36: cardTagFor,",
+          "src/modules/profile-module/ProfileModule.vue:331: if (account.kind !== \"personal\") return cardTagFor(account);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:isLuhnValid",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-card.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:6: isLuhnValid,",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:37: expect(isLuhnValid(cardNumberFor({ account_id: id, kind }))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:46: expect(isLuhnValid(a)).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:50: expect(isLuhnValid(\"9643 9138 4210 7755\")).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:51: expect(isLuhnValid(\"9643 9142 8802 3019\")).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:54: it(\"luhnCheckDigit согласован с isLuhnValid\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:57: expect(isLuhnValid(base + check)).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:78: expect(isLuhnValid(number)).toBe(true);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:luhnCheckDigit",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-card.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:7: luhnCheckDigit,",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:54: it(\"luhnCheckDigit согласован с isLuhnValid\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/pay-card.test.ts:56: const check = luhnCheckDigit(base);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:duplicatesPrivilege",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-privileges-match.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:11: duplicatesPrivilege,",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:37: expect(duplicatesPrivilege(\"\", privilege(\"Мерч Лови\"))).toBe(false);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:38: expect(duplicatesPrivilege(\"Мерч Лови\", privilege(\"\"))).toBe(false);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:44: expect(duplicatesPrivilege(\"«МЕРЧ ЛОВИ»\", privilege(\"мерч лови\"))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:45: expect(duplicatesPrivilege(\"Спец-скидки у МСП\", privilege(\"Спец скидки у МСП\"))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:46: expect(duplicatesPrivilege(\"Тёплый приём\", privilege(\"Теплый приём\"))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:47: expect(duplicatesPrivilege(\"  Ранний доступ  \", privilege(\"РАННИЙ ДОСТУП\"))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:51: expect(duplicatesPrivilege(\"Ранний доступ к новинкам\", privilege(\"Ранний доступ\"))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:52: expect(duplicatesPrivilege(\"Мерч\", privilege(\"Мерч Лови\"))).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:59: expect(duplicatesPrivilege(\"Лимитированный мерч\", privilege(\"Мерч Лови\"))).toBe(false);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:60: expect(duplicatesPrivilege(\"Приоритет в мероприятиях\", privilege(\"Приоритетная запись\"))).toBe(",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:63: expect(duplicatesPrivilege(\"Персональные скидки у МСП\", privilege(\"Спец-скидки у МСП\"))).toBe("
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:normalizePerkLabel",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-privileges-match.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:12: normalizePerkLabel,",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:29: expect(normalizePerkLabel(\"  Ранний ДОСТУП  \")).toBe(\"ранний доступ\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:30: expect(normalizePerkLabel(\"«Мерч Лови»\")).toBe(\"мерч лови\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:31: expect(normalizePerkLabel(\"Спец-скидки у МСП\")).toBe(\"спец скидки у мсп\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:32: expect(normalizePerkLabel(\"Тёплый—приём\")).toBe(\"теплый прием\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:33: expect(normalizePerkLabel(\"  \")).toBe(\"\");"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:EMPTY_TIER_STATE",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-tier.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:3: EMPTY_TIER_STATE,",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:30: const status = payTierStatus(EMPTY_TIER_STATE);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:PAY_TIERS",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-tier.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:PAY_TIER_PASS",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-tier.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:4: PAY_TIER_PASS,",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:79: expect(visibleTierPerks(PAY_TIER_PASS)).toEqual([]);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:92: visibleTierPerks(PAY_TIER_PASS);",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:95: expect(PAY_TIER_PASS.perks).toHaveLength(3);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:PAY_TIER_PAY",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-tier.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:5: PAY_TIER_PAY,",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:17: const tierWith = (...perks: string[]): PayTier => ({ ...PAY_TIER_PAY, perks });",
+          "src/modules/profile-balance/helpers/__tests__/pay-privileges-match.test.ts:71: expect(visibleTierPerks(PAY_TIER_PAY)).toEqual([",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:5: PAY_TIER_PAY,",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:76: expect(PAY_TIER_PAY.perks).toContain(\"Кэшбек баллами 1:1\");",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:77: expect(PAY_TIER_PAY.need).toBe(0);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:payTierById",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/pay-tier.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:CARD_LENGTH",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:DESTINATION_TITLES",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:PROMO_LENGTH",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:TRANSFER_LIMITS",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:39: TRANSFER_LIMITS,",
+          "src/modules/profile-balance/ProfileTransfer.vue:751: <p>Минимальная сумма перевода — {{ transferMoney(TRANSFER_LIMITS.minKopecks) }}</p>",
+          "src/modules/profile-balance/ProfileTransfer.vue:752: <p>Максимальная сумма перевода за раз — {{ transferMoney(TRANSFER_LIMITS.maxKopecks) }}</p>",
+          "src/modules/profile-balance/ProfileTransfer.vue:753: <p>Остаток на карте после перевода с учётом комиссии — {{ transferMoney(TRANSFER_LIMITS.reserveKopecks) }}</p>"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:TRANSFER_TIERS",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:availableKopecks",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:40: availableKopecks,",
+          "src/modules/profile-balance/ProfileTransfer.vue:233: availableKopecks(activeMode.value, wallet.value, companyBalance.value),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:describeTransferForm",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:41: describeTransferForm,",
+          "src/modules/profile-balance/ProfileTransfer.vue:189: describeTransferForm({",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:3: describeTransferForm,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:87: describe(\"describeTransferForm\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:99: expect(describeTransferForm(base).canSubmit).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:100: expect(describeTransferForm(base).validation).toBeNull();",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:104: const state = describeTransferForm({ ...base, amountKopecks: 400_000 });",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:110: expect(describeTransferForm({ ...base, amountKopecks: 5_000 }).validation).toBe(",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:114: const tight = describeTransferForm({",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:139: expect(describeTransferForm({ ...base, recipientFound: false }).canSubmit).toBe(false);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:140: expect(describeTransferForm({ ...base, destination: \"AA123\" }).validation).toBe(",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:146: const state = describeTransferForm({"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:detectDestinationType",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:4: detectDestinationType,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:32: describe(\"detectDestinationType\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:34: expect(detectDestinationType(\"AA1234\")).toBe(\"promo\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:35: expect(detectDestinationType(\"123456\")).toBe(\"promo\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:36: expect(detectDestinationType(\"AA123\")).toBeNull();",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:37: expect(detectDestinationType(\"AA12345\")).toBeNull();",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:41: expect(detectDestinationType(\"+7 999 000-00-22\")).toBe(\"phone\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:42: expect(detectDestinationType(\"7000 0000 0000 1234\")).toBe(\"card\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:43: expect(detectDestinationType(\"+79990\")).toBeNull();",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:126: expect(detectDestinationType(\"7000000000020104\")).toBe(\"card\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:127: expect(detectDestinationType(\"7000000000001\")).toBeNull();",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:128: expect(detectDestinationType(\"70000000000201\")).toBeNull();"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:isDestinationComplete",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:42: isDestinationComplete,",
+          "src/modules/profile-balance/ProfileTransfer.vue:223: isDestinationComplete(destination.value),",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:5: isDestinationComplete,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:131: it(\"isDestinationComplete: полный адресат определён, обрыв — нет\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:132: expect(isDestinationComplete(\"+7 999 000-02-01\")).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:133: expect(isDestinationComplete(\"7000 0000 0002 0104\")).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:134: expect(isDestinationComplete(\"AB1234\")).toBe(true);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:135: expect(isDestinationComplete(\"7000 0000 0002\")).toBe(false);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:normalizeTransferMode",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:6: normalizeTransferMode,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:61: describe(\"normalizeTransferMode\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:63: expect(normalizeTransferMode(\"to-pay\", false)).toBe(\"p2p\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:64: expect(normalizeTransferMode(\"to-business\", false)).toBe(\"p2p\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:68: expect(normalizeTransferMode(\"to-pay\", true)).toBe(\"to-pay\");",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:69: expect(normalizeTransferMode(\"to-business\", true)).toBe(\"to-business\");"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:parseAmountKopecks",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:43: parseAmountKopecks,",
+          "src/modules/profile-balance/ProfileTransfer.vue:161: const amountKopecks = computed(() => parseAmountKopecks(amount.value));",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:7: parseAmountKopecks,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:24: describe(\"parseAmountKopecks\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:26: expect(parseAmountKopecks(\"1 000,50\")).toBe(100_050);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:27: expect(parseAmountKopecks(\"999999\")).toBe(99_999_900);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:28: expect(parseAmountKopecks(\"\")).toBe(0);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:tariffPercentX100",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:174: const tariffPercentX100 = computed(() => {",
+          "src/modules/profile-balance/ProfileTransfer.vue:695: Комиссия {{ (tariffPercentX100 / 100).toFixed(1) }}% —",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:8: tariffPercentX100,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:47: describe(\"tariffPercentX100\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:49: expect(tariffPercentX100(10_000)).toBe(50);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:50: expect(tariffPercentX100(50_000)).toBe(50);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:51: expect(tariffPercentX100(50_001)).toBe(100);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:52: expect(tariffPercentX100(300_000)).toBe(300);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:53: expect(tariffPercentX100(300_001)).toBe(350);",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:57: expect(tariffPercentX100(100_000, 25)).toBe(25);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:transferMoney",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:44: transferMoney,",
+          "src/modules/profile-balance/ProfileTransfer.vue:357: total: transferMoney(total),",
+          "src/modules/profile-balance/ProfileTransfer.vue:372: total: transferMoney(total),",
+          "src/modules/profile-balance/ProfileTransfer.vue:385: total: transferMoney(total),",
+          "src/modules/profile-balance/ProfileTransfer.vue:389: showToast(done.value.title, { description: transferMoney(total), tone: \"financial\" });",
+          "src/modules/profile-balance/ProfileTransfer.vue:481: {{ sourceBalance === null ? \"—\" : transferMoney(sourceBalance) }}",
+          "src/modules/profile-balance/ProfileTransfer.vue:497: {{ sourceBalance === null ? \"—\" : transferMoney(sourceBalance) }}",
+          "src/modules/profile-balance/ProfileTransfer.vue:538: Счёт компании · доступно {{ transferMoney(account.balance) }}",
+          "src/modules/profile-balance/ProfileTransfer.vue:571: {{ wallet === null ? \"Баллы\" : `Доступно ${transferMoney(wallet)}` }}",
+          "src/modules/profile-balance/ProfileTransfer.vue:597: Счёт компании · доступно {{ transferMoney(account.balance) }}",
+          "src/modules/profile-balance/ProfileTransfer.vue:692: Вы переводите <strong>{{ transferMoney(amountKopecks) }}</strong>",
+          "src/modules/profile-balance/ProfileTransfer.vue:696: <strong>{{ transferMoney(commissionKopecks) }}</strong>"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:transferQuote",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/transfer-form.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileTransfer.vue:36: type TransferQuote,",
+          "src/modules/profile-balance/ProfileTransfer.vue:45: transferQuote,",
+          "src/modules/profile-balance/ProfileTransfer.vue:73: const serverQuote = ref<TransferQuote | null>(null);",
+          "src/modules/profile-balance/ProfileTransfer.vue:165: const local = transferQuote(amountKopecks.value, activeMode.value);",
+          "src/modules/profile-balance/ProfileTransfer.vue:175: const local = transferQuote(amountKopecks.value, activeMode.value);",
+          "src/modules/profile-balance/api/profile-balance-api.ts:114: export interface TransferQuote {",
+          "src/modules/profile-balance/api/profile-balance-api.ts:134: return API.get<{ data: TransferQuote }>(\"api/v1/account/transfer/quote\", {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:10: transferQuote,",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:73: describe(\"transferQuote\", () => {",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:75: expect(transferQuote(100_000, \"p2p\")).toEqual({",
+          "src/modules/profile-balance/helpers/__tests__/transfer-form.test.ts:83: expect(transferQuote(100_000, \"to-pay\").commission_kopecks).toBe(0);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:WALLET_FILTERS",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/wallet-history.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:61: WALLET_FILTERS,",
+          "src/modules/profile-balance/ProfileWallet.vue:731: v-for=\"tab in WALLET_FILTERS\""
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:filterWalletTx",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/wallet-history.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:62: filterWalletTx,",
+          "src/modules/profile-balance/ProfileWallet.vue:196: ? filterWalletTx(walletTx.value, txFilter.value).filter((tx) =>",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:11: filterWalletTx,",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:97: expect(filterWalletTx(list, \"in\").map((item) => item.id)).toEqual([1]);",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:98: expect(filterWalletTx(list, \"out\").map((item) => item.id)).toEqual([2, 3]);",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:99: expect(filterWalletTx(list, \"all\")).toHaveLength(3);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "helper:walletDirection",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/wallet-history.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "helper:walletMonthStats",
+      "repo": "app",
+      "kind": "helper-store-export",
+      "path": "src/modules/profile-balance/helpers/wallet-history.ts",
+      "why": "exported helper/store-экспорт: нет импортов и упоминаний имени в src",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_raw_word": [
+          "src/modules/profile-balance/ProfileWallet.vue:63: walletMonthStats,",
+          "src/modules/profile-balance/ProfileWallet.vue:183: isPoints.value ? walletMonthStats(walletMonth.value) : monthStats(ledgerMonth.value),",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:14: walletMonthStats,",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:113: const stats = walletMonthStats(",
+          "src/modules/profile-balance/helpers/__tests__/pay-tier.test.ts:132: expect(walletMonthStats([], new Date(2026, 8, 15))).toEqual({",
+          "src/modules/profile-module/ProfileModule.vue:46: walletMonthStats,",
+          "src/modules/profile-module/ProfileModule.vue:193: const walletMonth = computed(() => walletMonthStats(transactions.value));"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    }
+  ]
+}
