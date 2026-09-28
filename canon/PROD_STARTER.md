@@ -1,13 +1,16 @@
-# Прод-стартер: каноническая стартовая сборка БД (v3, 2026-09-28)
+# Прод-стартер: каноническая стартовая сборка БД (v3.2, 2026-09-28)
 
 > Состав выведен из канона и плана запуска, а не из тестовых данных:
 > BRD v1.0 (Основатель, AAAAAA), FINANCIAL_CONTOUR v0.5 (оператор, номинальный счёт),
 > RELEASE_READINESS §2.5/§2.6 + as-is/12. **Решение владельца 28.09:** кэшбэк по
 > умолчанию = 0 (правил лояльности в стартере НЕТ); 5% — рекомендация МСП, каждую <!-- fact-guard: allow — цитата решения владельца 28.09: рекомендация МСП, не платформенный параметр (в PARAMS дефолта кэшбэка нет; платформенный дефолт = 0) -->
 > точку/мерчант настраивают свою акцию у себя в промо; ID стартовых сущностей —
-> чистые, с 1. Артефакт: `deploy@89.19.223.16:~/backups/lovii-prod-starter_2026-09-27.dump.gz`
-> (49 КБ, `pg_restore --list` ✓). Исходник — БД `lovii_core_light` в
-> контейнере `lovii-core-staging-pgsql-1`.
+> чистые, с 1. **v3.2 (вечер 28.09): + уникальный индекс ИНН** (T-027, решение
+> владельца «ИНН уникален, замок в БД; fallback-группу Kuper не трогать» —
+> в стартере её нет, поэтому только индекс). Артефакт:
+> `deploy@89.19.223.16:~/backups/lovii-prod-starter_2026-09-28.dump.gz`
+> (48 КБ, `pg_restore --list` ✓, индекс в дампе). Предыдущая ревизия
+> `…2026-09-27.dump.gz` сохранена рядом. Исходник v3.1 — БД `lovii_core_light`.
 
 ## Состав (каждая строка — с источником)
 
@@ -23,6 +26,7 @@
 | 8 | **Транзитный счёт** `accounts(platform_nominal, 0, 0)` | SZ-077: «транзит по транзакции строго в ноль» (`AccountOwnerType::PlatformNominal`) |
 | 9 | **Кошелёк Основателя: 10 000₽** — строка `wallets` + `wallet_transactions(type=adjustment)` + зеркальная ledger-проводка (`wallet_adjustment`, split_role=adjustment) | чтобы сразу работали «купить подписку» (списание PAY → оператору) и тестовые сценарии; добавлено канон-проводкой, инвариант §5.2 сходится |
 | 10 | **Стартовый баланс оператора: 100 000₽** на счёте АКСИОМА — ledger-проводка `adjustment/starter_opening` | решение владельца 28.09: стартовая оборотка оператора для настроек и тестов пула/переводов |
+| 11 | **Уникальный индекс ИНН** `partners_inn_digits_unique` по нормализованному ИНН (выражение-индекс, `WHERE inn IS NOT NULL AND btrim(inn) <> ''`) | T-027, решение владельца 28.09: «одно ИНН — одно юрлицо» на уровне БД; выражение ловит дубли даже при пробелах/разделителях; NULL/пустые мимо индекса. Проверено: INSERT дубля → duplicate key |
 
 ## Чего НЕТ (намеренно)
 
@@ -59,7 +63,7 @@
 ## Применение на прод
 
 ```sh
-gunzip -c lovii-prod-starter_2026-09-27.dump.gz | \
+gunzip -c lovii-prod-starter_2026-09-28.dump.gz | \
   docker exec -i <prod-pgsql-container> pg_restore -U <user> -d <prod-db> --no-owner
 ```
 
@@ -75,4 +79,5 @@ partner_users 1, partners 1, membership 1, accounts operator+nominal, setval'ы
 `AdjustWalletBalanceController`/`LedgerService::post`: wallets 1 000 000 коп +
 wallet_transactions adjustment + ledger wallet_adjustment; accounts partner/1
 10 000 000 коп + ledger starter_opening; проверка инварианта «balance = Σ ledger»
-→ 0 строк) → pg_dump -Fc. Актуальная версия: 27.09 22:21, 50 КБ.
+→ 0 строк) → pg_dump -Fc. Актуальная версия: v3.2, 28.09 (вечер), 48 КБ — база v3.1
+→ + индекс `partners_inn_digits_unique` (см. Состав §11).
