@@ -1,0 +1,1762 @@
+{
+  "repo": "core-ext",
+  "meta": {
+    "head": "dd4d38568614595b4a7807a9d373c32ff077c417 (2026-09-28 22:13:21 +0300)",
+    "pass": "audit_ext (расширенные проверки карточки SZ-082)"
+  },
+  "candidates": [
+    {
+      "cid": "core:class:ActivateUserAfterConfirmAction",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Application/Auth/Actions/ConfirmByBindingAction.php:31: private ActivateUserAfterConfirmAction $activateUser,",
+          "app/Application/Auth/Actions/ConfirmOtpAction.php:18: private ActivateUserAfterConfirmAction $activateUser,"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:DispatchOrdersAction",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Application/Order/Actions/DispatchOrdersAction.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Application/Order/Actions/PlaceOrdersAction.php:27: private DispatchOrdersAction $dispatcher,",
+          "docs/reports/2026-04-02-gap-analysis.md:27: | 2 | **Order status transitions -- centralized validation** (23.2) | `OrderStatusMachine` exists, **not enforced on writes** | `canTransition()` service exists",
+          "docs/specs/lovii_technical_specification.md:301: - `DispatchOrdersAction`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:FinancialTransactionType",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:CreatePartnerApplicationResult",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Domain/Business/Actions/CreatePartnerApplicationResult.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:73: public function execute(User $user, array $data): CreatePartnerApplicationResult",
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:91: return new CreatePartnerApplicationResult($existing, created: false);",
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:128: return new CreatePartnerApplicationResult(",
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:213: return new CreatePartnerApplicationResult($application, created: true);",
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:369: ): CreatePartnerApplicationResult {",
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:421: return new CreatePartnerApplicationResult($application, created: true);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OrderStatusSyncContract",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Domain/Integration/Contracts/OrderStatusSyncContract.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "docs/reports/2026-04-02-gap-analysis.md:36: | 6 | **Status sync** -- external systems update order statuses (25.1, 25.3) | **Contract exists, no implementation** | `OrderStatusSyncContract` defined, zero ",
+          "docs/responses/2026-04-13-three-requests-response.md:138: | `OrderStatusSyncContract` implementations | **0.** Interface lives at `app/Domain/Integration/Contracts/OrderStatusSyncContract.php`. Zero classes implement i",
+          "docs/specs/lovii_technical_specification.md:1673: interface OrderStatusSyncContract"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:ApiResourceCollection",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/ApiResourceCollection.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/ApiResource.php:11: final public static function newCollection(mixed $resource): ApiResourceCollection",
+          "app/Http/Resources/Api/V1/ApiResource.php:13: return new ApiResourceCollection($resource, static::class);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:CartItemResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/CartItemResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/CartResource.php:71: 'items' => CartItemResource::collection($this->whenLoaded('items')),",
+          "docs/features/soft-deletes/2026-04-19-design.md:170: **Resource change** — `app/Http/Resources/Api/V1/CartItemResource.php`:",
+          "docs/features/soft-deletes/2026-04-19-design.md:378: 3. Cart / order queries + `CartItemResource` updated.",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:63: - `app/Http/Resources/Api/V1/CartItemResource.php`",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:629: - Modify: `app/Http/Resources/Api/V1/CartItemResource.php`",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:746: - [ ] **Step 9.4: Update `CartItemResource`**",
+          "docs/superpowers/plans/2026-04-19-soft-deletes-core.md:790: git add app/Application/Cart/Queries/ app/Http/Resources/Api/V1/CartItemResource.php tests/Feature/SoftDeletes/CartRenderingWithTrashedOfferTest.php"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:CartSummaryResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/CartSummaryResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:MerchantSummaryResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/MerchantSummaryResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/CartResource.php:31: 'merchant' => new MerchantSummaryResource($this->whenLoaded('merchant')),",
+          "app/Http/Resources/Api/V1/OrderDetailResource.php:23: 'merchant' => new MerchantSummaryResource($this->whenLoaded('merchant')),",
+          "app/Http/Resources/Api/V1/OrderListResource.php:21: 'merchant' => new MerchantSummaryResource($this->whenLoaded('merchant')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:NearbyBranchResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/NearbyBranchResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/HomeResource.php:39: 'near_you' => NearbyBranchResource::collection($data['near_you']),",
+          "docs/sessions/034-platform-order-settings.md:90: | `app/Http/Resources/Api/V1/StoreCardResource.php`, `NearbyBranchResource.php`, `PopularMerchantResource.php`, `MerchantOfferResource.php`, `app/Http/Controlle"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OfferModifierGroupResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/OfferModifierGroupResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/MerchantOfferResource.php:43: 'modifier_groups' => OfferModifierGroupResource::collection($this->whenLoaded('modifierGroups')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OfferModifierResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/OfferModifierResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/OfferModifierGroupResource.php:24: 'modifiers' => OfferModifierResource::collection($this->whenLoaded('modifiers')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OrderItemResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/OrderItemResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/OrderDetailResource.php:25: 'items' => OrderItemResource::collection($this->whenLoaded('items')),",
+          "docs/features/soft-deletes/2026-04-19-design.md:208: `OrderItemResource` stays unchanged — it just needs `title`/media to keep resolving for trashed parents. No `is_available` flag here: an order line is a histori",
+          "docs/specs/lovii_technical_specification.md:1413: 'items' => OrderItemResource::collection($this->whenLoaded('items')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:OrderListItemResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/OrderListItemResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/OrderListResource.php:23: 'items' => OrderListItemResource::collection($this->whenLoaded('items')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:ProductRequirementResource",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Http/Resources/Api/V1/ProductRequirementResource.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Http/Resources/Api/V1/MerchantOfferResource.php:42: 'requirements' => ProductRequirementResource::collection($this->whenLoaded('requirements')),",
+          "app/Http/Resources/Api/V1/StorefrontOfferCardResource.php:37: 'requirements' => ProductRequirementResource::collection($this->whenLoaded('requirements')),"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:LogPromoApplied",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/LogPromoApplied.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:LogPromoRulePublished",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/LogPromoRulePublished.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:NotifyMerchantOnOrderPlacedViaMaxBot",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/NotifyMerchantOnOrderPlacedViaMaxBot.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Listeners/NotifyMerchantOnOrderPlacedViaTelegramBot.php:16: * Telegram-зеркало NotifyMerchantOnOrderPlacedViaMaxBot (решение владельца"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:NotifyMerchantOnOrderPlacedViaTelegramBot",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/NotifyMerchantOnOrderPlacedViaTelegramBot.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:class:NotifyMerchantOnOrderStatusChangedViaMaxBot",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/NotifyMerchantOnOrderStatusChangedViaMaxBot.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Listeners/NotifyMerchantOnOrderPlacedViaMaxBot.php:17: * («Новый заказ»), зеркально NotifyMerchantOnOrderStatusChangedViaMaxBot.",
+          "app/Listeners/NotifyMerchantOnOrderStatusChangedViaTelegramBot.php:17: * NotifyMerchantOnOrderStatusChangedViaMaxBot, resolving the dialog link by"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:NotifyMerchantOnOrderStatusChangedViaTelegramBot",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/NotifyMerchantOnOrderStatusChangedViaTelegramBot.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "docs/sessions/013-telegram-multibot.md:40: - `NotifyMerchantOnOrderStatusChangedViaTelegramBot` — исходящие: каждый"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:ReturnSpentPointsOnOrderCancellation",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Listeners/ReturnSpentPointsOnOrderCancellation.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "docs/sessions/028-sz045-chargeback-mirror.md:38: - `ReturnSpentPointsOnOrderCancellation` — b2b-путь через SZ-037-эндпоинт"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:AdminModel",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Models/Admin/AdminModel.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "_ide_helper_models.php:16: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|AdminModel newModelQuery()",
+          "_ide_helper_models.php:17: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|AdminModel newQuery()",
+          "_ide_helper_models.php:18: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|AdminModel query()",
+          "docs/sessions/002-staging-environment.md:27: - **core rector.php:** `Admin/AdminModel.php`, `B2b/B2bModel.php` в `withSkip` (Rector хотел `HasFactory` в синканутых базах → CI lint красный).",
+          "docs/superpowers/specs/2026-09-05-staging-environment-design.md:104: (`scripts/sync-shared-models.sh`, `app/Models/Admin/AdminModel.php`, `app/Models/B2b/*`). Пуш `master`",
+          "pint.json:7: \"app/Models/Core/AdminModel.php\",",
+          "rector.php:50: __DIR__.'/app/Models/Core/AdminModel.php',",
+          "rector.php:51: __DIR__.'/app/Models/Admin/AdminModel.php',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:B2bModel",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Models/B2b/B2bModel.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "app/Models/B2b/Partner.php:41: final class Partner extends B2bModel",
+          "app/Models/B2b/PartnerAuditLog.php:40: final class PartnerAuditLog extends B2bModel",
+          "app/Models/B2b/PartnerInvitation.php:42: final class PartnerInvitation extends B2bModel",
+          "app/Models/B2b/PartnerMembership.php:35: final class PartnerMembership extends B2bModel",
+          "app/Models/B2b/PartnerNotificationChannel.php:22: final class PartnerNotificationChannel extends B2bModel",
+          "app/Models/B2b/PartnerPayoutAccount.php:17: final class PartnerPayoutAccount extends B2bModel",
+          "app/Models/B2b/PartnerUiPreference.php:20: final class PartnerUiPreference extends B2bModel",
+          "docs/sessions/002-staging-environment.md:27: - **core rector.php:** `Admin/AdminModel.php`, `B2b/B2bModel.php` в `withSkip` (Rector хотел `HasFactory` в синканутых базах → CI lint красный).",
+          "docs/sessions/037-sz053-subscription-billing.md:57: (`TestCase::$connectionsToTransact`). B2b-модели (`B2bModel`) живут на",
+          "rector.php:52: __DIR__.'/app/Models/B2b/B2bModel.php',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:PartnerUiPreference",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Models/B2b/PartnerUiPreference.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "_ide_helper_models.php:218: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference newModelQuery()",
+          "_ide_helper_models.php:219: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference newQuery()",
+          "_ide_helper_models.php:220: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference query()",
+          "_ide_helper_models.php:221: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference whereId($value)",
+          "_ide_helper_models.php:222: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference whereKey($value)",
+          "_ide_helper_models.php:223: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference wherePartnerId($value)",
+          "_ide_helper_models.php:224: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference wherePartnerUserId($value)",
+          "_ide_helper_models.php:225: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference whereUpdatedAt($value)",
+          "_ide_helper_models.php:226: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|PartnerUiPreference whereValue($value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:class:CoreModel",
+      "repo": "core",
+      "kind": "php-class-ddd",
+      "path": "app/Models/Core/CoreModel.php",
+      "why": "PHP-класс: нет use-импортов и FQCN-упоминаний в кодовой базе",
+      "priority": "",
+      "strategies": {
+        "S1_import": [],
+        "S2_fqcn": [],
+        "S3_shortname": [
+          "_ide_helper_models.php:502: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CoreModel newModelQuery()",
+          "_ide_helper_models.php:503: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CoreModel newQuery()",
+          "_ide_helper_models.php:504: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CoreModel query()",
+          "app/Models/Core/Account.php:30: final class Account extends CoreModel",
+          "app/Models/Core/AccountTransfer.php:33: final class AccountTransfer extends CoreModel",
+          "app/Models/Core/AuthOtpSession.php:26: final class AuthOtpSession extends CoreModel",
+          "app/Models/Core/Card.php:26: final class Card extends CoreModel",
+          "app/Models/Core/Cart.php:29: final class Cart extends CoreModel",
+          "app/Models/Core/CartItem.php:31: final class CartItem extends CoreModel",
+          "app/Models/Core/CatalogCategory.php:42: final class CatalogCategory extends CoreModel",
+          "app/Models/Core/CatalogProduct.php:38: final class CatalogProduct extends CoreModel",
+          "app/Models/Core/ChargebackLog.php:31: final class ChargebackLog extends CoreModel"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Earn",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Earn",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "AGENTS.md:414: Core-only operations (must not be reimplemented in B2B/Admin): cart creation, guest cart merge, checkout preview, order placement, loyalty earn/spend/refund, in",
+          "CLAUDE.md:414: Core-only operations (must not be reimplemented in B2B/Admin): cart creation, guest cart merge, checkout preview, order placement, loyalty earn/spend/refund, in",
+          "app/Console/Commands/BackfillCashbackLegsCommand.php:22: * коммит e74f484, деплой 22.09): earn-транзакции кошельков, сделанные",
+          "app/Console/Commands/BackfillCashbackLegsCommand.php:27: * Для каждой earn-проводки без пользовательской cashback-ноги дописываем",
+          "app/Console/Commands/BackfillCashbackLegsCommand.php:36: protected $description = 'Допровести рублёвые cashback-ноги (клиент + номинал) для earn-проводок, сделанных до e74f484';",
+          "app/Console/Commands/BackfillCashbackLegsCommand.php:43: ->where('type', WalletTransactionType::Earn->value)",
+          "app/Console/Commands/BackfillCashbackLegsCommand.php:133: // Заказ без платежа не бывает в earn-цепочке, но при ручных правках",
+          "app/Domain/Billing/Services/AccrualRouter.php:80: // Кошелёк и нога появляются вместе (earn-цепочка), но при ручных",
+          "app/Domain/Billing/Services/AccrualRouter.php:98: // adjustment — не earn: уникальный индекс (wallet, order, type)",
+          "app/Domain/Loyalty/Enums/WalletTransactionType.php:14: case Earn = 'earn';",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:59: // не должен создать вторую earn-проводку (SZ-039). Первичный чек —",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:64: ->where('type', WalletTransactionType::Earn->value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Spend",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Spend",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "AGENTS.md:414: Core-only operations (must not be reimplemented in B2B/Admin): cart creation, guest cart merge, checkout preview, order placement, loyalty earn/spend/refund, in",
+          "CLAUDE.md:414: Core-only operations (must not be reimplemented in B2B/Admin): cart creation, guest cart merge, checkout preview, order placement, loyalty earn/spend/refund, in",
+          "app/Domain/Billing/Services/PayoutService.php:136: 'type' => WalletTransactionType::Spend->value,",
+          "app/Domain/Loyalty/Enums/WalletTransactionType.php:15: case Spend = 'spend';",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:149: * spend писался при размещении заказа, обратного хода не было). Тип",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:166: ->where('type', WalletTransactionType::Spend->value)",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:207: 'type' => WalletTransactionType::Spend->value,",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:230: throw_if($bonusToSpend > $maxAllowed, BusinessException::class, 'bonus_limit_exceeded', sprintf('Max bonus spend for this order is %d.', $maxAllowed));",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:423: // (не spend — это подписка, влияет на неё).",
+          "app/Models/Core/WalletTransaction.php:65: // пишет только TransferService. Прочие типы (earn/spend/refund/",
+          "database/factories/Core/WalletTransactionFactory.php:28: WalletTransactionType::Spend,",
+          "docs/reports/2026-04-02-gap-analysis.md:14: | Loyalty balance updates correctly | PARTIAL -- spend works, earn missing |"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Refund",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Refund",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "AGENTS.md:414: Core-only operations (must not be reimplemented in B2B/Admin): cart creation, guest cart merge, checkout preview, order placement, loyalty earn/spend/refund, in",
+          "CLAUDE.md:414: Core-only operations (must not be reimplemented in B2B/Admin): cart creation, guest cart merge, checkout preview, order placement, loyalty earn/spend/refund, in",
+          "app/Domain/Loyalty/Enums/WalletTransactionType.php:16: case Refund = 'refund';",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:104: * одной refund (unique-индекс wallet_id+order_id+type).",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:111: ->where('type', WalletTransactionType::Refund->value)",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:121: // сходится в ноль. Идемпотентность — по первой refund-строке заказа.",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:138: 'type' => WalletTransactionType::Refund->value,",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:150: * adjustment, а не refund: unique (wallet_id, order_id, type) держит",
+          "app/Domain/Loyalty/Services/LoyaltyService.php:151: * refund под кэшбэк-возвратом, инварианту §5.2 adjustment равнозначен.",
+          "app/Models/Core/WalletTransaction.php:65: // пишет только TransferService. Прочие типы (earn/spend/refund/",
+          "database/factories/Core/WalletTransactionFactory.php:29: WalletTransactionType::Refund,",
+          "docs/sessions/025-sz039-points-accrual-mvp.md:21: на `Refunded`/`Reversed` → `refundEarnForOrder()` (одна refund, возврат"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Transfer",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Transfer",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Billing/Services/TransferService.php:35: *   3) одна точка подписи: AccountTransfer + WalletTransaction (transfer/fee)",
+          "app/Domain/Billing/Services/TransferService.php:116: /** @var AccountTransfer $transfer */",
+          "app/Domain/Billing/Services/TransferService.php:117: $transfer = AccountTransfer::query()->create([",
+          "app/Domain/Billing/Services/TransferService.php:141: 'type' => WalletTransactionType::Transfer->value,",
+          "app/Domain/Billing/Services/TransferService.php:146: 'meta' => ['transfer_id' => $transfer->id, 'counterparty_user_id' => $to->id, 'direction' => 'out'],",
+          "app/Domain/Billing/Services/TransferService.php:156: 'meta' => ['transfer_id' => $transfer->id, 'counterparty_user_id' => $to->id, 'direction' => 'out'],",
+          "app/Domain/Billing/Services/TransferService.php:162: 'type' => WalletTransactionType::Transfer->value,",
+          "app/Domain/Billing/Services/TransferService.php:165: 'meta' => ['transfer_id' => $transfer->id, 'counterparty_user_id' => $from->id, 'direction' => 'in'],",
+          "app/Domain/Billing/Services/TransferService.php:176: $this->ledger->post($fromAccount, LedgerEntryType::Adjustment, -($amountKopecks + $commission), 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:178: 'meta' => ['transfer_id' => $transfer->id],",
+          "app/Domain/Billing/Services/TransferService.php:181: $this->ledger->post($nominal, LedgerEntryType::Adjustment, $amountKopecks + $commission, 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:183: 'meta' => ['transfer_id' => $transfer->id],"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Fee",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Fee",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:35: * полный цикл чека: +100% (инбокс), −fee (эквайринг по каналу) и зеркала",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:63: $fee = $this->bankFee($total, $channel, $rates);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:64: $pool = $platform - $fee;",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:91: DB::transaction(function () use ($order, $payment, $analytics, $pointShare, $company, $rep, $amb, $resolvedRep, $resolvedAmb, $companyOwner, $companyId, $total,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:96: if ($fee > 0) {",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:97: $this->nominal(-$fee, LedgerEntryType::AcquiringFee, 'acquiring', $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:314: * (role inbox), −fee (role acquiring) и зеркала исходящих ног под ролью",
+          "app/Application/Billing/Actions/PostChargebackBankFeeAction.php:18: * Dispute Fee целиком ложится на Точку — отдельная проводка",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:25: * (банк забирает платёж назад); эквайринг-fee остаётся (банк комиссию",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:39: /** Ноги распределения + инбокс; эквайринг-fee не разворачивается. */",
+          "app/Domain/Billing/Services/TransferService.php:35: *   3) одна точка подписи: AccountTransfer + WalletTransaction (transfer/fee)",
+          "app/Domain/Billing/Services/TransferService.php:153: 'type' => WalletTransactionType::Fee->value,"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Adjustment",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Adjustment",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Billing/Enums/LedgerEntryType.php:23: case Adjustment = 'adjustment';",
+          "app/Domain/Billing/Services/AccrualRouter.php:86: ->where('type', 'adjustment')",
+          "app/Domain/Billing/Services/AccrualRouter.php:98: // adjustment — не earn: уникальный индекс (wallet, order, type)",
+          "app/Domain/Billing/Services/AccrualRouter.php:102: 'type' => 'adjustment',",
+          "app/Domain/Billing/Services/TransferService.php:176: $this->ledger->post($fromAccount, LedgerEntryType::Adjustment, -($amountKopecks + $commission), 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:181: $this->ledger->post($nominal, LedgerEntryType::Adjustment, $amountKopecks + $commission, 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:186: $this->ledger->post($toAccount, LedgerEntryType::Adjustment, $amountKopecks, 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:191: $this->ledger->post($nominal, LedgerEntryType::Adjustment, -$amountKopecks, 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:298: $this->ledger->post($partnerAccount, LedgerEntryType::Adjustment, -($amountKopecks + $commission), 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:303: $this->ledger->post($nominal, LedgerEntryType::Adjustment, $amountKopecks + $commission, 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:308: $this->ledger->post($userAccount, LedgerEntryType::Adjustment, $amountKopecks, 'transfer', $transfer->id, [",
+          "app/Domain/Billing/Services/TransferService.php:313: $this->ledger->post($nominal, LedgerEntryType::Adjustment, -$amountKopecks, 'transfer', $transfer->id, ["
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::SubscriptionDebit",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::SubscriptionDebit",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Loyalty/Enums/WalletTransactionType.php:23: case SubscriptionDebit = 'subscription_debit';",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:424: 'type' => WalletTransactionType::SubscriptionDebit->value,"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::SubscriptionDebitFallback",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::SubscriptionDebitFallback",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::OrderIncome",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::OrderIncome",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:111: $this->post(AccountOwnerType::Partner, $partnerId, LedgerEntryType::OrderIncome,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:113: $this->nominal(-$pointShare, LedgerEntryType::OrderIncome, SplitRole::Point->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/PostChargebackBankFeeAction.php:93: ->where('type', LedgerEntryType::OrderIncome->value)",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:41: LedgerEntryType::OrderIncome,",
+          "app/Domain/Billing/Enums/LedgerEntryType.php:14: case OrderIncome = 'order_income';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::PoolShare",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::PoolShare",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:193: $this->post($companyOwner, $companyId, LedgerEntryType::PoolShare,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:195: $this->nominal(-$company, LedgerEntryType::PoolShare, SplitRole::Company->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:202: $this->post($companyOwner, $companyId, LedgerEntryType::PoolShare,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:207: $this->nominal(-$rep, LedgerEntryType::PoolShare, SplitRole::Representative->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:214: $this->post($companyOwner, $companyId, LedgerEntryType::PoolShare,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:219: $this->nominal(-$amb, LedgerEntryType::PoolShare, SplitRole::Ambassador->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:254: $type ??= LedgerEntryType::PoolShare;",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:42: LedgerEntryType::PoolShare,",
+          "app/Domain/Billing/Enums/LedgerEntryType.php:17: case PoolShare = 'pool_share';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Payout",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Payout",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Billing/Enums/LedgerEntryType.php:20: case Payout = 'payout';",
+          "app/Domain/Billing/Services/PayoutService.php:13: use App\\Models\\Core\\Payout;",
+          "app/Domain/Billing/Services/PayoutService.php:55: public function requestPull(User $user, int $amountKopecks): Payout",
+          "app/Domain/Billing/Services/PayoutService.php:95: $payout = DB::transaction(function () use ($user, $amount, $net, $commission, $bearer): Payout {",
+          "app/Domain/Billing/Services/PayoutService.php:120: $payout = Payout::query()->create([",
+          "app/Domain/Billing/Services/PayoutService.php:141: $this->ledger->post($ledgerAccount, LedgerEntryType::Payout, -$amount, 'payout', $payout->id, [",
+          "app/Domain/Billing/Services/PayoutService.php:149: $this->ledger->post($platform, LedgerEntryType::PayoutCommission, $commission, 'payout', $payout->id, [",
+          "app/Domain/Billing/Services/PayoutService.php:154: Log::info('payout.pull.created', [",
+          "app/Domain/Billing/Services/PayoutService.php:155: 'payout_id' => $payout->id,",
+          "app/Domain/Billing/Services/PayoutService.php:163: return $payout;",
+          "app/Domain/Billing/Services/PayoutService.php:169: [$report] = $this->pepReports->issueForPayout($payout);",
+          "app/Domain/Billing/Services/PayoutService.php:170: $payout->setRelation('pepReport', $report);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::PayoutCommission",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::PayoutCommission",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Billing/Enums/LedgerEntryType.php:41: case PayoutCommission = 'payout_commission';",
+          "app/Domain/Billing/Services/PayoutService.php:149: $this->ledger->post($platform, LedgerEntryType::PayoutCommission, $commission, 'payout', $payout->id, [",
+          "docs/sessions/038-sz054-payouts.md:18: - **`LedgerEntryType::PayoutCommission`** — удержание 30 ₽ из суммы (<3 000 ₽)",
+          "tests/Feature/Billing/PayoutTest.php:58: $payoutCommission = LedgerEntry::query()->where('type', LedgerEntryType::PayoutCommission->value)->count();",
+          "tests/Feature/Billing/PayoutTest.php:59: expect($payoutCommission)->toBe(0);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::RubleAdjustment",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::RubleAdjustment",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::PaymentIncome",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::PaymentIncome",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:93: $this->nominal($total, LedgerEntryType::PaymentIncome, 'inbox', $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:43: LedgerEntryType::PaymentIncome,",
+          "app/Domain/Billing/Enums/LedgerEntryType.php:26: case PaymentIncome = 'payment_income';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::AcquiringFee",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::AcquiringFee",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:97: $this->nominal(-$fee, LedgerEntryType::AcquiringFee, 'acquiring', $order, $payment->id, $analytics,",
+          "app/Domain/Billing/Enums/LedgerEntryType.php:29: case AcquiringFee = 'acquiring_fee';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::ChargebackReversal",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::ChargebackReversal",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:74: ->where('type', LedgerEntryType::ChargebackReversal->value)",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:87: LedgerEntryType::ChargebackReversal,",
+          "app/Domain/Billing/Enums/LedgerEntryType.php:32: case ChargebackReversal = 'chargeback_reversal';",
+          "docs/sessions/028-sz045-chargeback-mirror.md:19: - `LedgerEntryType::ChargebackReversal` / `ChargebackBankFee`; `PaymentStatus::Chargeback`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::ChargebackBankFee",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::ChargebackBankFee",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/PostChargebackBankFeeAction.php:42: ->where('type', LedgerEntryType::ChargebackBankFee->value)",
+          "app/Application/Billing/Actions/PostChargebackBankFeeAction.php:61: LedgerEntryType::ChargebackBankFee,",
+          "app/Domain/Billing/Enums/LedgerEntryType.php:35: case ChargebackBankFee = 'chargeback_bank_fee';",
+          "docs/sessions/028-sz045-chargeback-mirror.md:19: - `LedgerEntryType::ChargebackReversal` / `ChargebackBankFee`; `PaymentStatus::Chargeback`"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::SubscriptionPayment",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::SubscriptionPayment",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Billing/Enums/LedgerEntryType.php:38: case SubscriptionPayment = 'subscription_payment';",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:431: $this->ledger->post($userAccount, LedgerEntryType::SubscriptionPayment, -$price, 'subscription_charge', $charge->id, [",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:435: $this->ledger->post($this->ledger->getOrCreateAccount(AccountOwnerType::PlatformNominal, 0), LedgerEntryType::SubscriptionPayment, $price, 'subscription_charge'",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:442: $this->ledger->post($account, LedgerEntryType::SubscriptionPayment, -$price, 'subscription_charge', $charge->id, [",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:449: $this->ledger->post($this->ledger->getOrCreateAccount(AccountOwnerType::PlatformNominal, 0), LedgerEntryType::SubscriptionPayment, $price, 'subscription_charge'",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:456: $this->ledger->post($operatorAccount, LedgerEntryType::SubscriptionPayment, $price, 'subscription_charge', $charge->id, [",
+          "app/Domain/Subscription/Services/SubscriptionBillingService.php:467: LedgerEntryType::SubscriptionPayment,",
+          "docs/sessions/037-sz053-subscription-billing.md:15: - **`LedgerEntryType::SubscriptionPayment`** — дебет источника каскада +",
+          "docs/sessions/041-ec11-subscription-gate.md:44: 4. Новый тип проводки `SubscriptionPayment`; идемпотентность = уникальность",
+          "tests/Feature/Billing/FinancialTreeTest.php:35: $ledger->post($userAccount, LedgerEntryType::SubscriptionPayment, -59900, 'subscription_charge', 1, ['comment' => 'обеспечение']);",
+          "tests/Feature/Billing/FinancialTreeTest.php:36: $ledger->post($nominal, LedgerEntryType::SubscriptionPayment, 59900, 'subscription_charge', 1, ['split_role' => 'sub_nominal_in']);",
+          "tests/Feature/Billing/FinancialTreeTest.php:37: $ledger->post($operator, LedgerEntryType::SubscriptionPayment, 59900, 'subscription_charge', 1, ['split_role' => 'sub_operator']);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::Cashback",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::Cashback",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:108: $cashback = (int) ($order->bonus_earned ?? 0);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:117: if ($partnerId !== null && $cashback > 0) {",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:123: $this->post(AccountOwnerType::Partner, $partnerId, LedgerEntryType::Cashback,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:124: -$cashback, $order, $payment->id, SplitRole::Cashback, $analytics);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:125: $this->nominal($cashback, LedgerEntryType::Cashback, SplitRole::Cashback->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:130: $this->post(AccountOwnerType::User, $order->user_id, LedgerEntryType::Cashback,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:131: $cashback, $order, $payment->id, SplitRole::Client, $analytics);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:132: $this->nominal(-$cashback, LedgerEntryType::Cashback, SplitRole::Client->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:138: $cashbackFee = (int) round($cashback * (float) Config::get('payments.split.cashback_fee_rate', 0.25));",
+          "app/Application/Billing/Actions/ReverseOrderPoolAction.php:47: LedgerEntryType::Cashback,",
+          "app/Application/Loyalty/Actions/SavePromoRuleAction.php:66: 'earn_percent' => $data->type === PromoRuleType::Cashback ? ($reward['value'] ?? 0) : 0,",
+          "app/Application/Loyalty/Actions/SavePromoRuleAction.php:98: PromoRuleType::Cashback => PromoTriggerKind::Item,"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::CashbackFee",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::CashbackFee",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:138: $cashbackFee = (int) round($cashback * (float) Config::get('payments.split.cashback_fee_rate', 0.25));",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:140: if ($cashbackFee > 0) {",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:141: $this->post(AccountOwnerType::Partner, $partnerId, LedgerEntryType::CashbackFee,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:142: -$cashbackFee, $order, $payment->id, SplitRole::CashbackFee, $analytics);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:143: $this->nominal($cashbackFee, LedgerEntryType::CashbackFee, SplitRole::CashbackFee->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:146: $feeCompany = (int) round($cashbackFee * 0.4);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:147: $feeRep = (int) round($cashbackFee * 0.4);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:148: $feeAmb = $cashbackFee - $feeCompany - $feeRep;",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:151: $this->post($companyOwner, $companyId, LedgerEntryType::CashbackFee,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:153: $this->nominal(-$feeCompany, LedgerEntryType::CashbackFee, SplitRole::Company->value, $order, $payment->id, $analytics,",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:162: $this->creditRecipient($resolvedRep, $feeRep, $order, $payment->id, SplitRole::Representative, $analytics, LedgerEntryType::CashbackFee);",
+          "app/Application/Billing/Actions/DistributeOrderPoolAction.php:163: $this->nominal(-$feeRep, LedgerEntryType::CashbackFee, SplitRole::Representative->value, $order, $payment->id, $analytics,"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::ChargebackReserve",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::ChargebackReserve",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:FinancialTransactionType::ChargebackRelease",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Billing/Enums/FinancialTransactionType.php::ChargebackRelease",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:PartnerActivityType::Goods",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Business/Enums/PartnerActivityType.php::Goods",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "tests/Feature/Business/PartnerAdminVerifyTest.php:51: 'activity_type' => 'goods',",
+          "tests/Feature/Business/VerificationIncomingTest.php:56: 'activity_type' => 'goods',",
+          "tests/Feature/Order/MinOrderEnforcementTest.php:227: it('compares the goods total: delivery fee does not lift the order over the minimum', function (): void {",
+          "tests/Feature/Order/MinOrderEnforcementTest.php:245: it('compares the goods total: spent bonuses cannot lower the order below the minimum', function (): void {"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:PartnerActivityType::Services",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Business/Enums/PartnerActivityType.php::Services",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/agents/test-runner.md:18: - **Never run E2E tests** (`tests/E2e/`). They require dev DB data and running services. E2E tests are run manually via `composer test:e2e`.",
+          ".claude/skills/laravel-best-practices/SKILL.md:107: - Methods under 10 lines — extract to actions/services",
+          ".claude/skills/laravel-best-practices/rules/config.md:14: // config/services.php",
+          ".claude/skills/laravel-best-practices/rules/config.md:18: $key = config('services.key');",
+          ".claude/skills/laravel-best-practices/rules/http-client.md:26: ->withToken(config('services.github.token'));",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:29: Use progressively longer delays between retries to avoid hammering failing services.",
+          ".claude/skills/laravel-best-practices/rules/security.md:152: // config/services.php",
+          ".claude/skills/laravel-best-practices/rules/security.md:156: $key = config('services.api_key');",
+          ".claude/skills/scout-development/SKILL.md:169: - **CollectionEngine** — set `SCOUT_DRIVER=collection` for in-memory search without external services",
+          "AGENTS.md:265: - **Pragmatic modular monolith** — no microservice decomposition. Do not propose splitting into services.",
+          "AGENTS.md:294: Domain/{Domain}/        — Enums/, Services/, ValueObjects/, Contracts/",
+          "AGENTS.md:367: ### Value Objects & Services"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:PartnerApplicationStatus::Draft",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Business/Enums/PartnerApplicationStatus.php::Draft",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Business/Actions/CreatePartnerApplicationAction.php:596: Log::info('CreatePartnerApplicationAction: b2b schema unavailable, partner draft skipped', [",
+          "app/Domain/Merchant/Actions/CreateMspBranchAction.php:27: * координат не создаём (draft без города витрину всё равно не соберёт).",
+          "tests/Feature/Business/PartnerApplicationTest.php:223: it('gives the branch draft the timezone of its city', function (): void {",
+          "tests/Feature/Business/PartnerApplicationTest.php:481: it('keeps draft merchants out of the storefront index', function (): void {"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:CatalogSource::RetailApiImport",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/CatalogSource.php::RetailApiImport",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:522: case RetailApiImport = 'retail_api_import';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:CatalogSource::CrmSync",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/CatalogSource.php::CrmSync",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:523: case CrmSync = 'crm_sync';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:CatalogSource::RestaurantPosSync",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/CatalogSource.php::RestaurantPosSync",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:524: case RestaurantPosSync = 'restaurant_pos_sync';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:CatalogSource::FileImport",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/CatalogSource.php::FileImport",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:525: case FileImport = 'file_import';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ForceDeletableEntityType::Merchant",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/ForceDeletableEntityType.php::Merchant",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "AGENTS.md:306: Bounded context domains: Identity, User, Geo, Merchant, Catalog, Cart, Checkout, Order, Loyalty, Integration, Delivery, Search, Shared.",
+          "AGENTS.md:365: - `CatalogSource`, `OrderChannel`, and `FulfillmentMode` are **independent configuration axes** — never collapse them into one \"merchant type\" concept.",
+          "AGENTS.md:376: - **Soft deletes** are allowed only for the 7 catalog/merchant entities: `merchants`, `merchant_branches`, `catalog_products`, `catalog_categories`, `merchant_o",
+          "AGENTS.md:377: - **Snapshots** are mandatory for order data: merchant snapshot, pricing snapshot, address snapshot, item title/sku/options. This prevents corruption when catal",
+          "AGENTS.md:378: - Required indexes: unique on `phone`, unique on city `slug`, merchant/branch filters, offer availability + sync dates, cart by user/guest token, order by user/",
+          "AGENTS.md:397: - Platform-wide wallet — **not merchant-scoped**.",
+          "CLAUDE.md:306: Bounded context domains: Identity, User, Geo, Merchant, Catalog, Cart, Checkout, Order, Loyalty, Integration, Delivery, Search, Shared.",
+          "CLAUDE.md:365: - `CatalogSource`, `OrderChannel`, and `FulfillmentMode` are **independent configuration axes** — never collapse them into one \"merchant type\" concept.",
+          "CLAUDE.md:376: - **Soft deletes** are allowed only for the 7 catalog/merchant entities: `merchants`, `merchant_branches`, `catalog_products`, `catalog_categories`, `merchant_o",
+          "CLAUDE.md:377: - **Snapshots** are mandatory for order data: merchant snapshot, pricing snapshot, address snapshot, item title/sku/options. This prevents corruption when catal",
+          "CLAUDE.md:378: - Required indexes: unique on `phone`, unique on city `slug`, merchant/branch filters, offer availability + sync dates, cart by user/guest token, order by user/",
+          "CLAUDE.md:397: - Platform-wide wallet — **not merchant-scoped**."
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ForceDeletableEntityType::MerchantBranch",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/ForceDeletableEntityType.php::MerchantBranch",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "_ide_helper_models.php:350: * @property-read MerchantBranch|null $branch",
+          "_ide_helper_models.php:476: * @property-read Collection<int, MerchantBranch> $branches",
+          "_ide_helper_models.php:614: * @property-read \\App\\Models\\Core\\MerchantBranch|null $branch",
+          "_ide_helper_models.php:732: * @property-read Collection<int, MerchantBranch> $branches",
+          "_ide_helper_models.php:808: * @method static Builder|MerchantBranch query()",
+          "_ide_helper_models.php:809: * @method static Builder|MerchantBranch active()",
+          "_ide_helper_models.php:819: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|MerchantBranch newModelQuery()",
+          "_ide_helper_models.php:820: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|MerchantBranch newQuery()",
+          "_ide_helper_models.php:821: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|MerchantBranch onlyTrashed()",
+          "_ide_helper_models.php:822: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|MerchantBranch whereAddressLine($value)",
+          "_ide_helper_models.php:823: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|MerchantBranch whereCityId($value)",
+          "_ide_helper_models.php:824: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|MerchantBranch whereCreatedAt($value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ForceDeletableEntityType::CatalogProduct",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/ForceDeletableEntityType.php::CatalogProduct",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "_ide_helper_models.php:437: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct newModelQuery()",
+          "_ide_helper_models.php:438: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct newQuery()",
+          "_ide_helper_models.php:439: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct onlyTrashed()",
+          "_ide_helper_models.php:440: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct query()",
+          "_ide_helper_models.php:441: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereAttributes($value)",
+          "_ide_helper_models.php:442: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereBrand($value)",
+          "_ide_helper_models.php:443: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereCreatedAt($value)",
+          "_ide_helper_models.php:444: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereDeletedAt($value)",
+          "_ide_helper_models.php:445: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereDescription($value)",
+          "_ide_helper_models.php:446: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereId($value)",
+          "_ide_helper_models.php:447: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereIsActive($value)",
+          "_ide_helper_models.php:448: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogProduct whereMedia($value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ForceDeletableEntityType::CatalogCategory",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/ForceDeletableEntityType.php::CatalogCategory",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "_ide_helper_models.php:387: * @property-read Collection<int, CatalogCategory> $children",
+          "_ide_helper_models.php:388: * @property Collection<int, CatalogCategory> $tree_children",
+          "_ide_helper_models.php:390: * @method static Builder|CatalogCategory query()",
+          "_ide_helper_models.php:391: * @method static Builder|CatalogCategory active()",
+          "_ide_helper_models.php:395: * @property-read CatalogCategory|null $parent",
+          "_ide_helper_models.php:397: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory newModelQuery()",
+          "_ide_helper_models.php:398: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory newQuery()",
+          "_ide_helper_models.php:399: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory onlyTrashed()",
+          "_ide_helper_models.php:400: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory whereCreatedAt($value)",
+          "_ide_helper_models.php:401: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory whereDeletedAt($value)",
+          "_ide_helper_models.php:402: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory whereId($value)",
+          "_ide_helper_models.php:403: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|CatalogCategory whereImageUrl($value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ForceDeletableEntityType::OfferModifierGroup",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/ForceDeletableEntityType.php::OfferModifierGroup",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "_ide_helper_models.php:996: * @property-read Collection<int, OfferModifierGroup> $modifierGroups",
+          "_ide_helper_models.php:1057: * @property-read \\App\\Models\\Core\\OfferModifierGroup|null $group",
+          "_ide_helper_models.php:1099: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup newModelQuery()",
+          "_ide_helper_models.php:1100: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup newQuery()",
+          "_ide_helper_models.php:1101: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup onlyTrashed()",
+          "_ide_helper_models.php:1102: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup query()",
+          "_ide_helper_models.php:1103: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup whereCreatedAt($value)",
+          "_ide_helper_models.php:1104: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup whereDeletedAt($value)",
+          "_ide_helper_models.php:1105: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup whereId($value)",
+          "_ide_helper_models.php:1106: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup whereIsActive($value)",
+          "_ide_helper_models.php:1107: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup whereIsRequired($value)",
+          "_ide_helper_models.php:1108: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifierGroup whereMaxSelect($value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ForceDeletableEntityType::OfferModifier",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Catalog/Enums/ForceDeletableEntityType.php::OfferModifier",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "_ide_helper_models.php:1059: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier newModelQuery()",
+          "_ide_helper_models.php:1060: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier newQuery()",
+          "_ide_helper_models.php:1061: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier onlyTrashed()",
+          "_ide_helper_models.php:1062: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier query()",
+          "_ide_helper_models.php:1063: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereCreatedAt($value)",
+          "_ide_helper_models.php:1064: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereDeletedAt($value)",
+          "_ide_helper_models.php:1065: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereExternalId($value)",
+          "_ide_helper_models.php:1066: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereId($value)",
+          "_ide_helper_models.php:1067: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereIsActive($value)",
+          "_ide_helper_models.php:1068: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereModifierGroupId($value)",
+          "_ide_helper_models.php:1069: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier whereName($value)",
+          "_ide_helper_models.php:1070: * @method static \\Illuminate\\Database\\Eloquent\\Builder<static>|OfferModifier wherePriceDelta($value)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:IntegrationStatus::Inactive",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Integration/Enums/IntegrationStatus.php::Inactive",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Console/Commands/SyncSearchIndexCommand.php:68: // Remove inactive/unavailable offers from the index in chunks",
+          "app/Console/Commands/SyncSearchIndexCommand.php:74: $this->info(sprintf('Removing %d inactive offers from index...', $staleCount));",
+          "app/Console/Commands/SyncSearchIndexCommand.php:100: // Remove inactive merchants from the index",
+          "app/Console/Commands/SyncSearchIndexCommand.php:106: $this->info(sprintf('Removing %d inactive merchants from index...', $staleCount));",
+          "app/Domain/Merchant/Enums/BranchStatus.php:10: case Inactive = 'inactive';",
+          "app/Domain/Merchant/Enums/MerchantStatus.php:10: case Inactive = 'inactive';",
+          "database/factories/B2b/PartnerNotificationChannelFactory.php:60: public function inactive(): self",
+          "docs/responses/2026-04-13-three-requests-response.md:64: - **Factory**: `Database\\Factories\\B2b\\PartnerNotificationChannelFactory` with `email()`, `webhook()`, `sms()`, `inactive()` states.",
+          "tests/Feature/Auth/ReferralPromoBindingTest.php:104: it('ignores inactive promo codes', function (): void {",
+          "tests/Feature/Billing/DistributeOrderPoolTest.php:206: it('sends the ambassador share to the company when the branch is inactive', function (): void {",
+          "tests/Feature/Business/PartnerApplicationPromoBindingTest.php:114: it('rejects an inactive promo code', function (): void {",
+          "tests/Feature/Catalog/MerchantListTest.php:10: Merchant::factory()->create(['status' => MerchantStatus::Inactive]);"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:IntegrationStatus::Error",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Integration/Enums/IntegrationStatus.php::Error",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/agents/test-runner.md:40: - FAILED: list each failure with file, test name, and error message",
+          ".claude/skills/laravel-best-practices/SKILL.md:3: description: \"Apply this skill whenever writing, reviewing, or refactoring Laravel PHP code. This includes creating or modifying controllers, models, migrations",
+          ".claude/skills/laravel-best-practices/SKILL.md:128: ### 13. Error Handling → `rules/error-handling.md`",
+          ".claude/skills/laravel-best-practices/rules/error-handling.md:1: # Error Handling Best Practices",
+          ".claude/skills/laravel-best-practices/rules/error-handling.md:44: A single failing integration can flood error tracking. Use `throttle()` to rate-limit per exception type.",
+          ".claude/skills/laravel-best-practices/rules/error-handling.md:50: ## Force JSON Error Rendering for API Routes",
+          ".claude/skills/laravel-best-practices/rules/http-client.md:68: $user = $response->json(); // Could be an error body",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:73: Log::error('Processing failed', ['id' => $this->podcast->id, 'error' => $exception->getMessage()]);",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:98: ->catch(fn (Batch $batch, Throwable $e) => Log::error('Batch failed'))",
+          "AGENTS.md:122: - `laravel-best-practices` — Apply this skill whenever writing, reviewing, or refactoring Laravel PHP code. This includes creating or modifying controllers, mod",
+          "AGENTS.md:236: ## Vite Error",
+          "AGENTS.md:238: - If you receive an \"Illuminate\\Foundation\\ViteException: Unable to locate file in Vite manifest\" error, you can run `npm run build` or ask the user to run `npm"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:PromoRewardKind::CashbackFixed",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Loyalty/Enums/PromoRewardKind.php::CashbackFixed",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:PromoStackMode::Best",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Loyalty/Enums/PromoStackMode.php::Best",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/skills/laravel-best-practices/SKILL.md:2: name: laravel-best-practices",
+          ".claude/skills/laravel-best-practices/SKILL.md:3: description: \"Apply this skill whenever writing, reviewing, or refactoring Laravel PHP code. This includes creating or modifying controllers, models, migrations",
+          ".claude/skills/laravel-best-practices/SKILL.md:9: # Laravel Best Practices",
+          ".claude/skills/laravel-best-practices/SKILL.md:11: Best practices for Laravel, prioritized by impact. Each rule teaches what to do and why. For exact API syntax, verify with `search-docs`.",
+          ".claude/skills/laravel-best-practices/SKILL.md:15: Before applying any rule, check what the application already does. Laravel offers multiple valid approaches — the best choice is the one the codebase already us",
+          ".claude/skills/laravel-best-practices/rules/architecture.md:1: # Architecture Best Practices",
+          ".claude/skills/laravel-best-practices/rules/blade-views.md:1: # Blade & Views Best Practices",
+          ".claude/skills/laravel-best-practices/rules/caching.md:1: # Caching Best Practices",
+          ".claude/skills/laravel-best-practices/rules/collections.md:1: # Collection Best Practices",
+          ".claude/skills/laravel-best-practices/rules/config.md:1: # Configuration Best Practices",
+          ".claude/skills/laravel-best-practices/rules/db-performance.md:1: # Database Performance Best Practices",
+          ".claude/skills/laravel-best-practices/rules/eloquent.md:1: # Eloquent Best Practices"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:BranchStatus::Closed",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/BranchStatus.php::Closed",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/MaxBot/Exceptions/MaxBotDeliveryException.php:12: * stale (the dialog was closed or the user never started this particular",
+          "app/Domain/Merchant/Services/WorkingHoursService.php:13: * Determines branch open/closed status and formats schedules.",
+          "app/Domain/Merchant/Services/WorkingHoursService.php:142: BranchAvailabilityStatus::TemporarilyClosed => 'closed',",
+          "app/Domain/Merchant/Services/WorkingHoursService.php:208: // Open/closed check",
+          "app/Domain/Merchant/Services/WorkingHoursService.php:287: // Closed status with next-opening scan",
+          "app/Domain/Merchant/ValueObjects/BranchAvailability.php:10: * @param  string  $status  Legacy: 'open' | 'closed' | 'closes_in' | 'opens_in' (backward compatible)",
+          "app/Domain/TelegramBot/Exceptions/TelegramBotDeliveryException.php:12: * link is stale (the dialog was closed, or the user never pressed /start",
+          "app/Infrastructure/MaxBot/MaxBotApiClient.php:126: * A stored chat link can go stale on the MAX side (dialog closed/expired):",
+          "app/Infrastructure/TelegramBot/TelegramBotApiClient.php:230: * A stored chat link can go stale on the Telegram side (dialog closed,",
+          "config/geo.php:12: * as \"closed\" during their working hours). The primary source of a",
+          "config/session.php:32: | to expire immediately when the browser is closed then you may",
+          "docs/features/soft-deletes/2026-04-19-design.md:392: - Additional `unavailable_reason` values beyond `offer_unavailable` — merchant-closed, stock-out etc. live in their own design."
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:MerchantTariff::Start",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/MerchantTariff.php::Start",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Auth/Actions/SendOtpAction.php:82: // t.me/loviiru_bot?start=<binding_token> and the otp-bot webhook binds",
+          "app/Application/Auth/Actions/SendOtpAction.php:144: // VK deeplinks carry the payload in `ref` (NOT `?start=` like",
+          "app/Application/Auth/Actions/SendOtpAction.php:145: // Telegram/MAX — vk.me links do not support start-payloads).",
+          "app/Application/Auth/Actions/SendOtpAction.php:147: OtpChannel::Telegram => [sprintf('https://t.me/%s?start=%s', (string) config('telegrambots.bots.otp.username', 'loviiru_bot'), $bindingToken), 'telegram'],",
+          "app/Application/Auth/Actions/SendOtpAction.php:149: default => [sprintf('https://max.ru/%s?start=%s', (string) config('otp.channels.max.bot_api.username'), $bindingToken), 'max'],",
+          "app/Application/Auth/DTO/SendOtpResult.php:12: * the deeplink (https://max.ru/<bot>?start=<token> or",
+          "app/Application/Auth/DTO/SendOtpResult.php:13: * https://t.me/<bot>?start=<token>) so the webhook can bind the chat and",
+          "app/Application/MaxBot/Handlers/MaxOrderBotHandler.php:64: // 2) bot_started (deeplink start): same greeting, contact button.",
+          "app/Application/TelegramBot/Handlers/TelegramOrderBotHandler.php:17: *  - /start or plain text from an unlinked dialog → greeting + request_contact",
+          "app/Application/TelegramBot/Handlers/TelegramOrderBotHandler.php:66: // 2) /start (deeplink or first touch): greeting + contact button.",
+          "app/Application/TelegramBot/Handlers/TelegramOrderBotHandler.php:67: if ($text === '/start') {",
+          "app/Application/TelegramBot/Handlers/TelegramOtpBotHandler.php:20: *  - «/start <binding_token>» (deeplink t.me/loviiru_bot?start=<token> opened"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:MerchantTariff::Basic",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/MerchantTariff.php::Basic",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/skills/configuring-horizon/SKILL.md:22: ## Basic Usage",
+          ".claude/skills/pest-testing/SKILL.md:25: ## Basic Usage",
+          ".claude/skills/pest-testing/SKILL.md:37: ### Basic Test Structure",
+          ".claude/skills/pest-testing/SKILL.md:39: <!-- Basic Pest Test Example -->",
+          ".claude/skills/scout-development/SKILL.md:130: Basic patterns:",
+          "docs/sessions/026-roles-rep-amb-msp-phase1.md:33: - **Тариф точки**: `merchants.tariff` (start|basic|pro, PARAMS §1.3) +",
+          "docs/specs/lovii_technical_specification.md:71: - basic cross-merchant loyalty wallet.",
+          "docs/specs/lovii_technical_specification.md:1638: ## 24.2 Basic MVP mechanics",
+          "tests/Feature/Home/ListPopularStoresTest.php:35: // ── Basic response structure ─────────────────────────────────────────────────",
+          "tests/Feature/Merchant/ListStoresTest.php:35: // ── Basic response structure ─────────────────────────────────────────────────"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:MerchantTariff::Pro",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/MerchantTariff.php::Pro",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/skills/pest-testing/SKILL.md:106: - Test on different devices/viewports (iPhone 14 Pro, tablets) if requested.",
+          "docs/sessions/026-roles-rep-amb-msp-phase1.md:33: - **Тариф точки**: `merchants.tariff` (start|basic|pro, PARAMS §1.3) +"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:MerchantType::Club",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/MerchantType.php::Club",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Domain/Business/Enums/PartnerActivityType.php:40: * Услуги → Услуги (services). Плейсхолдер club остаётся недостижимым",
+          "app/Http/Controllers/Api/V1/Msp/StoreMspMerchantController.php:33: 'merchant_type' => ['required', 'string', 'in:store,restaurant,services,club'],"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:StorefrontDeliveryOption::FreeDelivery",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/StorefrontDeliveryOption.php::FreeDelivery",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:StorefrontDeliveryOption::CityDelivery",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/StorefrontDeliveryOption.php::CityDelivery",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:StorefrontDeliveryOption::RussiaDelivery",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/StorefrontDeliveryOption.php::RussiaDelivery",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:StorefrontDeliveryOption::Pickup",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Merchant/Enums/StorefrontDeliveryOption.php::Pickup",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Console/Commands/ParseKuperCommand.php:161: foreach (['courier', 'pickup'] as $shippingMethod) {",
+          "app/Console/Commands/ParseKuperCommand.php:230: foreach (['courier', 'pickup'] as $shippingMethod) {",
+          "app/Console/Commands/RepairBranchWorkingDataCommand.php:292: $this->line('<options=bold>3. Каналы заказа выключены (delivery + pickup = false) — НЕ меняем</>');",
+          "app/Domain/Checkout/Services/CheckoutBuilder.php:115: if ($data->deliveryType === DeliveryType::Pickup && ! $branch->pickup_available) {",
+          "app/Domain/Order/Enums/DeliveryType.php:10: case Pickup = 'pickup';",
+          "app/Domain/Order/Services/MspOrderActions.php:18: * (orders.delivery_type — DeliveryType::Pickup «самовывоз» и",
+          "app/Domain/Order/Services/MspOrderActions.php:47: if ($order->delivery_type === DeliveryType::Pickup) {",
+          "app/Domain/Order/Services/OrderBadges.php:49: if ($order->status === OrderStatus::Completed && $order->delivery_type === DeliveryType::Pickup) {",
+          "app/Http/Resources/Api/V1/OrderDetailResource.php:49: if ($this->delivery_type === DeliveryType::Pickup) {",
+          "app/Http/Resources/Api/V1/OrderListResource.php:34: if ($this->delivery_type === DeliveryType::Pickup) {",
+          "app/Infrastructure/Integrations/Kuper/KuperApiClient.php:93: * For pickup, the extra params `radius=-1` and `deduplicate_pickup=true`",
+          "app/Infrastructure/Integrations/Kuper/KuperApiClient.php:118: if ($shippingMethod === 'pickup') {"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:ConsentSource::AccountCreation",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Notification/Enums/ConsentSource.php::AccountCreation",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:ConsentType::Transactional",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Notification/Enums/ConsentType.php::Transactional",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/skills/laravel-best-practices/SKILL.md:126: - Markdown mailables for transactional emails",
+          ".claude/skills/laravel-best-practices/rules/mail.md:19: ## Use Markdown Mailables for Transactional Emails",
+          "tests/Feature/Notification/CommunicationConsentTest.php:128: it('never touches transactional emails regardless of consents', function (): void {",
+          "tests/Feature/Notification/CommunicationConsentTest.php:230: /** Тестовый transactional-mailable. */"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:FulfillmentMode::Hybrid",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Order/Enums/FulfillmentMode.php::Hybrid",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Http/Controllers/Api/V1/Auth/MaxWebhookController.php:22: *    phone ↔ chat_id link is stored and a hybrid message is delivered:",
+          "app/Infrastructure/Auth/Transports/MaxBotApiTransport.php:56: * Hybrid OTP message: the code in the text (manual entry) plus a",
+          "docs/specs/lovii_technical_specification.md:232: - future hybrid combinations.",
+          "docs/specs/lovii_technical_specification.md:503: - hybrid",
+          "docs/specs/lovii_technical_specification.md:543: case Hybrid = 'hybrid';",
+          "tests/Feature/Auth/MaxBotApiAuthTest.php:66: // webhook: bot_started links the chat and delivers the hybrid message"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:OrderChannel::CrmOrderApi",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Order/Enums/OrderChannel.php::CrmOrderApi",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:532: case CrmOrderApi = 'crm_order_api';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:OrderChannel::RestaurantPosApi",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Order/Enums/OrderChannel.php::RestaurantPosApi",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:533: case RestaurantPosApi = 'restaurant_pos_api';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:OrderChannel::ManualProcessing",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Order/Enums/OrderChannel.php::ManualProcessing",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "docs/specs/lovii_technical_specification.md:534: case ManualProcessing = 'manual_processing';"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:OrderSubmissionStatus::Failed",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Order/Enums/OrderSubmissionStatus.php::Failed",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          ".claude/agents/test-runner.md:40: - FAILED: list each failure with file, test name, and error message",
+          ".claude/skills/configuring-horizon/references/notifications.md:19: ### Failed job alerts are separate from Horizon's documented notification routing",
+          ".claude/skills/configuring-horizon/references/notifications.md:21: Horizon's 12.x documentation covers built-in long-wait notifications. Do not assume the docs provide a `JobFailed` listener example in `HorizonServiceProvider`.",
+          ".claude/skills/laravel-best-practices/SKILL.md:98: - Always implement `failed()`; with `retryUntil()`, set `$tries = 0`",
+          ".claude/skills/laravel-best-practices/rules/http-client.md:40: if ($response->failed()) {",
+          ".claude/skills/laravel-best-practices/rules/http-client.md:41: throw new PaymentFailedException('Charge failed');",
+          ".claude/skills/laravel-best-practices/rules/migrations.md:88: Implement `down()` for schema changes that can be safely reversed so `migrate:rollback` works in CI and failed deployments.",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:65: ## Always Implement `failed()`",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:70: public function failed(?Throwable $exception): void",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:72: $this->podcast->update(['status' => 'failed']);",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:73: Log::error('Processing failed', ['id' => $this->podcast->id, 'error' => $exception->getMessage()]);",
+          ".claude/skills/laravel-best-practices/rules/queue-jobs.md:98: ->catch(fn (Batch $batch, Throwable $e) => Log::error('Batch failed'))"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:OrderSubmissionStatus::Retrying",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Order/Enums/OrderSubmissionStatus.php::Retrying",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "app/Application/Payment/Actions/HandleTBankNotificationAction.php:59: // The bank keeps retrying a notification until we answer OK — an",
+          "docs/superpowers/plans/2026-09-05-staging-environment.md:479: echo \"Health check attempt $i failed, retrying...\"",
+          "lang/en/passwords.php:20: 'throttled' => 'Please wait before retrying.',",
+          "tests/Feature/Payment/TBankWebhookTest.php:173: it('answers OK for unknown payments so the bank stops retrying', function (): void {"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:BadgeColor::White",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Shared/Enums/BadgeColor.php::White",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "resources/views/emails/order-created.blade.php:24: <td align=\"right\" style=\"white-space:nowrap;\">{{ $item['price'] }}</td>"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:BadgeColor::Tertiary",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/Shared/Enums/BadgeColor.php::Tertiary",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:Gender::Male",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/User/Enums/Gender.php::Male",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": []
+      },
+      "verdict": "CANDIDATE"
+    },
+    {
+      "cid": "core:enumcase:Gender::Female",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Domain/User/Enums/Gender.php::Female",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "tests/Feature/Profile/UpdateProfileTest.php:15: 'gender' => 'female',",
+          "tests/Feature/Profile/UpdateProfileTest.php:22: ->assertJsonPath('data.gender', 'female')"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:enumcase:PartnerUserStatus::Invited",
+      "repo": "core",
+      "kind": "enum-case",
+      "path": "app/Enums/PartnerUserStatus.php::Invited",
+      "why": "enum-кейс без статических ссылок Base::CASE — ловушка: может жить в БД как value (from()/tryFrom)",
+      "priority": "P3",
+      "strategies": {
+        "S1_static_ref": [],
+        "S2_case_word": [
+          "tests/Feature/Business/PartnerApplicationTest.php:331: $invited = User::factory()->create(['promo_code' => resolve(RepresentativePromoService::class)->issue($representative)->code]);",
+          "tests/Feature/Business/PartnerApplicationTest.php:333: $this->actingAs($invited)"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:blade:docs",
+      "repo": "core",
+      "kind": "blade-partial",
+      "path": "resources/views/docs.blade.php",
+      "why": "blade: нет @include/@extends/@component по имени и нет view-name строки",
+      "priority": "",
+      "strategies": {
+        "S1_blade_ref": [],
+        "S2_view_name": [
+          "routes/web.php:18: Route::get('/docs', fn (): View => view('docs'))->name('docs');"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:blade:email-verification",
+      "repo": "core",
+      "kind": "blade-partial",
+      "path": "resources/views/emails/email-verification.blade.php",
+      "why": "blade: нет @include/@extends/@component по имени и нет view-name строки",
+      "priority": "",
+      "strategies": {
+        "S1_blade_ref": [],
+        "S2_view_name": [
+          "app/Mail/EmailVerificationMail.php:39: view: 'emails.email-verification',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:blade:new-device-login",
+      "repo": "core",
+      "kind": "blade-partial",
+      "path": "resources/views/emails/new-device-login.blade.php",
+      "why": "blade: нет @include/@extends/@component по имени и нет view-name строки",
+      "priority": "",
+      "strategies": {
+        "S1_blade_ref": [],
+        "S2_view_name": [
+          "app/Mail/NewDeviceLoginMail.php:38: view: 'emails.new-device-login',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:blade:order-created",
+      "repo": "core",
+      "kind": "blade-partial",
+      "path": "resources/views/emails/order-created.blade.php",
+      "why": "blade: нет @include/@extends/@component по имени и нет view-name строки",
+      "priority": "",
+      "strategies": {
+        "S1_blade_ref": [],
+        "S2_view_name": [
+          "app/Mail/OrderCreatedMail.php:47: view: 'emails.order-created',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    },
+    {
+      "cid": "core:blade:order-status-changed",
+      "repo": "core",
+      "kind": "blade-partial",
+      "path": "resources/views/emails/order-status-changed.blade.php",
+      "why": "blade: нет @include/@extends/@component по имени и нет view-name строки",
+      "priority": "",
+      "strategies": {
+        "S1_blade_ref": [],
+        "S2_view_name": [
+          "app/Mail/OrderStatusChangedMail.php:42: view: 'emails.order-status-changed',"
+        ]
+      },
+      "verdict": "AMBIGUOUS(мансревью)"
+    }
+  ]
+}
