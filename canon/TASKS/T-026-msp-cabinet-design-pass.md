@@ -41,3 +41,5 @@
 ## Артефакты
 
 `artifacts/2026-09-27-msp-design-pass-deliverables/` (9 отчётов + скриншоты).
+
+- [`2026-09-28-ds-canon-decisions-deliverables`](../../artifacts/2026-09-28-ds-canon-decisions-deliverables/) — решения по канону (визуально) и чек-лист приёмки фиксов `t026-msp-products-audit` (28.09).
