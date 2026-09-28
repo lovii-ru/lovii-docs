@@ -7,6 +7,20 @@
 > `canon/TASKS/`. Старые записи сжимаются до одной строки на дату.
 > Полная история до 20.09 — `../archive/old_versions/status-20260920-full.md`.
 
+## 2026-09-28 (позже) — SZ-077 «переводы с юрлицами» выложена на staging
+
+- По команде владельца («принял на 5175») смержены ОБЕ части фичи: core
+  `feat/transfer-company-account` → staging `ebf2ddeb` (account_id в
+  POST /account/transfer, 422 transfer_account_not_accessible; гейт 1571
+  зелёных + pint/phpstan), app `feat/sz-077-transfer-company-name` →
+  staging `c797f9e` (селектор «Откуда» с названиями юрлиц; гейт
+  test:unit/type-check/build-only зелёные). CI обоих репо ✅, healthz 200.
+- ВАЖНО: фронт и бэк фичи связаны (account_id) — на staging уехали парой.
+- Грабли дня: OrbStack-шаринг в этот день терял массовые записи (vendor-
+  деревья не проходили ни bind-mount, ни docker cp; мелкие файлы — ок).
+  Обход: tar-поток через `docker exec -i ... tar xf -` в контейнер без
+  bind-монта. `orb stop/start` проблему массовых записей не снял.
+
 ## 2026-09-28 — T-027 «одно ИНН — одно юрлицо» в staging + локальный стенд на дереве T-027
 
 - **T-027 реализована в lovii-core** (ветка `t027-application-identity`, merge `fa100279`
