@@ -1,6 +1,6 @@
 # SZ-079 — UI кабинета Основателя: назначение амбассадора (строго ручное, 4+1 проверок, красивый код)
 
-> Статус: **Открыта** (после T-018/T-019/T-020/T-022/SZ-078 — токен-экономно, не давит)
+> Статус: **Открыта** (после T-018/T-019/T-020/T-022/SZ-078 — токен-экономно, не давит; факт-чек постановки Super Z 27.09 — «Достаточно», якоря и 3 уточнения для zcode в §«Факт-чек постановки»)
 > Приоритет: **P2** (продуктовая + безопасность) · Источник: решение владельца 2026-09-26 «только я лично в кабинете Основателя присваиваю роль амбассадора; prefix+автоген ИЛИ красивый промокод (EGRPAT); 3+ разноплановых проверки перед записью, люди будут пытаться обойти»
 > Исполнитель: **zcode** · Репо: `lovii-core` (backend: command + API + policy + audit) + `lovii-admin` или `lovii-app` (founder cabinet UI — определяет zcode) + `lovii_docs` (BRD/PARAMS, session-док) · Дата постановки: 2026-09-26
 
@@ -59,6 +59,50 @@ Laravel Policy `AmbassadorPolicy::assign()` — проверяет `Auth::user()
 | Insider с БД-доступом: INSERT в ambassadors напрямую | Проверка 4 (audit) — запись без лога = аномалия → alert; плюс БД-доступ отдельный канал (не app-слой) |
 | Client-side spoof: модифицированный UI | Все проверки server-side — UI не авторитет |
 | Коллизия кода: подобрать занятый | Проверка 5 (uniqueness) — reject + audit |
+
+## Факт-чек постановки (Super Z, 2026-09-27) — вердикт: «Достаточно»
+
+Состязательная сверка постановки с реальным кодом `lovii-core` staging (`164a90c`). Все
+технические утверждения подтверждены; три уточнения для исполнителя — ниже.
+
+**Подтверждённые якоря:**
+
+| Утверждение карточки | Якорь в коде |
+|---|---|
+| Сигнатура `roles:assign-ambassador {phone} {prefix}`, суффикс только автоген | `app/Console/Commands/AssignAmbassadorCommand.php:18` (опции `--code` нет) |
+| Префикс — ровно 2 буквы A-Z | там же, `:27` (`preg_match('/^[A-Z]{2}$/')`) |
+| Алфавит `23456789ABCDEFGHJKLMNPQRSTUVWXYZ` без 0/1/I/O, суффикс 4 символа | там же, `:72-80` |
+| Коллизии: `ambassadors.code` + активные `representative_promo_codes` | там же, `:82-83` |
+| Только prefix-уникальность, ACL нет, `updateOrCreate` по user_id | там же, `:41-52` (повторное назначение тому же user = апдейт; занятый другим — отказ) |
+| `ambassadors`: user_id, prefix, is_active, code | модель `app/Models/Core/Ambassador.php` + миграция `2026_09_19_160000` (code string(6) nullable unique) |
+| 199₽ по амбассадорскому коду | `SubscriptionBillingService::resolvePrice()` `:492-505` (BRD §A2) |
+| Реп-код при подписке, тот же префикс | `RepresentativePromoService::issue()` `app/Domain/Roles/Services/RepresentativePromoService.php:32`, `FOUNDER_PREFIX='AA'` `:23` |
+| `users.promo_code` | миграция `2026_09_14_120001` (string(6) nullable) |
+| OTP-каналы живы (Проверка 3 осуществима штатно) | `OtpChannel::codeLength()` (`SendOtpAction:59`, `TelegramOtpBotHandler:144`) |
+| Rate limit паттерн есть (Г.1 ложится 1:1) | `AppServiceProvider::configureRateLimiters()` `:173+` (пример `otp-send`) |
+| Запретные зоны §1.2 названы верно | `canon/WORK_PROTOCOL.md:54-55` (`config/payments.php`, `tbank-mock`, `ProfileWallet`/`PayCard`) |
+
+**Уточнения для zcode (не меняют вердикт):**
+
+1. **Код Основателя сейчас `AA2222`, не `AAAAAA` — и это не конфликт, а первый кейс Фазы В.**
+   `AAAAAA` — прод-канон (BRD v1.0:189 «неизменяем, зарезервирован навсегда»;
+   `PROD_STARTER.md:19-20,36`: «AA2222/AA2BTK — артефакты тестового стенда; канону
+   Основателя отвечает AAAAAA»). Но в staging-коде и стенде живёт `AA2222`:
+   дефолт `config/payments.php:107` (`FOUNDER_REP_PROMO_CODE`, `'AA2222'`) и миграция
+   `2026_09_19_160000` перенесла его в `ambassadors.code` Основателя. Значит Фаза В
+   (self-assign `AAAAAA`) встретит существующую запись амбассадора Основателя с
+   `code=AA2222`: `updateOrCreate` по user_id (prefix `AA` тот же юзер — апдейт) +
+   смена кода через owner-chosen путь. Тесты Д.2 (self-assign) обязаны покрывать
+   сцену «у Основателя уже есть AA2222» — иначе в тест-среде кейс не воспроизведётся.
+   Попутно (вне SZ-079, но связано): PROD_STARTER `:41-42` требует перекрыть
+   `FOUNDER_REP_PROMO_CODE=AAAAAA` на проде — дефолт конфига стенда остаётся AA2222.
+2. **`config/platform.php` не существует** — создаётся задачей
+   (`config('platform.founder_user_id')` + env `PLATFORM_FOUNDER_USER_ID`; Г.3: на
+   staging = 51; на прод-стартере Основатель = `users.id=1` — env обязателен, дефолт 51
+   справедлив только для staging-стенда).
+3. **Minor:** модель `Ambassador` использует `$guarded = ['id']` (не `$fillable`) —
+   для А.4 (audit-модель) это не помеха, но mass-assignment-политику аудит-записи
+   держать явной (`$fillable` = все поля, append-only без update/delete).
 
 ## Что сделать
 
