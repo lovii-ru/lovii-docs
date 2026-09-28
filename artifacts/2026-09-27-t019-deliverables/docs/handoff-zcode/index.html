@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T-019 · Приёмка и постановка для zcode</title>
+<style>
+  :root{--ink:#151114;--dim:#6b6b6b;--line:#e7e1d8;--bg:#faf8f5;--card:#fff;--accent:#c92a6a;--acc-soft:rgba(246,74,138,.10);--ok:#07726f;--warn:#8a6a25;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:52px 24px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:32px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:30px;margin:10px 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--dim)}
+  h2{font-size:20px;margin:38px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+  .alert{border-left:3px solid var(--accent);background:var(--acc-soft);padding:14px 18px;margin:16px 0}
+  .alert b{color:var(--accent)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+  code,.mono{font-family:var(--mono);font-size:12.5px;background:#f2efe9;padding:1px 5px;border-radius:4px}
+  pre{background:#171219;color:#f3ebf0;padding:14px 16px;overflow:auto;font-size:12.5px;line-height:1.5}
+  .b{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--dim)}
+  .b.ok{color:var(--ok);border-color:rgba(7,114,111,.35)}
+  .b.wait{color:var(--warn);border-color:rgba(138,106,37,.35)}
+  ul{padding-left:20px}li{margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">LOVII · T-019 · ветка t019g-p1-fixes</div>
+    <h1>Приёмка и постановка для zcode</h1>
+    <p class="lead">Промежуточная приёмка Фазы Г, блокирующий дефект стража и постановка по экрану «Промо» кабинета МСП.</p>
+  </header>
+
+  <h2>0. Блокер — дефект стража (править первым)</h2>
+  <div class="alert">
+    Правила <code>font-size-literal</code> и <code>font-family-literal</code> записаны с <b>инвертированным</b> условием: нарушением считается наличие токена, а «голые» пиксели пропускаются. Страж краснеет на корректном коде и молчит на некорректном.
+  </div>
+  <table>
+    <tr><td>Файл <span class="mono">scss/variables.scss</span> — только <code>calc(var(--font-scale…))</code></td><td>в baseline = <b>24 нарушения</b></td></tr>
+    <tr><td>Сейчас страж падает на</td><td><code>ProfileTransfer.vue · font-size-literal: 15 (было 0)</code></td></tr>
+    <tr><td>Сдвиг baseline после правки</td><td>font-size 71 → 295 · font-family 12 → 1 · сумма 1579 → 1767</td></tr>
+  </table>
+  <pre>// font-size-literal
+keep: (value) =&gt; !(value.includes("var(--font-scale") || value.includes("var(--lv-")),
+// font-family-literal
+keep: (value) =&gt; !value.includes("var(--lv-font"),
+// затем: DS_GUARD_UPDATE=1 npx vitest run src/__tests__/design-system.guard.test.ts</pre>
+
+  <h2>1. Приёмка Фазы Г (промежуточная)</h2>
+  <table>
+    <thead><tr><th>Пункт</th><th>Что сделано</th><th>Вердикт</th></tr></thead>
+    <tbody>
+      <tr><td>Г.4 Переводы — «прилипают к краям»</td><td>токены + боковой гуттер контейнера</td><td><span class="b ok">принято</span></td></tr>
+      <tr><td>Г.3 Сабхедер настроек «отлип»</td><td><code>padding-top: 0</code></td><td><span class="b wait">проверить</span></td></tr>
+      <tr><td>Г.2 Промо МСП — «буквы вылезают»</td><td>overflow-wrap · line-clamp · ellipsis</td><td><span class="b wait">проверить</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Постановка: «Промо» МСП — динамический выбор</h2>
+  <ul>
+    <li><b>Выбор уровня:</b> юрлицо → бренд → точка; каскад (смена родителя сбрасывает детей); системный свитчер/select, без локальных примитивов.</li>
+    <li><b>Динамика:</b> точка → правила точки; бренд → агрегат по точкам + правило на бренд с наследованием; юрлицо → сводка по мерчантам. «Итог по точке», бюджет и предпросмотр покупателя пересчитываются под выбор.</li>
+    <li><b>Устойчивость:</b> пустые состояния (нет точки/бренда/правил); длинные названия не вылезают (перекос, line-clamp, ellipsis).</li>
+    <li><b>ДС:</b> только токены канона; гейт <code>yarn test:unit &amp;&amp; yarn type-check &amp;&amp; yarn build-only</code>; скриншоты 390/1280 × 2 темы для каждого уровня.</li>
+  </ul>
+
+  <h2>3. Критерии приёмки</h2>
+  <ul>
+    <li>Каскад меняет данные промо без перезагрузки.</li>
+    <li>Для бренда видно наследование правил точкам; для юрлица — сводка.</li>
+    <li>Тексты не обрезаются и не выходят за границы на всех уровнях.</li>
+    <li>Нет новых нарушений стража (после фикса §0).</li>
+    <li>Скриншоты обоих размеров и тем приложены.</li>
+  </ul>
+</div>
+</body>
+</html>
