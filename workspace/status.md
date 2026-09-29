@@ -7,6 +7,21 @@
 > `canon/TASKS/`. Старые записи сжимаются до одной строки на дату.
 > Полная история до 20.09 — `../archive/old_versions/status-20260920-full.md`.
 
+## 2026-09-29 (день) — ПУШ фильтров каталога + SZ-083 (удаление фильтра типов) — В STAGING
+
+- Пуш выполнен владельцем («пуш что готово»): фильтры точек — merge
+  `7b112edf`, SZ-083 core-часть — merge `a4300a8a` (types[] тихо
+  игнорируется, трейт HasMerchantTypes удалён, rector-фиксы GetStoresQuery).
+- 🔴 Грабля дня: контейнерные env стенда (CACHE_STORE=redis,
+  INTEGRATIONS_ENABLED=false) перекрывали phpunit.xml → тесты писали кэш в
+  общий Redis стенда (протухшие nearby_cities) и Kuper-тесты отключались.
+  Починено: force=true в phpunit.xml + docker -e оверрайды в
+  tools/lovii-php-tests.sh; Redis db1 почищен (61 ключ). «11 средовых
+  падений» частично были этой отравой; новый локальный счёт 1586/12.
+- ⚠️ Ночные коммиты фильтров ушли в staging без зелёного гейта (CI падал
+  на lint, до тестов не дошло) — гейт до пуша обязателен.
+- Сессия: lovii-core `docs/sessions/069-sz083-remove-merchant-types.md`.
+
 ## 2026-09-29 (день) — разбор wt-core-t027: фильтры каталога перебазированы, черновики в stash
 
 - Сверка сводки утреннего агента: волна дизайна app-actual УЖЕ в staging
