@@ -1,6 +1,6 @@
 # T-009 — Клиент узнаёт о принятом и собранном заказе: пуши на accepted/ready + чистка мёртвых push-подписок в планировщике (lovii-core)
 
-> Статус: **Открыта** (решения владельца 21.09 — в конце карточки; остаток: Accepted/Ready + крон prune-dead; пер-устройство → SZ-069)
+> Статус: **Выполнена (2026-09-29, merge ed3478b2, CI 🟢) — пуши Accepted/Ready; prune-dead уже в кроне (F-073); пер-устройство → SZ-069**
 > Приоритет: P2 · Источник: `as-is/03-zakazy.md` и `as-is/07-pushi-uvedomleniya.md`
 > (кандидаты в «не хватает», срез кода 2026-09-17); решение владельца о процессе
 > «Super Z ставит задачу → карточка в `canon/TASKS/` → ссылка zcode» (2026-09-18)
@@ -93,7 +93,36 @@ WebPush-подписок `push:prune-dead` существует, но не до�
 
 ## Отчёт исполнителя
 
-(заполняет zcode: коммиты, прогоны, выборы по развилкам, отклонения, риски)
+**zcode, 2026-09-29.** Коммит `53ca74f7`, merge в staging `ed3478b2` (CI 🟢).
+
+- `push:prune-dead` в планировщик **уже добавлен** раньше (F-073,
+  `routes/console.php` — daily) — в этой задаче не трогал. Остаток карточки
+  закрыт пуши Accepted/Ready.
+- Развилка (a): текст Ready зависит от `delivery_type` — самовывоз
+  «Заказ готов — можно забирать. Ждём вас!» (label «готов к выдаче»),
+  доставка «Заказ собран и скоро будет передан курьеру.» (label «собран»,
+  т.к. отдельный пуш придёт на handed_to_delivery). Accepted — «Ваш заказ
+  принят. Сообщим, когда он будет готов.» (label «принят»).
+- Развилка (b): deep-link обеих групп — `/profile/orders/{id}`, как у
+  существующих групп.
+- Развилка (c): push-only. Email-нога статусов глушится флагом
+  `push.email_order_status=false` (решение владельца 21.09, SZ-069) — новых
+  писем нет; карта групп остаётся единой для обоих каналов.
+- Развилка (d): группы `accepted` и `ready` (читаются в дедуп-ключе и логах).
+- Идемпотентность: `OrderStatusMachine` запрещает повторный переход в тот же
+  статус (`invalid_status_transition`) — событие Accepted/Ready дважды прийти
+  не может; push-канал ставит `tag: order-{id}` — на устройстве уведомление
+  заменяется, не плодится. Email-дедуп — ключ `order_status:{id}:{group}`.
+- Затронуто: `app/Domain/Order/Services/OrderStatusNotificationGroups.php`
+  (+группы, +параметр deliveryType), `app/Listeners/NotifyClientOnOrderStatusChangedViaPush.php:31`,
+  `app/Listeners/NotifyClientOnOrderStatusChangedByEmail.php:39`,
+  `tests/Feature/Push/PushNotificationFlowTest.php` (+accepted в датасет,
+  +ready×2 pickup/delivery), `tests/Unit/Infrastructure/Notification/PushPayloadTest.php`,
+  `tests/Unit/Listeners/NotifyClientByEmailTest.php`.
+- Протухшие факты as-is: as-is/07 «map молчит на accepted/ready» и
+  «push:prune-dead не в планировщике» — оба больше не верны.
+- Гейт: lint ✅; unit 1589 passed / 12 failed (средовой базлайн, без
+  регрессий; отравленный redis-кэш тестов вычищен — см. сессию 069).
 
 ## Приёмка-1 / Приёмка-2
 
