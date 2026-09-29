@@ -3,6 +3,7 @@
 > Собрано из кода ядра 2026-09-29 (Enums `LedgerEntryType`, `SplitRole`,
 > `FinancialTransactionType`, `OrderStatus`, `PaymentStatus` + действия
 > `DistributeOrderPoolAction`, `ProcessChargebackController`, `ReverseOrderPoolAction`).
+<!-- fact-guard: allow — справочник зеркалит код и содержит производные числа из PARAMS (ставки, пороги) и живых примеров; дом факта — PARAMS.md, FINANCIAL_CONTOUR.md -->
 > Назначение — единый источник «что за операция и к чему относится» для
 > владельца, агентов и разбора инцидентов. Суммы в копейках, ledger —
 > append-only, баланс счёта = сумма знаковых проводок.
@@ -22,7 +23,7 @@
 
 | Тип | Роль | Откуда → Куда | Что означает |
 |---|---|---|---|
-| `payment_income` | `inbox` | банк → **номинальный счёт** | Приход чека 100% при подтверждённой оплате |
+| `payment_income` | `inbox` | банк → **номинальный счёт** | Приход чека 100% при подтверждённой оплате
 | `acquiring_fee` | `acquiring` | номинальный → банк | Эквайринг по каналу оплаты (карта 3,16%, баллы 0) |
 | `order_income` | `point` | номинальный → **счёт точки (ИНН)** | Выручка точки — 90% чека |
 | `pool_share` | `company` / `representative` / `ambassador` | номинальный → **оператор** | Пул 40/40/20 от остатка платформы |
