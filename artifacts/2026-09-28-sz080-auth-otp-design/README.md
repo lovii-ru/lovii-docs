@@ -1,6 +1,6 @@
 # 2026-09-28-sz080-auth-otp-design — вход и OTP: канонический макет
 
-Дизайн-пакет к задаче [`SZ-080`](../../canon/TASKS/SZ-080-otp-screen-applock-pattern-logo-cells.md):
+Дизайн-пакет к задаче SZ-080 (`archive/tasks/SZ-080-otp-screen-applock-pattern-logo-cells.md`):
 канонический экран входа и кода (OTP). До кода — на приёмку владельца.
 Запрос владельца 28.09: «начинаем с экрана авторизации и OTP — думаю, ты сразу его сделаешь каноничным».
 
@@ -32,6 +32,6 @@
 
 - Зафиксировано в демо: `lovii-demo/design/2026-09-28-auth-otp/` (тянется на :8090 и lovii.mobiap.com после пуша).
 
-- Карточка: `canon/TASKS/SZ-080-otp-screen-applock-pattern-logo-cells.md`.
+- Карточка: `archive/tasks/SZ-080-otp-screen-applock-pattern-logo-cells.md`.
 - Кадры «до»: сняты 28.09 со стенда :5175 (текущий `AuthCode.vue`: одно поле 148px, статусы
   с независимыми отступами 32/40, логотипа нет).

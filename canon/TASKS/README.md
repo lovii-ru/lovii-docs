@@ -116,7 +116,7 @@
 | [`SZ-075`](SZ-075-loyalty-buyer-integration.md) | Интеграция: точка, категория «Комбо», корзина, чекаут |
 | [`SZ-076`](SZ-076-demo-skin-restyle.md) | Рестайл под дизайн-систему демо: натянуть шкурку `lovii-demo/css/lovii.css` на экраны приложения (план по 21 экрану) |
 | [`T-008`](T-008-staging-test-data-cleanup.md) | Чистка тестового мусора staging-БД (отложена владельцем) |
-| [`T-009`](T-009-client-order-status-pushes.md) | Пуши accepted/ready + `push:prune-dead` в планировщик |
+| T-009 (`archive/tasks/`) | Пуши accepted/ready + `push:prune-dead` в планировщик — **закрыта 29.09** |
 | [`T-010`](T-010-promo-ref-universal-capture.md) | Промо/реф-ссылки: любой суффикс, валидация кода по БД |
 | [`T-011`](T-011-sub-billing-cascade.md) | №3 Sub-billing: каскад списаний и авто-переходы жизненного цикла |
 | [`T-012`](T-012-lovii-pay-fin-service.md) | lovii-pay: каркас фин-сервиса + поддомен платёжных ссылок |

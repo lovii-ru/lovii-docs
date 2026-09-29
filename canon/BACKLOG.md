@@ -99,7 +99,7 @@
 |---|---|---|
 | ✅ Приёмка №1 (минимум заказа) и №2 (SZ-052) — приняты владельцем 18.09 («принимай»); №1 в staging core `9bf7992` + app `e147433`, №2 core `b21ac96` | закрыто | — |
 | ✅ Опубликовать `BACKLOG_REVIEW.md` в корпус — в корпусе с 18.09 (пуш zcode), этот файл его цитирует | закрыто | — |
-| 🔶 T-009: клиентские пуш-статусы — ЖИВЫ в staging (SZ-010 §2, `NotifyClientOnOrderStatusChangedViaPush`); Accepted/Ready сознательно «тишина» (решение зафиксировано в `OrderStatusNotificationGroups` — промежуточные статусы = шум); `push:prune-dead` команда есть, в планировщик НЕ поставлен. Карточка [`T-009`](TASKS/T-009-client-order-status-pushes.md) остаётся открытой на два хвоста: расписание + сверка Accepted/Ready с владельцем | zcode | развилка Accepted/Ready |
+| ✅ T-009 — ЗАКРЫТА 29.09: пуши Accepted/Ready в staging (merge `ed3478b2`, текст ready по delivery_type, push-only); `push:prune-dead` в кроне (F-073, daily). Карточка — `archive/tasks/T-009-client-order-status-pushes.md` | zcode | — |
 | ✅ №3 sub-billing (T-011): каскад Business → PAY → карта (внешняя — failed `external_unavailable` до банка), cron 03/09/15/21 МСК, grace 48 ч, сброс промо-цены — SZ-053, в staging 18.09 | закрыто | — |
 | ✅ Вписать числа в канон-дома: минимум 600/500 → PARAMS §1.7, grace/льготы/Price Lock → §1.4, «активная» для вывода → §1.6 | закрыто 18.09 | — |
 

@@ -7,6 +7,10 @@
 > заметка (класс W), не канон. Числовые параметры — канон `lovii_docs/canon/PARAMS.md`
 > / договор Т-Банка. Формат — [README](README.md).
 > **2026-09-25** (дельта 23–25.09: переводы PAY/Business — раздел ниже).
+> **2026-09-29** (дельта 26–29.09: канон «PAY = баллы» реализован — T-023
+> Фазы A/B в staging; каскад подписки инвертирован PAY→Business; переводы
+> «по любому реквизиту», карта компании = адресат; провижининг МСП при
+> апруве — сразу счёт + карта).
 
 ## Что это
 
@@ -89,9 +93,13 @@ SZ-052/053/056/057), **выплаты** (pull НПД + суточный push-р�
   (routes/api.php:251; без подписки — data:null).
 - Биллинг (SZ-053): журнал попыток `subscription_charges` + каркас
   `external_payment_methods`; `SubscriptionBillingService` — каскад источников:
-  **Business (счета юрлиц по мосту partners.owner_user_id) → PAY (личный счёт) →
-  внешняя карта** (каркас: попытка = failed `external_unavailable`, реальное
-  снятие после тестового контура банка). Cron `subscriptions:charge`
+  ~~Business → PAY → внешняя карта~~ **актуализация 29.09 (T-023 Фаза B,
+  PR lovii-core#14, merge `132d30c`): каскад инвертирован — PAY (балльный
+  кошелёк) по умолчанию → Business фоллбэком** (решение владельца 26.09 №2,
+  закрытие F-059/F-067); проводка кошелька — `subscription_debit`, фоллбэк
+  пишется парой ledger-строк `subscription_payment` c `meta.fallback=true`;
+  fail-попытки в wallet_transactions не пишутся. Внешняя карта — прежний
+  каркас (попытка = failed `external_unavailable`). Cron `subscriptions:charge`
   03/09/15/21 МСК (retry раз в 6 ч). Проводка — `subscription_payment`
   (дебет источника + кредит оператора 100% Компания).
 - Grace 48 ч сохраняет льготы; аннулирование **сбрасывает акционную цену**

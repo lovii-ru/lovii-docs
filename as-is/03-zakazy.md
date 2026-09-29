@@ -67,11 +67,15 @@ on_the_way → completed`; боковые: `cancelled`, `failed` (термина
 
 ## Уведомления (все из core, событие `OrderStatusChanged`)
 
-- Карта поводов (OrderStatusNotificationGroups.php:35–57): preparing → «готовится»,
+- Карта поводов (OrderStatusNotificationGroups): preparing → «готовится»,
   handed_to_delivery/on_the_way → «передан курьеру», completed → «доставлен»,
-  cancelled/failed → «отменён»; **created/submitted/accepted/ready — тишина**.
-- Клиенту: WebPush (VAPID; без ключей канал молчит — PushNotificationDispatcher.php:19–29)
-  + email (только verified, dedupe по `order_status:{id}:{group}`).
+  cancelled/failed → «отменён». **Актуализация 29.09 (T-009, merge ed3478b2):**
+  accepted → «принят», ready → текст по delivery_type (самовывоз «готов к
+  выдаче — можно забирать», доставка «собран — скоро передадим курьеру»);
+  тишина осталась только на created/submitted.
+- Клиенту: WebPush (VAPID; без ключей канал молчит) — push-only: email-нога
+  статусов глушится флагом `push.email_order_status=false` (решение владельца
+  21.09; dedupe-ключ `order_status:{id}:{group}` сохранён в коде).
 - Точке: пуш о новом заказе и отмене, боты MAX и Telegram (Listeners/NotifyMerchant*),
   **напоминания о непринятых заказах**: `orders:remind-new` каждую минуту, пуш
   «Заказ #N ещё не принят» через 2 мин после создания и до 60 мин
@@ -132,7 +136,7 @@ on_the_way → completed`; боковые: `cancelled`, `failed` (термина
 
 1. Пуши на accepted («заказ принят») и ready («можно забирать / курьер забрал») —
    сейчас самые ожидаемые клиентом статусы молчат. → карточка
-   `canon/TASKS/T-009-client-order-status-pushes.md` (Открыта, 2026-09-18).
+   `archive/tasks/T-009-client-order-status-pushes.md` (закрыта 29.09 — пуши реализованы).
 2. Таймаут: точку о непринятом заказе система напоминает 2–60 мин, но дальше —
    ничего: заказ висит submitted бессрочно, клиент ждёт без эскалации.
 3. Автопереход готового заказа: ready → completed по истечении N дней (сейчас
