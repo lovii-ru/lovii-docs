@@ -1,10 +1,12 @@
 # 11. База данных: как хранится информация — как есть
 
 > Срез: 2026-09-17 (структура — по снимку staging 2026-09-13), **обновлено
-> 2026-09-19** (волна миграций подписки/выплат/ПЭП — см. «Прибавилось 18–19.09»).
-> Полный разбор всех 85 таблиц с колонками и числами строк:
-> `lovii_docs/artifacts/db-schema-analysis.md` (обновлять при волнах миграций).
-> Этот док — навигационная выжимка. Формат — [README](README.md).
+> 2026-09-19** (волна миграций подписки/выплат/ПЭП — см. «Прибавилось 18–19.09»),
+> **обновлено 2026-09-30** по свежему снимку staging (лояльность 22.09, переводы
+> 24.09, ИНН-замок и провижининг МСП 28.09, чарджбэк-журнал 29.09 — см.
+> «Прибавилось 22–29.09»). Полный разбор всех 107 таблиц с колонками и числами
+> строк: `lovii_docs/artifacts/db-schema-analysis.md` (обновлять при волнах
+> миграций). Этот док — навигационная выжимка. Формат — [README](README.md).
 
 ## Устройство: одна БД, три схемы
 
@@ -101,21 +103,55 @@ PostgreSQL `lovii-core`, три схемы = три приложения:
   (default 60000 / floor 50000 коп.).
 - Колонки: `users.legal_status` (nullable — презумпция НПД),
   `users.promo_code` (с 14.09), `accounts.payouts_blocked`.
-- На staging (SQL 19.09) таблицы живые, строк пока 0.
+
+### Прибавилось 22–29.09 (по снимку staging 30.09)
+
+- **Лояльность (SZ-073, 22.09)** — отдельный домен: `promo_rules` (механики
+  кэшбэк/порог/комбо/штампы/часы, бюджет с авто-стопом, скоуп
+  платформа/мерчант/точка/категория/товар; на staging 11 живых правил),
+  `promo_rule_customer_uses` (лимит «раз на клиента»), группы товаров —
+  `loyalty_product_groups` + связи `loyalty_group_categories`/`loyalty_group_products`;
+  комбо/бандлы позиций — `merchant_offer_bundle_items`.
+- **Переводы 2.0 (24.09)** — `account_transfers` (P2P и PAY↔Business, адресация
+  телефон/промокод/карта, карта = детерминированный номер счёта).
+- **Чарджбэки (T-024, 29.09)** — `chargeback_logs` (журнал обработок), в
+  `ledger_entries` идемпотентность разворота по `original_entry_id` (partial
+  unique); внешняя нога дерева `external:bank` — синтетическая (таблицы нет).
+- **Каналы получения точки (T-025, 27.09)** — `category_branch_hidden`
+  (скрытие категорий мерчанта на точке).
+- **18+ ограничения** — `product_requirements` + связи
+  `merchant_offer_product_requirement` / `merchant_category_product_requirement`.
+- **Заявки и оферты** — `partner_offer_acceptances` (реестр присоединений к
+  офертам, роутинг заявки по промокоду профиля, 20.09).
+- **Платежи** — `payment_settings` (консоль платёжных каналов, 19.09); колонка
+  `payments.method` (card/tpay/sbp — канонизация с 28.09, точные комиссии пула).
+- **lovii_b2b**: `partner_payout_accounts` («карточки компании», реквизиты
+  верификации и выплат; адресат переводов на счёт компании),
+  `partner_auth_events` (аудит входов), `partner_passkey_credentials`,
+  `partner_sessions`, `partner_user_devices`; замок дублей ИНН —
+  `partners_inn_digits_unique` (выражение-индекс, 28.09); снимок отката T-027 —
+  таблица-артефакт `partners_inn_fix_20260928` (можно удалить после релиза).
+- Служебные (Laravel 11/12 стандарт, не домен): `cache_locks`, `failed_jobs`,
+  `job_batches`, `password_reset_tokens` — во всех трёх схемах.
 
 ### Роли
 - `partner_applications` — заявка «ЛОВИ Бизнес»: inn, статус-лестница,
   verification_suffix (VER-код), promo_code + representative_user_id (снимок),
   partner_id/merchant_id/branch_id (материализация).
-- `representative_promo_codes` (prefix+suffix), `ambassadors` (prefix ветки).
+- `representative_promo_codes` (prefix+suffix); `ambassadors` — **самостоятельная
+  сущность с 6-символьным кодом** (с 19.09: амб-код ≠ реп-код, у Основателя
+  AA2222 + личный AA-XXXX).
 
 ### Уведомления
 - `push_subscriptions` (endpoint unique, error_count); `email_notification_logs`
-  (dedupe_key unique) + **дубль-таблица `email_notification_log` (пустая, зачистить)**.
+  (dedupe_key unique). Дубль-таблица `email_notification_log` **удалена 28.09**.
 
 ### Интеграции (Kuper, выключены)
-- `integrations`, `import_jobs`, `integration_entity_mappings` — **1,41 млн строк,
-  924 МБ** артефакт автоимпорта; кандидат на архивацию перед продом.
+- `integrations`, `import_jobs` (+`import_job_errors`), `integration_entity_mappings`
+  — 1,41 млн строк / 881 МБ. **Решение F-074 (29.09): НЕ удалять** — маппинги
+  третья ветка MerchantVisibility (витрина ритейлеров), чистка обрушила витрину
+  staging 29.09; таблица в НЕудаляемом списке.
+- `max_support_messages` — журнал поддержки через бота MAX.
 
 ### lovii_b2b
 - `partners` — **юрлица**: name, slug, inn, dadata_party, **verified_at** (гейт
@@ -153,10 +189,17 @@ users ──< carts ──< cart_items >── merchant_offers ──> merchants
   каждый раз фиксировать в session-доке.
 - После массовых правок позиций — не забывать Scout-реиндекс (модели, не SQL).
 
+## Числа staging на 30.09 (снимок zcode)
+
+users 334 · orders 420 · payments 333 · accounts 284 · ledger_entries 3 464 ·
+account_transfers 9 · promo_rules 11 (живой домен лояльности) ·
+partner_payout_accounts 2 · payouts 0 (исполнение ждёт банк-контур, Б-5).
+
 ## Кандидаты в «не хватает» (решает владелец)
 
-1. Зачистка: дубль `email_notification_log`, 1,4 ГБ Kuper-маппингов, черновики-
-   партнёры (Grand/Статус-92 — дубль ИНН 970512345688).
+1. ~~Зачистка дубля `email_notification_log`~~ — удалён 28.09; ~~дубли ИНН~~ —
+   сведены T-027 (273→267) + включён замок `partners_inn_digits_unique`;
+   ~~Kuper-маппинги~~ — снято с повестки решением F-074 (НЕ удалять, витринный гейт).
 2. Cross-schema FK — логические; либо оставить как есть (зафиксировать решение),
    либо триггеры/проверки.
 3. Единая таймзона/тип для дат (timestamptz против ts) — при отчётности вылезет.
