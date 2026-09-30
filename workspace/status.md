@@ -1,3 +1,22 @@
+## 2026-09-30 (поздний вечер) — П-4 и П-8 в staging (zcode)
+
+- **П-4 — оплата баллами в UI чекаута**: ядро отдаёт `bonus_max_allowed` в
+  `/orders/preview` (LoyaltyService::maxSpendForTotal — min баланс / потолок
+  платформенного правила, без 422); app — карточка «Оплатить баллами»
+  (AppSwitch + ввод с клампом), предпросмотр пересчитывается с баллами,
+  строка «Оплата баллами» в итогах, баллы уходят в оформление.
+- **П-8 — доход репа/амба живой**: core `RoleIncomeQuery` — Σ pool_share по
+  split_role из ledger (месяц / за всё время / история, Money в рублях);
+  `GET /representative/income` (новый, за гвардом role.representative),
+  `/ambassador/income` — вместо заглушки. App: RepresentativeIncome делает
+  запрос (скелетон/Retry/история), AmbassadorIncome показывает «за всё время».
+  Контракт history = AmbassadorIncomeEntry (id, Money, created_at, comment).
+- Гейты: core unit зелёный, CI+деплой ✓ (3 круга lint — pint ordered_imports,
+  rector, phpstan nullable-user); app 1005/1005 + type-check + build ✓.
+- Грабли: routes/api.php — новый контроллер требует `use`-импорт (неимпортированный
+  ::class даёт «Invalid route action» без подсказки); Money ролевых кабинетов —
+  в РУБЛЯХ, конвертация копеек ledger — в ядре.
+
 ## 2026-09-30 (вечер) — стресс-страж на локальном стенде: PASS
 
 - Рампа read 10/25/50/100 VU (`STRESS_BASE=http://localhost`): 176/169/127/145
