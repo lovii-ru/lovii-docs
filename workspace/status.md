@@ -1,3 +1,18 @@
+## 2026-09-30 (ночь) — авто-самовывоз точке без работающей доставки (zcode)
+
+- Продолжение 074: «мёртвые» точки оказались другого типа — `delivery=true,
+  pickup=false, 0 зон` (импорт Kuper); на локальном стенде 94 шт. Инвариант в
+  MerchantBranch (core `24faf24e`/merge `a6de6690`, sync-хуки в b2b `4a453c5`
+  и admin `a7d7605`): saving включает самовывоз, если доставки фактически нет
+  (флаг выкл ИЛИ зон нет). Команда `branches:fix-channels` (--apply): локальный
+  стенд починен 94→0; staging — кандидатов 0. Тесты: BranchChannelAutoPickupTest
+  (6 новых), обновлены ListStores/RepairWorkingData/KuperReconciler.
+- Гейты: core unit+lint ✅, b2b полный ✅ (546), admin тесты ✅ (PHPStan admin
+  красный предсуществующий, 121 ошибка в чужих файлах). CI staging:
+  core/b2b/admin — gh run 36776896763 / 36776911172 / 36776916887.
+- Флейк PromoFeedTest (виснет локально, в т.ч. чистый staging) подтверждён
+  независимо — см. session 077 в core; у SZ-085 та же находка.
+
 ## 2026-09-30 (поздний вечер) — SZ-085 в staging И на проде; первый прод-деплой платформы (zcode)
 
 - Staging: мерж 9ef872c1, CI ✅ + автодеплой ✅. Прод: master ← staging
