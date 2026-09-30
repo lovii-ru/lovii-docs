@@ -1,3 +1,31 @@
+## 2026-09-30 (день) — вердикты владельца исполнены: T-020 Фаза B, Б-5 мок-выплаты, П-3, G4/G5 (zcode)
+
+- **T-023/T-024 закрыты** (демонстрация принята), карточки в archive/tasks.
+- **T-020 Фаза B — В STAGING**: LedgerTxRow/WalletHistoryList + entries.ts +
+  wallet-history.ts слиты в `feed.ts` (мапперы ledgerToRow/walletToRow,
+  filterTx, groupTxByDay, monthStats, groupTxByOrder, chainStats) + TxRow.vue;
+  pay-tier докблок приведён к API-контуру; cashbackOperationSummary удалён.
+  app 996/996 + DS-guard + CI ✓.
+- **Б-5 первая половина — В STAGING**: tbank-mock получил
+  `/e2c/v2/{Init,Payment,GetState}`; core — TBankPayoutClient (fromChannel),
+  PayoutExecutionService (pending→sent, ПЭП-гейт pull, комиссия ОПЕРАТОРА при
+  исполнении), команда `payouts:execute` (операторская). Живой сквозняк:
+  pull 3 000 ₽ → ПЭП → sent P-900001, кошелёк списан, команда идемпотентна.
+  Остаток Б-5: маршрут получателя + боевой доступ банка.
+- **🔴 F-076 (FINDINGS)**: локальный .env стенда имел sail-дефолт
+  `DB_CONNECTION=pgsql` при моделях на `pgsql_core` — два PDO одной БД,
+  фасад-транзакции ничего не оборачивали, сироты и самодедлоки. Исправлено
+  на `pgsql_core`; сироты репетиции компенсированы adjustment (+900 000,
+  инвариант Σ ledger сверен). Staging/prod не задеты.
+- **П-3 — В STAGING**: чекаут шлёт Idempotency-Key цикла отправки (стабилен
+  на ретраях, сброс на успехе/входе). app 999/999.
+- **G4 — В STAGING**: QR ссылки-приглашения в кабинете амбассадора.
+- **G5**: Grand 268 верифицирован на staging штатным internal API
+  (verified_at 30.09) — профиль Основателя полный.
+- ⚠️ testing-БД — поле боя: чужой прогон мигрировал её посреди моего гейта
+  (47 ложных падений, реран зелёный) — правило изолировки (отдельный
+  TEST_DB) становится обязательным для параллельных core-прогонов.
+
 ## 2026-09-30 (утро) — хвосты бэклога 30.09 закрыты zcode
 
 - **9 падений PlatformOrderSettingsTest (admin) — корень и фикс**: в тестовом
