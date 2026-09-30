@@ -109,3 +109,70 @@ append-only журнал (простая таблица) или прецеден
    `business:reconcile-inn-duplicates` = готовый механизм разноса зависимостей).
 5. Всё удаление — через core-сервис; b2b/admin — internal HTTP, не прямые
    DELETE из Filament (Shield и так всё запрещает — оставить так до решения).
+
+## 7. Доресёрч: индустриальные лучшие практики (веб-ресёрч 2026-09-30)
+
+### 7.1 Двухступенчатая модель — консенсус индустрии
+
+Стандарт де-факто совпадает с постановкой владельца: **немедленная
+деактивация/tombstone (undo + аудит) → отложенная системная зачистка по
+retention-расписанию из центральной таблицы запросов на удаление**. Soft-delete
+сам по себе НЕ считается достаточным для стирания ПИИ — данные должны стать
+нечитаемыми. Для finance-платформ работает трёхуровневая сортировка ответа на
+запрос стирания: маркетинговые/профильные данные — удалять сразу;
+записи под statutory retention (AML/KYC, бухгалтерия, 5–10 лет) — не
+отказывать пользователю, а информировать о сроке удержания; всё удержанное —
+псевдонимизировать. Легальная основа — GDPR Art. 17(3)(b) (исключение для
+юридической обязанности хранения); истинная анонимизация выводит данные
+из-под GDPR целиком (Recital 26). Вывод для LOVII: существующая пара
+`deactivated_at + purge-команда` — правильный каркас, доукомплектовать, а не
+менять.
+
+### 7.2 Анонимизация вместо DELETE — подтверждено
+
+Финансовые записи ломаются полным удалением (отчётность, audit trail) —
+паттерн индустрии: **псевдонимизация/шифрование удержанных записей, ПИИ из
+профиля — удалить**, не-PИИ каркас оставить. Продвинутый вариант — «удалить
+ключ шифрования + tombstone» (криптографическая невосстановимость при
+сохранении структуры), для нас избыточен, но пригодится, если появятся
+шифрованные ПИИ-поля. Это независимо подтверждает вывод §6 ресёрча кода:
+DELETE строк user/partner недопустим, зачистка = обезличивание.
+
+### 7.3 Запрет пересоздания — реестр хэшей идентификаторов
+
+Практика анти-фрода: хранить в блок-реестре **не сырые данные, а
+нормализованные HMAC-хэши** идентификаторов (телефон в E.164, email — lower/trim)
+— это одновременно anti-frod матчинг и совместимость с ПИИ-зачисткой
+(сырой телефон удаляем по retention, хэш живёт в реестре со своим TTL).
+Рекомендации: ре-бан при совпадении хэша (новый аккаунт наследует
+ограничения/ревью), velocity-проверки, TTL по номерам (перевыпускаются другим
+людям — стейл-записи дают false positives), осторожность с SMS как якорем
+доверия (SIM swap, VoIP). Для LOVII это точный ответ на развилку №5 карточки:
+**отдельный реестр хэшей, не tombstone-строка** — и retention-счётчик, и
+совместимость с зачисткой.
+
+### 7.4 Техника PostgreSQL/Laravel — подтверждён наш паттерн
+
+Канон для «уникальность среди живых» — **partial unique index
+`WHERE deleted_at IS NULL`** (именно так сделаны merchants.slug и
+merchant_offers — §3). Тонкости из практики: Laravel Blueprint не выражает
+WHERE — нужен raw `DB::statement` (или пакет tpetry/laravel-postgresql-enhanced);
+schema-интроспекция Laravel partial unique не видит (проверять миграциями, не
+дампом); `deleted_at` стоит держать под частичным индексом, иначе фильтр
+soft-delete раздувает запросы на больших таблицах. Альтернатива при больших
+объёмах удалений — **archive-таблица** (уносим строку целиком из живой таблицы:
+уникальность живых тривиальна, индексы чистые), ценой сложности restore и FK.
+Для наших объёмов archive-таблица не нужна, но годится как целевое состояние
+после retention-зачистки каркаса.
+
+### Источники
+
+- [Reform: Best Practices for GDPR-Compliant Data Deletion](https://www.reform.app/blog/best-practices-gdpr-compliant-data-deletion)
+- [Medium: Hard vs Soft delete user data](https://medium.com/@mtreacy002/hard-vs-soft-delete-user-data-forget-me-or-forget-me-not-e5b564363607)
+- [HN: soft deletes discussion](https://news.ycombinator.com/item?id=16366050)
+- [DBA StackExchange: tombstone table vs deleted flag](https://dba.stackexchange.com/questions/14402/)
+- [koder.ai: soft deletes vs hard deletes](https://koder.ai/blog/soft-deletes-vs-hard-deletes)
+- [Wikipedia: GDPR Article 17](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation)
+- [filerskeepers: practical data retention policy guide](https://filerskeepers.com)
+- [tpetry/laravel-postgresql-enhanced — partial indexes](https://packagist.org/packages/tpetry/laravel-postgresql-enhanced)
+- [GitHub: partial unique index introspection issue](https://github.com)
