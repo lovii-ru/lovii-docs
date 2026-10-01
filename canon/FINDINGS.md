@@ -1148,3 +1148,25 @@ zcode); сироты репетиции Б-5 компенсированы adjust
 проверять `php -r "echo config('database.default');"` — должно быть `pgsql_core`.
 Выявлено живой репетицией Б-5 (pull-выплата через мок) — до этого скрыто,
 т.к. фасад-пути на стенде через CLI не гонялись.
+
+### F-078 · `lovii-core` тесты · PromoFeedTest самодедлок: `usesB2bSchema()` + DDL той же таблицы на default-коннекте — полный локальный гейт невозможен (01.10)
+
+`TestCase::$connectionsToTransact = ['pgsql_core', 'pgsql_b2b']`, оба
+соединения — один физический `testing` (у `pgsql_b2b` нет своих env).
+`B2bSchema::ensure()` на conn_b создаёт `lovii_b2b.*` в пер-тестовой
+транзакции (персистентно их нет — migrate:fresh сносит) и держит
+AccessExclusive до отката. Тест «hides promos of a teaser point»
+(PromoFeedTest) создавал ту же таблицу на default-коннекте — она ему
+невидима (незакоммичена на conn_b) → вечное ожидание блокировки.
+Детерминированно валил весь полный локальный GATE=unit неделями; полный
+гейт принимался только CI (`--parallel`, там не воспроизводился).
+
+**Урок:** тест, делающий DDL `lovii_b2b.*` на default-коннекте, не имеет
+права вызывать `usesB2bSchema()` в этом же тесте (паттерн
+TransferMultiCompanyTest: зеркало на default-коннекте БЕЗ ensure; или
+ensure явно и только там, где b2b-модели действительно нужны).
+Зомби-грабля: убитый по таймауту прогон оставляет застрявшие сессии —
+чистить `pkill -f vendor/bin/pest` + `pg_terminate_backend` по
+`idle in transaction` перед повтором, иначе новый прогон виснет об труп.
+Исполнение: PromoFeedTest починен (ensure только в 4 фикстурных тестах),
+полный локальный гейт 1672/1672 за 71 с (01.10, zcode, session 079).
