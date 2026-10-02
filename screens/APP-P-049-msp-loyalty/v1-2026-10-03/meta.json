@@ -1,0 +1,24 @@
+{
+  "id": "APP-P-049-msp-loyalty",
+  "version": "v1-2026-10-03",
+  "date": "2026-10-03",
+  "stand": "localhost:5174 (локальный стенд, OrbStack)",
+  "app_slice": "staging-рабочее дерево lovii-app",
+  "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
+  "tool": "Playwright chrome 390×844 @2x, fullPage",
+  "kind": "states-only (T-034): основной кадр версии не менялся",
+  "states": [
+    "wizard-step1",
+    "mech-threshold",
+    "mech-combo",
+    "mech-stamps",
+    "mech-hours",
+    "mech-cashback",
+    "step2-threshold",
+    "step2-combo-BLOCKED-at-step1",
+    "step2-stamps-BLOCKED-at-step1",
+    "step2-hours",
+    "step2-cashback",
+    "step3-publish"
+  ]
+}
