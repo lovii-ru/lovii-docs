@@ -1,11 +1,15 @@
 # APP-P-017 — Мои адреса
 - Статус: живая
-- Маршрут: `/profile/addresses · AddressesView` (src/router/index.ts:439)
-- Тип: обычная
-- Доступ: авторизован
-- Назначение: Список адресов доставки покупателя.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/addresses` · name `AddressesView` (src/router/index.ts:439)
+- Тип: вложенная (родитель: APP-P-008; группа `/profile/addresses` с общим beforeEnter auth на router/index.ts:433, child MainLayout)
+- Доступ: авторизован (beforeEnter группы, :433–440)
+- Назначение: список адресов доставки покупателя с переходом к добавлению и редактированию.
+- Функциональные блоки:
+  - #list — список `AddressItem.vue` (адрес, дефолтный, действия) из кэша стора: `addressStore.loadAddresses()` (GET `api/v1/profile/addresses`, address-api.ts:10) в onMounted (ProfileAddresses.vue:16–18)
+  - #reset — clearAddresses() в onBeforeUnmount (:19–21) — список всегда свежий при входе
+  - #add — кнопка «+» в хедере (aria-label «Добавить адрес», :12–16) → APP-P-018
+- Состояния: loading — 5 скелетонов `AddressItemSkeleton.vue` (:48–50), пусто — `AddressesEmpty.vue` (CTA добавления), ошибка — errorHandler (тост)
+- Зависимости: API GET `api/v1/profile/addresses` (modules/address/api/address-api.ts); store `modules/address/store/address.store.ts` (кэш, SZ-046 §3.1 — один стор на весь ресурс); компоненты AddressItem/AddressesEmpty/AddressItemSkeleton
+- Переходы: → APP-P-018 (кнопка «+»), → APP-P-019 (из AddressItem); ← APP-P-008 (плитка «Мои адреса»), APP-P-018/019 (после сохранения, router.replace/push), назад — AppPageHeader back-to ProfileView
+- Дизайн/канон — проверить визуально: пустое состояние — приглашение, скелетоны, токены lv-* (gap `lv-block-gap`, отступ `lv-navbar-offset`), a11y (aria-label у кнопки добавления), ритм карточек по SZ-002
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

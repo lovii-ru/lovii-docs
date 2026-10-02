@@ -1,11 +1,14 @@
-# APP-P-035 — Владелец — Структура
+# APP-P-035 — Владелец · Структура
 - Статус: живая
-- Маршрут: `/cabinet/owner/structure · OwnerStructure` (src/router/index.ts:666)
-- Тип: вложенная (родитель: группа /cabinet/owner)
-- Доступ: роль founder
-- Назначение: Структура сети: точки, роли, география.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cabinet/owner/structure` · name `OwnerStructure` (src/router/index.ts:666)
+- Тип: вложенная (родитель: `/cabinet/owner`, CabinetLayout; вкладка «Структура», icon store; accent gold)
+- Доступ: роль founder (rolesGuard на родителе, src/router/index.ts:644)
+- Назначение: Точки платформы с выручкой за период — постранично («Показать ещё», meta.points.has_more из ядра). Географии/дерева ролей нет — только плоский список точек (OwnerStructure.vue:2-5).
+- Функциональные блоки:
+  - #period — PeriodChips (:63).
+  - #points — «Точки платформы», счётчик = points_total (testid `owner-points-total`): строка точки — имя, мерчант, «заказов: N» (:81-95); два тега: статус (active→«Активна», inactive→«Оффлайн», closed→«Закрыта» — словарь :25-29, класс is-<status>, testid `owner-point-status-<status>`) и GMV. Пагинация по 20 (points_per_page: 20, loadPage :31-52, loadMore :56, кнопка :96-105, testid `owner-points-more`).
+- Состояния: loading — «Загружаем…» пока список пуст (:69); ошибка — «Данные платформы недоступны — попробуйте ещё раз» + «Повторить» (:65-68); пусто — «Точек пока нет — появятся после подключения партнёров» (:77-79, testid `owner-points-empty`); при догрузке кнопка disabled с «Загружаем…».
+- Зависимости: API GET `api/v1/platform/owner?period=…&points_page=&points_per_page=20` (src/modules/platform-module/api/platform-api.ts:136-145, meta.points с has_more); PeriodChips; money; dashboard.scss.
+- Переходы: → APP-P-033 «Обзор», APP-P-034 «Финансы» (нижний бар); ← APP-P-033 (таб-бар).
+- Дизайн/канон — проверить визуально: 3 состояния, честные цифры (заказов и GMV — из ядра), токены ДС, a11y, акцент owner gold по PRODUCT_QUALITY_BAR.
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

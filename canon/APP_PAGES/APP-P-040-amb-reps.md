@@ -1,11 +1,14 @@
-# APP-P-040 — Амбассадор — Структура
+# APP-P-040 — Амбассадор · Структура
 - Статус: живая
-- Маршрут: `/cabinet/ambassador/reps · AmbassadorReps` (src/router/index.ts:741)
-- Тип: вложенная (родитель: группа /cabinet/ambassador)
-- Доступ: роль ambassador
-- Назначение: Структура представителей амбассадора.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cabinet/ambassador/reps` · name `AmbassadorReps` (src/router/index.ts:741)
+- Тип: вложенная (родитель: `/cabinet/ambassador`, CabinetLayout; вкладка «Структура», icon users; accent gold)
+- Доступ: роль ambassador (rolesGuard на родителе, src/router/index.ts:723)
+- Назначение: Представители ветки — активные промокоды с префиксом амбассадора (core: ListAmbassadorRepsController; дерева нет, SZ-034A §1.1). Карточка приглашения: код ветки, копирование и QR ссылки-приглашения (SZ-061: шарится 6-символьный код, не 2-символьный префикс — AmbassadorReps.vue:52-56).
+- Функциональные блоки:
+  - #list — «Мои представители» (счётчик): плитка-юзер, имя (fallback «Представитель»), моно-промокод (rep.promo_code, testid `amb-reps-code`), точки (plural), доход/мес (income_month — до ledger-фазы 3 честный ноль) (:108-132, testid `amb-reps-list`). Города и дельты роста в API нет — не выдумываются (комментарий :13-22).
+  - #invite — «Промокод ветки» (только если dashboard загрузился): крупный моно-код (testid `amb-reps-prefix`), текст-пояснение (разный для пустой/непустой ветки), QR ссылки-приглашения по buildReferralUrl(code) (AppQrCode, testid `amb-reps-qr`, :71-72), кнопка «Скопировать код» (copyPrefix :74-91: результат копирования проверяется — при неудаче тост «Не удалось скопировать», а не ложное «Код скопирован»; success — надпись на 2 сек).
+- Состояния: loading — скелетоны (заголовок + 2 строки + приглашение, aria-hidden); ошибка списка — roleLoadErrorText («…после назначения ветки.» / «Структура недоступна — проблема с сетью…») + «Повторить» (:96-99, testid `amb-reps-error`); пусто — при отсутствии представителей текст с пояснением про регистрацию по промокоду (:137-140, :158-161, testid `amb-reps-empty`). Загрузка через Promise.allSettled: падение только dashboard не убивает список — просто скрывает карточку приглашения (:38-56).
+- Зависимости: API GET `api/v1/ambassador/reps`, `api/v1/ambassador/dashboard` (src/modules/roles-module/api/roles-api.ts:608-616); buildReferralUrl (src/package/global-helpers/referral.ts), copyTextToClipboard, showToast; AppQrCode, AppButton, AppSkeleton, LvIcon; formatMoney/plural.
+- Переходы: → нет (терминальный раздел); ← APP-P-039 (CTA «Открыть структуру» и действие «Представители»), APP-P-041, APP-P-042 (CTA «Моя ветка»), таб-бар.
+- Дизайн/канон — проверить визуально: 3 состояния, честные цифры (доход представителя — реальный ноль), токены ДС (--lv-soft-gold, --lv-tile-tiffany для плитки юзера, mono-шрифты кода), a11y (aria-hidden плитки, QR с label «QR-код ссылки-приглашения ветки»), акцент amb gold по PRODUCT_QUALITY_BAR.
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

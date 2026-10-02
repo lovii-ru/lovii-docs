@@ -1,11 +1,16 @@
 # APP-P-004 — Заведение (точка)
 - Статус: живая
-- Маршрут: `/stores/:id · StoreView` (src/router/index.ts:239)
-- Тип: обычная (параметр :id)
-- Доступ: гость
-- Назначение: Карточка точки: витрина, инфо, каналы (самовывоз/доставка).
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/stores/:id` · name `StoreView` (src/router/index.ts:239)
+- Тип: вложенная (родитель: APP-P-003 — child `/stores/:id` внутри `/stores`)
+- Доступ: гость (meta.public)
+- Назначение: витрина торговой точки: карточка магазина (лого, бейджи, статус availability, расстояние, минималка), категории и товары с поиском; teaser-точка вместо витрины показывает честную плашку «Скоро» (SZ-035). Точное имя точки ставится в title вкладки из компонента.
+- Функциональные блоки:
+  - #card — StoreCard: шапка точки + FavoriteButton (избранное — localStorage, `src/stores/favorites.store.ts`, серверного эндпоинта в ядре нет), бейджи филиала (`branch.badges`), статус из `availability` (SZ-024 — не хардкод «Открыто»), `formatDistance`, кнопка «i» → инфо-шит. `src/modules/store-module/components/StoreCard.vue`
+  - #info — StoreInfoSheet (AppBottomSheet): адрес, график (человекочитаемый статус: «Закрывается через N мин», «Откроется в HH:MM», «Закрыто до …»), минимальная сумма заказа. `components/StoreInfoSheet.vue`
+  - #categories — StoreCategories: чипы категорий и подкатегорий из дерева `categories` витрины; выбор перезагружает товары. `components/StoreCategories.vue`
+  - #products — StoreProducts: сетка карточек ProductPreview (→ APP-P-005), курсорная пагинация, встроенный поиск по офферам (дебаунс 1 с, `GET /search/offers` с branch_id/category). `components/StoreProducts.vue`, `StoreSearch.vue`
+- Состояния: loading — StoreSkeleton; teaser — «Скоро. Эта точка скоро откроется на LOVII — товары появятся здесь после полного запуска» (`is_teaser`); пусто — пустая категория/поиск «ничего не нашлось» (в StoreSearch catch → пустой результат); ошибка — errorHandler (тост); offline — SW; guest-view — нет
+- Зависимости: API `GET api/v1/storefront/info?branch_id&lat&lon`, `GET api/v1/storefront?branch_id&category_id&lat&lon&per_page&cursor`, `GET api/v1/search/offers?q&branch_id&category_id&page` (`src/modules/store-module/api/store-api.ts`); стор `src/modules/store-module/store/store.store.ts`; `src/stores/system.store.ts`, `src/stores/favorites.store.ts`; компоненты `AppPageHeader` (back → APP-P-003), `AppBadge`, `FavoriteButton`, `ProductPreview`
+- Переходы: → APP-P-005 (карточка товара из витрины/поиска), ← APP-P-003 (список/поиск каталога), ← APP-P-001 (популярные/рядом/акции), ← APP-P-002, ← APP-P-006/APP-P-007 (тап по заведению в корзине и акциях); AppPageHeader «назад» → APP-P-003
+- Дизайн/канон — проверить визуально: 3 состояния (скелетон ✓, teaser ✓); честные цифры (статусы availability, минималка из API ✓); токены ДС ✓; a11y (кнопки категорий, alt у фото — сверить);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

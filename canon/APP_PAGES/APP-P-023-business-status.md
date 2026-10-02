@@ -1,11 +1,18 @@
-# APP-P-023 — Статус заявки
+# APP-P-023 — ЛОВИ Бизнес — статус заявки
 - Статус: живая
-- Маршрут: `/business/status · BusinessStatusView` (src/router/index.ts:525)
-- Тип: обычная
-- Доступ: авторизован
-- Назначение: Таймлайн статусов заявки МСП; также цель редиректа /business/pending (запись без имени, :517).
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/business/status` · name `BusinessStatusView` (src/router/index.ts:525)
+- Тип: вложенная (родитель: `/business` → MainLayout)
+- Доступ: авторизован (гард группы `/business`)
+- Назначение: Шаг 5 сценария (замена вечному спиннеру `/business/pending`, Task 91): честный таймлайн из 5 вех по реальному статусу заявки + детали заявки + ручное и автообновление раз в 30с.
+- Функциональные блоки:
+  - #timeline — Таймлайн: вехи `BUSINESS_MILESTONES` («Заявка отправлена» → «Модерация»/«Подтверждение представителя» → «Инсталляционный платёж» → «Проверка платежа» → «Точка на витрине»); прогресс из `PROGRESS_BY_STATUS` (doneCount/currentIndex), для `awaiting_rep_approval` вторая веха честно переименовывается (BusinessStatus.vue:31-35, 191-225; package/business-status.ts:19-84).
+  - #head — Заголовок-состояние из `businessStatusView()`: tone waiting/done/failed, тексты без обещаний сроков (BusinessStatus.vue:37-46, 182-189).
+  - #details — Детали заявки: «№N · дата» (`formatApplicationMeta`) + строки точка/ИНН/деятельность/адрес/e-mail (BusinessStatus.vue:48-63, 228-236).
+  - #cabinet-cta — Мост в кабинет МСП: с `invoice_issued`/`awaiting_payment` — «оплатить счёт», с `verifying`/`verified` — «Перейти/Открыть кабинет МСП» → `MspOverview`; иначе «На главную» → `HomeView` и кнопка «Обновить статус» (BusinessStatus.vue:70-79, 238-264).
+  - #failed — Провал (`failed`/`expired`): причина от представителя (`rep_reject_reason`), «Отправить заявку заново» → apply, «Написать в поддержку» (mailto) (BusinessStatus.vue:150-179).
+  - #refresh — Автообновление `setInterval` 30с без потолка (долгоживущее состояние) + ручное «Обновить» (BusinessStatus.vue:25, 81-101).
+- Состояния: loading — спиннер «Загружаем заявку» (только первичная, `data-testid=business-status-loading`); пусто — «Заявки ещё нет» с CTA на apply; ошибка — «Не удалось загрузить заявку» + «Обновить»; основной экран — waiting/done/failed по статусу. Offline покрывается error-состоянием.
+- Зависимости: store `business.store.ts` (`loadCurrentApplication`, `loadState`); API `GET api/v1/business/applications/current`; мапперы `package/business-status.ts`; `BUSINESS_SUPPORT_EMAIL` (const/business.ts:56); компоненты `AppButton`, `AppPageHeader`, иконки статуса.
+- Переходы: → APP-P-022 (повторная заявка), → APP-P-044 (`MspOverview` — cabinet CTA), → APP-P-001 (`HomeView`), ← APP-P-021 (статус-строка лендинга), ← APP-P-022 (после сабмита); назад — `BusinessLandingView` (AppPageHeader).
+- Дизайн/канон — проверить визуально: все 4 состояния экрана, честные цифры (без «до 2 минут»), токены ДС (бренд-доты таймлайна, `--feedback-negative-solid`), a11y (`aria-label="Этапы подключения точки"` на ol, `aria-hidden` на декоративных точках/спиннере).
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

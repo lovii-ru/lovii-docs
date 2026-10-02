@@ -3,14 +3,22 @@
 - Маршрут: `/profile` · name `ProfileView` (src/router/index.ts:297)
 - Тип: обычная (child MainLayout, таб-бар)
 - Доступ: гость — meta.public намеренно (T-021: гостевой экран и есть экран входа; отдельного /auth в приложении нет)
-- Назначение: хаб покупателя: авторизованному — плитки-ссылки на контуры; гостю — экран входа (OTP sms/MAX, Telegram/MAX-статусы).
+- Назначение: хаб покупателя: авторизованному — карты счетов, подписка, плитки контуров; гостю — экран входа (OTP sms/MAX, Telegram/MAX-статусы).
 - Функциональные блоки:
-  - #auth — вход: телефон → код; API `auth/request-code`, `auth/send-code`, `auth/confirm`, `auth/max/status`, `auth/telegram/status`
-  - #blocks — плитки: → APP-P-009 (Счёт), APP-P-015 (Заказы), APP-P-017 (Адреса), APP-P-013 (Профиль), APP-P-020 (Настройки)
-  - #role-cabinets — плитки ролей по флагам GET /profile: → APP-P-026, APP-P-039, APP-P-044, APP-P-032
-  - #subscription — статус LOVII PASS (API `api/v1/subscription`)
-  - #promo — промокод/амб-код (API `api/v1/profile/promo`)
-- Состояния: loading / гость (auth-экран) / авторизован (блоки) / ошибка загрузки профиля
-- Зависимости: API `api/v1/profile`, `profile/consents`, `profile/avatar`, `guest/session`; stores/компоненты profile-module (файлы уточнить в фазе B)
-- Переходы: см. #blocks/#role-cabinets; ← нижний таб-бар; сюда редиректят все auth-гарды приложения (beforeEach и beforeEnter)
-- Сверка: роутер ✓ / код ✓ / UI ✗ (фаза B)
+  - #auth — вход: телефон → код; компонент `components/ProfileAuth.vue:1` открывает `auth-module/AuthModule.vue` по кнопке «Войти» (ProfileAuth.vue:16, showAuth); API `api/v1/auth/request-code`, `auth/send-code`, `auth/confirm`, `auth/max/status`, `auth/telegram/status` (auth-module)
+  - #head — шапка участника: аватар (фолбэк на инициалы/заглушку `assets/images/avatar.svg`), имя, телефон (libphonenumber), переход → APP-P-013 (ProfileModule.vue:369–390, testid `profile-edit-entry`)
+  - #cards — карусель карт счетов: `apiGetBalanceAccounts` (GET `api/v1/balance`, ProfileModule.vue:126) + компонент `profile-balance/components/PayCard.vue`; скелетон/ошибка загрузки карт (ProfileModule.vue:401–470, testid `profile-cards`)
+  - #card-actions — кнопки на карусели: «Счёт» → APP-P-009 (ProfileModule.vue:452–459, testid `profile-card-wallet`), «Перевести» → APP-P-010 (ProfileModule.vue:460–467, testid `profile-card-transfers`)
+  - #wallet-collapse — свёрнутый блок счёта: `apiGetWallet` (GET `api/v1/wallet`, :137), `apiGetWalletTransactions` (GET `api/v1/wallet/transactions?per_page=48`, :146), компоненты `ProfileCollapse.vue` (testid `profile-collapse-account`) и `WalletHistoryList.vue`; вход «Счёт и операции» → APP-P-009 (ProfileModule.vue:478–530, testid `profile-wallet-entry`)
+  - #tier — уровень LOVII PASS/VIP (helpers `pay-tier.ts`, `pay-privileges-match.ts`): статус подписки `apiGetSubscription` (GET `api/v1/subscription`, :154), активация `apiActivateSubscription` (POST `api/v1/subscription/activate`, оплата только с внутреннего счёта — profile-balance-api.ts:250–260), подписка/промо-блок: свой промокод (копировать/поделиться, ProfileModule.vue:574–598) или привязка чужого `apiBindProfilePromo` (POST `api/v1/profile/promo`, :279; ошибки 422 invalid_promo_code, 409 promo_already_bound) (ProfileModule.vue:531–646)
+  - #favorites — избранное: `stores/favorites.store.ts`, список магазинов → `StoreView`/:id и «Все магазины» → `StoresView` (ProfileModule.vue:677–715)
+  - #nav-addresses — «Мои адреса» → APP-P-017 (ProfileModule.vue:718–725)
+  - #nav-orders — «История заказов» → APP-P-015; заглушки «Отзывы» и «Пригласить друга» с бейджем «Скоро» (ProfileModule.vue:729–741)
+  - #role-cabinets — плитки ролей по данным профиля (`ProfileCabinets.vue:36–150`): MspOverview, RepresentativeOverview, AmbassadorOverview, OwnerOverview, InvestorGrowth, TeamOrders, CabinetPlatform → APP-P-044/026/039/021/032; «ЛОВИ Бизнес» и «Моя точка» убраны (прод-консолидация 14.09)
+  - #push-consents — шит SettingsSheet (`components/SettingsSheet.vue`): тема/текст/анимации, Web Push (`use-push-notifications.ts`, `api/v1/push/*`), согласия email/push (`consents-api.ts`, `api/v1/profile/consents*`), выход
+  - #footer — юридический футер: офер/политика (axiiom-ru.github.io), support@lovii.ru, реквизиты ООО «Аксиома» (`ProfileFooter.vue:36–64`)
+- Состояния: pending — скелетон `ProfileSkeleton.vue` (анти-FOUC, store `profile.store.ts:18`), гость — ProfileAuth, authed — контент; сбой загрузки профиля — ретраи 2/4/8/8/8 c (profile.store.ts:32, PROFILE_RETRY_DELAYS_MS), после исчерпания скелетон остаётся + OfflineBanner/ReloadPrompt; ошибка карт — `profile__cards-failed` (ProfileModule.vue:404)
+- Зависимости: GET `api/v1/profile`, `api/v1/balance`, `api/v1/wallet`, `api/v1/wallet/transactions`, `api/v1/subscription`, `api/v1/subscription/activate`, POST `api/v1/profile/promo`, `api/v1/push/*`, `api/v1/profile/consents*`; stores: `modules/profile-module/store/profile.store.ts` (authState pending/authed/guest), `stores/favorites.store.ts`, `modules/roles-module/store/roles.store.ts`
+- Переходы: → APP-P-009 (wallet-collapse, card-actions), APP-P-010 (card-actions), APP-P-013 (head), APP-P-015 (nav-orders), APP-P-017 (nav-addresses), APP-P-020 (шит настроек), роли → APP-P-021/026/032/039/044; ← нижний таб-бар; сюда редиректят все гарды приложения (beforeEnter каждой закрытой страницы и глобальный beforeEach)
+- Дизайн/канон — проверить визуально: скрин-тест «премиальный банк» (карты/баланс — объект гордости), 3 состояния (скелетон/гость/ошибка — реально есть), честные цифры (реальный баланс, без подмен), токены ДС (lv-*, AppBadge «Скоро» вместо мёртвых ссылок), a11y (aria-label секций, testid-покрытие), референс Revolut/Monobank
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

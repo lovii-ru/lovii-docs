@@ -1,11 +1,16 @@
 # APP-P-019 — Редактирование адреса
 - Статус: живая
-- Маршрут: `/profile/addresses/edit/:id · EditAddressView` (src/router/index.ts:457)
-- Тип: вложенная (родитель: APP-P-017)
-- Доступ: авторизован
-- Назначение: Единая форма адреса (mode=update), тот же компонент AddressForm.vue.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/addresses/edit/:id` · name `EditAddressView` (src/router/index.ts:457)
+- Тип: вложенная (родитель: APP-P-017; child MainLayout)
+- Доступ: авторизован (beforeEnter группы `/profile/addresses`, router/index.ts:433)
+- Назначение: та же единая форма адреса в режиме update (SZ-046 §3.1, `modules/address/AddressForm.vue`, props mode="update") + удаление адреса.
+- Функциональные блоки:
+  - #form — те же поля и валидация, что в create (см. APP-P-018); предзаполнение из `addressStore.addresses` по :id из маршрута; если адрес не найден — router.replace на список (:194)
+  - #save — `addressStore.updateAddress` (PATCH `api/v1/profile/addresses/{id}`, address.store.ts:44); если правят текущий delivery-адрес — обновление `systemStore.setDeliveryAddress` (:191–196); router.replace на список — редактор не остаётся в истории (:198)
+  - #delete — удаление с двухшаговым подтверждением прямо в форме (confirmDelete, 4 c таймаут, :63–77): `addressStore.deleteAddress` (DELETE `api/v1/profile/addresses/{id}` + перечитывание списка, address.store.ts:56); если удалили delivery-адрес — `systemStore.clearDeliveryAddress()` (:113–115) → AddressesView
+  - #map — карта-точка и геокодинг как в create (geoResolve, AddressPointMap)
+- Состояния: buttonLoader, ошибки полей, ошибка сохранения/удаления — тост из стора, «адрес не найден» — тихий replace
+- Зависимости: API PATCH/DELETE `api/v1/profile/addresses/{id}`, GET `api/v1/cities`, GET `api/v1/geo/resolve`; stores `address.store.ts`, `system.store.ts`; компоненты AddressForm.vue, AddressPointMap.vue, IconTrashRegular
+- Переходы: → APP-P-017 (replace после сохранения/удаления); ← APP-P-017 (AddressItem)
+- Дизайн/канон — проверить визуально: подтверждение удаления без модалок-тупиков (2-й тап за 4 c), токены lv-*, a11y (понятная кнопка удаления с иконкой + текстом), честные ошибки карты
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

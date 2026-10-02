@@ -1,11 +1,17 @@
 # APP-P-003 — Поиск заведений и товаров
 - Статус: живая
-- Маршрут: `/stores · StoresView` (src/router/index.ts:228)
-- Тип: обычная
-- Доступ: гость
-- Назначение: Каталог/поиск точек с гео-сортировкой и фильтрами категорий.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/stores` · name `StoresView` (src/router/index.ts:228)
+- Тип: обычная (child MainLayout, таб-бар)
+- Доступ: гость (meta.public)
+- Назначение: каталог заведений рядом (без адреса — пустое состояние, F-017) с серверными фильтрами/сортировкой, двумя видами списка (список/плитка, выбор в `localStorage("lovii_stores_view")`) и живым поиском по мерчантам (дебаунс 1 с, серверная offset-пагинация).
+- Функциональные блоки:
+  - #search — AppInput «Магазин или товар»: непустой ввод переключает экран на CatalogSearch (результаты `GET /search/merchants`), кнопка фильтров при поиске скрыта. `src/modules/stores-catalog/StoresCatalog.vue`, `components/CatalogSearch.vue`
+  - #filters — CatalogFilters (bottom-sheet): «Доставка», «Самовывоз», «Бесплатная доставка», «Доставка за час», «Кэшбэк», «Акции», «Комбо» + сортировка «по удалённости/по новизне» — всё серверное (решение владельца 29.09); счётчик активных фильтров на кнопке; любой фильтр сбрасывает пагинацию и перезагружает. `components/CatalogFilters.vue`
+  - #list — список CatalogStore / плитка CatalogStoreTile (статус «Открыто/Закрыто», `formatDistance`), переключатель вида — сегмент с aria-label; тап → APP-P-004. `components/CatalogStore.vue`, `CatalogStoreTile.vue`
+  - #noresult — честное пустое «По этим фильтрам ничего не нашлось — сбросить условия» (кнопка resetFilters); при поиске — «Ничего не нашлось — попробуйте другой запрос». `StoresCatalog.vue`, `CatalogSearch.vue`
+  - #search-results — CatalogSearchStore в списке: результат поиска мерчантов ведёт на StoreView по `store.branch_id ?? store.id`. `components/CatalogSearchStore.vue`
+- Состояния: loading — 8× CatalogStoreSkeleton (с вариантом list/grid); пусто — «Выберите адрес доставки, чтобы увидеть заведения рядом» + hint; #noresult выше; ошибка — errorHandler (в поиске catch → пустой результат); offline — SW; guest-view — нет
+- Зависимости: API `GET api/v1/stores?lat&lon&cursor&pickup&delivery&free_delivery&fast_delivery&cashback&promo&combo&sort` и `GET api/v1/search/merchants?q&page&per_page` (`src/modules/stores-catalog/api/store-catalog-api.ts`); стор `src/modules/stores-catalog/store/store-catalog.store.ts` (в нём же кэшируются `categories` из ответа /stores — в UI каталога чипы категорий сейчас НЕ рендерятся, параметр `categories[]` не отправляется); `src/stores/system.store.ts`; `AppInput`, `AppPagination`; хелперы `distance-helpers.ts`
+- Переходы: → APP-P-004 (карточка заведения/результат поиска); ← APP-P-001 (кнопка поиска героя), таб-бар
+- Дизайн/канон — проверить визуально: 3 состояния (скелетоны ✓, честные пустые ✓); честные цифры ✓; токены ДС (lv-surface/lv-card/lv-r-pill; `filters-indicator` использует литерал #fff через fallback `var(--content-normal-on-brand, #fff)` — сверить); a11y (aria-label у кнопок фильтров/вида, role="group" ✓);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

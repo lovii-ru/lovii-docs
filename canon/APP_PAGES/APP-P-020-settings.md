@@ -1,11 +1,20 @@
 # APP-P-020 — Настройки
 - Статус: живая
-- Маршрут: `/settings · ProfileSettings` (src/router/index.ts:477)
-- Тип: обычная
-- Доступ: авторизован (meta без public → default-deny)
-- Назначение: Настройки приложения: подписка LOVII PASS, уведомления, версия, выход.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/settings` · name `ProfileSettings` (src/router/index.ts:477)
+- Тип: обычная (отдельный top-level `/settings`, child MainLayout — иначе нет хедера и нижнего меню, SZ-076; beforeEnter на запись НЕТ)
+- Доступ: фактически для авторизованных (блоки профиля/выход), но гарда нет — страница открывается и гостю (расхождение с meta.public-моделью; остальные закрытые страницы закрыты beforeEnter)
+- Назначение: настройки приложения (SZ-076, 5-й пункт нижнего меню): тема, размер текста, анимации, Web Push, быстрый вход (Face ID/ПИН), кэш/установка PWA, свежесть сборки, выход.
+- Функциональные блоки:
+  - #appearance — тема (system/light/dark), размер текста (fontScale), анимации (motion): `readThemeChoice`, `storeFontScale`, `storeMotion` (ProfileSettings.vue:14–22; testid `settings-theme-*`, `settings-font-*`)
+  - #push — Web Push переключатель (`usePushNotifications`, state subscribed/unsupported/denied с честной подпиской «Браузер не поддерживает…», :56–62; testid `settings-push`): subscribe/unsubscribe → `api/v1/push/public-key`, `api/v1/push/subscriptions` (POST/DELETE)
+  - #quick-access — быстрый вход: `useQuickAccess` + `QuickAccessSheet.vue` (profile-security, :27–28, testid-кнопка :304, пин-статус :310)
+  - #freshness — свежесть сборки SZ-076: `ensureFreshVersion` сверяет `__APP_VERSION__` с `/version.json` (no-store); разошлись — `clearAppCaches()` + reload (:121–135)
+  - #cache — «Очистить кэш»: двухшаговое подтверждение (cacheConfirm) → clearAppCaches + reload (:85–93)
+  - #install — «Установить приложение» (PWA): beforeinstallprompt / подсказка про меню браузера в Safari (:103–118)
+  - #logout — выход: `profileStore.logout()` (POST `api/v1/auth/logout` + сброс токена + reload, profile.store.ts) → router.push HomeView (:95–98; testid `settings-logout`)
+  - #boot — onMounted: push.refresh() + push.loadDevices() (per-device темы, GET/PATCH `api/v1/push/subscriptions/{id}`) (:141–142)
+- Состояния: переключатели с busy-состояниями, pushNote для unsupported/denied, подтверждение очистки кэша; гостю страница рендерится без профильных действий
+- Зависимости: API `api/v1/push/public-key`, `api/v1/push/subscriptions` (GET/POST/DELETE/PATCH), POST `api/v1/auth/logout`; stores `profile.store.ts`; хелперы `cache-helpers.ts` (clearAppCaches), theme/font/motion-сторы; компоненты AppSwitch, QuickAccessSheet, LvIcon
+- Переходы: → HomeView (выход); ← нижний таб-бар (5-й пункт меню); функции дублируют шит SettingsSheet профиля (APP-P-008)
+- Дизайн/канон — проверить визуально: токены lv-* (тема применяется live), a11y (AppSwitch с aria-checked, :179), честные подписки состояний пуша, адаптив, паритет с демо settings.js
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

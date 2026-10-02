@@ -1,11 +1,16 @@
 # APP-P-013 — Редактирование профиля
 - Статус: живая
-- Маршрут: `/profile/edit · ProfileEditView` (src/router/index.ts:366)
-- Тип: обычная
-- Доступ: авторизован
-- Назначение: Форма данных профиля (имя, e-mail, город).
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/edit` · name `ProfileEditView` (src/router/index.ts:366)
+- Тип: вложенная (родитель: APP-P-008; child MainLayout, beforeEnter auth)
+- Доступ: авторизован (beforeEnter, router/index.ts:371)
+- Назначение: форма данных профиля: имя, фамилия, пол, дата рождения, e-mail, город; загрузка и кроп аватара.
+- Функциональные блоки:
+  - #form — поля профиля: `composables/profile-form.ts` (vuelidate: required/minLength/email, ошибки полей), сегмент пола AppSegmentControl (Gender), телефон показом (не редактируется, формат libphonenumber — ProfileEditForm.vue:9)
+  - #avatar — смена аватара: скрытый file-input (:25, avatarInput) → кроп в `AvatarCropper.vue` → FormData `avatar` → `updateProfileAvatar` (POST `api/v1/profile/avatar`, store profile.store.ts)
+  - #save — сохранение: `updateProfileInfo` (PATCH `api/v1/profile`), обновление стора из ответа (ProfileEditForm.vue:70–77); saveError (:55): валидационная деталь email из API (validation_failed + details.email) или общий текст; после save при непроверенном email — подсказка (email_verified_at свежий, :78–80)
+  - #email-verify — плашка непроверенного e-mail: email задан, но `email_verified_at == null` (computed emailNeedsVerification, :139–146, testid `profile-email-unverified`) → кнопка → APP-P-014 (testid `profile-email-verify`)
+- Состояния: скелетон `ProfileEditSkeleton.vue`, пока profileStore.profile не загружен (ProfileEdit.vue:16–17); ошибки полей (vuelidate), saveError, загрузка аватара
+- Зависимости: API PATCH `api/v1/profile`, POST `api/v1/profile/avatar` (modules/profile-module/api/profile-api.ts, store `profile.store.ts`); vuelidate; компоненты ProfileEditForm.vue, AvatarCropper.vue, AppInput/AppButton/AppSegmentControl
+- Переходы: → APP-P-014 (плашка e-mail); ← APP-P-008 (шапка участника, testid `profile-edit-entry`); назад — AppPageHeader back-to ProfileView
+- Дизайн/канон — проверить визуально: скелетон вместо спиннера, честные состояния (ошибка сохранения — текст с действием), токены lv-*, a11y (label у полей, тап-таргеты ≥44px), кроп аватара квадратным по канону
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

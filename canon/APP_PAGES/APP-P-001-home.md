@@ -3,14 +3,14 @@
 - Маршрут: `/` · name `HomeView` (src/router/index.ts:204)
 - Тип: обычная (child MainLayout, таб-бар)
 - Доступ: гость (meta.public)
-- Назначение: агрегированная витрина «всё в шаговой доступности» — города, популярные заведения/рестораны, ближайшие точки по геолокации.
+- Назначение: агрегированная стартовая витрина — герой с адресом района и статой «рядом», популярные заведения, лента акций лояльности, точки «Возле вас». Загрузка от адреса доставки (systemStore.deliveryAddress), без него — от дефолтной точки (F-017).
 - Функциональные блоки:
-  - #geo-banner — гео-баннер: город по lat/lon; отказ геолокации → дефолтный город
-  - #popular-stores — слайдер «Популярные магазины» → APP-P-004
-  - #popular-restaurants — слайдер «Популярные заведения» → APP-P-004
-  - #near-you — «Рядом с вами»: ближайшие точки → APP-P-004
-  - #categories — вход в каталог/поиск → APP-P-003 (в фазе B сверить фактический вход)
-- Состояния: loading (скелетоны слайдеров) / пусто (нет точек рядом) / ошибка загрузки / offline (SW)
-- Зависимости: API `GET api/v1/home` (src/modules/home-module/api/home-api.ts); стор home-module/store; компоненты home-module/components; каркас MainLayout.vue
-- Переходы: → APP-P-004 (карточки точек), → APP-P-003 (каталог); ← APP-P-060, нижний таб-бар
-- Сверка: роутер ✓ / код ✓ (home-api.ts) / UI ✗ (фаза B)
+  - #hero — HomeHero: сворачиваемая герой-карточка «Всё нужное — в шаговой доступности»; таб с адресом (`formatAddressLabel`, без адреса — «Выбрать адрес»; выбор адреса живёт в шапке MainLayout), stat-пилюли «N точек рядом» / «ближайшая — X км» (считаются из `near_you`), статичная пилюля «баллы 1:1»; свёрнутость в `localStorage("lovii_hero")`; кнопка-псевдополе «Найти товар или точку рядом…» → APP-P-003. `src/modules/home-module/components/HomeHero.vue` (goSearch ~L55)
+  - #popular — HomePopular: горизонтальный drag-слайдер «Популярные заведения» (PopularStorePreview → APP-P-004) + плитка «Посмотреть все» → APP-P-002. `src/modules/home-module/components/HomePopular.vue`
+  - #promos — PromoFeed (SZ-075): лента карточек акций лояльности (`isRenderablePromo`-фильтр), пусто — блок не мешает; тап по акции → APP-P-004 (StoreView по branch_id). `src/modules/loyalty/components/PromoFeed.vue`
+  - #nearby — HomeNearbyPlaces: сетка «Возле вас» (2 колонки, <540px — 1) из NearbyStore: фото-плитки (нет медиа → мягкая плитка), лого (нет → плитка), «Открыто/Закрыто» по `availability.is_open`, «Заказ от N ₽» при `min_order_amount > 0`, `formatDistance`; тап → APP-P-004. `src/modules/home-module/components/HomeNearbyPlaces.vue`, `NearbyStore.vue`
+- Состояния: loading — скелетоны (8× NearbyStoreSkeleton, 8× PopularStorePreviewSkeleton; PromoFeed грузит сам); пусто — точки рядом/популярные не рисуются (пустая сетка, отдельного продающего состояния нет), PromoFeed скрыт; ошибка — errorHandler (тост), ретрая через смену адреса/перезаход; offline — SW; guest-view — нет, экран полностью гостевой
+- Зависимости: API `GET api/v1/home?lat&lon&limit` (`src/modules/home-module/api/home-api.ts`; блоки ответа cities/popular_restaurants стором не используются — берутся только near_you и popular_stores); `GET api/v1/loyalty/promos` (PromoFeed, `src/modules/loyalty/api/loyalty-api.ts:58`); сторы `src/modules/home-module/store/home.store.ts`, `src/stores/system.store.ts`; хелперы `default-point.ts`, `address-helpers.ts`, `price-helpers.ts`, `distance-helpers.ts`; composable `useDragScroll.ts`
+- Переходы: → APP-P-002 («Посмотреть все» в #popular), → APP-P-003 (кнопка поиска героя), → APP-P-004 (карточки популярных/рядом, акции); ← APP-P-060, таб-бар
+- Дизайн/канон — проверить визуально: 3 состояния (скелетоны ✓; «пусто» nearby — голая сетка без CTA — сверить с PRODUCT_QUALITY_BAR); честные цифры (счётчики из API ✓; «баллы 1:1» — статичная маркетинговая пилюля, не из данных); токены ДС (lv-card/lv-line/lv-soft-pink/lv-r-* ✓; в NearbyStore локальные радиусы 16/8px — сверить); a11y (герой: aria-expanded/aria-controls ✓; фото alt="" как декор — имя рядом текстом);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)
