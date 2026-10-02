@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ревью состояний экранов ЛОВИ — T-034 (формы, визарды, ветвления)</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c1e21;--mut:#69707a;--line:#e3e6ea;
+--ok:#1e9e6a;--fix:#e0a100;--raw:#d64545;--acc:#0f8a8a}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font:15px/1.45 -apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+.app{display:grid;grid-template-columns:1fr 380px;height:100vh}
+@media (max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr}.side{order:-1;max-height:45vh}}
+.main{display:flex;flex-direction:column;height:100vh}
+.mhead{display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.mhead h1{font-size:16px;margin:0;flex:1 1 240px}
+.mhead button{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+#prog{font-weight:600;color:var(--mut)}
+.scroll{overflow:auto;flex:1;padding:16px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:860px;margin:0 auto}
+.stage img{width:100%;display:block}
+.meta{padding:12px 16px;border-top:1px solid var(--line)}
+.meta h2{margin:0 0 2px;font-size:18px}
+.meta .id{color:var(--acc);font-weight:700}
+.meta .code{color:var(--mut);font-size:13px;font-family:ui-monospace,monospace}
+.vrow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.vrow button{flex:1 1 120px;font:inherit;font-weight:600;padding:10px;border-radius:10px;border:2px solid transparent;cursor:pointer;background:#fff}
+.v-ok.on{border-color:var(--ok);color:var(--ok);background:#eafaf3}
+.v-fix.on{border-color:var(--fix);color:#8a6200;background:#fff8e6}
+.v-raw.on{border-color:var(--raw);color:var(--raw);background:#fdeeee}
+textarea{width:100%;min-height:64px;margin-top:10px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:10px}
+.check{margin-top:12px;font-size:13px;color:var(--mut)}
+.check label{display:block;margin:2px 0}
+.hint{font-size:12px;color:var(--mut);margin-top:8px}
+.side{background:var(--card);border-left:1px solid var(--line);display:flex;flex-direction:column;height:100vh}
+.shead{padding:12px 14px;border-bottom:1px solid var(--line)}
+.shead h2{margin:0 0 6px;font-size:14px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.shead select{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;width:100%}
+.slist{overflow:auto;flex:1}
+.slist table{width:100%;border-collapse:collapse;font-size:13px}
+.slist tr{cursor:pointer}
+.slist tr.cur{background:#eef6f6}
+.slist td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.slist .t{color:var(--acc);font-weight:700}
+.slist .v{color:var(--mut);font-size:12px}
+.badge{font-size:11px;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-ok{background:#eafaf3;color:var(--ok)} .b-fix{background:#fff8e6;color:#8a6200} .b-raw{background:#fdeeee;color:var(--raw)} .b-none{color:#b6bcc4}
+.sfoot{padding:10px 14px;border-top:1px solid var(--line);display:grid;gap:8px}
+.sfoot button,.sfoot label{font:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+#exportOut{display:none;width:100%;min-height:120px;font:12px ui-monospace,monospace}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="main">
+    <div class="mhead">
+      <h1>T-034 · Ревью состояний экранов — формы, визарды, ветвления</h1>
+      <span id="prog"></span>
+      <button id="prev">←</button><button id="next">→</button>
+    </div>
+    <div class="scroll">
+      <div class="stage">
+        <img id="img" alt="кадр состояния">
+        <div class="meta">
+          <h2><span class="id" id="pid"></span> <span id="ptitle"></span></h2>
+          <div class="code" id="pcode"></div>
+          <div class="vrow">
+            <button class="v-ok" data-v="ok">✅ ОК</button>
+            <button class="v-fix" data-v="fix">✏️ Правки</button>
+            <button class="v-raw" data-v="raw">🚧 Сырой</button>
+          </div>
+          <textarea id="note" placeholder="Комментарий к вердикту (что править)…"></textarea>
+          <div class="check">
+            <b>Чек-лист PRODUCT_QUALITY_BAR:</b>
+            <label><input type="checkbox" class="chk"> канон ДС (токены/компоненты lovii-demo)</label>
+            <label><input type="checkbox" class="chk"> читаемость/контраст, a11y (фокус, роли)</label>
+            <label><input type="checkbox" class="chk"> честные цифры и подписи</label>
+            <label><input type="checkbox" class="chk"> мобильная раскладка 390 не разваливается</label>
+          </div>
+          <div class="hint">Клавиши: ←/→ листать, 1/2/3 — вердикт. Вердикты живут в localStorage и экспортируются JSON-ом (файл кладётся в artifacts/2026-10-03-t034-screens-states-inventory/VERDICTS.json).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <aside class="side">
+    <div class="shead"><h2>Экраны-состояния</h2><select id="group"></select></div>
+    <div class="slist" id="listbody"></div>
+    <div class="sfoot">
+      <button id="exportBtn">⬇️ Экспорт JSON</button>
+      <button id="resetBtn">Сброс</button>
+      <textarea id="exportOut" readonly></textarea>
+    </div>
+  </aside>
+</div>
+<script>
+const ITEMS=[{"id": "T034-01", "page": "APP-P-048", "title": "Товары МСП — форма «Добавить товар»", "group": "МСП · товары", "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/add-product.png", "code": "MspProducts.vue:443-600"}, {"id": "T034-02", "page": "APP-P-048", "title": "Товары МСП — правка товара", "group": "МСП · товары", "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/edit-product.png", "code": "MspProducts.vue (edit)"}, {"id": "T034-03", "page": "APP-P-048", "title": "Товары МСП — создание категории", "group": "МСП · товары", "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/add-category.png", "code": "MspProducts.vue:601+"}, {"id": "T034-04", "page": "APP-P-048", "title": "Товары МСП — переименование категории", "group": "МСП · товары", "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/category-rename.png", "code": "MspProducts.vue:622-665"}, {"id": "T034-05", "page": "APP-P-049", "title": "Визард акции — шаг 1: выбор механики", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/wizard-step1.png", "code": "LoyaltyRuleWizard.vue + MechanicPicker.vue"}, {"id": "T034-06", "page": "APP-P-049", "title": "Механика «Сумма чека» (threshold)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-threshold.png", "code": "msp/loyalty.ts:157"}, {"id": "T034-07", "page": "APP-P-049", "title": "Механика «Комбо» (combo)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-combo.png", "code": "msp/loyalty.ts:165"}, {"id": "T034-08", "page": "APP-P-049", "title": "Механика «Штампы — N-й в подарок» (stamps)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-stamps.png", "code": "msp/loyalty.ts:172"}, {"id": "T034-09", "page": "APP-P-049", "title": "Механика «Счастливые часы» (hours)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-hours.png", "code": "msp/loyalty.ts:178"}, {"id": "T034-10", "page": "APP-P-049", "title": "Механика «Группа товаров» (cashback)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-cashback.png", "code": "msp/loyalty.ts:184"}, {"id": "T034-11", "page": "APP-P-049", "title": "Шаг 2 — порог и награда (threshold)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-threshold.png", "code": "LoyaltyRuleWizard.vue"}, {"id": "T034-12", "page": "APP-P-049", "title": "Шаг 2 — часы и дни (hours)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-hours.png", "code": "DayChips + TimeField"}, {"id": "T034-13", "page": "APP-P-049", "title": "Шаг 2 — группа товаров (cashback)", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-cashback.png", "code": "LoyaltyGroupEditor.vue"}, {"id": "T034-14", "page": "APP-P-049", "title": "🔴 Комбо — шаг 2 НЕДОСТИЖИМ (Далее заблокирован на шаге 1)", "group": "МСП · лояльность · дефекты", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-combo-BLOCKED-at-step1.png", "code": "валидация draftValidationError требует ≥2 товара, выбираемые только на шаге 2"}, {"id": "T034-15", "page": "APP-P-049", "title": "🔴 Штампы — шаг 2 НЕДОСТИЖИМ (нужен товар-подарок с шага 2)", "group": "МСП · лояльность · дефекты", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-stamps-BLOCKED-at-step1.png", "code": "giftOfferId пуст → error≠null → Далее disabled"}, {"id": "T034-16", "page": "APP-P-049", "title": "Шаг 3 — бюджет и предпросмотр покупателя", "group": "МСП · лояльность", "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step3-publish.png", "code": "BudgetMeter + BuyerPreview"}, {"id": "T034-17", "page": "APP-P-046", "title": "Заказы точки — пустые активные", "group": "МСП · заказы", "img": "../screens/APP-P-046-msp-orders/v1-2026-10-03/empty-active.png", "code": "MspOrders.vue"}, {"id": "T034-18", "page": "APP-P-047", "title": "Деталь заказа — кнопки статусов", "group": "МСП · заказы", "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-03/actions.png", "code": "MspOrderDetail.vue:370-385"}, {"id": "T034-19", "page": "APP-P-047", "title": "Деталь заказа — подтверждение отмены", "group": "МСП · заказы", "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-03/cancel-confirm.png", "code": "MspOrderDetail.vue:394-443"}, {"id": "T034-20", "page": "APP-P-050", "title": "Настройки точки — зона доставки (радиус)", "group": "МСП · настройки", "img": "../screens/APP-P-050-msp-branch-settings/v1-2026-10-03/delivery-zone.png", "code": "MspBranchSettings.vue:148-222"}, {"id": "T034-21", "page": "APP-P-051", "title": "Команда — форма приглашения (бренд→точки→роль→телефон)", "group": "МСП · команда", "img": "../screens/APP-P-051-msp-team/v1-2026-10-03/invite-form.png", "code": "MspTeam.vue:309+ (SZ-047)"}, {"id": "T034-22", "page": "APP-P-044", "title": "Свитчер точки (BranchSwitcher)", "group": "МСП · навигация", "img": "../screens/APP-P-044-msp-overview/v1-2026-10-03/branch-switcher.png", "code": "BranchSwitcher.vue (SZ-076)"}, {"id": "T034-23", "page": "APP-P-003", "title": "Каталог — пустой результат поиска", "group": "Витрина · состояния", "img": "../screens/APP-P-003-stores/v1-2026-10-03/search-empty.png", "code": "StoresCatalog.vue + CatalogSearch.vue"}, {"id": "T034-24", "page": "APP-P-007", "title": "Чекаут покупателя — создание заказа", "group": "Витрина · состояния", "img": "../screens/APP-P-007-cart-order/v1-2026-10-03/checkout-create.png", "code": "CreateOrder.vue"}, {"id": "T034-25", "page": "APP-P-028", "title": "Кабинет представителя — карточки заявок", "group": "Представитель · состояния", "img": "../screens/APP-P-028-rep-approvals/v1-2026-10-03/approval-cards.png", "code": "RepresentativeApprovals.vue"}, {"id": "T034-26", "page": "APP-P-055", "title": "Кабинет команды — товары (read-only)", "group": "Команда · состояния", "img": "../screens/APP-P-055-team-products/v1-2026-10-03/team-products.png", "code": "TeamProducts.vue"}];
+const LS="t034-verdicts-v1";
+let data=ITEMS, verdicts={}, cur=0;
+try{verdicts=JSON.parse(localStorage.getItem(LS)||"{}")}catch(e){verdicts={}}
+const gsel=document.getElementById("group");
+const all=document.createElement("option");all.value="";all.textContent="Все группы ("+data.length+")";gsel.appendChild(all);
+[...new Set(data.map(x=>x.group))].forEach(g=>{const o=document.createElement("option");o.value=g;o.textContent=g;gsel.appendChild(o)});
+gsel.addEventListener("change",()=>{cur=0;render();renderList()});
+function curList(){const g=gsel.value;return data.map((x,i)=>({x,i})).filter(p=>!g||p.x.group===g)}
+function render(){
+  const it=data[cur];
+  document.getElementById("img").src=it.img;
+  document.getElementById("pid").textContent=it.id+" ·";
+  document.getElementById("ptitle").textContent=it.title;
+  document.getElementById("pcode").textContent=it.code+" · страница-дом "+it.page+" · кадр ../screens/"+it.img.split("/").slice(-3).join("/");
+  const v=verdicts[it.id]||{};
+  document.querySelectorAll(".vrow button").forEach(b=>b.classList.toggle("on",b.dataset.v===v.verdict));
+  document.getElementById("note").value=v.note||"";
+  document.getElementById("prog").textContent=Object.keys(verdicts).length+" / "+data.length;
+}
+function setVerdict(vv){
+  const it=data[cur];
+  verdicts[it.id]=Object.assign({id:it.id,title:it.title},verdicts[it.id]||{},{verdict:vv,note:document.getElementById("note").value,at:new Date().toISOString()});
+  save();render();renderList();
+  if(vv==="ok")setTimeout(()=>{const l=curList();const p=l.findIndex(q=>q.i===cur);if(p<l.length-1){cur=l[p+1].i;render();renderList();scrollList()}},250);
+}
+function save(){localStorage.setItem(LS,JSON.stringify(verdicts));renderList()}
+function next(){const l=curList();const p=l.findIndex(q=>q.i===cur);if(p<l.length-1){cur=l[p+1].i;render();renderList();scrollList()}}
+function prev(){const l=curList();const p=l.findIndex(q=>q.i===cur);if(p>0){cur=l[p-1].i;render();renderList();scrollList()}}
+function scrollList(){const tr=document.querySelector("#listbody tr.cur");if(tr)tr.scrollIntoView({block:"nearest"})}
+document.querySelectorAll(".vrow button").forEach(b=>b.onclick=()=>setVerdict(b.dataset.v));
+document.getElementById("note").addEventListener("change",()=>{
+  const it=data[cur];verdicts[it.id]=Object.assign({id:it.id,title:it.title},verdicts[it.id]||{});
+  verdicts[it.id].note=document.getElementById("note").value;verdicts[it.id].at=new Date().toISOString();save();
+});
+document.getElementById("next").onclick=next;document.getElementById("prev").onclick=prev;
+document.getElementById("exportBtn").onclick=()=>{
+  const out={task:"T-034",exported:new Date().toISOString(),total:data.length,reviewed:Object.keys(verdicts).length,
+    counts:{ok:Object.values(verdicts).filter(v=>v.verdict==="ok").length,fix:Object.values(verdicts).filter(v=>v.verdict==="fix").length,raw:Object.values(verdicts).filter(v=>v.verdict==="raw").length},
+    verdicts:Object.values(verdicts).sort((a,b)=>a.id<b.id?-1:1)};
+  const s=JSON.stringify(out,null,1);const o=document.getElementById("exportOut");o.style.display="block";o.value=s;
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([s],{type:"application/json"}));a.download="VERDICTS.json";a.click();};
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Сбросить все вердикты в этом браузере?")){verdicts={};save();render()}};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA"||e.target.tagName==="INPUT"||e.target.tagName==="SELECT")return;
+  if(e.key==="ArrowRight")next();else if(e.key==="ArrowLeft")prev();
+  else if(e.key==="1")setVerdict("ok");else if(e.key==="2")setVerdict("fix");else if(e.key==="3")setVerdict("raw");});
+function badgeOf(v){return v?{ok:["b-ok","✅"],fix:["b-fix","✏️"],raw:["b-raw","🚧"]}[v.verdict]:["b-none","—"]}
+function renderList(){
+  const l=curList();
+  document.getElementById("listbody").innerHTML="<table>"+l.map(q=>{
+    const v=verdicts[q.x.id];const b=badgeOf(v);
+    return `<tr class="${q.i===cur?"cur":""}" onclick="jump(${q.i})"><td><span class="t">${q.x.id}</span> <span class="v">${q.x.title}</span>${v&&v.note?`<br><span class="v">✏️ ${v.note.length>60?v.note.slice(0,60)+"…":v.note}</span>`:""}</td><td><span class="badge ${b[0]}">${b[1]}</span></td></tr>`}).join("")+"</table>";
+}
+window.jump=i=>{cur=i;render();renderList();document.querySelector(".scroll").scrollTop=0};
+render();renderList();
+</script>
+</body>
+</html>

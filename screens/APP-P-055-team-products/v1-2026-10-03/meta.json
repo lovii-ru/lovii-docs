@@ -1,0 +1,13 @@
+{
+  "id": "APP-P-055-team-products",
+  "version": "v1-2026-10-03",
+  "date": "2026-10-03",
+  "stand": "localhost:5174 (локальный стенд, OrbStack)",
+  "app_slice": "staging-рабочее дерево lovii-app",
+  "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
+  "tool": "Playwright chrome 390×844 @2x, fullPage",
+  "kind": "states-only (T-034): основной кадр версии не менялся",
+  "states": [
+    "team-products"
+  ]
+}

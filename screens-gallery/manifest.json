@@ -31,7 +31,9 @@
    "group": "Витрина",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-003-stores/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-003-stores/v1-2026-10-03/search-empty.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-003-stores.md",
    "card_local": "../canon/APP_PAGES/APP-P-003-stores.md"
   },
@@ -78,7 +80,8 @@
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-007-cart-order/v1-2026-10-02/default.png",
    "extras": [
-    "../screens/APP-P-007-cart-order/v1-2026-10-02/guest.png"
+    "../screens/APP-P-007-cart-order/v1-2026-10-02/guest.png",
+    "../screens/APP-P-007-cart-order/v1-2026-10-03/checkout-create.png"
    ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-007-cart-order.md",
    "card_local": "../canon/APP_PAGES/APP-P-007-cart-order.md"
@@ -281,7 +284,9 @@
    "group": "Бизнес и реп",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-028-rep-approvals/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-028-rep-approvals/v1-2026-10-03/approval-cards.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-028-rep-approvals.md",
    "card_local": "../canon/APP_PAGES/APP-P-028-rep-approvals.md"
   },
@@ -457,7 +462,9 @@
    "group": "МСП",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-044-msp-overview/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-044-msp-overview/v1-2026-10-03/branch-switcher.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-044-msp-overview.md",
    "card_local": "../canon/APP_PAGES/APP-P-044-msp-overview.md"
   },
@@ -480,7 +487,8 @@
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-046-msp-orders/v1-2026-10-02/default.png",
    "extras": [
-    "../screens/APP-P-046-msp-orders/v1-2026-10-02/history.png"
+    "../screens/APP-P-046-msp-orders/v1-2026-10-02/history.png",
+    "../screens/APP-P-046-msp-orders/v1-2026-10-03/empty-active.png"
    ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-046-msp-orders.md",
    "card_local": "../canon/APP_PAGES/APP-P-046-msp-orders.md"
@@ -492,7 +500,10 @@
    "group": "МСП",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-047-msp-order-detail/v1-2026-10-03/actions.png",
+    "../screens/APP-P-047-msp-order-detail/v1-2026-10-03/cancel-confirm.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-047-msp-order-detail.md",
    "card_local": "../canon/APP_PAGES/APP-P-047-msp-order-detail.md"
   },
@@ -503,7 +514,12 @@
    "group": "МСП",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-048-msp-products/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-048-msp-products/v1-2026-10-03/add-product.png",
+    "../screens/APP-P-048-msp-products/v1-2026-10-03/edit-product.png",
+    "../screens/APP-P-048-msp-products/v1-2026-10-03/add-category.png",
+    "../screens/APP-P-048-msp-products/v1-2026-10-03/category-rename.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-048-msp-products.md",
    "card_local": "../canon/APP_PAGES/APP-P-048-msp-products.md"
   },
@@ -514,7 +530,20 @@
    "group": "МСП",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/wizard-step1.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-threshold.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-combo.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-stamps.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-hours.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-cashback.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-threshold.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-hours.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-cashback.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-combo-BLOCKED-at-step1.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-stamps-BLOCKED-at-step1.png",
+    "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step3-publish.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-049-msp-loyalty.md",
    "card_local": "../canon/APP_PAGES/APP-P-049-msp-loyalty.md"
   },
@@ -525,7 +554,9 @@
    "group": "МСП",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-050-msp-branch-settings/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-050-msp-branch-settings/v1-2026-10-03/delivery-zone.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-050-msp-branch-settings.md",
    "card_local": "../canon/APP_PAGES/APP-P-050-msp-branch-settings.md"
   },
@@ -536,7 +567,9 @@
    "group": "МСП",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-051-msp-team/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-051-msp-team/v1-2026-10-03/invite-form.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-051-msp-team.md",
    "card_local": "../canon/APP_PAGES/APP-P-051-msp-team.md"
   },
@@ -582,7 +615,9 @@
    "group": "Команда",
    "version": "v1-2026-10-02",
    "img": "../screens/APP-P-055-team-products/v1-2026-10-02/default.png",
-   "extras": [],
+   "extras": [
+    "../screens/APP-P-055-team-products/v1-2026-10-03/team-products.png"
+   ],
    "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-055-team-products.md",
    "card_local": "../canon/APP_PAGES/APP-P-055-team-products.md"
   },
