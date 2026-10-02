@@ -1,0 +1,13 @@
+# APP-P-059 — Вход по magic link
+- Статус: живая
+- Маршрут: `/auth/by-binding` · name `AuthByBindingView` (src/router/index.ts:992)
+- Тип: обычная (вне MainLayout — самостоятельный экран без хедера/таб-бара)
+- Доступ: гость (meta.public)
+- Назначение: целевой роут кнопки «Войти в приложение» из Telegram-бота (P-1 magic link, SZ-008): одноразовый binding_token подтверждается и логинит.
+- Функциональные блоки:
+  - #confirm — обмен token: `POST api/v1/auth/confirm-by-binding` → сохранение сессии
+  - #result — состояния loading / success / error (истёк или использован)
+- Состояния: loading / success / error (заявлены в комментарии роутера)
+- Зависимости: API `api/v1/auth/confirm-by-binding`; src/modules/auth-module/AuthByBinding.vue
+- Переходы: → APP-P-008 (после логина / при ошибке — сверить в фазе B); ← внешняя ссылка Telegram-бота
+- Сверка: роутер ✓ / код ✓ / UI ✗ (фаза B)

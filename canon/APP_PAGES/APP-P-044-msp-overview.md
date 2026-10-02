@@ -1,0 +1,16 @@
+# APP-P-044 — Кабинет МСП — Обзор («Мой магазин»)
+- Статус: живая
+- Маршрут: `/cabinet/msp` · name `MspOverview` (src/router/index.ts:831)
+- Тип: обычная (корень группы /cabinet/msp, каркас CabinetLayout)
+- Доступ: роль msp — rolesGuard("msp") + ensureRole() + teamToOwnCabinet() (роль команды уходит в APP-P-053)
+- Назначение: главный экран кабинета точки: сводка заказов/выручки/готовности, вход во все разделы управления; контекст юрлица — свитчер в шапке (SZ-050).
+- Функциональные блоки:
+  - #overview — сводка из `GET api/v1/msp/overview` (заказы, статусы, readiness)
+  - #partner-switcher — свитчер юрлица/мерчанта (msp.store, cabinetPartnerSwitcher)
+  - #tabs — нижний бар разделов с abilities: Обзор(merchant.view), Заказы(order.view) → APP-P-046, Товары(offer.create) → APP-P-048, Команда(team.view) → APP-P-051, Промо(merchant.update_profile) → APP-P-049, Точка(branch.update) → APP-P-050
+  - #verification — блок счёта верификации → APP-P-045
+  - #starter — чек-лист запуска → APP-P-052
+- Состояния: loading (ensureRole) / пусто (нет мерчантов у юрлица, SZ-049) / ошибка / нет роли (редирект в APP-P-008)
+- Зависимости: API `api/v1/msp/overview`; stores roles-module/store/{msp,roles}.store.ts; каркас CabinetLayout.vue
+- Переходы: → APP-P-045…052; ← APP-P-008 (плитка роли), APP-P-025 (легаси-редирект «Моя точка»)
+- Сверка: роутер ✓ / код ✓ (msp.store.ts, MspProducts.vue:39) / UI ✗ (фаза B)
