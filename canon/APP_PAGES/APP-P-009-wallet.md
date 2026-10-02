@@ -1,0 +1,16 @@
+# APP-P-009 — Счёт и операции
+- Статус: живая
+- Маршрут: `/profile/wallet` · name `ProfileWalletView` (src/router/index.ts:310)
+- Тип: обычная (child MainLayout; beforeEnter auth)
+- Доступ: авторизован
+- Назначение: единый экран контуров «Деньги» и «Баллы» (сессия 109): селектор счёта, сводка баланса, лента операций с пагинацией.
+- Функциональные блоки:
+  - #account-switch — селектор счёта (рубли/PAY-баллы; query `?tab=points|operations`, `?account=ID`)
+  - #balance-summary — сводка: баланс, оборот 30 дней / VIP (API `api/v1/wallet`, `api/v1/balance`)
+  - #operations — лента операций (API `api/v1/wallet/transactions`, `api/v1/balance/entries`; per_page)
+  - #transfer-entry — кнопка «Перевести» → APP-P-010
+  - #pay — вход в PAY-операции (карты/переводы, канон PAY=баллы)
+- Состояния: loading / пусто (нет операций) / ошибка / offline
+- Зависимости: API `api/v1/wallet`, `wallet/transactions`, `api/v1/balance`, `balance/entries`; profile-balance/{api,components,helpers}
+- Переходы: → APP-P-010; ← APP-P-008, APP-P-011/APP-P-012 (редиректы сюда)
+- Сверка: роутер ✓ / код ✓ / UI ✗ (фаза B)

@@ -1,0 +1,16 @@
+# APP-P-008 — Профиль (хаб входа)
+- Статус: живая
+- Маршрут: `/profile` · name `ProfileView` (src/router/index.ts:297)
+- Тип: обычная (child MainLayout, таб-бар)
+- Доступ: гость — meta.public намеренно (T-021: гостевой экран и есть экран входа; отдельного /auth в приложении нет)
+- Назначение: хаб покупателя: авторизованному — плитки-ссылки на контуры; гостю — экран входа (OTP sms/MAX, Telegram/MAX-статусы).
+- Функциональные блоки:
+  - #auth — вход: телефон → код; API `auth/request-code`, `auth/send-code`, `auth/confirm`, `auth/max/status`, `auth/telegram/status`
+  - #blocks — плитки: → APP-P-009 (Счёт), APP-P-015 (Заказы), APP-P-017 (Адреса), APP-P-013 (Профиль), APP-P-020 (Настройки)
+  - #role-cabinets — плитки ролей по флагам GET /profile: → APP-P-026, APP-P-039, APP-P-044, APP-P-032
+  - #subscription — статус LOVII PASS (API `api/v1/subscription`)
+  - #promo — промокод/амб-код (API `api/v1/profile/promo`)
+- Состояния: loading / гость (auth-экран) / авторизован (блоки) / ошибка загрузки профиля
+- Зависимости: API `api/v1/profile`, `profile/consents`, `profile/avatar`, `guest/session`; stores/компоненты profile-module (файлы уточнить в фазе B)
+- Переходы: см. #blocks/#role-cabinets; ← нижний таб-бар; сюда редиректят все auth-гарды приложения (beforeEach и beforeEnter)
+- Сверка: роутер ✓ / код ✓ / UI ✗ (фаза B)

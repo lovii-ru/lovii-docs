@@ -134,6 +134,7 @@ lovii_docs/
 | [`AGENT.md`](canon/AGENT.md) | B | Ранбук: как агенту править корпус |
 | [`WORK_PROTOCOL.md`](canon/WORK_PROTOCOL.md) | B | Протокол ролей, направлений T/SZ, статусов, отчёта, приёмки и архива |
 | [`TASKS/README.md`](canon/TASKS/README.md) | W | Индекс активных task-specs; карточки не являются домом фактов |
+| [`APP_PAGES/_INDEX.md`](canon/APP_PAGES/_INDEX.md) | A | Карта страниц lovii-app (T-032): все страницы/модалки с постоянными ID `APP-P-NNN`/`APP-M-NNN`, 1 файл на страницу; адресация в задачах |
 | [`MINI_APPS_RESEARCH.md`](canon/MINI_APPS_RESEARCH.md) | B | Ресёрч мини-приложений Telegram/VK/MAX: публикация, валидация запуска, тихая авторизация, уведомления, платежи, матрица, MVP-рекомендация (SZ-014) |
 | [`PUSH_NOTIFICATIONS_SPEC.md`](canon/PUSH_NOTIFICATIONS_SPEC.md) | B | Спека пуш-уведомлений: матрица сред РФ с цитатами, UX soft-ask, канальная матрица + анти-дубли, MVP + 🔶 (SZ-033 → SZ-010) |
 | [`SECRETS_ROTATION.md`](canon/SECRETS_ROTATION.md) | B | Гигиена секретов: инвентаризация (12 позиций), план ротации до прода, инцидент-план «утечка секрета» (SZ-018, S-3) |
