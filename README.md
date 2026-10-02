@@ -18,6 +18,7 @@
 | [`canon/`](canon/) | **Каноны** — единый источник истины: BRD, PRD, VISION, ROADMAP, PARAMS, FINANCIAL_CONTOUR/MODEL, ARCHITECTURE, DATA_MODEL, API_SPEC, DESIGN, PRODUCT_QUALITY_BAR, STATUS, BACKLOG, FINDINGS, FEATURES, + ADR/, + TASKS/ |
 | [`artifacts/`](artifacts/) | Ресёрчи, БД-разбор (db-schema-analysis — 85 таблиц), карта экранов, точечные отчёты |
 | [`screens/`](screens/) | Скриншоты экранов приложения (по ID карточек `canon/APP_PAGES`) с версионированием — визуальный контроль интерфейсов и отклонений от дизайн-системы |
+| [`screens-gallery/`](screens-gallery/) | **Веб-галерея скринов всех 60 страниц приложения** (T-032, срез 2026-10-02): [открыть галерею](screens-gallery/gallery.html) — кадры по карточкам APP-P-001…060 с фильтрами по ролям/гостю |
 | [`loyalty/`](loyalty/) | Наработки по лояльности и промо партнёра: продуктовый дизайн (SZ-070/SZ-071), прототипы, скриншоты демо (`lovii-demo`) |
 | `archive/` | Исторические версии канонов (BRD_v1.0, FINANCIAL_MODEL_REVIEW), аудиты, юр-документы |
 | [`public/`](public/) | Чистые публичные документы для лендинга `axiiom-ru/lovii` (без служебных комментариев агентов): публичная оферта, оферта присоединения, политика ПД, money_flow_public, публичный README |
