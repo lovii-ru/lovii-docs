@@ -1,0 +1,63 @@
+{
+  "APP-P-039-amb-overview": {
+    "id": "APP-P-039-amb-overview",
+    "route": "/cabinet/ambassador",
+    "section": "ambassador",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador",
+    "title": "Кабинет амбассадора — Лови",
+    "file": "APP-P-039-amb-overview.png",
+    "bytes": 159429,
+    "ms": 8731
+  },
+  "APP-P-040-amb-reps": {
+    "id": "APP-P-040-amb-reps",
+    "route": "/cabinet/ambassador/reps",
+    "section": "ambassador",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/reps",
+    "title": "Структура — Лови",
+    "file": "APP-P-040-amb-reps.png",
+    "bytes": 152131,
+    "ms": 7775
+  },
+  "APP-P-041-amb-training": {
+    "id": "APP-P-041-amb-training",
+    "route": "/cabinet/ambassador/training",
+    "section": "ambassador",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/training",
+    "title": "Обучение — Лови",
+    "file": "APP-P-041-amb-training.png",
+    "bytes": 300762,
+    "ms": 7848
+  },
+  "APP-P-042-amb-income": {
+    "id": "APP-P-042-amb-income",
+    "route": "/cabinet/ambassador/income",
+    "section": "ambassador",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/income",
+    "title": "Доход амбассадора — Лови",
+    "file": "APP-P-042-amb-income.png",
+    "bytes": 168445,
+    "ms": 7764
+  },
+  "APP-P-043-amb-chats": {
+    "id": "APP-P-043-amb-chats",
+    "route": "/cabinet/ambassador/chats",
+    "section": "ambassador",
+    "status": "ok",
+    "note": "заглушка ChatStub (эксперимент)",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/chats",
+    "title": "Чаты амбассадора — Лови",
+    "file": "APP-P-043-amb-chats.png",
+    "bytes": 80402,
+    "ms": 8578
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "APP-P-019-address-edit": {
+    "id": "APP-P-019-address-edit",
+    "route": "/profile/addresses → клик ✎ (сразу после входа)",
+    "section": "fixups",
+    "status": "ok",
+    "note": "as-is: автоподсказки города/улицы раскрываются при входе (гидратация запускает саджест)",
+    "finalUrl": "https://app-staging.lovii.ru/profile/addresses/edit/107",
+    "file": "APP-P-019-address-edit.as-is.png",
+    "bytes": 275852
+  },
+  "APP-P-046-msp-orders": {
+    "id": "APP-P-046-msp-orders",
+    "route": "/cabinet/msp/orders → вкладка «История»",
+    "section": "fixups",
+    "status": "ok",
+    "note": "вариант: история заказов точки (основной кадр — вкладка «Активные», пусто)",
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/orders",
+    "file": "APP-P-046-msp-orders.history.png",
+    "bytes": 1067198
+  },
+  "APP-P-053-team-orders": {
+    "id": "APP-P-053-team-orders",
+    "route": "/cabinet/team → вкладка «История»",
+    "section": "fixups",
+    "status": "ok",
+    "note": "вариант: история заказов (основной кадр — вкладка «Активные», пусто)",
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/team",
+    "file": "APP-P-053-team-orders.history.png",
+    "bytes": 1050675
+  }
+}

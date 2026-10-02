@@ -1,0 +1,22 @@
+{
+  "APP-P-019-address-edit": {
+    "id": "APP-P-019-address-edit",
+    "route": "/profile/addresses → клик ✎ → /profile/addresses/edit/:id",
+    "section": "fixups",
+    "status": "ok",
+    "note": "форма открыта кликом из списка (прямой заход редиректит: стор пуст)",
+    "finalUrl": "https://app-staging.lovii.ru/profile/addresses/edit/107",
+    "file": "APP-P-019-address-edit.png",
+    "bytes": 266382
+  },
+  "APP-P-058-fake-terminal": {
+    "id": "APP-P-058-fake-terminal",
+    "route": "/payment/fake?order=440&payment=338",
+    "section": "fixups",
+    "status": "ok",
+    "note": "mock-банк (dev/staging): тестовая платёжная форма",
+    "finalUrl": "https://app-staging.lovii.ru/payment/fake?order=440&payment=338",
+    "file": "APP-P-058-fake-terminal.png",
+    "bytes": 80439
+  }
+}

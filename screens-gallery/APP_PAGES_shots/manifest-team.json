@@ -1,0 +1,50 @@
+{
+  "APP-P-053-team-orders": {
+    "id": "APP-P-053-team-orders",
+    "route": "/cabinet/team",
+    "section": "team",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/team",
+    "title": "Заказы точки — Лови",
+    "file": "APP-P-053-team-orders.png",
+    "bytes": 93724,
+    "ms": 6494
+  },
+  "APP-P-054-team-order-detail": {
+    "id": "APP-P-054-team-order-detail",
+    "route": "/cabinet/team/orders/441",
+    "section": "team",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/team/orders/441",
+    "title": "Заказ точки — Лови",
+    "file": "APP-P-054-team-order-detail.png",
+    "bytes": 158300,
+    "ms": 6933
+  },
+  "APP-P-055-team-products": {
+    "id": "APP-P-055-team-products",
+    "route": "/cabinet/team/products",
+    "section": "team",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/team/products",
+    "title": "Товары точки — Лови",
+    "file": "APP-P-055-team-products.png",
+    "bytes": 581978,
+    "ms": 7034
+  },
+  "APP-P-056-team-team": {
+    "id": "APP-P-056-team-team",
+    "route": "/cabinet/team/team",
+    "section": "team",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/team/team",
+    "title": "Команда точки — Лови",
+    "file": "APP-P-056-team-team.png",
+    "bytes": 154141,
+    "ms": 6316
+  }
+}
