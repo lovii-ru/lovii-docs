@@ -1,0 +1,75 @@
+{
+  "APP-P-026-rep-overview": {
+    "id": "APP-P-026-rep-overview",
+    "route": "/cabinet/representative",
+    "section": "representative",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/representative",
+    "title": "Кабинет представителя — Лови",
+    "file": "APP-P-026-rep-overview.png",
+    "bytes": 263783,
+    "ms": 6714
+  },
+  "APP-P-027-rep-points": {
+    "id": "APP-P-027-rep-points",
+    "route": "/cabinet/representative/points",
+    "section": "representative",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/points",
+    "title": "Мои точки — Лови",
+    "file": "APP-P-027-rep-points.png",
+    "bytes": 135781,
+    "ms": 6237
+  },
+  "APP-P-028-rep-approvals": {
+    "id": "APP-P-028-rep-approvals",
+    "route": "/cabinet/representative/approvals",
+    "section": "representative",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/approvals",
+    "title": "Подключение точек — Лови",
+    "file": "APP-P-028-rep-approvals.png",
+    "bytes": 92392,
+    "ms": 6021
+  },
+  "APP-P-029-rep-income": {
+    "id": "APP-P-029-rep-income",
+    "route": "/cabinet/representative/income",
+    "section": "representative",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/income",
+    "title": "Доход представителя — Лови",
+    "file": "APP-P-029-rep-income.png",
+    "bytes": 169260,
+    "ms": 6383
+  },
+  "APP-P-030-rep-profile": {
+    "id": "APP-P-030-rep-profile",
+    "route": "/cabinet/representative/profile",
+    "section": "representative",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/profile",
+    "title": "Профиль представителя — Лови",
+    "file": "APP-P-030-rep-profile.png",
+    "bytes": 239071,
+    "ms": 6280
+  },
+  "APP-P-031-rep-chats": {
+    "id": "APP-P-031-rep-chats",
+    "route": "/cabinet/representative/chats",
+    "section": "representative",
+    "status": "ok",
+    "note": "заглушка ChatStub (эксперимент)",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/chats",
+    "title": "Чаты представителя — Лови",
+    "file": "APP-P-031-rep-chats.png",
+    "bytes": 80961,
+    "ms": 6022
+  }
+}

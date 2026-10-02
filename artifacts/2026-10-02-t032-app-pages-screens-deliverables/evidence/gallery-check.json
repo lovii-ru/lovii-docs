@@ -1,0 +1,50 @@
+{
+  "results": [
+    {
+      "name": "cards == 60",
+      "ok": true,
+      "detail": "count=60"
+    },
+    {
+      "name": "filters >= 8",
+      "ok": true,
+      "detail": "count=10"
+    },
+    {
+      "name": "thumbs loaded",
+      "ok": true,
+      "detail": "total=60 broken=0 "
+    },
+    {
+      "name": "full files exist",
+      "ok": true,
+      "detail": "links=60 missing=0"
+    },
+    {
+      "name": "filter msp == 9",
+      "ok": true,
+      "detail": "visible=9"
+    },
+    {
+      "name": "filter all == 60",
+      "ok": true,
+      "detail": "visible=60"
+    },
+    {
+      "name": "lightbox opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lightbox closes (Esc)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no js errors",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "failed": 0
+}

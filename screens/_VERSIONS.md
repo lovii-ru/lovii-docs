@@ -1,0 +1,67 @@
+# _VERSIONS.md — журнал версий скриншотов экранов
+
+> Append-only: строки не удаляются; новая версия = новая папка `vN-YYYY-MM-DD/` + строка в конце этой таблицы.
+> Правила и инструкция — `README.md` каталога.
+
+| Дата | Экран | Версия | Каталог | Комментарий |
+|---|---|---|---|---|
+| 2026-10-02 | APP-P-001-home | v1-2026-10-02 | `APP-P-001-home/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-002-popular | v1-2026-10-02 | `APP-P-002-popular/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-003-stores | v1-2026-10-02 | `APP-P-003-stores/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-004-store | v1-2026-10-02 | `APP-P-004-store/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-005-product | v1-2026-10-02 | `APP-P-005-product/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-006-cart | v1-2026-10-02 | `APP-P-006-cart/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-007-cart-order | v1-2026-10-02 | `APP-P-007-cart-order/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-008-profile | v1-2026-10-02 | `APP-P-008-profile/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-009-wallet | v1-2026-10-02 | `APP-P-009-wallet/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-010-transfer | v1-2026-10-02 | `APP-P-010-transfer/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-011-balance-redirect | v1-2026-10-02 | `APP-P-011-balance-redirect/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-012-operations-redirect | v1-2026-10-02 | `APP-P-012-operations-redirect/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-013-profile-edit | v1-2026-10-02 | `APP-P-013-profile-edit/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-014-email-verify | v1-2026-10-02 | `APP-P-014-email-verify/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-015-orders | v1-2026-10-02 | `APP-P-015-orders/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-016-order | v1-2026-10-02 | `APP-P-016-order/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-017-addresses | v1-2026-10-02 | `APP-P-017-addresses/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-018-address-create | v1-2026-10-02 | `APP-P-018-address-create/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-019-address-edit | v1-2026-10-02 | `APP-P-019-address-edit/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-020-settings | v1-2026-10-02 | `APP-P-020-settings/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-021-business-landing | v1-2026-10-02 | `APP-P-021-business-landing/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-022-business-apply | v1-2026-10-02 | `APP-P-022-business-apply/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-023-business-status | v1-2026-10-02 | `APP-P-023-business-status/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-024-business-result | v1-2026-10-02 | `APP-P-024-business-result/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-025-mypoint | v1-2026-10-02 | `APP-P-025-mypoint/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-026-rep-overview | v1-2026-10-02 | `APP-P-026-rep-overview/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-027-rep-points | v1-2026-10-02 | `APP-P-027-rep-points/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-028-rep-approvals | v1-2026-10-02 | `APP-P-028-rep-approvals/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-029-rep-income | v1-2026-10-02 | `APP-P-029-rep-income/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-030-rep-profile | v1-2026-10-02 | `APP-P-030-rep-profile/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-031-rep-chats | v1-2026-10-02 | `APP-P-031-rep-chats/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-032-platform | v1-2026-10-02 | `APP-P-032-platform/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-033-owner-overview | v1-2026-10-02 | `APP-P-033-owner-overview/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-034-owner-finance | v1-2026-10-02 | `APP-P-034-owner-finance/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-035-owner-structure | v1-2026-10-02 | `APP-P-035-owner-structure/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-036-investor-growth | v1-2026-10-02 | `APP-P-036-investor-growth/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-037-investor-points | v1-2026-10-02 | `APP-P-037-investor-points/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-038-investor-money | v1-2026-10-02 | `APP-P-038-investor-money/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-039-amb-overview | v1-2026-10-02 | `APP-P-039-amb-overview/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-040-amb-reps | v1-2026-10-02 | `APP-P-040-amb-reps/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-041-amb-training | v1-2026-10-02 | `APP-P-041-amb-training/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-042-amb-income | v1-2026-10-02 | `APP-P-042-amb-income/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-043-amb-chats | v1-2026-10-02 | `APP-P-043-amb-chats/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-044-msp-overview | v1-2026-10-02 | `APP-P-044-msp-overview/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-045-msp-payment | v1-2026-10-02 | `APP-P-045-msp-payment/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-046-msp-orders | v1-2026-10-02 | `APP-P-046-msp-orders/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-047-msp-order-detail | v1-2026-10-02 | `APP-P-047-msp-order-detail/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-048-msp-products | v1-2026-10-02 | `APP-P-048-msp-products/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-049-msp-loyalty | v1-2026-10-02 | `APP-P-049-msp-loyalty/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-050-msp-branch-settings | v1-2026-10-02 | `APP-P-050-msp-branch-settings/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-051-msp-team | v1-2026-10-02 | `APP-P-051-msp-team/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-052-msp-starter | v1-2026-10-02 | `APP-P-052-msp-starter/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-053-team-orders | v1-2026-10-02 | `APP-P-053-team-orders/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-054-team-order-detail | v1-2026-10-02 | `APP-P-054-team-order-detail/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-055-team-products | v1-2026-10-02 | `APP-P-055-team-products/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-056-team-team | v1-2026-10-02 | `APP-P-056-team-team/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-057-payment-result | v1-2026-10-02 | `APP-P-057-payment-result/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-058-fake-terminal | v1-2026-10-02 | `APP-P-058-fake-terminal/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-059-auth-by-binding | v1-2026-10-02 | `APP-P-059-auth-by-binding/v1-2026-10-02/` | baseline — первый полный срез (T-032) |
+| 2026-10-02 | APP-P-060-not-found | v1-2026-10-02 | `APP-P-060-not-found/v1-2026-10-02/` | baseline — первый полный срез (T-032) |

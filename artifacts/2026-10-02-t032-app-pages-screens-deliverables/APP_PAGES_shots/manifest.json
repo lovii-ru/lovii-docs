@@ -1,0 +1,984 @@
+{
+  "APP-P-039-amb-overview": {
+    "primary": {
+      "id": "APP-P-039-amb-overview",
+      "route": "/cabinet/ambassador",
+      "section": "ambassador",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador",
+      "title": "Кабинет амбассадора — Лови",
+      "file": "APP-P-039-amb-overview.png",
+      "bytes": 159429,
+      "ms": 8731
+    },
+    "variants": []
+  },
+  "APP-P-040-amb-reps": {
+    "primary": {
+      "id": "APP-P-040-amb-reps",
+      "route": "/cabinet/ambassador/reps",
+      "section": "ambassador",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/reps",
+      "title": "Структура — Лови",
+      "file": "APP-P-040-amb-reps.png",
+      "bytes": 152131,
+      "ms": 7775
+    },
+    "variants": []
+  },
+  "APP-P-041-amb-training": {
+    "primary": {
+      "id": "APP-P-041-amb-training",
+      "route": "/cabinet/ambassador/training",
+      "section": "ambassador",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/training",
+      "title": "Обучение — Лови",
+      "file": "APP-P-041-amb-training.png",
+      "bytes": 300762,
+      "ms": 7848
+    },
+    "variants": []
+  },
+  "APP-P-042-amb-income": {
+    "primary": {
+      "id": "APP-P-042-amb-income",
+      "route": "/cabinet/ambassador/income",
+      "section": "ambassador",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/income",
+      "title": "Доход амбассадора — Лови",
+      "file": "APP-P-042-amb-income.png",
+      "bytes": 168445,
+      "ms": 7764
+    },
+    "variants": []
+  },
+  "APP-P-043-amb-chats": {
+    "primary": {
+      "id": "APP-P-043-amb-chats",
+      "route": "/cabinet/ambassador/chats",
+      "section": "ambassador",
+      "status": "ok",
+      "note": "заглушка ChatStub (эксперимент)",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/ambassador/chats",
+      "title": "Чаты амбассадора — Лови",
+      "file": "APP-P-043-amb-chats.png",
+      "bytes": 80402,
+      "ms": 8578
+    },
+    "variants": []
+  },
+  "APP-P-006-cart": {
+    "primary": {
+      "id": "APP-P-006-cart",
+      "route": "/cart",
+      "section": "buyer",
+      "status": "ok",
+      "note": "авторизованная корзина — приоритетный скрин",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cart",
+      "title": "Корзина — Лови",
+      "file": "APP-P-006-cart.png",
+      "bytes": 151643,
+      "ms": 9840
+    },
+    "variants": [
+      {
+        "id": "APP-P-006-cart",
+        "route": "/cart",
+        "section": "guest",
+        "status": "ok",
+        "note": "гостевая корзина (без товаров)",
+        "httpStatus": 200,
+        "finalUrl": "https://app-staging.lovii.ru/cart",
+        "title": "Корзина — Лови",
+        "file": "APP-P-006-cart.guest.png",
+        "bytes": 63000,
+        "ms": 7321
+      }
+    ]
+  },
+  "APP-P-007-cart-order": {
+    "primary": {
+      "id": "APP-P-007-cart-order",
+      "route": "/cart/205",
+      "section": "buyer",
+      "status": "ok",
+      "note": "оформление заказа",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cart/205",
+      "title": "Оформление заказа — Лови",
+      "file": "APP-P-007-cart-order.png",
+      "bytes": 151547,
+      "ms": 8237
+    },
+    "variants": [
+      {
+        "id": "APP-P-007-cart-order",
+        "route": "/cart/205",
+        "section": "guest",
+        "status": "ok",
+        "note": "гость: карточка чужой корзины — ожидаем гейт/редирект",
+        "httpStatus": 200,
+        "finalUrl": "https://app-staging.lovii.ru/cart",
+        "title": "Корзина — Лови",
+        "file": "APP-P-007-cart-order.guest.png",
+        "bytes": 63000,
+        "ms": 5385
+      }
+    ]
+  },
+  "APP-P-008-profile": {
+    "primary": {
+      "id": "APP-P-008-profile",
+      "route": "/profile",
+      "section": "buyer",
+      "status": "ok",
+      "note": "профиль авторизованного — хаб",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile",
+      "title": "Профиль — Лови",
+      "file": "APP-P-008-profile.png",
+      "bytes": 425229,
+      "ms": 9371
+    },
+    "variants": [
+      {
+        "id": "APP-P-008-profile",
+        "route": "/profile",
+        "section": "guest",
+        "status": "ok",
+        "note": "гостевой экран входа",
+        "httpStatus": 200,
+        "finalUrl": "https://app-staging.lovii.ru/profile",
+        "title": "Профиль — Лови",
+        "file": "APP-P-008-profile.guest.png",
+        "bytes": 98260,
+        "ms": 5392
+      }
+    ]
+  },
+  "APP-P-009-wallet": {
+    "primary": {
+      "id": "APP-P-009-wallet",
+      "route": "/profile/wallet",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/wallet",
+      "title": "Счёт и операции — Лови",
+      "file": "APP-P-009-wallet.png",
+      "bytes": 733305,
+      "ms": 8995
+    },
+    "variants": []
+  },
+  "APP-P-010-transfer": {
+    "primary": {
+      "id": "APP-P-010-transfer",
+      "route": "/profile/wallet/transfer",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/wallet/transfer",
+      "title": "Перевод баллов — Лови",
+      "file": "APP-P-010-transfer.png",
+      "bytes": 117903,
+      "ms": 8182
+    },
+    "variants": []
+  },
+  "APP-P-011-balance-redirect": {
+    "primary": {
+      "id": "APP-P-011-balance-redirect",
+      "route": "/profile/balance",
+      "section": "buyer",
+      "status": "ok",
+      "note": "redirect-карточка (removed)",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/wallet?tab=points",
+      "title": "Счёт и операции — Лови",
+      "file": "APP-P-011-balance-redirect.png",
+      "bytes": 733607,
+      "ms": 8024
+    },
+    "variants": []
+  },
+  "APP-P-012-operations-redirect": {
+    "primary": {
+      "id": "APP-P-012-operations-redirect",
+      "route": "/profile/operations",
+      "section": "buyer",
+      "status": "ok",
+      "note": "redirect-карточка (removed)",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/wallet?tab=operations",
+      "title": "Счёт и операции — Лови",
+      "file": "APP-P-012-operations-redirect.png",
+      "bytes": 733266,
+      "ms": 7401
+    },
+    "variants": []
+  },
+  "APP-P-013-profile-edit": {
+    "primary": {
+      "id": "APP-P-013-profile-edit",
+      "route": "/profile/edit",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/edit",
+      "title": "Редактирование профиля — Лови",
+      "file": "APP-P-013-profile-edit.png",
+      "bytes": 183434,
+      "ms": 6474
+    },
+    "variants": []
+  },
+  "APP-P-014-email-verify": {
+    "primary": {
+      "id": "APP-P-014-email-verify",
+      "route": "/profile/edit/email/verify",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/edit/email/verify",
+      "title": "Подтверждение e-mail — Лови",
+      "file": "APP-P-014-email-verify.png",
+      "bytes": 85871,
+      "ms": 5849
+    },
+    "variants": []
+  },
+  "APP-P-015-orders": {
+    "primary": {
+      "id": "APP-P-015-orders",
+      "route": "/profile/orders",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/orders",
+      "title": "История заказов — Лови",
+      "file": "APP-P-015-orders.png",
+      "bytes": 1411340,
+      "ms": 6913
+    },
+    "variants": []
+  },
+  "APP-P-016-order": {
+    "primary": {
+      "id": "APP-P-016-order",
+      "route": "/profile/orders/440",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/orders/440",
+      "title": "Заказ — Лови",
+      "file": "APP-P-016-order.png",
+      "bytes": 139702,
+      "ms": 6518
+    },
+    "variants": []
+  },
+  "APP-P-017-addresses": {
+    "primary": {
+      "id": "APP-P-017-addresses",
+      "route": "/profile/addresses",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/addresses",
+      "title": "Мои адреса — Лови",
+      "file": "APP-P-017-addresses.png",
+      "bytes": 180353,
+      "ms": 7319
+    },
+    "variants": []
+  },
+  "APP-P-018-address-create": {
+    "primary": {
+      "id": "APP-P-018-address-create",
+      "route": "/profile/addresses/create",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/profile/addresses/create",
+      "title": "Добавление адреса — Лови",
+      "file": "APP-P-018-address-create.png",
+      "bytes": 252640,
+      "ms": 11376
+    },
+    "variants": []
+  },
+  "APP-P-019-address-edit": {
+    "primary": {
+      "id": "APP-P-019-address-edit",
+      "route": "/profile/addresses → клик ✎ → /profile/addresses/edit/:id",
+      "section": "fixups",
+      "status": "ok",
+      "note": "форма открыта кликом из списка (прямой заход редиректит: стор пуст)",
+      "finalUrl": "https://app-staging.lovii.ru/profile/addresses/edit/107",
+      "file": "APP-P-019-address-edit.png",
+      "bytes": 266382
+    },
+    "variants": [
+      {
+        "id": "APP-P-019-address-edit",
+        "route": "/profile/addresses → клик ✎ (сразу после входа)",
+        "section": "fixups-variant",
+        "status": "ok",
+        "note": "as-is: автоподсказки города/улицы раскрываются при входе (гидратация запускает саджест)",
+        "finalUrl": "https://app-staging.lovii.ru/profile/addresses/edit/107",
+        "file": "APP-P-019-address-edit.as-is.png",
+        "bytes": 275852
+      }
+    ]
+  },
+  "APP-P-020-settings": {
+    "primary": {
+      "id": "APP-P-020-settings",
+      "route": "/settings",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/settings",
+      "title": "Настройки — Лови",
+      "file": "APP-P-020-settings.png",
+      "bytes": 226564,
+      "ms": 7162
+    },
+    "variants": []
+  },
+  "APP-P-021-business-landing": {
+    "primary": {
+      "id": "APP-P-021-business-landing",
+      "route": "/business",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/business",
+      "title": "ЛОВИ Бизнес — подключение точки — Лови",
+      "file": "APP-P-021-business-landing.png",
+      "bytes": 138189,
+      "ms": 6604
+    },
+    "variants": []
+  },
+  "APP-P-022-business-apply": {
+    "primary": {
+      "id": "APP-P-022-business-apply",
+      "route": "/business/apply",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/business/apply",
+      "title": "Заявка на подключение точки — Лови",
+      "file": "APP-P-022-business-apply.png",
+      "bytes": 145730,
+      "ms": 7220
+    },
+    "variants": []
+  },
+  "APP-P-023-business-status": {
+    "primary": {
+      "id": "APP-P-023-business-status",
+      "route": "/business/status",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/business/status",
+      "title": "Статус заявки — Лови",
+      "file": "APP-P-023-business-status.png",
+      "bytes": 73894,
+      "ms": 6767
+    },
+    "variants": []
+  },
+  "APP-P-024-business-result": {
+    "primary": {
+      "id": "APP-P-024-business-result",
+      "route": "/business/result",
+      "section": "buyer",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/business/result",
+      "title": "Результат заявки — Лови",
+      "file": "APP-P-024-business-result.png",
+      "bytes": 69531,
+      "ms": 6540
+    },
+    "variants": []
+  },
+  "APP-P-025-mypoint": {
+    "primary": {
+      "id": "APP-P-025-mypoint",
+      "route": "/business/point",
+      "section": "buyer",
+      "status": "ok",
+      "note": "redirect-карточка (removed)",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp",
+      "title": "Мой магазин — Лови",
+      "file": "APP-P-025-mypoint.png",
+      "bytes": 380565,
+      "ms": 6584
+    },
+    "variants": []
+  },
+  "APP-P-057-payment-result": {
+    "primary": {
+      "id": "APP-P-057-payment-result",
+      "route": "/payment/result?order=440",
+      "section": "buyer",
+      "status": "ok",
+      "note": "страница статуса оплаты заказа",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/payment/result?order=440",
+      "title": "Результат оплаты — Лови",
+      "file": "APP-P-057-payment-result.png",
+      "bytes": 135346,
+      "ms": 7028
+    },
+    "variants": []
+  },
+  "APP-P-058-fake-terminal": {
+    "primary": {
+      "id": "APP-P-058-fake-terminal",
+      "route": "/payment/fake?order=440&payment=338",
+      "section": "fixups",
+      "status": "ok",
+      "note": "mock-банк (dev/staging): тестовая платёжная форма",
+      "finalUrl": "https://app-staging.lovii.ru/payment/fake?order=440&payment=338",
+      "file": "APP-P-058-fake-terminal.png",
+      "bytes": 80439
+    },
+    "variants": []
+  },
+  "APP-P-046-msp-orders": {
+    "primary": {
+      "id": "APP-P-046-msp-orders",
+      "route": "/cabinet/msp/orders",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/orders",
+      "title": "Заказы точки — Лови",
+      "file": "APP-P-046-msp-orders.png",
+      "bytes": 106033,
+      "ms": 7012
+    },
+    "variants": [
+      {
+        "id": "APP-P-046-msp-orders",
+        "route": "/cabinet/msp/orders → вкладка «История»",
+        "section": "fixups-variant",
+        "status": "ok",
+        "note": "вариант: история заказов точки (основной кадр — вкладка «Активные», пусто)",
+        "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/orders",
+        "file": "APP-P-046-msp-orders.history.png",
+        "bytes": 1067198
+      }
+    ]
+  },
+  "APP-P-053-team-orders": {
+    "primary": {
+      "id": "APP-P-053-team-orders",
+      "route": "/cabinet/team",
+      "section": "team",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/team",
+      "title": "Заказы точки — Лови",
+      "file": "APP-P-053-team-orders.png",
+      "bytes": 93724,
+      "ms": 6494
+    },
+    "variants": [
+      {
+        "id": "APP-P-053-team-orders",
+        "route": "/cabinet/team → вкладка «История»",
+        "section": "fixups-variant",
+        "status": "ok",
+        "note": "вариант: история заказов (основной кадр — вкладка «Активные», пусто)",
+        "finalUrl": "https://app-staging.lovii.ru/cabinet/team",
+        "file": "APP-P-053-team-orders.history.png",
+        "bytes": 1050675
+      }
+    ]
+  },
+  "APP-P-001-home": {
+    "primary": {
+      "id": "APP-P-001-home",
+      "route": "/",
+      "section": "guest",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/",
+      "title": "Лови — всё в шаговой доступности",
+      "file": "APP-P-001-home.png",
+      "bytes": 2454110,
+      "ms": 7660
+    },
+    "variants": []
+  },
+  "APP-P-002-popular": {
+    "primary": {
+      "id": "APP-P-002-popular",
+      "route": "/popular",
+      "section": "guest",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/popular",
+      "title": "Популярное — Лови",
+      "file": "APP-P-002-popular.png",
+      "bytes": 779746,
+      "ms": 6105
+    },
+    "variants": []
+  },
+  "APP-P-003-stores": {
+    "primary": {
+      "id": "APP-P-003-stores",
+      "route": "/stores",
+      "section": "guest",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/stores",
+      "title": "Поиск заведений и товаров — Лови",
+      "file": "APP-P-003-stores.png",
+      "bytes": 364773,
+      "ms": 6988
+    },
+    "variants": []
+  },
+  "APP-P-004-store": {
+    "primary": {
+      "id": "APP-P-004-store",
+      "route": "/stores/542",
+      "section": "guest",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/stores/542",
+      "title": "Заведение — Лови",
+      "file": "APP-P-004-store.png",
+      "bytes": 2506153,
+      "ms": 7542
+    },
+    "variants": []
+  },
+  "APP-P-005-product": {
+    "primary": {
+      "id": "APP-P-005-product",
+      "route": "/stores/542/product/80021",
+      "section": "guest",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/stores/542/product/80021",
+      "title": "Товар — Лови",
+      "file": "APP-P-005-product.png",
+      "bytes": 846427,
+      "ms": 6913
+    },
+    "variants": []
+  },
+  "APP-P-059-auth-by-binding": {
+    "primary": {
+      "id": "APP-P-059-auth-by-binding",
+      "route": "/auth/by-binding",
+      "section": "guest",
+      "status": "ok",
+      "note": "magic link без токена — состояние страницы",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/auth/by-binding",
+      "title": "Вход в приложение — Лови",
+      "file": "APP-P-059-auth-by-binding.png",
+      "bytes": 64086,
+      "ms": 5322
+    },
+    "variants": []
+  },
+  "APP-P-060-not-found": {
+    "primary": {
+      "id": "APP-P-060-not-found",
+      "route": "/this-page-does-not-exist-404",
+      "section": "guest",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/this-page-does-not-exist-404",
+      "title": "Страница не найдена — Лови",
+      "file": "APP-P-060-not-found.png",
+      "bytes": 56736,
+      "ms": 5349
+    },
+    "variants": []
+  },
+  "APP-P-044-msp-overview": {
+    "primary": {
+      "id": "APP-P-044-msp-overview",
+      "route": "/cabinet/msp",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp",
+      "title": "Мой магазин — Лови",
+      "file": "APP-P-044-msp-overview.png",
+      "bytes": 380418,
+      "ms": 9036
+    },
+    "variants": []
+  },
+  "APP-P-045-msp-payment": {
+    "primary": {
+      "id": "APP-P-045-msp-payment",
+      "route": "/cabinet/msp/payment",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/payment",
+      "title": "Счёт верификации — Лови",
+      "file": "APP-P-045-msp-payment.png",
+      "bytes": 108488,
+      "ms": 6921
+    },
+    "variants": []
+  },
+  "APP-P-047-msp-order-detail": {
+    "primary": {
+      "id": "APP-P-047-msp-order-detail",
+      "route": "/cabinet/msp/orders/441",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/orders/441",
+      "title": "Заказ точки — Лови",
+      "file": "APP-P-047-msp-order-detail.png",
+      "bytes": 179637,
+      "ms": 7333
+    },
+    "variants": []
+  },
+  "APP-P-048-msp-products": {
+    "primary": {
+      "id": "APP-P-048-msp-products",
+      "route": "/cabinet/msp/products",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/products",
+      "title": "Товары точки — Лови",
+      "file": "APP-P-048-msp-products.png",
+      "bytes": 706381,
+      "ms": 8464
+    },
+    "variants": []
+  },
+  "APP-P-049-msp-loyalty": {
+    "primary": {
+      "id": "APP-P-049-msp-loyalty",
+      "route": "/cabinet/msp/loyalty",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/loyalty",
+      "title": "Промо — Лови",
+      "file": "APP-P-049-msp-loyalty.png",
+      "bytes": 207901,
+      "ms": 8498
+    },
+    "variants": []
+  },
+  "APP-P-050-msp-branch-settings": {
+    "primary": {
+      "id": "APP-P-050-msp-branch-settings",
+      "route": "/cabinet/msp/settings",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/settings",
+      "title": "Настройки точки — Лови",
+      "file": "APP-P-050-msp-branch-settings.png",
+      "bytes": 362459,
+      "ms": 7727
+    },
+    "variants": []
+  },
+  "APP-P-051-msp-team": {
+    "primary": {
+      "id": "APP-P-051-msp-team",
+      "route": "/cabinet/msp/team",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/team",
+      "title": "Команда точки — Лови",
+      "file": "APP-P-051-msp-team.png",
+      "bytes": 280980,
+      "ms": 6757
+    },
+    "variants": []
+  },
+  "APP-P-052-msp-starter": {
+    "primary": {
+      "id": "APP-P-052-msp-starter",
+      "route": "/cabinet/msp/starter",
+      "section": "msp",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/starter",
+      "title": "Запуск точки — Лови",
+      "file": "APP-P-052-msp-starter.png",
+      "bytes": 220193,
+      "ms": 6429
+    },
+    "variants": []
+  },
+  "APP-P-032-platform": {
+    "primary": {
+      "id": "APP-P-032-platform",
+      "route": "/cabinet/platform",
+      "section": "platform",
+      "status": "ok",
+      "note": "легаси-хаб",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/platform",
+      "title": "Платформа",
+      "file": "APP-P-032-platform.png",
+      "bytes": 404530,
+      "ms": 6307
+    },
+    "variants": []
+  },
+  "APP-P-033-owner-overview": {
+    "primary": {
+      "id": "APP-P-033-owner-overview",
+      "route": "/cabinet/owner",
+      "section": "platform",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/owner",
+      "title": "Кабинет владельца — Лови",
+      "file": "APP-P-033-owner-overview.png",
+      "bytes": 2363625,
+      "ms": 7547
+    },
+    "variants": []
+  },
+  "APP-P-034-owner-finance": {
+    "primary": {
+      "id": "APP-P-034-owner-finance",
+      "route": "/cabinet/owner/finance",
+      "section": "platform",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/owner/finance",
+      "title": "Финансы платформы — Лови",
+      "file": "APP-P-034-owner-finance.png",
+      "bytes": 161293,
+      "ms": 6803
+    },
+    "variants": []
+  },
+  "APP-P-035-owner-structure": {
+    "primary": {
+      "id": "APP-P-035-owner-structure",
+      "route": "/cabinet/owner/structure",
+      "section": "platform",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/owner/structure",
+      "title": "Структура платформы — Лови",
+      "file": "APP-P-035-owner-structure.png",
+      "bytes": 320110,
+      "ms": 8206
+    },
+    "variants": []
+  },
+  "APP-P-036-investor-growth": {
+    "primary": {
+      "id": "APP-P-036-investor-growth",
+      "route": "/cabinet/investor",
+      "section": "platform",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/investor",
+      "title": "Кабинет инвестора — Лови",
+      "file": "APP-P-036-investor-growth.png",
+      "bytes": 116021,
+      "ms": 7553
+    },
+    "variants": []
+  },
+  "APP-P-037-investor-points": {
+    "primary": {
+      "id": "APP-P-037-investor-points",
+      "route": "/cabinet/investor/points",
+      "section": "platform",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/investor/points",
+      "title": "Точки платформы — Лови",
+      "file": "APP-P-037-investor-points.png",
+      "bytes": 122345,
+      "ms": 7391
+    },
+    "variants": []
+  },
+  "APP-P-038-investor-money": {
+    "primary": {
+      "id": "APP-P-038-investor-money",
+      "route": "/cabinet/investor/money",
+      "section": "platform",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/investor/money",
+      "title": "Доходность платформы — Лови",
+      "file": "APP-P-038-investor-money.png",
+      "bytes": 122633,
+      "ms": 7750
+    },
+    "variants": []
+  },
+  "APP-P-026-rep-overview": {
+    "primary": {
+      "id": "APP-P-026-rep-overview",
+      "route": "/cabinet/representative",
+      "section": "representative",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/representative",
+      "title": "Кабинет представителя — Лови",
+      "file": "APP-P-026-rep-overview.png",
+      "bytes": 263783,
+      "ms": 6714
+    },
+    "variants": []
+  },
+  "APP-P-027-rep-points": {
+    "primary": {
+      "id": "APP-P-027-rep-points",
+      "route": "/cabinet/representative/points",
+      "section": "representative",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/points",
+      "title": "Мои точки — Лови",
+      "file": "APP-P-027-rep-points.png",
+      "bytes": 135781,
+      "ms": 6237
+    },
+    "variants": []
+  },
+  "APP-P-028-rep-approvals": {
+    "primary": {
+      "id": "APP-P-028-rep-approvals",
+      "route": "/cabinet/representative/approvals",
+      "section": "representative",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/approvals",
+      "title": "Подключение точек — Лови",
+      "file": "APP-P-028-rep-approvals.png",
+      "bytes": 92392,
+      "ms": 6021
+    },
+    "variants": []
+  },
+  "APP-P-029-rep-income": {
+    "primary": {
+      "id": "APP-P-029-rep-income",
+      "route": "/cabinet/representative/income",
+      "section": "representative",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/income",
+      "title": "Доход представителя — Лови",
+      "file": "APP-P-029-rep-income.png",
+      "bytes": 169260,
+      "ms": 6383
+    },
+    "variants": []
+  },
+  "APP-P-030-rep-profile": {
+    "primary": {
+      "id": "APP-P-030-rep-profile",
+      "route": "/cabinet/representative/profile",
+      "section": "representative",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/profile",
+      "title": "Профиль представителя — Лови",
+      "file": "APP-P-030-rep-profile.png",
+      "bytes": 239071,
+      "ms": 6280
+    },
+    "variants": []
+  },
+  "APP-P-031-rep-chats": {
+    "primary": {
+      "id": "APP-P-031-rep-chats",
+      "route": "/cabinet/representative/chats",
+      "section": "representative",
+      "status": "ok",
+      "note": "заглушка ChatStub (эксперимент)",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/representative/chats",
+      "title": "Чаты представителя — Лови",
+      "file": "APP-P-031-rep-chats.png",
+      "bytes": 80961,
+      "ms": 6022
+    },
+    "variants": []
+  },
+  "APP-P-054-team-order-detail": {
+    "primary": {
+      "id": "APP-P-054-team-order-detail",
+      "route": "/cabinet/team/orders/441",
+      "section": "team",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/team/orders/441",
+      "title": "Заказ точки — Лови",
+      "file": "APP-P-054-team-order-detail.png",
+      "bytes": 158300,
+      "ms": 6933
+    },
+    "variants": []
+  },
+  "APP-P-055-team-products": {
+    "primary": {
+      "id": "APP-P-055-team-products",
+      "route": "/cabinet/team/products",
+      "section": "team",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/team/products",
+      "title": "Товары точки — Лови",
+      "file": "APP-P-055-team-products.png",
+      "bytes": 581978,
+      "ms": 7034
+    },
+    "variants": []
+  },
+  "APP-P-056-team-team": {
+    "primary": {
+      "id": "APP-P-056-team-team",
+      "route": "/cabinet/team/team",
+      "section": "team",
+      "status": "ok",
+      "httpStatus": 200,
+      "finalUrl": "https://app-staging.lovii.ru/cabinet/team/team",
+      "title": "Команда точки — Лови",
+      "file": "APP-P-056-team-team.png",
+      "bytes": 154141,
+      "ms": 6316
+    },
+    "variants": []
+  }
+}
