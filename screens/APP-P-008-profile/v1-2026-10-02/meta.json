@@ -1,0 +1,17 @@
+{
+  "id": "APP-P-008-profile",
+  "title": "Профиль (хаб входа)",
+  "version": "v1-2026-10-02",
+  "date": "2026-10-02",
+  "stand": "app-staging.lovii.ru",
+  "app_slice": "cf33ef2 (origin/staging)",
+  "profile": "+79119287478 (user 51)",
+  "tool": "Playwright 390×844 @2x, fullPage",
+  "route": "/profile",
+  "final_url": "https://app-staging.lovii.ru/profile",
+  "states": {
+    "default.png": "основной кадр",
+    "guest.png": "гостевой вид"
+  },
+  "notes": "профиль авторизованного — хаб · baseline — первый полный срез (T-032)"
+}

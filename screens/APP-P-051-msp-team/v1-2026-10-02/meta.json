@@ -1,0 +1,16 @@
+{
+  "id": "APP-P-051-msp-team",
+  "title": "МСП — Команда",
+  "version": "v1-2026-10-02",
+  "date": "2026-10-02",
+  "stand": "app-staging.lovii.ru",
+  "app_slice": "cf33ef2 (origin/staging)",
+  "profile": "+79119287478 (user 51)",
+  "tool": "Playwright 390×844 @2x, fullPage",
+  "route": "/cabinet/msp/team",
+  "final_url": "https://app-staging.lovii.ru/cabinet/msp/team",
+  "states": {
+    "default.png": "основной кадр"
+  },
+  "notes": "baseline — первый полный срез (T-032)"
+}

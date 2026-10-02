@@ -1,0 +1,110 @@
+{
+  "APP-P-044-msp-overview": {
+    "id": "APP-P-044-msp-overview",
+    "route": "/cabinet/msp",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp",
+    "title": "Мой магазин — Лови",
+    "file": "APP-P-044-msp-overview.png",
+    "bytes": 380418,
+    "ms": 9036
+  },
+  "APP-P-045-msp-payment": {
+    "id": "APP-P-045-msp-payment",
+    "route": "/cabinet/msp/payment",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/payment",
+    "title": "Счёт верификации — Лови",
+    "file": "APP-P-045-msp-payment.png",
+    "bytes": 108488,
+    "ms": 6921
+  },
+  "APP-P-046-msp-orders": {
+    "id": "APP-P-046-msp-orders",
+    "route": "/cabinet/msp/orders",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/orders",
+    "title": "Заказы точки — Лови",
+    "file": "APP-P-046-msp-orders.png",
+    "bytes": 106033,
+    "ms": 7012
+  },
+  "APP-P-047-msp-order-detail": {
+    "id": "APP-P-047-msp-order-detail",
+    "route": "/cabinet/msp/orders/441",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/orders/441",
+    "title": "Заказ точки — Лови",
+    "file": "APP-P-047-msp-order-detail.png",
+    "bytes": 179637,
+    "ms": 7333
+  },
+  "APP-P-048-msp-products": {
+    "id": "APP-P-048-msp-products",
+    "route": "/cabinet/msp/products",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/products",
+    "title": "Товары точки — Лови",
+    "file": "APP-P-048-msp-products.png",
+    "bytes": 706381,
+    "ms": 8464
+  },
+  "APP-P-049-msp-loyalty": {
+    "id": "APP-P-049-msp-loyalty",
+    "route": "/cabinet/msp/loyalty",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/loyalty",
+    "title": "Промо — Лови",
+    "file": "APP-P-049-msp-loyalty.png",
+    "bytes": 207901,
+    "ms": 8498
+  },
+  "APP-P-050-msp-branch-settings": {
+    "id": "APP-P-050-msp-branch-settings",
+    "route": "/cabinet/msp/settings",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/settings",
+    "title": "Настройки точки — Лови",
+    "file": "APP-P-050-msp-branch-settings.png",
+    "bytes": 362459,
+    "ms": 7727
+  },
+  "APP-P-051-msp-team": {
+    "id": "APP-P-051-msp-team",
+    "route": "/cabinet/msp/team",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/team",
+    "title": "Команда точки — Лови",
+    "file": "APP-P-051-msp-team.png",
+    "bytes": 280980,
+    "ms": 6757
+  },
+  "APP-P-052-msp-starter": {
+    "id": "APP-P-052-msp-starter",
+    "route": "/cabinet/msp/starter",
+    "section": "msp",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/msp/starter",
+    "title": "Запуск точки — Лови",
+    "file": "APP-P-052-msp-starter.png",
+    "bytes": 220193,
+    "ms": 6429
+  }
+}
