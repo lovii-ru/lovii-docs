@@ -1,6 +1,6 @@
 # APP-P-036 — Кабинет инвестора — Рост
 - Статус: живая
-- Маршрут: `/cabinet/investor · InvestorGrowth` (src/router/index.ts:692)
+- Маршрут: `/cabinet/investor · InvestorGrowth` (src/router/index.ts:693)
 - Тип: обычная
 - Доступ: роль founder (rolesGuard)
 - Назначение: Рост платформы: метрики подключений и активности.

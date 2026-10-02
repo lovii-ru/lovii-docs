@@ -1,6 +1,6 @@
 # APP-P-055 — Команда — Товары
 - Статус: живая
-- Маршрут: `/cabinet/team/products · TeamProducts` (src/router/index.ts:920)
+- Маршрут: `/cabinet/team/products · TeamProducts` (src/router/index.ts:921)
 - Тип: вложенная (родитель: группа /cabinet/team)
 - Доступ: manager only (managerOnlyGuard)
 - Назначение: Товары точки; сотруднику — редирект на APP-P-053.

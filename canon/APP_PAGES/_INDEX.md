@@ -56,9 +56,9 @@
 | APP-P-033 | Кабинет владельца — Обзор | страница | `/cabinet/owner · OwnerOverview` (index.ts:654) | [APP-P-033](APP-P-033-owner-overview.md) |
 | APP-P-034 | Владелец — Финансы | страница | `/cabinet/owner/finance · OwnerFinance` (index.ts:660) | [APP-P-034](APP-P-034-owner-finance.md) |
 | APP-P-035 | Владелец — Структура | страница | `/cabinet/owner/structure · OwnerStructure` (index.ts:666) | [APP-P-035](APP-P-035-owner-structure.md) |
-| APP-P-036 | Кабинет инвестора — Рост | страница | `/cabinet/investor · InvestorGrowth` (index.ts:692) | [APP-P-036](APP-P-036-investor-growth.md) |
-| APP-P-037 | Инвестор — Точки | страница | `/cabinet/investor/points · InvestorPoints` (index.ts:698) | [APP-P-037](APP-P-037-investor-points.md) |
-| APP-P-038 | Инвестор — Доходность | страница | `/cabinet/investor/money · InvestorMoney` (index.ts:704) | [APP-P-038](APP-P-038-investor-money.md) |
+| APP-P-036 | Кабинет инвестора — Рост | страница | `/cabinet/investor · InvestorGrowth` (index.ts:693) | [APP-P-036](APP-P-036-investor-growth.md) |
+| APP-P-037 | Инвестор — Точки | страница | `/cabinet/investor/points · InvestorPoints` (index.ts:699) | [APP-P-037](APP-P-037-investor-points.md) |
+| APP-P-038 | Инвестор — Доходность | страница | `/cabinet/investor/money · InvestorMoney` (index.ts:705) | [APP-P-038](APP-P-038-investor-money.md) |
 | APP-P-039 | Кабинет амбассадора — Обзор | страница | `/cabinet/ambassador · AmbassadorOverview` (index.ts:735) | [APP-P-039](APP-P-039-amb-overview.md) |
 | APP-P-040 | Амбассадор — Структура | страница | `/cabinet/ambassador/reps · AmbassadorReps` (index.ts:741) | [APP-P-040](APP-P-040-amb-reps.md) |
 | APP-P-041 | Амбассадор — Обучение | страница | `/cabinet/ambassador/training · AmbassadorTraining` (index.ts:747) | [APP-P-041](APP-P-041-amb-training.md) |
@@ -75,8 +75,8 @@
 | APP-P-052 | МСП — Запуск точки | страница | `/cabinet/msp/starter · MspStarter` (index.ts:880) | [APP-P-052](APP-P-052-msp-starter.md) |
 | APP-P-053 | Кабинет команды — Заказы | страница | `/cabinet/team · TeamOrders` (index.ts:907) | [APP-P-053](APP-P-053-team-orders.md) |
 | APP-P-054 | Команда — Заказ точки | страница | `/cabinet/team/orders/:id · TeamOrderDetail` (index.ts:913) | [APP-P-054](APP-P-054-team-order-detail.md) |
-| APP-P-055 | Команда — Товары | страница | `/cabinet/team/products · TeamProducts` (index.ts:920) | [APP-P-055](APP-P-055-team-products.md) |
-| APP-P-056 | Команда — Команда | страница | `/cabinet/team/team · TeamTeam` (index.ts:927) | [APP-P-056](APP-P-056-team-team.md) |
+| APP-P-055 | Команда — Товары | страница | `/cabinet/team/products · TeamProducts` (index.ts:921) | [APP-P-055](APP-P-055-team-products.md) |
+| APP-P-056 | Команда — Команда | страница | `/cabinet/team/team · TeamTeam` (index.ts:928) | [APP-P-056](APP-P-056-team-team.md) |
 | APP-P-057 | Результат оплаты | страница | `/payment/result · PaymentResultView` (index.ts:941) | [APP-P-057](APP-P-057-payment-result.md) |
 | APP-P-058 | Тестовый терминал (mock-банк) | страница | `/payment/fake · FakeTerminalView` (index.ts:963) | [APP-P-058](APP-P-058-fake-terminal.md) |
 | APP-P-059 | Вход по magic link | страница | `/auth/by-binding · AuthByBindingView` (index.ts:992) | [APP-P-059](APP-P-059-auth-by-binding.md) |

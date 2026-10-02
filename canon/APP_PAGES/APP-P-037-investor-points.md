@@ -1,6 +1,6 @@
 # APP-P-037 — Инвестор — Точки
 - Статус: живая
-- Маршрут: `/cabinet/investor/points · InvestorPoints` (src/router/index.ts:698)
+- Маршрут: `/cabinet/investor/points · InvestorPoints` (src/router/index.ts:699)
 - Тип: вложенная (родитель: группа /cabinet/investor)
 - Доступ: роль founder
 - Назначение: Точки платформы (список/статистика).
