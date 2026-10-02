@@ -1,11 +1,19 @@
 # APP-P-007 — Оформление заказа
 - Статус: живая
-- Маршрут: `/cart/:id · CartOrderView` (src/router/index.ts:278)
-- Тип: обычная (параметр :id)
-- Доступ: гость (действие — auth-гейт формы)
-- Назначение: Чекаут: доставка/самовывоз, адрес, промо, preview заказа.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cart/:id` · name `CartOrderView` (src/router/index.ts:278)
+- Тип: обычная (child MainLayout, таб-бар; параметр :id — id корзины)
+- Доступ: гость (meta.public): гость видит форму, действие гейтится его собственным гейтом (вариант Б.3 T-021) — для доставки «Войдите в аккаунт, чтобы оформить доставку» при автосохранении адреса (`CreateOrder.vue` ~L195); в корзине (APP-P-006) гость перед чекаутом проходит AuthModule
+- Назначение: чекаут корзины: способ получения (доставка/самовывоз по флагам филиала), адрес (AddressSelectSheet / автосохранение гео-адреса), получатель и комментарий, оплата баллами (П-4), предрасчёт `orders/preview` (промо: скидка/кэшбэк/подарки, T-030) и «Оплатить N ₽» в два тапа (создание заказа + открытие оплаты, Idempotency-Key П-3).
+- Функциональные блоки:
+  - #delivery-type — CreateOrderDeliveryType: переключатель доставки/самовывоза, строка адреса (тот же шит, что в шапке, F-029), расстояние точка↔адрес и ETA доставки из предрасчёта (SZ-066); недоступный способ автопереключается (SZ-036). `src/modules/create-order/components/CreateOrderDeliveryType.vue`
+  - #recipient — CreateOrderRecipient: предзаполнение из профиля (имя/телефон), комментарий. `components/CreateOrderRecipient.vue`
+  - #products — CreateOrderProducts: состав корзины. `components/CreateOrderProducts.vue`
+  - #bonus — «Оплатить баллами»: тумблер + ввод в рублях, честный максимум от ядра (`bonus_max_allowed` = min баланс/потолок), баланс кошелька `GET /wallet` (сбой молчит). `CreateOrder.vue` (~L55–110, шаблон ~L415+)
+  - #summary-promo — OrderSummary + панель выгоды: «Оплата баллами −N б.», «Скидка по акциям», «Кэшбэк за заказ +N б.», «Подарок» (пустая promo панель не рисуется). `CreateOrder.vue`
+  - #cta — sticky «Итого» + кнопка-стейт-машина: «Создаём заказ…» → «Открываем оплату…» → «Оплатить N ₽» / «Повторить оплату» (заказ создан, банк не открылся — заказ не теряем). `CreateOrder.vue:createOrder` (~L280)
+  - #errors — честные тексты по коду ответа core (`order-errors.ts`): отказ доставки с предложением самовывоза (текст отказа остаётся), «Повторить» при сбое предрасчёта. `order-errors.ts`
+- Состояния: loading — структурный скелетон (получатель/способ+адрес/товары, A7); busy — сумма гаснет при пересчёте (A8); пусто/ошибка — экран не пустой: переключатель + причина + «Повторить» (SZ-036); failover — сбой загрузки корзины → APP-P-006; offline — SW; guest-view — форма видна, оформление блокируется гейтом адреса/профиля
+- Зависимости: API `GET api/v1/cart/{id}`, `POST api/v1/orders/preview`, `POST api/v1/orders/checkout` (заголовок Idempotency-Key, `src/modules/create-order/api/create-order-api.ts`), `POST api/v1/orders/{id}/payment` (payment store), `GET api/v1/wallet`, `POST api/v1/profile/addresses` (автосохранение адреса, `src/modules/address/api/address-api.ts`); сторы `src/modules/create-order/store/create-order.store.ts` (orderSubmitKey), `src/modules/cart-module/store/cart.store.ts`, `src/modules/payment/store/payment.store.ts`, `src/modules/profile-module/store/profile.store.ts`, `src/modules/address/store/address.store.ts`, `src/stores/system.store.ts`; хелперы `payment-helpers.ts` (openPaymentUrl), `order-errors.ts`
+- Переходы: → APP-P-016 (заказ создан, `payment_enabled=false` → карточка заказа), → APP-P-057 (оплата открылась в новой вкладке → экран «ждём оплату»), → APP-P-006 (назад/сбой загрузки корзины); ← APP-P-006 («Оформить заказ»)
+- Дизайн/канон — проверить визуально: 3 состояния (скелетон по структуре ✓, ошибка — алерт-карточка role="alert" с действием ✓); честные цифры (предрасчёт от ядра, максимум баллов, без «трёх Итого» — Task 89 ✓); токены ДС ✓; a11y (role="alert", data-testid наборы, AppSwitch c label ✓);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

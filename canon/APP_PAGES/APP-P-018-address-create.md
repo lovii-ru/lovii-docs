@@ -1,11 +1,15 @@
 # APP-P-018 — Добавление адреса
 - Статус: живая
-- Маршрут: `/profile/addresses/create · CreateAddressView` (src/router/index.ts:447)
-- Тип: вложенная (родитель: APP-P-017)
-- Доступ: авторизован
-- Назначение: Единая форма адреса (mode=create): гео-подсказки, сохранение.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/addresses/create` · name `CreateAddressView` (src/router/index.ts:447)
+- Тип: вложенная (родитель: APP-P-017; child MainLayout)
+- Доступ: авторизован (beforeEnter группы `/profile/addresses`, router/index.ts:433)
+- Назначение: единая форма адреса в режиме create (SZ-046 §3.1, компонент `modules/address/AddressForm.vue`, props mode="create"): подсказки города/улицы, карта-точка, сохранение.
+- Функциональные блоки:
+  - #form — поля: название, город (CitySearchInput → GET `api/v1/cities?search=`, cities-api.ts:6), улица (StreetSearchInput), дом, подъезд/домофон/этаж/квартира, комментарий курьеру, переключатель «по умолчанию»; валидация `use-address-form.ts` (labelError/cityNameError/streetError/houseError, AddressForm.vue:18–25)
+  - #map — карта-точка `AddressPointMap.vue` (geolocation-module): двигаешь пин — координаты пишутся в форму (mapDriven-флаг против каскада вотчеров, :128–131); вотчеры полей → авто-геокодинг `geoResolve` (GET `api/v1/geo/resolve`, package/api/geo-api.ts, :80, :317); ручной резерв «Определить на карте» при сбое геокодинга (autoResolveHandle, :31–52)
+  - #save — `addressStore.createAddress` (POST `api/v1/profile/addresses`, address.store.ts:33) → новый адрес сразу становится delivery-адресом (`systemStore.setDeliveryAddress`, F-029) + `profileStore.loadProfileInfo()`; возврат в чекаут при `?return=checkout&cart_id=` → `CartOrderView` (:229), иначе router.replace на список (:235)
+- Состояния: buttonLoader на сохранении, autoResolveError (геокодинг недоступен/не заполнены город-улица-дом), ошибки полей (vuelidate), ошибка сохранения — тост из стора
+- Зависимости: API POST `api/v1/profile/addresses`, GET `api/v1/cities`, GET `api/v1/geo/resolve`; stores `address.store.ts`, `system.store.ts` (delivery-адрес), `profile.store.ts`; компоненты AddressForm.vue, CitySearchInput, StreetSearchInput, AddressPointMap
+- Переходы: → APP-P-017 (replace после сохранения), CartOrderView (возврат в чекаут); ← APP-P-017 («+»), чекаут корзины (?return=checkout)
+- Дизайн/канон — проверить визуально: фон `--background-normal-surface` (router/index.ts:452), токены lv-*, a11y (label полей, маски числовых), честные состояния карты (ошибка геокодинга текстом, не молчание); адаптив карты на 390px+
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

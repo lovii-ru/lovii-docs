@@ -1,13 +1,16 @@
 # APP-P-059 — Вход по magic link
 - Статус: живая
-- Маршрут: `/auth/by-binding` · name `AuthByBindingView` (src/router/index.ts:992)
-- Тип: обычная (вне MainLayout — самостоятельный экран без хедера/таб-бара)
-- Доступ: гость (meta.public)
-- Назначение: целевой роут кнопки «Войти в приложение» из Telegram-бота (P-1 magic link, SZ-008): одноразовый binding_token подтверждается и логинит.
+- Маршрут: `/auth/by-binding?token=...` · name `AuthByBindingView` (src/router/index.ts:992)
+- Тип: обычная (вне MainLayout — самостоятельный полноэкранный экран по центру, без хедера/таб-бара)
+- Доступ: гость (meta.public; глобальный auth-гард default-deny пропускает публичные)
+- Назначение: целевой роут кнопки «Войти в приложение» из Telegram-бота (P-1 magic link, SZ-008): одноразовый binding_token подтверждается через confirm-by-binding и логинит; код из бота остаётся fallback-ом.
 - Функциональные блоки:
-  - #confirm — обмен token: `POST api/v1/auth/confirm-by-binding` → сохранение сессии
-  - #result — состояния loading / success / error (истёк или использован)
-- Состояния: loading / success / error (заявлены в комментарии роутера)
-- Зависимости: API `api/v1/auth/confirm-by-binding`; src/modules/auth-module/AuthByBinding.vue
-- Переходы: → APP-P-008 (после логина / при ошибке — сверить в фазе B); ← внешняя ссылка Telegram-бота
-- Сверка: роутер ✓ / код ✓ / UI ✗ (фаза B)
+  - #confirm — onMounted: token из query (пусто → сразу error); берёт loviGuestToken из localStorage (карта гостя прикладывается к сессии) и вызывает authStore.confirmByBinding → `POST api/v1/auth/confirm-by-binding` (auth-api.ts:103, с реферальными полями) → сохранение сессии (AuthByBinding.vue:30–52)
+  - #loading — спиннер «Подтверждаем вход…» (AuthByBinding.vue:59–63)
+  - #success — «Готово! Вход выполнен» + кнопка «Перейти в приложение» → HomeView; авто-переход через 1200 мс (REDIRECT_DELAY_MS, «мягкий финал»; AuthByBinding.vue:46–48)
+  - #error — «Ссылка недействительна или устарела» (истёк/использован token или его нет) + «Открыть приложение» → HomeView, где вход можно повторить по коду из бота (AuthByBinding.vue:72–79)
+- Состояния: loading / success / error (TypeScript State) — ровно три, без промежуточных; сетевая ошибка и невалидный token не различаются (обе → error)
+- Зависимости: API `api/v1/auth/confirm-by-binding` (auth-module/api/auth-api.ts:103); стор auth-module/store/auth.store.ts (confirmByBinding, AuthToken); иконки IconCircleDoneFill / IconCircleErrorThin
+- Переходы: → APP-P-001 (HomeView, replace — в истории ссылки не остаётся); ← внешняя ссылка Telegram-бота (MAX-бот «Лови»)
+- Дизайн/канон — проверить визуально: 3 состояния по канону, токены ДС (content-normal-success/error, h3-bold, спиннер на брендовом цвете), a11y (единственный h1 на состояние); без витринного каркаса
+- Сверка: роутер ✓ / код ✓ (гостевой токен и автопереход 1.2 с подтверждены по коду) / UI ✗ (скрины — параллельный агент)

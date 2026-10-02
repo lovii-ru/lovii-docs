@@ -1,11 +1,14 @@
 # APP-P-002 — Популярное
 - Статус: живая
-- Маршрут: `/popular · PopularView` (src/router/index.ts:213)
-- Тип: обычная
-- Доступ: гость
-- Назначение: Подборка популярных заведений и товаров.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/popular` · name `PopularView` (src/router/index.ts:213)
+- Тип: обычная (child MainLayout, таб-бар)
+- Доступ: гость (meta.public)
+- Назначение: сетка «Популярные заведения» рядом с адресом доставки, курсорная пагинация по 24. Без адреса доставки — пустое состояние с подсказкой вместо фолбэк-точки (F-017).
+- Функциональные блоки:
+  - #list — сетка PopularStorePreview (4 колонки; <540px — 3, <425px — 2): мини-лого на подложке `logo_background_color` + имя; тап → APP-P-004. `src/modules/popular-stores/PopularStores.vue` (шаблон), `components/PopularStorePreview.vue`
+  - #pagination — AppPagination: догрузка по `pagination.next_cursor`, конкатенация в стор, guard `pageLoading`. `PopularStores.vue:loadPopularStores`
+- Состояния: loading — 8× PopularStorePreviewSkeleton; пусто — «Выберите адрес доставки, чтобы увидеть популярные заведения рядом» + hint «Используйте иконку адреса в шапке»; при адресе пустая выдача = пустая сетка (отдельного «ничего не нашлось» нет — сверить с каноном); ошибка — errorHandler (тост); offline — SW; guest-view — нет
+- Зависимости: API `GET api/v1/popular-stores?lat&lon&per_page&cursor` (`src/modules/popular-stores/api/popular-stores-api.ts`); стор `src/modules/popular-stores/store/popular-stores.store.ts`; `src/stores/system.store.ts` (deliveryAddress); `src/components/Ui/AppPagination.vue`
+- Переходы: → APP-P-004 (карточка заведения); ← APP-P-001 (плитка «Посмотреть все»)
+- Дизайн/канон — проверить визуально: 3 состояния (скелетон ✓; честная пустая выдача без CTA — проверить); честные цифры ✓ (только данные API); токены ДС (lv-card/lv-line/lv-shadow-soft в карточке ✓); a11y (img alt="" — имя текстом рядом);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

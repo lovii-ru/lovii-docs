@@ -1,11 +1,17 @@
-# APP-P-028 — Представитель — Заявки
+# APP-P-028 — Кабинет представителя — Заявки (очередь на модерации)
 - Статус: живая
-- Маршрут: `/cabinet/representative/approvals · RepresentativeApprovals` (src/router/index.ts:597)
-- Тип: вложенная (родитель: группа /cabinet/representative)
-- Доступ: роль representative
-- Назначение: Заявки на подключение точек: апрув/отклонение (SZ-071).
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cabinet/representative/approvals` · name `RepresentativeApprovals` (src/router/index.ts:597)
+- Тип: вложенная (родитель: `/cabinet/representative` → CabinetLayout, вкладка «Заявки»)
+- Доступ: роль representative (rolesGuard)
+- Назначение: Рабочая очередь представителя: карточки заявок с реквизитами + подтверждение (точка получает верификационный счёт) или возврат на правку с причиной — оба решения через AppBottomSheet.
+- Функциональные блоки:
+  - #cards — Карточка заявки: бренд крупно, юрлицо (`legal_name`) под ним; dl-реквизиты в 2 колонки (ИНН, ОГРН, адрес, контакт `tel:`-ссылкой, промокод, дата подачи); адрес/контакт — на всю ширину (RepresentativeApprovals.vue:120-198).
+  - #actions — Кнопки «Подтвердить»/«Отклонить» с блокировкой на время запроса (`busyId`) (RepresentativeApprovals.vue:179-196).
+  - #sheet — AppBottomSheet подтверждения: текст последствия по режиму; при reject — textarea причины (необязательно, maxlength 255, счётчик, блокировка кнопки при переполнении); «Отмена»/confirm (RepresentativeApprovals.vue:222-264, 59-99).
+  - #confirm — Решение: `POST approvals/{id}/verify` или `/reject {reason}` → toast → перезагрузка очереди; при ошибке (заявку уже обработал другой представитель) — toast «Не удалось…» и перечитывание, чтобы показать факт (RepresentativeApprovals.vue:71-99).
+  - #empty — Пустая очередь: «Все заявки обработаны» с CTA «Посмотреть мои точки» (RepresentativeApprovals.vue:202-212).
+- Состояния: loading — скелетон (2 карточки); пусто — #empty; ошибка — `roleLoadErrorText` + «Повторить»; busy — loading на кнопке листа; конфликт — toast + reload.
+- Зависимости: API `GET api/v1/representative/approvals`, `POST .../approvals/{id}/verify`, `POST .../approvals/{id}/reject` (api/roles-api.ts:593-605); `AppBottomSheet` (src/components/Ui/), toast (`package/global-helpers/toast.ts`), `money.ts` (typoRu, formatDateRu, plural).
+- Переходы: → APP-P-027 (из пустого состояния), ← APP-P-026 (next-блок, «Открыть очередь», плитка), ← таб-бар «Заявки».
+- Дизайн/канон — проверить визуально: 3 состояния экрана (заявлено в док-комментарии), необратимые решения — через подтверждение ✓, токены ДС (cabinet-ui, tiffany), a11y (тап-таргет 44px на tel-ссылке, focus-visible, счётчик символов, роль листа подтверждения).
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

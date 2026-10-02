@@ -1,11 +1,17 @@
 # APP-P-006 — Корзина
 - Статус: живая
-- Маршрут: `/cart · CartView` (src/router/index.ts:266)
-- Тип: обычная
-- Доступ: гость
-- Назначение: Корзина покупателя по точкам, управление позициями.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cart` · name `CartView` (src/router/index.ts:266)
+- Тип: обычная (child MainLayout, таб-бар)
+- Доступ: гость (meta.public)
+- Назначение: корзины покупателя по точкам: вкладки-мерчанты при нескольких корзинах, позиции с +/− (оптимистичный UI + отложенная синхронизация с ядром, T-014), итоги, платформенный минимум заказа, допродажа (акции заведения + товары с выгодой), гейт входа перед оформлением.
+- Функциональные блоки:
+  - #tabs — вкладки корзин (>1): лого (битое → плейсхолдер с первой буквой, F-026) + имя мерчанта. `src/modules/cart-module/CartModule.vue`
+  - #items — CartInfo + CartProduct: позиции с фото (нет → нейтральная плитка), ценой снапшотом и счётчиком; количество из `cartStore.getProductsCounts`, изменение через `bumpProduct` (оптимистичный сдвиг, `POST /cart/items` через 350 мс). `components/CartInfo.vue`, `CartProduct.vue`, `store/cart.store.ts`
+  - #summary — итоги: «Товары (N)», «Доставка — по тарифам заведения», «Итого»; блок минималки («Минимальная сумма заказа — N ₽. Добавьте ещё на M ₽») — кнопка «Оформить заказ» блокируется ДО 422 на чекауте (SZ-min-order-enforcement). `components/CartInfo.vue`
+  - #cross-sell — CartPromos (акции заведения, `GET /loyalty/promos` по мерчанту) + CartPromoProducts (товары с выгодой из витрины точки: кэшбэк/промо-бейдж/зачёркнутая цена — `helpers/cross-sell.ts`); три запроса параллельно, сбои молча скрывают блок. `components/CartPromos.vue`, `CartPromoProducts.vue`
+  - #auth-gate — при «Оформить заказ» без профиля: AuthModule с пояснением «Чтобы оформить заказ, подтвердите номер телефона — корзина сохранится» (`profileStore.profile`). `CartInfo.vue:createOrder`
+- Состояния: loading — CartSkeleton (анти-FOUC); пусто — CartEmpty «Корзина пуста» + CTA «К заведениям» → APP-P-003; ошибка — errorHandler (тост); offline — SW; guest-view — корзина и правки доступны гостю, гейт только на оформление
+- Зависимости: API `GET api/v1/carts`, `POST api/v1/cart/items` (`src/modules/cart-module/api/cart-api.ts`; `GET api/v1/carts?merchant_id=` в apiGetCurrentCart объявлен, но не используется), `GET api/v1/offers/{id}` (resolveBranch для «в точку»), `GET api/v1/storefront?branch_id` (допродажа), `GET api/v1/loyalty/promos`; сторы `src/modules/cart-module/store/cart.store.ts` (+`flushPendingSyncs` перед чекаутом), `src/modules/profile-module/store/profile.store.ts`
+- Переходы: → APP-P-004 (тап по заведению / карточка акции, по branchId из первой позиции), → APP-P-005 (ProductPreview допродажи с явным storeId), → APP-P-007 («Оформить заказ» после `flushPendingSyncs`); ← APP-P-005 (CTA), ← APP-P-007 (back и failover `router.push({name:"CartView"})`), таб-бар
+- Дизайн/канон — проверить визуально: 3 состояния (скелетон ✓, честное пустое с CTA ✓); честные цифры (снапшоты цен, счётчики от серверного состояния ✓); токены ДС ✓; a11y (aria-label на «в заведение», role="note" у минималки ✓);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

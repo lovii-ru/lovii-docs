@@ -1,11 +1,16 @@
 # APP-P-014 — Подтверждение e-mail
 - Статус: живая
-- Маршрут: `/profile/edit/email/verify · EmailVerifyView` (src/router/index.ts:383)
-- Тип: вложенная (родитель: APP-P-013)
-- Доступ: авторизован
-- Назначение: Ввод кода из письма для подтверждения владения e-mail.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/edit/email/verify` · name `EmailVerifyView` (src/router/index.ts:383)
+- Тип: вложенная (родитель: APP-P-013; child MainLayout, beforeEnter auth)
+- Доступ: авторизован (beforeEnter, router/index.ts:388)
+- Назначение: подтверждение владения e-mail кодом из письма (SZ-009 E-1): «Получить код» → ввод 6 цифр → успех.
+- Функциональные блоки:
+  - #request — отправка кода на email из профиля (`profileStore.profile?.email`, EmailVerify.vue:28): `apiSendEmailVerification` (POST `api/v1/profile/email/verification`, timeout 15 c — profile-api.ts:50–56); переключение на форму ввода (codeSent, :30)
+  - #confirm — ввод 6-значного кода (валидация «ровно 6 цифр», :127): `apiConfirmEmailVerification` (POST `api/v1/profile/email/verification/confirm`, :62–68)
+  - #resend — повтор с кулдауном 60 c (RESEND_COOLDOWN_SECONDS, :24; таймер, чистится в onBeforeUnmount): `apiResendEmailVerification` (POST `.../resend`, :57–62); серверный cooldown `email_code_resend_cooldown`/`too_many_requests` включает форму ввода (:73–74)
+  - #errors — карта ошибок: `email_already_verified` — сразу назад в профиль (:68), `email_code_invalid`, `email_code_exhausted`, `email_verification_not_requested` (возврат к «Получить код», :153–154), `email_not_set` (:79); таймауты 15 c на каждый вызов (уроки SZ-012 §1)
+- Состояния: до запроса («Получить код»), код отправлен (ввод + кулдаун), loading, errorMessage/notice, успех → редирект
+- Зависимости: API POST `api/v1/profile/email/verification{,/resend,/confirm}` (modules/profile-module/api/profile-api.ts:50–68); store `profile.store.ts` (email, refresh профиля)
+- Переходы: → APP-P-013 (успех/отмена, router.push ProfileEditView, :120/:170/:217); ← APP-P-013 (плашка непроверенного e-mail)
+- Дизайн/канон — проверить визуально: три состояния (не отправлен/ввод/ошибка), честный кулдаун (реальные 60 c, счётчик виден), токены lv-*, a11y (label у поля кода, inputmode numeric, автофокус)
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

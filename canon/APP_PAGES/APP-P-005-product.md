@@ -1,11 +1,16 @@
 # APP-P-005 — Товар
 - Статус: живая
-- Маршрут: `/stores/:id/product/:productId · ProductView` (src/router/index.ts:248)
-- Тип: обычная (параметры :id, :productId)
-- Доступ: гость
-- Назначение: Карточка товара точки: цена, вариант, добавление в корзину.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/stores/:id/product/:productId` · name `ProductView` (src/router/index.ts:248)
+- Тип: вложенная (родитель: APP-P-004 — child `product/:productId` внутри `/stores/:id`)
+- Доступ: гость (meta.public)
+- Назначение: карточка товара точки: квадратное фото, название (до 3 строк), раскрывающееся описание, рекомендации «Ещё может подойти», CTA добавления в корзину с debounce-синхронизацией (1 с). Точное имя товара — в title вкладки.
+- Функциональные блоки:
+  - #image — фото товара (CDN 380×380, aspect-ratio 1:1) + кнопка «назад»: `router.back()` при наличии history, иначе StoreView. `src/modules/store-product/StoreProduct.vue` (backHandle ~L40)
+  - #info — название + описание («Детальное описание», аккордеон); КБЖУ-блок убран (F-024 — данные были захардкожены). `StoreProduct.vue`
+  - #recommendations — «Ещё может подойти»: `product.recommendations.may_like`, карточки ProductPreview (replace-навигация по тому же маршруту). `components/ProductPreview.vue`
+  - #cta — закреплённая полоса: кнопка «{цена} ₽ за 1 шт.» или счётчик +/−; количество берётся из cart store (`getProductsCounts` — единый источник истины, T-014), изменение через `cartStore.updateProductInCart` с debounce 1 с. `StoreProduct.vue:addToCart/updateCartQuantity`
+- Состояния: loading — StoreProductSkeleton; пусто/ошибка — errorHandler (тост), catch пустой (экран остаётся скелетоном); offline — SW; guest-view — добавление в корзину доступно гостю (guest-токен витрины)
+- Зависимости: API `GET api/v1/offers/{productId}` (`src/modules/store-product/api/store-product-api.ts`); `POST api/v1/cart/items` (через cart store); сторы `src/modules/store-product/store/store-product.store.ts`, `src/modules/cart-module/store/cart.store.ts`, `src/modules/store-module/store/store.store.ts` (очистка при уходе не в StoreView); хелпер `price-helpers.ts`
+- Переходы: → APP-P-004 (назад из шапки/кнопки, `router.back`), → APP-P-005 (рекомендации, replace); ← APP-P-004 (карточки витрины и поиска точки), ← APP-P-006 (ProductPreview с явным storeId из блока допродажи корзины)
+- Дизайн/канон — проверить визуально: 3 состояния (скелетон ✓; пустого/ошибочного экрана-состояния нет — только тост — сверить с каноном); честные цифры (цена из API, счётчик из корзины ✓); токены ДС ✓; a11y (кнопки +/− без aria-label — сверить);
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

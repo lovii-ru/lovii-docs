@@ -1,11 +1,16 @@
 # APP-P-058 — Тестовый терминал (mock-банк)
-- Статус: эксперимент (не prod)
-- Маршрут: `/payment/fake · FakeTerminalView` (src/router/index.ts:963)
-- Тип: обычная
-- Доступ: авторизован; маршрут исключён в production-сборке
-- Назначение: Эмулятор банка для PAYMENTS_FAKE (e2e scenario-03); в prod записи маршрута нет.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Статус: эксперимент (не prod — маршрут отсутствует в production-сборке)
+- Маршрут: `/payment/fake?order={id}&payment={id}` · name `FakeTerminalView` (src/router/index.ts:963; ветка роутера только при `import.meta.env.VITE_APP_ENV !== "production"` — index.ts:959–982)
+- Тип: обычная (в MainLayout, группа /payment)
+- Доступ: авторизован — beforeEnter без loviAccessToken → APP-P-008; нужен e2e scenario-03 (PAYMENTS_FAKE)
+- Назначение: тестовый «банк» PAYMENTS_FAKE (аудит 2026-09-13): имитация платёжной формы с двумя исходами для проверки цепочки оплаты без реального эквайринга.
+- Функциональные блоки:
+  - #badge — бейдж «Заглушка банка · dev/staging» — честная маркировка, что это не прод (FakeTerminalView.vue:59)
+  - #amount — «Заказ №… · {сумма} ₽» из `GET api/v1/profile-orders/{id}`; если заказ не загрузился — просто номер (сумма не критична, кнопки рабочие; FakeTerminalView.vue:41–53)
+  - #actions — «Успешно оплатить» / «Отклонить платёж» → `POST api/v1/payments/fake/notify` (paymentStore.fakeNotify с paymentId из query) → replace в APP-P-057 с query order; кнопки в loading-состоянии на время запроса (FakeTerminalView.vue:23–39)
+  - #error — «Не удалось передать результат — попробуйте ещё раз» при сбое notify (FakeTerminalView.vue:70–72)
+- Состояния: loading кнопки / ошибка notify; битые query order/payment — replace в APP-P-015
+- Зависимости: API payment/api/payment-api.ts (fakeNotify → `api/v1/payments/fake/notify`), profile-order-api.ts; стор payment/store/payment.store.ts
+- Переходы: → APP-P-057 (replace, query order); ← чекаут APP-P-007 (redirect «банка»), e2e
+- Дизайн/канон — проверить визуально: токены ДС, маркировка заглушки видна сразу; на прод недостижим (роутера нет)
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

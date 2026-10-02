@@ -1,11 +1,16 @@
-# APP-P-039 — Кабинет амбассадора — Обзор
+# APP-P-039 — Амбассадор · Обзор
 - Статус: живая
-- Маршрут: `/cabinet/ambassador · AmbassadorOverview` (src/router/index.ts:735)
-- Тип: обычная
-- Доступ: роль ambassador (rolesGuard)
-- Назначение: Сводка кабинета амбассадора.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cabinet/ambassador` · name `AmbassadorOverview` (src/router/index.ts:735)
+- Тип: вложенная (родитель: `/cabinet/ambassador`, CabinetLayout; вкладка «Обзор», icon bar-chart; кабинет: title «Амбассадор», note «Развитие сети представителей», icon sparkles, accent gold, hideNavBar)
+- Доступ: роль ambassador (rolesGuard на родителе, src/router/index.ts:723)
+- Назначение: Сводка ветки по канону демо (renderAmbDash): KPI → next-step «Обучение» → топ представителей → быстрые действия. Доход и GMV — реальные нули из core (ledger-фаза 3 не включена), рядом честное пояснение; дерева структуры, города представителя и дельты роста в API нет — не рисуются (AmbassadorOverview.vue:14-22).
+- Функциональные блоки:
+  - #kpi — 4 карточки amb-kpi: Представители (reps_count, accent gold), Точки в структуре (points_count), Доход · месяц (income_month, подпись «начисления — с запуском выплат»), GMV сети · месяц (network_gmv_month) (:129-154, testid `amb-overview-kpi`).
+  - #next — next-step карточка «Пройди обучение — X из Y» с длительностью трека («~1 ч 18 мин» из суммы duration_minutes, :86-101) → RouterLink на AmbassadorTraining (:156-169, testid `amb-overview-next`).
+  - #top — «Топ представителей» (топ-5 по points_count, сортировка на клиенте :61-63): горизонтальные бары, длина = доля от лидера ветки, ноль = пустая дорожка (barWidth :67-71), легенда поясняет смысл бара; подпись счётчиком reps (:171-205, testid `amb-overview-top`).
+  - #actions — Быстрые действия: Представители → AmbassadorReps, Обучение → AmbassadorTraining (с процентом прогресса), Доход → AmbassadorIncome (:207-229, testid `amb-overview-actions`).
+- Состояния: loading — скелетоны AppSkeleton (4 KPI + next + chart, aria-hidden, :116-126); ошибка — текст через roleLoadErrorText («Амбассадорские инструменты появятся после назначения ветки.» / «Обзор недоступен — проблема с сетью…») + AppButton «Повторить» (:111-114, testid `amb-overview-error`); пусто — топа нет: карточка «В ветке пока нет представителей — поделитесь префиксом…» + CTA «Открыть структуру» (:197-204, testid `amb-overview-top-empty`). Загружаются параллельно 3 запроса (Promise.all :36-40).
+- Зависимости: API GET `api/v1/ambassador/dashboard`, `api/v1/ambassador/reps`, `api/v1/ambassador/training` (rolesApi.ambassadorDashboard/Reps/Training — src/modules/roles-module/api/roles-api.ts:608-631); formatMoney/plural (src/modules/roles-module/ambassador/money.ts); AppButton, AppSkeleton, LvIcon; roleLoadErrorText (src/modules/roles-module/role-errors.ts).
+- Переходы: → APP-P-040 (CTA/действие «Представители»), APP-P-041 (next-step и действие «Обучение»), APP-P-042 (действие «Доход»); ← APP-P-008 (строка «Амбассадор» в ProfileCabinets, route AmbassadorOverview, flag ambassador).
+- Дизайн/канон — проверить визуально: 3 состояния (скелетоны — не спиннер), честные цифры (нулевые доходы с пояснением, бар без «заглушечных» значений), токены ДС (--lv-soft-gold, --lv-gradient-gold), a11y (aria-hidden у декора, 44px CTA), акцент amb gold по PRODUCT_QUALITY_BAR; адаптив: KPI 2→4 колонки, действия 2→3 на ≥768px (:606-614).
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

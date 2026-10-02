@@ -1,11 +1,18 @@
-# APP-P-022 — Заявка на подключение точки
+# APP-P-022 — ЛОВИ Бизнес — форма заявки «Добавить точку»
 - Статус: живая
-- Маршрут: `/business/apply · BusinessApplyView` (src/router/index.ts:510)
-- Тип: вложенная (родитель: APP-P-021)
-- Доступ: авторизован
-- Назначение: Форма заявки МСП (данные точки, контакты).
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/business/apply` · name `BusinessApplyView` (src/router/index.ts:510)
+- Тип: вложенная (родитель: `/business` → MainLayout; вход из APP-P-021)
+- Доступ: авторизован (гард группы `/business`)
+- Назначение: Шаг 3 сценария: форма заявки на подключение точки (название, ИНН, адрес с геокодером, телефон, e-mail, согласия) с отправкой в `POST /business/applications`.
+- Функциональные блоки:
+  - #form — Поля: название бренда, ИНН (10/12 цифр), адрес, телефон с маской `+7 ### ###-##-##`, e-mail (необязателен); валидация — `useBusinessForm` (`runValidate`/`fieldError`/`toPayload`); поле промокода убрано прод-каноном 2026-09-14, `activity_type` на клиенте не выбирается — уходит дефолт `goods` (BusinessApply.vue:196-247; composables/use-business-form.ts:109).
+  - #prefill — Предзаполнение повторного флоу: ИНН, название, адрес (+lat/lon — иначе точка не создастся), телефон и e-mail из последней заявки и профиля; заполняется один раз и только в нетронутые поля; гонка с асинхронным профилем закрыта watch'ами (BusinessApply.vue:42-101).
+  - #address — `BusinessAddressInput`: подсказки `GET /geo/suggest`, выбор → `GET /geo/resolve` (координаты + город); ручной ввод сбрасывает координаты (components/BusinessAddressInput.vue:94-113; BusinessApply.vue:141-157).
+  - #consents — Два чекбокса `BusinessOfferCheckbox`: оферта (публичная + присоединения) и ПД; ссылки — `BUSINESS_*_URL` на Pages-лендинг (BusinessApply.vue:252-280; package/const/business.ts:49-53).
+  - #submit — Сабмит: `businessStore.submitApplication` → редирект на `BusinessStatusView`; серверные ошибки — инлайн-алерт `role=alert` с человекочитаемыми текстами по кодам: `partner_application_cap_reached` (лимит 5 заявок), `too_many_requests` (429), `inn_owned_by_other`, `promo_not_found`, `promo_inactive` (BusinessApply.vue:106-186, 282-284).
+  - #focus-error — При провале валидации скролл к первой ошибке (`focusFirstError`, nextTick + scrollIntoView) (BusinessApply.vue:162-168).
+- Состояния: loading — кнопка в состоянии `:loading` при `submitState === 'submitting'`; пусто — нет; ошибка — инлайн-алерт сервера + ошибки полей под инпутами; offline — общий текст «Проверьте связь и попробуйте снова».
+- Зависимости: API `POST api/v1/business/applications` (api/business-api.ts:69), `GET /geo/suggest|resolve` (src/package/api/geo-api.ts); сторы `business.store.ts`, `profile-module/store/profile.store.ts`; компоненты `AppInput`, `AppButton`, `AppPageHeader`, `BusinessAddressInput`, `BusinessOfferCheckbox`.
+- Переходы: → APP-P-023 (`BusinessStatusView`, после успешного сабмита), ← APP-P-021 (лендинг), ← APP-P-023/024 (кнопки «Отправить заново»/«Попробовать снова»), ← APP-P-033 (MspOverview:491,587), ← PartnerSwitcher (roles-module/components/PartnerSwitcher.vue:92); назад — `BusinessLandingView` (AppPageHeader).
+- Дизайн/канон — проверить визуально: 3 состояния (форма / отправка / ошибка), честные подписи необязательных полей, токены ДС (`--feedback-negative-subtle`, `--lv-glass`), a11y (`role=alert`, скролл к ошибке, тапабельные ссылки оферты с `rel="noopener"`), sticky CTA со стеклом.
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

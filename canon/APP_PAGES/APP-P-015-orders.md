@@ -1,11 +1,15 @@
 # APP-P-015 — История заказов
 - Статус: живая
-- Маршрут: `/profile/orders · OrdersView` (src/router/index.ts:410)
-- Тип: обычная
-- Доступ: авторизован
-- Назначение: Список заказов покупателя со статусами.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/orders` · name `OrdersView` (src/router/index.ts:410)
+- Тип: вложенная (родитель: APP-P-008; группа `/profile/orders` с общим beforeEnter auth на router/index.ts:404, child MainLayout)
+- Доступ: авторизован (beforeEnter группы, :404–411)
+- Назначение: список заказов покупателя с серверной пагинацией; карточка заказа целиком — ссылка на деталь.
+- Функциональные блоки:
+  - #list — лента заказов: `loadProfileOrders` (GET `api/v1/orders?page=N`, api/profile-orders-api.ts:12), страницы конкатенируются в стор (store/profile-orders.store.ts:17–21); карточки `OrderPreview.vue` — вся карточка RouterLink на OrderView (`:to={name:'OrderView', params:{id}}`, OrderPreview.vue:43–93)
+  - #pagination — «Показать ещё» `AppPagination` при `pagination.has_more` (OrdersModule.vue:63–67); защита от двойного тапа через pageLoading-флаг (:18–28)
+  - #reset — сброс кэша списка в onBeforeUnmount (`clearProfileOrders`, :32–34) — вход всегда перечитывает список
+- Состояния: loading — 5 скелетонов `OrderPreviewSkeleton.vue` (:53–55), пусто — продающее `OrdersEmpty.vue` (CTA в каталог), ошибка — errorHandler (тост) + пустой список; offline — OfflineBanner глобальный
+- Зависимости: API GET `api/v1/orders` (modules/profile-orders/api/profile-orders-api.ts); store `modules/profile-orders/store/profile-orders.store.ts`; компоненты OrderPreview/OrderPreviewSkeleton/OrdersEmpty, AppPagination
+- Переходы: → APP-P-016 (карточка OrderPreview); ← APP-P-008 (плитка «История заказов», ProfileModule.vue:730), назад — AppPageHeader back-to ProfileView
+- Дизайн/канон — проверить визуально: вертикальный ритм карточек 16px (SZ-002 §2, OrdersModule.vue:78), пустое состояние — приглашение, не тупик; скелетоны вместо спиннеров; честные цифры (реальные суммы/статусы, formatPrice); токены lv-*, отступ под таб-бар (`lv-navbar-offset`)
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

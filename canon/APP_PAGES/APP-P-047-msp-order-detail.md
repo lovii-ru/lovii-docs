@@ -1,11 +1,19 @@
-# APP-P-047 — МСП — Заказ точки
+# APP-P-047 — МСП — Заказ точки (деталь)
 - Статус: живая
-- Маршрут: `/cabinet/msp/orders/:id · MspOrderDetail` (src/router/index.ts:849)
-- Тип: вложенная (родитель: APP-P-046)
-- Доступ: роль msp
-- Назначение: Детальная карточка заказа точки.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cabinet/msp/orders/:id` · name `MspOrderDetail` (src/router/index.ts:849)
+- Тип: вложенная (родитель: группа /cabinet/msp, каркас CabinetLayout)
+- Доступ: роль msp (право на заказ проверяет ядро: order_not_owned при чужом заказе)
+- Назначение: деталь заказа точки: состав и суммы, клиент с кнопкой звонка, причина отмены, таймлайн ядра и смена статуса по машине состояний `allowed_transitions`.
+- Функциональные блоки:
+  - #head — карточка «Заказ №…» + тег типа исполнения (pickup/delivery) + статус-чип + дата и число позиций (MspOrderDetail.vue:243–258)
+  - #items — состав с фото (loading=lazy, при битой ссылке плитка-заглушка brokenImages, MspOrderDetail.vue:109–113), qty × цена, kv-блок сумм: Товары / Доставка (>0) / Итого ₽
+  - #customer — имя, телефон ссылкой `tel:` (тап-зона 44px), адрес delivery_address + детали (кв./подъезд/этаж — читаются по одному ключу, без выдумки; MspOrderDetail.vue:120–139), комментарий
+  - #cancel-reason — секция при status=cancelled и непустой причине (MspOrderDetail.vue:340–347)
+  - #timeline — «История заказа» из ядра (order.timeline); у старых заказов пустой — блок не рисуется (MspOrderDetail.vue:106, 349–362)
+  - #actions — кнопка следующего шага по статусу и типу (submitted→Принять … ready→Выдать клиенту / Выдать курьеру; MspOrderDetail.vue:56–80) + пикер остальных легальных переходов из `allowed_transitions` (чипы) + отмена: обязательная причина (быстрые причины-чипы + textarea ≥3 символов) с явным подтверждением (MspOrderDetail.vue:204–227, 391–451)
+  - #errors — честный текст отказа по коду ядра: status_not_allowed / order_not_owned / too_many_requests; после сбоя молча подтягивается свежий заказ (MspOrderDetail.vue:146–162, 193–198)
+- Состояния: loading (скелетон) / ошибка «Заказ недоступен» с «Повторить» / финал — честная строка «Заказ закрыт — менять статус больше нечего» вместо пустых кнопок (isFinal, MspOrderDetail.vue:455)
+- Зависимости: API `api/v1/msp/orders/{id}` (roles-api.ts:695), `api/v1/msp/orders/{id}/status` c cancel_reason (roles-api.ts:706); helpers msp/order-status.ts (statusLabel, deliveryTypeLabel, formatDateTimeRu), create-order/order-errors.ts (getApiErrorCode)
+- Переходы: → нет (только внешние tel:); ← APP-P-044 (последние заказы), APP-P-046 (обе выборки)
+- Дизайн/канон — проверить визуально: 3 состояния, честные цифры (₽ на всех суммах), токены ДС (kv-строки, статус-чипы, tabular-nums), a11y (aria-pressed на чипах причин); акцент tiffany
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

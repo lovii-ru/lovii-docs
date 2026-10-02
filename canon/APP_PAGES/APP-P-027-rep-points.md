@@ -1,11 +1,18 @@
-# APP-P-027 — Представитель — Мои точки
+# APP-P-027 — Кабинет представителя — Мои точки
 - Статус: живая
-- Маршрут: `/cabinet/representative/points · RepresentativePoints` (src/router/index.ts:591)
-- Тип: вложенная (родитель: группа /cabinet/representative)
-- Доступ: роль representative
-- Назначение: Список закреплённых точек представителя.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/cabinet/representative/points` · name `RepresentativePoints` (src/router/index.ts:591)
+- Тип: вложенная (родитель: `/cabinet/representative` → CabinetLayout, вкладка «Точки»)
+- Доступ: роль representative (rolesGuard)
+- Назначение: Список точек, подключённых по промокоду представителя: клиентский поиск/фильтр/сортировка по реальным полям ответа + честный свод «активных / в работе».
+- Функциональные блоки:
+  - #summary — Заголовок со сводом: «N активных · M заявок в работе» — счётчики из профиля, а не по отфильтрованному списку (RepresentativePoints.vue:52-59, 85-89).
+  - #filters — Чипы-фильтры по статусу с счётчиками (`POINT_GROUPS`, aria-pressed) (RepresentativePoints.vue:123-136; representative/points.ts).
+  - #search — Поиск «Название, адрес или город» — клиентский: на сервере у `/representative/points` есть только `?status=` (RepresentativePoints.vue:138-147, док-комментарий 24-30).
+  - #sort — Сортировка (`POINT_SORTS`, по дате/др.) — тоже клиентская (RepresentativePoints.vue:149-161).
+  - #list — Строки точек: название, статус-бейдж (`pointTone`), адрес (`pointAddressSub`), тариф (`tariff_label ?? «Тариф не назначен»`), «заявка от …»; БЕЗ шеврона-«подробнее» — у неверифицированной точки открывать нечего (RepresentativePoints.vue:163-185).
+  - #note — Сноска «Показано N из M… точки без верификации ещё не опубликованы» (RepresentativePoints.vue:221-224).
+- Состояния: loading — скелетон (чипы/поиск/список); пусто — два разных: «Точек пока нет» с CTA на профиль (промокод) и «Ничего не нашлось» при фильтре с «Сбросить фильтры» (emptyKind none/filtered, RepresentativePoints.vue:97-99, 186-219); ошибка — `roleLoadErrorText` + «Повторить».
+- Зависимости: API `GET api/v1/representative/points`, `GET api/v1/representative/profile` (Promise.all); хелперы `representative/points.ts`, `money.ts` (plural, formatDateRu, typoRu); `LvIcon`, `AppSkeleton`.
+- Переходы: → APP-P-030 (CTA «Взять промокод в профиле»), ← APP-P-026 (плитка «Мои точки»), ← APP-P-028 (пустая очередь «Посмотреть мои точки»), ← таб-бар «Точки».
+- Дизайн/канон — проверить визуально: 3 состояния (+двойное пустое), честные цифры (воронка демо удалена намеренно), токены ДС (cabinet-ui, tiffany), a11y (aria-pressed на чипах/сортировке, aria-label поиска, role=group).
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)

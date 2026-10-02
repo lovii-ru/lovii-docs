@@ -1,11 +1,16 @@
 # APP-P-016 — Заказ
 - Статус: живая
-- Маршрут: `/profile/orders/:id · OrderView` (src/router/index.ts:418)
-- Тип: вложенная (родитель: APP-P-015)
-- Доступ: авторизован
-- Назначение: Детальная карточка заказа: состав, статусы, суммы, квитанция.
-- Функциональные блоки: — (заполняется в фазе B)
-- Состояния: — (заполняется в фазе B)
-- Зависимости: — (заполняется в фазе B)
-- Переходы: — (заполняется в фазе B)
-- Сверка: роутер ✓ / код ✗ (фаза B) / UI ✗ (фаза B)
+- Маршрут: `/profile/orders/:id` · name `OrderView` (src/router/index.ts:418)
+- Тип: вложенная (родитель: APP-P-015; child группы `/profile/orders` с общим beforeEnter auth, MainLayout)
+- Доступ: авторизован (beforeEnter группы, router/index.ts:404–411)
+- Назначение: детальная карточка заказа: состав, статусы, суммы, квитанция; отмена заказа с причиной, оплата при payment_enabled.
+- Функциональные блоки:
+  - #detail — данные заказа: `loadOrder` (GET `api/v1/orders/{id}`, api/profile-order-api.ts:5, store profile-order.store.ts); блоки `OrderProducts.vue` (состав), `OrderInfo.vue` (статусы/даты), `OrderSummary.vue`, `OrderReceipt.vue` (квитанция), formatPrice
+  - #cancel — отмена клиента: `canCancel` по CANCELLABLE_STATUSES (:37); причина обязательна, минимум 3 символа, «её увидит точка» (:41–43) — POST `api/v1/orders/{id}/cancel` {reason} (api/profile-order-api.ts:10–12); после отмены — показ причины «Заказ отменён» (testid `order-cancel-reason`, :143–148); открытие/закрытие формы testid `order-cancel-block`
+  - #payment — оплата при `order.payment_enabled` и статусе payment (:68–91): `paymentStore.createOrderPayment` (modules/payment) → `openPaymentUrl(payment_url)` (new-tab) или → `PaymentResultView?order=id` (:92)
+  - #cleanup — clearOrder + paymentStore.clearPayment() в onBeforeUnmount (:109–120)
+- Состояния: loading — AppSkeleton (:11), ошибка загрузки (errorHandler), форма отмены открыта (cancelError/cancelLoader), статус cancelled с причиной
+- Зависимости: API GET `api/v1/orders/{id}`, POST `api/v1/orders/{id}/cancel` (modules/profile-order/api/profile-order-api.ts); stores `profile-order.store.ts`, `modules/payment/store/payment.store.ts`; компоненты OrderProducts/OrderInfo/OrderSummary/OrderReceipt/AppButton/AppSkeleton
+- Переходы: → PaymentResultView (после старта оплаты), OrdersView (без id/ошибка роутинга, :109/:114); ← APP-P-015 (карточка заказа)
+- Дизайн/канон — проверить визуально: честные статусы и суммы (formatPrice, платформенные форматы), отмена — честная причина вместо тихой операции, токены lv-*, a11y (кнопки ≥44px, подписи), скелетон при загрузке
+- Сверка: роутер ✓ / код ✓ / UI ✗ (скрины — параллельный агент)
