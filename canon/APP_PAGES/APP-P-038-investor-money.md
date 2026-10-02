@@ -1,6 +1,6 @@
 # APP-P-038 — Инвестор — Доходность
 - Статус: живая
-- Маршрут: `/cabinet/investor/money · InvestorMoney` (src/router/index.ts:704)
+- Маршрут: `/cabinet/investor/money · InvestorMoney` (src/router/index.ts:705)
 - Тип: вложенная (родитель: группа /cabinet/investor)
 - Доступ: роль founder
 - Назначение: Доходность платформы.

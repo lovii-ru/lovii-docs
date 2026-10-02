@@ -1,6 +1,6 @@
 # APP-P-056 — Команда — Команда
 - Статус: живая
-- Маршрут: `/cabinet/team/team · TeamTeam` (src/router/index.ts:927)
+- Маршрут: `/cabinet/team/team · TeamTeam` (src/router/index.ts:928)
 - Тип: вложенная (родитель: группа /cabinet/team)
 - Доступ: manager only (managerOnlyGuard)
 - Назначение: Состав команды; сотруднику — редирект на APP-P-053.
