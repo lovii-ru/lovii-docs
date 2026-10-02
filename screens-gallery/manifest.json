@@ -1,0 +1,645 @@
+{
+ "generated": "2026-10-02",
+ "source": "screens/_VERSIONS.md (latest per screen)",
+ "items": [
+  {
+   "id": "APP-P-001",
+   "slug": "APP-P-001-home",
+   "title": "APP-P-001 — Главный экран (витрина)",
+   "group": "Витрина",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-001-home/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-001-home.md",
+   "card_local": "../canon/APP_PAGES/APP-P-001-home.md"
+  },
+  {
+   "id": "APP-P-002",
+   "slug": "APP-P-002-popular",
+   "title": "APP-P-002 — Популярное",
+   "group": "Витрина",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-002-popular/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-002-popular.md",
+   "card_local": "../canon/APP_PAGES/APP-P-002-popular.md"
+  },
+  {
+   "id": "APP-P-003",
+   "slug": "APP-P-003-stores",
+   "title": "APP-P-003 — Поиск заведений и товаров",
+   "group": "Витрина",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-003-stores/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-003-stores.md",
+   "card_local": "../canon/APP_PAGES/APP-P-003-stores.md"
+  },
+  {
+   "id": "APP-P-004",
+   "slug": "APP-P-004-store",
+   "title": "APP-P-004 — Заведение (точка)",
+   "group": "Витрина",
+   "version": "v2-2026-10-02",
+   "img": "../screens/APP-P-004-store/v2-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-004-store.md",
+   "card_local": "../canon/APP_PAGES/APP-P-004-store.md"
+  },
+  {
+   "id": "APP-P-005",
+   "slug": "APP-P-005-product",
+   "title": "APP-P-005 — Товар",
+   "group": "Витрина",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-005-product/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-005-product.md",
+   "card_local": "../canon/APP_PAGES/APP-P-005-product.md"
+  },
+  {
+   "id": "APP-P-006",
+   "slug": "APP-P-006-cart",
+   "title": "APP-P-006 — Корзина",
+   "group": "Витрина",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-006-cart/v1-2026-10-02/default.png",
+   "extras": [
+    "../screens/APP-P-006-cart/v1-2026-10-02/guest.png"
+   ],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-006-cart.md",
+   "card_local": "../canon/APP_PAGES/APP-P-006-cart.md"
+  },
+  {
+   "id": "APP-P-007",
+   "slug": "APP-P-007-cart-order",
+   "title": "APP-P-007 — Оформление заказа",
+   "group": "Витрина",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-007-cart-order/v1-2026-10-02/default.png",
+   "extras": [
+    "../screens/APP-P-007-cart-order/v1-2026-10-02/guest.png"
+   ],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-007-cart-order.md",
+   "card_local": "../canon/APP_PAGES/APP-P-007-cart-order.md"
+  },
+  {
+   "id": "APP-P-008",
+   "slug": "APP-P-008-profile",
+   "title": "APP-P-008 — Профиль (хаб входа)",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-008-profile/v1-2026-10-02/default.png",
+   "extras": [
+    "../screens/APP-P-008-profile/v1-2026-10-02/guest.png"
+   ],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-008-profile.md",
+   "card_local": "../canon/APP_PAGES/APP-P-008-profile.md"
+  },
+  {
+   "id": "APP-P-009",
+   "slug": "APP-P-009-wallet",
+   "title": "APP-P-009 — Счёт и операции",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-009-wallet/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-009-wallet.md",
+   "card_local": "../canon/APP_PAGES/APP-P-009-wallet.md"
+  },
+  {
+   "id": "APP-P-010",
+   "slug": "APP-P-010-transfer",
+   "title": "APP-P-010 — Перевод баллов",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-010-transfer/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-010-transfer.md",
+   "card_local": "../canon/APP_PAGES/APP-P-010-transfer.md"
+  },
+  {
+   "id": "APP-P-013",
+   "slug": "APP-P-013-profile-edit",
+   "title": "APP-P-013 — Редактирование профиля",
+   "group": "Профиль",
+   "version": "v2-2026-10-02",
+   "img": "../screens/APP-P-013-profile-edit/v2-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-013-profile-edit.md",
+   "card_local": "../canon/APP_PAGES/APP-P-013-profile-edit.md"
+  },
+  {
+   "id": "APP-P-014",
+   "slug": "APP-P-014-email-verify",
+   "title": "APP-P-014 — Подтверждение e-mail",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-014-email-verify/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-014-email-verify.md",
+   "card_local": "../canon/APP_PAGES/APP-P-014-email-verify.md"
+  },
+  {
+   "id": "APP-P-015",
+   "slug": "APP-P-015-orders",
+   "title": "APP-P-015 — История заказов",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-015-orders/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-015-orders.md",
+   "card_local": "../canon/APP_PAGES/APP-P-015-orders.md"
+  },
+  {
+   "id": "APP-P-016",
+   "slug": "APP-P-016-order",
+   "title": "APP-P-016 — Заказ",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-016-order/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-016-order.md",
+   "card_local": "../canon/APP_PAGES/APP-P-016-order.md"
+  },
+  {
+   "id": "APP-P-017",
+   "slug": "APP-P-017-addresses",
+   "title": "APP-P-017 — Мои адреса",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-017-addresses/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-017-addresses.md",
+   "card_local": "../canon/APP_PAGES/APP-P-017-addresses.md"
+  },
+  {
+   "id": "APP-P-018",
+   "slug": "APP-P-018-address-create",
+   "title": "APP-P-018 — Добавление адреса",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-018-address-create/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-018-address-create.md",
+   "card_local": "../canon/APP_PAGES/APP-P-018-address-create.md"
+  },
+  {
+   "id": "APP-P-019",
+   "slug": "APP-P-019-address-edit",
+   "title": "APP-P-019 — Редактирование адреса",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-019-address-edit/v1-2026-10-02/default.png",
+   "extras": [
+    "../screens/APP-P-019-address-edit/v1-2026-10-02/as-is.png"
+   ],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-019-address-edit.md",
+   "card_local": "../canon/APP_PAGES/APP-P-019-address-edit.md"
+  },
+  {
+   "id": "APP-P-020",
+   "slug": "APP-P-020-settings",
+   "title": "APP-P-020 — Настройки",
+   "group": "Профиль",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-020-settings/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-020-settings.md",
+   "card_local": "../canon/APP_PAGES/APP-P-020-settings.md"
+  },
+  {
+   "id": "APP-P-021",
+   "slug": "APP-P-021-business-landing",
+   "title": "APP-P-021 — ЛОВИ Бизнес — лендинг подключения точки",
+   "group": "Бизнес и реп",
+   "version": "v2-2026-10-02",
+   "img": "../screens/APP-P-021-business-landing/v2-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-021-business-landing.md",
+   "card_local": "../canon/APP_PAGES/APP-P-021-business-landing.md"
+  },
+  {
+   "id": "APP-P-022",
+   "slug": "APP-P-022-business-apply",
+   "title": "APP-P-022 — ЛОВИ Бизнес — форма заявки «Добавить точку»",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-022-business-apply/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-022-business-apply.md",
+   "card_local": "../canon/APP_PAGES/APP-P-022-business-apply.md"
+  },
+  {
+   "id": "APP-P-023",
+   "slug": "APP-P-023-business-status",
+   "title": "APP-P-023 — ЛОВИ Бизнес — статус заявки",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-023-business-status/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-023-business-status.md",
+   "card_local": "../canon/APP_PAGES/APP-P-023-business-status.md"
+  },
+  {
+   "id": "APP-P-024",
+   "slug": "APP-P-024-business-result",
+   "title": "APP-P-024 — ЛОВИ Бизнес — результат заявки",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-024-business-result/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-024-business-result.md",
+   "card_local": "../canon/APP_PAGES/APP-P-024-business-result.md"
+  },
+  {
+   "id": "APP-P-026",
+   "slug": "APP-P-026-rep-overview",
+   "title": "APP-P-026 — Кабинет представителя — Обзор",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-026-rep-overview/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-026-rep-overview.md",
+   "card_local": "../canon/APP_PAGES/APP-P-026-rep-overview.md"
+  },
+  {
+   "id": "APP-P-027",
+   "slug": "APP-P-027-rep-points",
+   "title": "APP-P-027 — Кабинет представителя — Мои точки",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-027-rep-points/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-027-rep-points.md",
+   "card_local": "../canon/APP_PAGES/APP-P-027-rep-points.md"
+  },
+  {
+   "id": "APP-P-028",
+   "slug": "APP-P-028-rep-approvals",
+   "title": "APP-P-028 — Кабинет представителя — Заявки (очередь на модерации)",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-028-rep-approvals/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-028-rep-approvals.md",
+   "card_local": "../canon/APP_PAGES/APP-P-028-rep-approvals.md"
+  },
+  {
+   "id": "APP-P-029",
+   "slug": "APP-P-029-rep-income",
+   "title": "APP-P-029 — Кабинет представителя — Доход",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-029-rep-income/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-029-rep-income.md",
+   "card_local": "../canon/APP_PAGES/APP-P-029-rep-income.md"
+  },
+  {
+   "id": "APP-P-030",
+   "slug": "APP-P-030-rep-profile",
+   "title": "APP-P-030 — Кабинет представителя — Профиль",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-030-rep-profile/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-030-rep-profile.md",
+   "card_local": "../canon/APP_PAGES/APP-P-030-rep-profile.md"
+  },
+  {
+   "id": "APP-P-031",
+   "slug": "APP-P-031-rep-chats",
+   "title": "APP-P-031 — Кабинет представителя — Чаты",
+   "group": "Бизнес и реп",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-031-rep-chats/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-031-rep-chats.md",
+   "card_local": "../canon/APP_PAGES/APP-P-031-rep-chats.md"
+  },
+  {
+   "id": "APP-P-032",
+   "slug": "APP-P-032-platform",
+   "title": "APP-P-032 — Кабинет платформы (счета, распределения, реестры)",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-032-platform/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-032-platform.md",
+   "card_local": "../canon/APP_PAGES/APP-P-032-platform.md"
+  },
+  {
+   "id": "APP-P-033",
+   "slug": "APP-P-033-owner-overview",
+   "title": "APP-P-033 — Владелец · Обзор",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-033-owner-overview/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-033-owner-overview.md",
+   "card_local": "../canon/APP_PAGES/APP-P-033-owner-overview.md"
+  },
+  {
+   "id": "APP-P-034",
+   "slug": "APP-P-034-owner-finance",
+   "title": "APP-P-034 — Владелец · Финансы",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-034-owner-finance/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-034-owner-finance.md",
+   "card_local": "../canon/APP_PAGES/APP-P-034-owner-finance.md"
+  },
+  {
+   "id": "APP-P-035",
+   "slug": "APP-P-035-owner-structure",
+   "title": "APP-P-035 — Владелец · Структура",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-035-owner-structure/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-035-owner-structure.md",
+   "card_local": "../canon/APP_PAGES/APP-P-035-owner-structure.md"
+  },
+  {
+   "id": "APP-P-036",
+   "slug": "APP-P-036-investor-growth",
+   "title": "APP-P-036 — Инвестор · Рост",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-036-investor-growth/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-036-investor-growth.md",
+   "card_local": "../canon/APP_PAGES/APP-P-036-investor-growth.md"
+  },
+  {
+   "id": "APP-P-037",
+   "slug": "APP-P-037-investor-points",
+   "title": "APP-P-037 — Инвестор · Точки",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-037-investor-points/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-037-investor-points.md",
+   "card_local": "../canon/APP_PAGES/APP-P-037-investor-points.md"
+  },
+  {
+   "id": "APP-P-038",
+   "slug": "APP-P-038-investor-money",
+   "title": "APP-P-038 — Инвестор · Доходность",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-038-investor-money/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-038-investor-money.md",
+   "card_local": "../canon/APP_PAGES/APP-P-038-investor-money.md"
+  },
+  {
+   "id": "APP-P-039",
+   "slug": "APP-P-039-amb-overview",
+   "title": "APP-P-039 — Амбассадор · Обзор",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-039-amb-overview/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-039-amb-overview.md",
+   "card_local": "../canon/APP_PAGES/APP-P-039-amb-overview.md"
+  },
+  {
+   "id": "APP-P-040",
+   "slug": "APP-P-040-amb-reps",
+   "title": "APP-P-040 — Амбассадор · Структура",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-040-amb-reps/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-040-amb-reps.md",
+   "card_local": "../canon/APP_PAGES/APP-P-040-amb-reps.md"
+  },
+  {
+   "id": "APP-P-041",
+   "slug": "APP-P-041-amb-training",
+   "title": "APP-P-041 — Амбассадор · Обучение",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-041-amb-training/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-041-amb-training.md",
+   "card_local": "../canon/APP_PAGES/APP-P-041-amb-training.md"
+  },
+  {
+   "id": "APP-P-042",
+   "slug": "APP-P-042-amb-income",
+   "title": "APP-P-042 — Амбассадор · Доход",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-042-amb-income/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-042-amb-income.md",
+   "card_local": "../canon/APP_PAGES/APP-P-042-amb-income.md"
+  },
+  {
+   "id": "APP-P-043",
+   "slug": "APP-P-043-amb-chats",
+   "title": "APP-P-043 — Амбассадор · Чаты",
+   "group": "Платформа/Инвестор/Амб",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-043-amb-chats/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-043-amb-chats.md",
+   "card_local": "../canon/APP_PAGES/APP-P-043-amb-chats.md"
+  },
+  {
+   "id": "APP-P-044",
+   "slug": "APP-P-044-msp-overview",
+   "title": "APP-P-044 — Кабинет МСП — Обзор («Мой магазин»)",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-044-msp-overview/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-044-msp-overview.md",
+   "card_local": "../canon/APP_PAGES/APP-P-044-msp-overview.md"
+  },
+  {
+   "id": "APP-P-045",
+   "slug": "APP-P-045-msp-payment",
+   "title": "APP-P-045 — МСП — Счёт верификации",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-045-msp-payment/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-045-msp-payment.md",
+   "card_local": "../canon/APP_PAGES/APP-P-045-msp-payment.md"
+  },
+  {
+   "id": "APP-P-046",
+   "slug": "APP-P-046-msp-orders",
+   "title": "APP-P-046 — МСП — Заказы точки",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-046-msp-orders/v1-2026-10-02/default.png",
+   "extras": [
+    "../screens/APP-P-046-msp-orders/v1-2026-10-02/history.png"
+   ],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-046-msp-orders.md",
+   "card_local": "../canon/APP_PAGES/APP-P-046-msp-orders.md"
+  },
+  {
+   "id": "APP-P-047",
+   "slug": "APP-P-047-msp-order-detail",
+   "title": "APP-P-047 — МСП — Заказ точки (деталь)",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-047-msp-order-detail.md",
+   "card_local": "../canon/APP_PAGES/APP-P-047-msp-order-detail.md"
+  },
+  {
+   "id": "APP-P-048",
+   "slug": "APP-P-048-msp-products",
+   "title": "APP-P-048 — МСП — Товары",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-048-msp-products/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-048-msp-products.md",
+   "card_local": "../canon/APP_PAGES/APP-P-048-msp-products.md"
+  },
+  {
+   "id": "APP-P-049",
+   "slug": "APP-P-049-msp-loyalty",
+   "title": "APP-P-049 — МСП — Промо (лояльность)",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-049-msp-loyalty.md",
+   "card_local": "../canon/APP_PAGES/APP-P-049-msp-loyalty.md"
+  },
+  {
+   "id": "APP-P-050",
+   "slug": "APP-P-050-msp-branch-settings",
+   "title": "APP-P-050 — МСП — Настройки точки",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-050-msp-branch-settings/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-050-msp-branch-settings.md",
+   "card_local": "../canon/APP_PAGES/APP-P-050-msp-branch-settings.md"
+  },
+  {
+   "id": "APP-P-051",
+   "slug": "APP-P-051-msp-team",
+   "title": "APP-P-051 — МСП — Команда",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-051-msp-team/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-051-msp-team.md",
+   "card_local": "../canon/APP_PAGES/APP-P-051-msp-team.md"
+  },
+  {
+   "id": "APP-P-052",
+   "slug": "APP-P-052-msp-starter",
+   "title": "APP-P-052 — МСП — Запуск точки («Начать»)",
+   "group": "МСП",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-052-msp-starter/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-052-msp-starter.md",
+   "card_local": "../canon/APP_PAGES/APP-P-052-msp-starter.md"
+  },
+  {
+   "id": "APP-P-053",
+   "slug": "APP-P-053-team-orders",
+   "title": "APP-P-053 — Кабинет команды — Заказы",
+   "group": "Команда",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-053-team-orders/v1-2026-10-02/default.png",
+   "extras": [
+    "../screens/APP-P-053-team-orders/v1-2026-10-02/history.png"
+   ],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-053-team-orders.md",
+   "card_local": "../canon/APP_PAGES/APP-P-053-team-orders.md"
+  },
+  {
+   "id": "APP-P-054",
+   "slug": "APP-P-054-team-order-detail",
+   "title": "APP-P-054 — Команда — Заказ точки (деталь)",
+   "group": "Команда",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-054-team-order-detail/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-054-team-order-detail.md",
+   "card_local": "../canon/APP_PAGES/APP-P-054-team-order-detail.md"
+  },
+  {
+   "id": "APP-P-055",
+   "slug": "APP-P-055-team-products",
+   "title": "APP-P-055 — Команда — Товары",
+   "group": "Команда",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-055-team-products/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-055-team-products.md",
+   "card_local": "../canon/APP_PAGES/APP-P-055-team-products.md"
+  },
+  {
+   "id": "APP-P-056",
+   "slug": "APP-P-056-team-team",
+   "title": "APP-P-056 — Команда — Команда",
+   "group": "Команда",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-056-team-team/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-056-team-team.md",
+   "card_local": "../canon/APP_PAGES/APP-P-056-team-team.md"
+  },
+  {
+   "id": "APP-P-057",
+   "slug": "APP-P-057-payment-result",
+   "title": "APP-P-057 — Результат оплаты заказа",
+   "group": "Оплата и служебные",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-057-payment-result/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-057-payment-result.md",
+   "card_local": "../canon/APP_PAGES/APP-P-057-payment-result.md"
+  },
+  {
+   "id": "APP-P-058",
+   "slug": "APP-P-058-fake-terminal",
+   "title": "APP-P-058 — Тестовый терминал (mock-банк)",
+   "group": "Оплата и служебные",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-058-fake-terminal/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-058-fake-terminal.md",
+   "card_local": "../canon/APP_PAGES/APP-P-058-fake-terminal.md"
+  },
+  {
+   "id": "APP-P-059",
+   "slug": "APP-P-059-auth-by-binding",
+   "title": "APP-P-059 — Вход по magic link",
+   "group": "Оплата и служебные",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-059-auth-by-binding/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-059-auth-by-binding.md",
+   "card_local": "../canon/APP_PAGES/APP-P-059-auth-by-binding.md"
+  },
+  {
+   "id": "APP-P-060",
+   "slug": "APP-P-060-not-found",
+   "title": "APP-P-060 — Страница не найдена",
+   "group": "Оплата и служебные",
+   "version": "v1-2026-10-02",
+   "img": "../screens/APP-P-060-not-found/v1-2026-10-02/default.png",
+   "extras": [],
+   "card": "https://github.com/bestdeejay-design/lovii_docs/blob/main/canon/APP_PAGES/APP-P-060-not-found.md",
+   "card_local": "../canon/APP_PAGES/APP-P-060-not-found.md"
+  }
+ ]
+}

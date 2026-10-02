@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Приёмка экранов ЛОВИ — T-033 (ОК / требует правок / сырой)</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c1e21;--mut:#69707a;--line:#e3e6ea;
+--ok:#1e9e6a;--fix:#e0a100;--raw:#d64545;--acc:#0f8a8a}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 -apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+header h1{font-size:16px;margin:0;flex:1 1 300px}
+header select,header button{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+#prog{font-weight:600;color:var(--mut)}
+main{max-width:1100px;margin:16px auto;padding:0 16px}
+.nav{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.nav button{font:inherit;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+.nav .pos{color:var(--mut)}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.stage img{width:100%;display:block}
+.shot{position:relative;text-align:center}
+.shot figure{margin:0}
+.shot figcaption{font-size:12px;color:var(--mut);padding:4px}
+.extras{display:flex;gap:6px;flex-wrap:wrap;padding:8px}
+.extras button{font:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+.extras button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.meta{padding:12px 16px;border-top:1px solid var(--line)}
+.meta h2{margin:0 0 2px;font-size:18px}
+.meta .id{color:var(--acc);font-weight:700}
+.meta .route{color:var(--mut);font-size:13px}
+.meta a{color:var(--acc)}
+.vrow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.vrow button{flex:1 1 120px;font:inherit;font-weight:600;padding:10px;border-radius:10px;border:2px solid transparent;cursor:pointer;background:#fff}
+.v-ok.on{border-color:var(--ok);color:var(--ok);background:#eafaf3}
+.v-fix.on{border-color:var(--fix);color:#8a6200;background:#fff8e6}
+.v-raw.on{border-color:var(--raw);color:var(--raw);background:#fdeeee}
+textarea{width:100%;min-height:64px;margin-top:10px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:10px}
+.hint{font-size:12px;color:var(--mut);margin-top:8px}
+footer{max-width:1100px;margin:20px auto 40px;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap}
+footer button,footer label{font:inherit;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer}
+footer label input{display:none}
+#exportOut{width:100%;margin-top:8px;display:none}
+.list{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:10px}
+.list summary{cursor:pointer;padding:10px 14px;font-weight:600}
+.list table{width:100%;border-collapse:collapse;font-size:13px}
+.list td{padding:6px 10px;border-top:1px solid var(--line)}
+.badge{padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600}
+.b-ok{background:#eafaf3;color:var(--ok)}.b-fix{background:#fff8e6;color:#8a6200}.b-raw{background:#fdeeee;color:var(--raw)}.b-none{background:#f0f1f3;color:var(--mut)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Приёмка экранов · T-033</h1>
+  <select id="group"></select>
+  <span id="prog"></span>
+  <button id="prev">← Назад</button>
+  <button id="next">Вперёд →</button>
+</header>
+<main>
+  <div class="nav">
+    <button id="jumplist">📋 Список экранов</button>
+    <span class="hint" id="kbd-hint">клавиши: ← → навигация · 1 ОК · 2 правки · 3 сырой</span>
+  </div>
+  <div class="stage">
+    <div class="shot"><figure><img id="img" alt=""><figcaption id="imgcap"></figcaption></figure>
+      <div class="extras" id="extras"></div></div>
+    <div class="meta">
+      <h2><span class="id" id="pid"></span> <span id="ptitle"></span></h2>
+      <div class="route" id="pver"></div>
+      <div><a id="cardlink" target="_blank">Карточка канона ↗</a></div>
+      <div class="vrow">
+        <button class="v-ok" data-v="ok">✅ ОК</button>
+        <button class="v-fix" data-v="fix">✏️ Требует правок</button>
+        <button class="v-raw" data-v="raw">🚧 Сырой</button>
+      </div>
+      <textarea id="note" placeholder="Комментарий: что именно править / что не так (обязательно для «правок» и «сырого»)"></textarea>
+      <div class="hint">Вердикт и комментарий сохраняются автоматически (в этом браузере). По завершении — «Экспорт вердиктов» внизу и передай файл/текст агенту.</div>
+    </div>
+  </div>
+  <details class="list" id="listbox"><summary>Список экранов и статусы</summary><div id="listbody"></div></details>
+</main>
+<footer>
+  <button id="exportBtn">⬇️ Экспорт вердиктов (JSON)</button>
+  <label>⬆️ Импорт вердиктов<input type="file" id="importFile" accept=".json"></label>
+  <button id="resetBtn">Сбросить всё</button>
+  <textarea id="exportOut" readonly></textarea>
+</footer>
+<script>
+const LS="t033-verdicts-v1";
+let data=null, verdicts={}, cur=0, extraIdx=0;
+try{verdicts=JSON.parse(localStorage.getItem(LS)||"{}")}catch(e){verdicts={}}
+fetch("manifest.json").then(r=>r.json()).then(j=>{
+  data=j.items;
+  const gsel=document.getElementById("group");
+  [...new Set(data.map(x=>x.group))].forEach(g=>{
+    const o=document.createElement("option");o.value=g;o.textContent=g;gsel.appendChild(o);
+  });
+  gsel.addEventListener("change",()=>{cur=data.findIndex(x=>x.group===gsel.value);render()});
+  renderList();render();
+});
+function curList(){const g=document.getElementById("group").value;return data.map((x,i)=>({x,i})).filter(p=>!g||p.x.group===g)}
+function render(){
+  if(!data)return;const it=data[cur];
+  document.getElementById("pid").textContent=it.id;
+  document.getElementById("ptitle").textContent=it.title.replace(new RegExp("^"+it.id+"\\s*[—–-]?\\s*"),"");
+  document.getElementById("pver").textContent="версия "+it.version+" · "+it.group;
+  document.getElementById("cardlink").href=it.card;
+  extraIdx=0;showImg(it);
+  const ex=document.getElementById("extras");ex.innerHTML="";
+  if(it.extras&&it.extras.length){it.extras.forEach((p,k)=>{const b=document.createElement("button");b.textContent="кадр "+(k+2);b.onclick=()=>{extraIdx=k+1;showImg(it);[...ex.children].forEach(c=>c.classList.remove("on"));b.classList.add("on")};ex.appendChild(b)})}
+  const v=verdicts[it.id]||{};
+  document.querySelectorAll(".vrow button").forEach(b=>b.classList.toggle("on",b.dataset.v===v.verdict));
+  document.getElementById("note").value=v.note||"";
+  document.getElementById("prog").textContent=Object.keys(verdicts).length+" / "+data.length;
+  document.getElementById("jumplist").onclick=()=>document.getElementById("listbox").open=true;
+}
+function showImg(it){const arr=["../screens/"+it.slug+"/"+it.version+"/default.png",...(it.extras||[])];
+  const p=arr[Math.min(extraIdx,arr.length-1)];
+  document.getElementById("img").src=it.extras&&extraIdx>0?it.extras[extraIdx-1]:p;
+  document.getElementById("imgcap").textContent=(it.extras&&extraIdx>0?"доп. кадр "+(extraIdx+1):"основной кадр")+" · "+it.id+" · "+it.version;}
+function setVerdict(vv){const it=data[cur];verdicts[it.id]={id:it.id,title:it.title,version:it.version,verdict:vv,note:document.getElementById("note").value,at:new Date().toISOString()};save();render();if(vv!=="ok")setTimeout(next,250)}
+function save(){localStorage.setItem(LS,JSON.stringify(verdicts));renderList()}
+function next(){const l=curList();const p=l.findIndex(q=>q.i===cur);if(p<l.length-1){cur=l[p+1].i;render()}else{document.getElementById("listbox").open=true}}
+function prev(){const l=curList();const p=l.findIndex(q=>q.i===cur);if(p>0){cur=l[p-1].i;render()}}
+document.querySelectorAll(".vrow button").forEach(b=>b.onclick=()=>setVerdict(b.dataset.v));
+document.getElementById("note").addEventListener("change",()=>{const it=data[cur];verdicts[it.id]=Object.assign(verdicts[it.id]||{id:it.id,title:it.title,version:it.version},verdicts[it.id]||{});verdicts[it.id].note=document.getElementById("note").value;verdicts[it.id].at=new Date().toISOString();save()});
+document.getElementById("next").onclick=next;document.getElementById("prev").onclick=prev;
+document.getElementById("exportBtn").onclick=()=>{
+  const out={task:"T-033",exported:new Date().toISOString(),total:data.length,reviewed:Object.keys(verdicts).length,
+    counts:{ok:Object.values(verdicts).filter(v=>v.verdict==="ok").length,fix:Object.values(verdicts).filter(v=>v.verdict==="fix").length,raw:Object.values(verdicts).filter(v=>v.verdict==="raw").length},
+    verdicts:Object.values(verdicts).sort((a,b)=>a.id<b.id?-1:1)};
+  const s=JSON.stringify(out,null,1);const o=document.getElementById("exportOut");o.style.display="block";o.value=s;
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([s],{type:"application/json"}));a.download="t033-verdicts.json";a.click();};
+document.getElementById("importFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const j=JSON.parse(t);(j.verdicts||[]).forEach(v=>verdicts[v.id]=v);save();render()})});
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Сбросить все вердикты в этом браузере?")){verdicts={};save();render()}};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA"||e.target.tagName==="INPUT")return;
+  if(e.key==="ArrowRight")next();else if(e.key==="ArrowLeft")prev();
+  else if(e.key==="1")setVerdict("ok");else if(e.key==="2")setVerdict("fix");else if(e.key==="3")setVerdict("raw");});
+function renderList(){
+  const L=document.getElementById("listbody");
+  const rows=data.map(x=>{const v=verdicts[x.id];const b=v?{ok:["b-ok","✅ ОК"],fix:["b-fix","✏️ правки"],raw:["b-raw","🚧 сырой"]}[v.verdict]:["b-none","—"];
+    return `<tr><td><a href="#" onclick="jump('${x.id}');return false">${x.id}</a></td><td>${x.title.replace(new RegExp("^"+x.id+"\\s*[—–-]?\\s*"),"")}</td><td>${x.version}</td><td><span class="badge ${b[0]}">${b[1]}</span></td><td>${v&&v.note?(v.note.length>60?v.note.slice(0,60)+"…":v.note):""}</td></tr>`}).join("");
+  L.innerHTML="<table><tr><td><b>ID</b></td><td><b>Экран</b></td><td><b>Версия</b></td><td><b>Вердикт</b></td><td><b>Комментарий</b></td></tr>"+rows+"</table>";
+}
+window.jump=id=>{cur=data.findIndex(x=>x.id===id);document.getElementById("listbox").open=false;render()};
+</script>
+</body>
+</html>
