@@ -1,0 +1,87 @@
+{
+  "APP-P-032-platform": {
+    "id": "APP-P-032-platform",
+    "route": "/cabinet/platform",
+    "section": "platform",
+    "status": "ok",
+    "note": "легаси-хаб",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/platform",
+    "title": "Платформа",
+    "file": "APP-P-032-platform.png",
+    "bytes": 404530,
+    "ms": 6307
+  },
+  "APP-P-033-owner-overview": {
+    "id": "APP-P-033-owner-overview",
+    "route": "/cabinet/owner",
+    "section": "platform",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/owner",
+    "title": "Кабинет владельца — Лови",
+    "file": "APP-P-033-owner-overview.png",
+    "bytes": 2363625,
+    "ms": 7547
+  },
+  "APP-P-034-owner-finance": {
+    "id": "APP-P-034-owner-finance",
+    "route": "/cabinet/owner/finance",
+    "section": "platform",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/owner/finance",
+    "title": "Финансы платформы — Лови",
+    "file": "APP-P-034-owner-finance.png",
+    "bytes": 161293,
+    "ms": 6803
+  },
+  "APP-P-035-owner-structure": {
+    "id": "APP-P-035-owner-structure",
+    "route": "/cabinet/owner/structure",
+    "section": "platform",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/owner/structure",
+    "title": "Структура платформы — Лови",
+    "file": "APP-P-035-owner-structure.png",
+    "bytes": 320110,
+    "ms": 8206
+  },
+  "APP-P-036-investor-growth": {
+    "id": "APP-P-036-investor-growth",
+    "route": "/cabinet/investor",
+    "section": "platform",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/investor",
+    "title": "Кабинет инвестора — Лови",
+    "file": "APP-P-036-investor-growth.png",
+    "bytes": 116021,
+    "ms": 7553
+  },
+  "APP-P-037-investor-points": {
+    "id": "APP-P-037-investor-points",
+    "route": "/cabinet/investor/points",
+    "section": "platform",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/investor/points",
+    "title": "Точки платформы — Лови",
+    "file": "APP-P-037-investor-points.png",
+    "bytes": 122345,
+    "ms": 7391
+  },
+  "APP-P-038-investor-money": {
+    "id": "APP-P-038-investor-money",
+    "route": "/cabinet/investor/money",
+    "section": "platform",
+    "status": "ok",
+    "httpStatus": 200,
+    "finalUrl": "https://app-staging.lovii.ru/cabinet/investor/money",
+    "title": "Доходность платформы — Лови",
+    "file": "APP-P-038-investor-money.png",
+    "bytes": 122633,
+    "ms": 7750
+  }
+}
