@@ -1,12 +1,12 @@
 {
-  "generated": "2026-10-03 15:23 UTC",
+  "generated": "2026-10-03 15:42 UTC",
   "source": "screens/ (append-only) + screens-gallery/{manifest,states}.json + canon/APP_PAGES",
   "build": "node screens-library/_tools/build-library.mjs",
   "counts": {
     "pages": 60,
     "modals": 9,
-    "versions": 99,
-    "frames": 140
+    "versions": 101,
+    "frames": 142
   },
   "groups": [
     "Модалки",
@@ -1060,9 +1060,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v4-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000014 (ACT-04, заявка №17 verified)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "апрув платформы через internal verify; шаги таймлайна все зелёные — инсталляционный платёж ПЕРЕСКочЕН (счёт не выставлялся) — отдельно проверить бизнес-логику",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v4-2026-10-03/default.png",
+              "code": "«Точка на витрине!» + кнопка «Открыть кабинет МСП»",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v3-2026-10-03"
+      "current_version": "v4-2026-10-03"
     },
     {
       "id": "APP-P-024",
@@ -1107,9 +1125,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/result",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000014 (ACT-04, заявка №17 verified)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "«Заявка не найдена» при одобренной заявке — маршрут мёртвый (R-073) · статусы заявки после апрува платформы (internal verify)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-024-business-result/v3-2026-10-03/default.png",
+              "code": "«Заявка не найдена» при одобренной заявке — маршрут мёртвый (R-073)",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v2-2026-10-03"
+      "current_version": "v3-2026-10-03"
     },
     {
       "id": "APP-P-025",
