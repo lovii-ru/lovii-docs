@@ -18,7 +18,14 @@
 - Включаются **только в b2b**: BranchResource:95–100 (секция operations, рядом
   min/max_delivery_minutes и min_order_amount).
 - Из кабинета МСП в app тумблеры **недоступны** — UpdateMspBranchSettings
-  принимает только name/address/часы/min_order (UpdateMspBranchSettingsController.php:28–33).
+  принимает name/address/часы/min_order, **с 21.09 — `delivery_radius_meters`
+  (SZ-066, 300…1000 м), с 30.09 — `status`/`pause_minutes` (SZ-063)**
+  (сверка 04.10 по коду staging); тумблеров delivery/pickup в API по-прежнему нет.
+- **Дельта 30.09 (SZ-063, staging — на приёмке): статус точки сильнее расписания** —
+  вкл/выкл (`active/inactive`) и временное закрытие (`pause_minutes` 30/60,
+  `paused_until_at` с авто-возвратом `branches:resume-paused`);
+  `BranchAvailabilityResolver` ставит статус выше расписания для покупателя
+  (настройка — в app, раздел «Настройки точки»).
 - Проверка — в чекауте (`delivery_not_supported`, CheckoutBuilder.php:81–87);
   на витрину пробрасываются флагами корзины (CartResource.php:32–43).
 

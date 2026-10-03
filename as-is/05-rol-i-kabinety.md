@@ -6,7 +6,9 @@
 > роутинг заявки по промокоду профиля, кабинеты платформы). Рабочая заметка
 > (класс W), не канон. Числа (доли 40/40/20, подписка 599/199) — канон
 > `PARAMS.md`. Формат — [README](README.md).
-> **2026-09-25** (дельта 23–25.09: см. раздел ниже).
+> **2026-09-25** (дельта 23–25.09: см. раздел ниже). **2026-10-04** (аудит
+> Super Z: QR амба G4 и доходы П-8 закрыты 30.09; SZ-063 смержена в staging
+> 30.09 — отметки по тексту).
 
 ## Что это
 
@@ -152,7 +154,9 @@ failed, expired`.
 - Настройки точки из app: `PATCH /msp/branch/settings` — name, address_line,
   часы (24ч-селекты), min_order_amount_rubles (UpdateMspBranchSettingsController.php:33–71;
   право owner/manager). **Тумблеры доставки из app не меняются** (их в API нет —
-  только b2b).
+  только b2b). **С 21.09 добавился `delivery_radius_meters` (SZ-066, 300…1000 м),
+  с 30.09 — `status`/`pause_minutes` (SZ-063)**; тумблеры delivery/pickup —
+  по-прежнему только b2b (сверка 04.10 по коду staging).
 - Обновление 18.09: `min_order_amount_rubles` — 0/null → NULL, 1..499 ₽ →
   422 `min_order_amount_too_low` (пол 500 ₽ из конфига); ресурс отдаёт
   `min_order_amount_effective` (см. [02](02-korzina-checkout.md) «Минимум
@@ -181,12 +185,15 @@ failed, expired`.
 
 ## Кабинеты репа и амбассадора
 
-- Реп `/cabinet/representative` — Обзор (KPI: заявки, активные точки, доход 0
-  «финконтур ещё не подключён»), Точки, Заявки (очередь апрувов), Доход (0 ₽),
-  Профиль (промокод + **QR есть** — инлайн-SVG, реф-ссылка `?ref=КОД`).
-- Амб `/cabinet/ambassador` — Обзор (prefix, reps_count, points_count, доходы 0),
-  Структура (активные промокоды префикса), Обучение (статический трек из конфига,
-  progress 0), Доход («честный ноль»). **QR у амба нет**.
+- Реп `/cabinet/representative` — Обзор (KPI: заявки, активные точки, ~~доход 0
+  «финконтур ещё не подключён»~~ **доход из ledger — П-8, 30.09**), Точки,
+  Заявки (очередь апрувов), Доход (**живой** — `/representative/income`,
+  RepresentativeIncome.vue), Профиль (промокод + **QR есть** — инлайн-SVG,
+  реф-ссылка `?ref=КОД`).
+- Амб `/cabinet/ambassador` — Обзор (prefix, reps_count, points_count, доходы
+  из ledger), Структура (активные промокоды префикса), Обучение (статический
+  трек из конфига, progress 0), Доход (**живой** — AmbassadorIncome.vue).
+  ~~**QR у амба нет**~~ — **закрыто 30.09 (G4)**: QR-карточка кода амбассадора.
 - Чаты в обоих — заглушка «скоро» (ChatStub.vue:14–21), эндпоинтов в core нет.
 
 ## Права
@@ -197,9 +204,11 @@ failed, expired`.
 - Гард app `rolesGuard`: без флага — редирект на профиль (не 403); manager/operator
   МСП автоматически уводятся в кабинет команды (teamToOwnCabinet).
 
-## Чего нет (факты, на 22.09)
+## Чего нет (факты, на 22.09; актуализация 04.10)
 
-- Доходы репа и амба — всегда ноль (UI-хардкод / API `amount: 0`); `rank` в
+- ~~Доходы репа и амба — всегда ноль (UI-хардкод / API `amount: 0`)~~ —
+  **устарело (30.09, П-8 закрыто)**: доход считается из ledger
+  (`RoleIncomeQuery`, `GET /representative/income`, экраны app); `rank` в
   профиле репа — null. `subscription` в профиле репа — теперь из API
   `GET /v1/subscription` (см. [04](04-bally-koshelek-platezhi.md)); без подписки
   и при включённом гейте EC-11 доля пула репа уходит Компании.
@@ -226,7 +235,10 @@ failed, expired`.
 
 ### Только feature-worktree: SZ-063, включение/выключение точки
 
-> **Не относится к staging.** Ниже только код worktree `lovii-core-sz063` и `lovii-app-sz063` (`feat/sz063-branch-on-off`); карточка SZ-063 открыта, отдельного отчёта и приёмки нет. В staging-контрактах этих полей и методов нет: `lovii-app/src/modules/roles-module/api/roles-api.ts:332-382`, а валидация staging-core не содержит `status`/`pause_minutes` (`lovii-core/app/Http/Controllers/Api/V1/Msp/UpdateMspBranchSettingsController.php:79-133`).
+> ~~**Не относится к staging.**~~ **Устарело (30.09): SZ-063 смержена в staging**
+> (в коде staging подтверждены `BranchAvailabilityResolver` и миграция
+> `paused_until_at`, снимок-аудит 04.10); экран настроек в app. **Ждёт приёмки
+> владельца.** Ниже — исходный разбор worktree (факты совпадают с мержем).
 
 - **App-контракт и UI.** `lovii-app-sz063/src/modules/roles-module/api/roles-api.ts:333-376` добавляет `status`, `paused_until_at`, `paused_until_local`, `availability` и `pause_options_minutes`; методы `mspSetBranchStatus()` и `mspPauseBranch()` — там же `:664-704`. Экран скрывает секцию состояния, если старый core не прислал `status` (`MspBranchSettings.vue:369-379`), и показывает включение, выключение и временное закрытие только при поддержке контракта (`MspBranchSettings.vue:1110-1201`).
 
@@ -241,7 +253,8 @@ failed, expired`.
 2. ~~Промокод в форме заявки~~ — T-010 закрыл путь регистрации (любой суффикс
    `?ключ=` → `users.promo_code`); за подписку выдаётся личный код (SZ-057);
    роутинг заявки по промокоду профиля — сделан 20.09.
-3. Доход репа/амба (эндпоинт + экраны) — всегда ноль (см. [04](04-bally-koshelek-platezhi.md)).
+3. ~~Доход репа/амба (эндпоинт + экраны) — всегда ноль~~ — **сделано 30.09**
+   (П-8, см. [04](04-bally-koshelek-platezhi.md)).
 4. UI назначения амбассадора (сейчас только artisan) и ранги Мэр/Губернатор.
 5. Тумблеры доставки точки — добавить в настройки app или зафиксировать «только b2b»
    (радиус SZ-066 уже в настройках app — см. [08](08-dostavka-adresa-geo.md)).
