@@ -1,0 +1,2516 @@
+{
+  "generated": "2026-10-03 09:13 UTC",
+  "source": "screens/ (append-only) + screens-gallery/{manifest,states}.json + canon/APP_PAGES",
+  "build": "node screens-library/_tools/build-library.mjs",
+  "counts": {
+    "pages": 60,
+    "modals": 9,
+    "versions": 86,
+    "frames": 126
+  },
+  "groups": [
+    "Модалки",
+    "Прочее",
+    "Профиль",
+    "Бизнес и реп",
+    "Платформа/Инвестор/Амб",
+    "МСП",
+    "Команда",
+    "Оплата и служебные",
+    "Витрина"
+  ],
+  "items": [
+    {
+      "id": "APP-M-001",
+      "kind": "modal",
+      "slug": "APP-M-001-app-lock",
+      "title": "APP-M-001 — Блокировка быстрого входа (AppLock)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-001-app-lock.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-002",
+      "kind": "modal",
+      "slug": "APP-M-002-geolocation-map",
+      "title": "APP-M-002 — Карта выбора адреса (GeolocationModule)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-002-geolocation-map.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-003",
+      "kind": "modal",
+      "slug": "APP-M-003-address-select",
+      "title": "APP-M-003 — Выбор адреса доставки (AddressSelectSheet)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-003-address-select.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-004",
+      "kind": "modal",
+      "slug": "APP-M-004-avatar-cropper",
+      "title": "APP-M-004 — Кадрирование аватара (AvatarCropper)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-004-avatar-cropper.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-005",
+      "kind": "modal",
+      "slug": "APP-M-005-quick-access",
+      "title": "APP-M-005 — Настройка быстрого входа (QuickAccessSheet)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-005-quick-access.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-006",
+      "kind": "modal",
+      "slug": "APP-M-006-partner-switcher",
+      "title": "APP-M-006 — Свитчер юрлиц (PartnerSwitcher)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-006-partner-switcher.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-007",
+      "kind": "modal",
+      "slug": "APP-M-007-merchant-switcher",
+      "title": "APP-M-007 — Свитчер мерчантов/брендов (MerchantSwitcher)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-007-merchant-switcher.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-008",
+      "kind": "modal",
+      "slug": "APP-M-008-branch-switcher",
+      "title": "APP-M-008 — Свитчер точек (BranchSwitcher)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-008-branch-switcher.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-M-009",
+      "kind": "modal",
+      "slug": "APP-M-009-store-info",
+      "title": "APP-M-009 — Информация о заведении (StoreInfoSheet)",
+      "group": "Модалки",
+      "card_local": "../canon/APP_PAGES/APP-M-009-store-info.md",
+      "versions": [],
+      "current_version": null
+    },
+    {
+      "id": "APP-P-001",
+      "kind": "page",
+      "slug": "APP-P-001-home",
+      "title": "Главный экран (витрина)",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-001-home.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-001-home/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-002",
+      "kind": "page",
+      "slug": "APP-P-002-popular",
+      "title": "Популярное",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-002-popular.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/popular",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-002-popular/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-003",
+      "kind": "page",
+      "slug": "APP-P-003-stores",
+      "title": "Поиск заведений и товаров",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-003-stores.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/stores",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-003-stores/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "search-empty",
+              "is_default": false,
+              "img": "../screens/APP-P-003-stores/v1-2026-10-03/search-empty.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "search-empty",
+              "is_default": false,
+              "img": "../screens/APP-P-003-stores/v2-2026-10-03/search-empty.png",
+              "code": "StoresCatalog.vue + CatalogSearch.vue",
+              "note": "Каталог — пустой результат поиска"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-004",
+      "kind": "page",
+      "slug": "APP-P-004-store",
+      "title": "Заведение (точка)",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-004-store.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/stores/542",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-004-store/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/stores/542",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "правка F-3 (T-032): заголовки подшапки 013/021, сабхедер 004 убран — возврат на баннере",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-004-store/v2-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-02"
+    },
+    {
+      "id": "APP-P-005",
+      "kind": "page",
+      "slug": "APP-P-005-product",
+      "title": "Товар",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-005-product.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/stores/542/product/80021",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-005-product/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-006",
+      "kind": "page",
+      "slug": "APP-P-006-cart",
+      "title": "Корзина",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-006-cart.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cart",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "авторизованная корзина — приоритетный скрин · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-006-cart/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            },
+            {
+              "state": "guest",
+              "is_default": false,
+              "img": "../screens/APP-P-006-cart/v1-2026-10-02/guest.png",
+              "code": "гостевой вид",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-007",
+      "kind": "page",
+      "slug": "APP-P-007-cart-order",
+      "title": "Оформление заказа",
+      "group": "Витрина",
+      "card_local": "../canon/APP_PAGES/APP-P-007-cart-order.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cart/205",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "оформление заказа · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-007-cart-order/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            },
+            {
+              "state": "guest",
+              "is_default": false,
+              "img": "../screens/APP-P-007-cart-order/v1-2026-10-02/guest.png",
+              "code": "гостевой вид",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "checkout-create",
+              "is_default": false,
+              "img": "../screens/APP-P-007-cart-order/v1-2026-10-03/checkout-create.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "checkout-create",
+              "is_default": false,
+              "img": "../screens/APP-P-007-cart-order/v2-2026-10-03/checkout-create.png",
+              "code": "CreateOrder.vue",
+              "note": "Чекаут покупателя — создание заказа"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-008",
+      "kind": "page",
+      "slug": "APP-P-008-profile",
+      "title": "Профиль (хаб входа)",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-008-profile.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "профиль авторизованного — хаб · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-008-profile/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            },
+            {
+              "state": "guest",
+              "is_default": false,
+              "img": "../screens/APP-P-008-profile/v1-2026-10-02/guest.png",
+              "code": "гостевой вид",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-009",
+      "kind": "page",
+      "slug": "APP-P-009-wallet",
+      "title": "Счёт и операции",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-009-wallet.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/wallet",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-009-wallet/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-010",
+      "kind": "page",
+      "slug": "APP-P-010-transfer",
+      "title": "Перевод баллов",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-010-transfer.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/wallet/transfer",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-010-transfer/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-011",
+      "kind": "page",
+      "slug": "APP-P-011-balance-redirect",
+      "title": "Редирект «Мои баллы»",
+      "group": "Прочее",
+      "card_local": "../canon/APP_PAGES/APP-P-011-balance-redirect.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/balance",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "redirect-карточка (removed) · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-011-balance-redirect/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-012",
+      "kind": "page",
+      "slug": "APP-P-012-operations-redirect",
+      "title": "Редирект «Все операции»",
+      "group": "Прочее",
+      "card_local": "../canon/APP_PAGES/APP-P-012-operations-redirect.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/operations",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "redirect-карточка (removed) · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-012-operations-redirect/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-013",
+      "kind": "page",
+      "slug": "APP-P-013-profile-edit",
+      "title": "Редактирование профиля",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-013-profile-edit.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/edit",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-013-profile-edit/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/edit",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "правка F-3 (T-032): заголовки подшапки 013/021, сабхедер 004 убран — возврат на баннере",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-013-profile-edit/v2-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-02"
+    },
+    {
+      "id": "APP-P-014",
+      "kind": "page",
+      "slug": "APP-P-014-email-verify",
+      "title": "Подтверждение e-mail",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-014-email-verify.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/edit/email/verify",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-014-email-verify/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-015",
+      "kind": "page",
+      "slug": "APP-P-015-orders",
+      "title": "История заказов",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-015-orders.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/orders",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-015-orders/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-016",
+      "kind": "page",
+      "slug": "APP-P-016-order",
+      "title": "Заказ",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-016-order.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/orders/440",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-016-order/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-017",
+      "kind": "page",
+      "slug": "APP-P-017-addresses",
+      "title": "Мои адреса",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-017-addresses.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/addresses",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-017-addresses/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-018",
+      "kind": "page",
+      "slug": "APP-P-018-address-create",
+      "title": "Добавление адреса",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-018-address-create.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/addresses/create",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-018-address-create/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-019",
+      "kind": "page",
+      "slug": "APP-P-019-address-edit",
+      "title": "Редактирование адреса",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-019-address-edit.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/profile/addresses → клик ✎ → /profile/addresses/edit/:id",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "форма открыта кликом из списка (прямой заход редиректит: стор пуст) · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "as-is",
+              "is_default": false,
+              "img": "../screens/APP-P-019-address-edit/v1-2026-10-02/as-is.png",
+              "code": "как есть (сразу после входа)",
+              "note": null
+            },
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-019-address-edit/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-020",
+      "kind": "page",
+      "slug": "APP-P-020-settings",
+      "title": "Настройки",
+      "group": "Профиль",
+      "card_local": "../canon/APP_PAGES/APP-P-020-settings.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/settings",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-020-settings/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-021",
+      "kind": "page",
+      "slug": "APP-P-021-business-landing",
+      "title": "ЛОВИ Бизнес — лендинг подключения точки",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-021-business-landing.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-021-business-landing/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "правка F-3 (T-032): заголовки подшапки 013/021, сабхедер 004 убран — возврат на баннере",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-021-business-landing/v2-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v3-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "правка F-3 (T-032): название только в подшапке — дубль из hero убран",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-021-business-landing/v3-2026-10-02/default.png",
+              "code": "базовый кадр T-032 (v1-2026-10-02) — верхний уровень",
+              "note": "Шаг 1 — «ЛОВИ Бизнес»: лендинг подключения точки"
+            }
+          ]
+        }
+      ],
+      "current_version": "v3-2026-10-02"
+    },
+    {
+      "id": "APP-P-022",
+      "kind": "page",
+      "slug": "APP-P-022-business-apply",
+      "title": "ЛОВИ Бизнес — форма заявки «Добавить точку»",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-022-business-apply.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business/apply",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-022-business-apply/v1-2026-10-02/default.png",
+              "code": "базовый кадр T-032 (v1-2026-10-02) — верхний уровень",
+              "note": "Шаг 2 — форма заявки «Добавить точку»"
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-023",
+      "kind": "page",
+      "slug": "APP-P-023-business-status",
+      "title": "ЛОВИ Бизнес — статус заявки",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-023-business-status.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v1-2026-10-02/default.png",
+              "code": "базовый кадр T-032 (v1-2026-10-02) — верхний уровень",
+              "note": "Шаг 3 — статус заявки на модерации"
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-024",
+      "kind": "page",
+      "slug": "APP-P-024-business-result",
+      "title": "ЛОВИ Бизнес — результат заявки",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-024-business-result.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business/result",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-024-business-result/v1-2026-10-02/default.png",
+              "code": "базовый кадр T-032 (v1-2026-10-02) — верхний уровень",
+              "note": "Шаги 6/7 — результат заявки (успех/ошибки)"
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-025",
+      "kind": "page",
+      "slug": "APP-P-025-mypoint",
+      "title": "Редирект «Моя точка»",
+      "group": "Прочее",
+      "card_local": "../canon/APP_PAGES/APP-P-025-mypoint.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/business/point",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "redirect-карточка (removed) · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-025-mypoint/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-026",
+      "kind": "page",
+      "slug": "APP-P-026-rep-overview",
+      "title": "Кабинет представителя — Обзор",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-026-rep-overview.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/representative",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-026-rep-overview/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-027",
+      "kind": "page",
+      "slug": "APP-P-027-rep-points",
+      "title": "Кабинет представителя — Мои точки",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-027-rep-points.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/representative/points",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-027-rep-points/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-028",
+      "kind": "page",
+      "slug": "APP-P-028-rep-approvals",
+      "title": "Кабинет представителя — Заявки (очередь на модерации)",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-028-rep-approvals.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/representative/approvals",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-028-rep-approvals/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "approval-cards",
+              "is_default": false,
+              "img": "../screens/APP-P-028-rep-approvals/v1-2026-10-03/approval-cards.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "approval-cards",
+              "is_default": false,
+              "img": "../screens/APP-P-028-rep-approvals/v2-2026-10-03/approval-cards.png",
+              "code": "RepresentativeApprovals.vue",
+              "note": "Кабинет представителя — карточки заявок"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-029",
+      "kind": "page",
+      "slug": "APP-P-029-rep-income",
+      "title": "Кабинет представителя — Доход",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-029-rep-income.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/representative/income",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-029-rep-income/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-030",
+      "kind": "page",
+      "slug": "APP-P-030-rep-profile",
+      "title": "Кабинет представителя — Профиль",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-030-rep-profile.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/representative/profile",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-030-rep-profile/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-031",
+      "kind": "page",
+      "slug": "APP-P-031-rep-chats",
+      "title": "Кабинет представителя — Чаты",
+      "group": "Бизнес и реп",
+      "card_local": "../canon/APP_PAGES/APP-P-031-rep-chats.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/representative/chats",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "заглушка ChatStub (эксперимент) · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-031-rep-chats/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-032",
+      "kind": "page",
+      "slug": "APP-P-032-platform",
+      "title": "Кабинет платформы (счета, распределения, реестры)",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-032-platform.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/platform",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "легаси-хаб · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-032-platform/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-033",
+      "kind": "page",
+      "slug": "APP-P-033-owner-overview",
+      "title": "Владелец · Обзор",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-033-owner-overview.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/owner",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-033-owner-overview/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-034",
+      "kind": "page",
+      "slug": "APP-P-034-owner-finance",
+      "title": "Владелец · Финансы",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-034-owner-finance.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/owner/finance",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-034-owner-finance/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-035",
+      "kind": "page",
+      "slug": "APP-P-035-owner-structure",
+      "title": "Владелец · Структура",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-035-owner-structure.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/owner/structure",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-035-owner-structure/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-036",
+      "kind": "page",
+      "slug": "APP-P-036-investor-growth",
+      "title": "Инвестор · Рост",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-036-investor-growth.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/investor",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-036-investor-growth/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-037",
+      "kind": "page",
+      "slug": "APP-P-037-investor-points",
+      "title": "Инвестор · Точки",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-037-investor-points.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/investor/points",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-037-investor-points/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-038",
+      "kind": "page",
+      "slug": "APP-P-038-investor-money",
+      "title": "Инвестор · Доходность",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-038-investor-money.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/investor/money",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-038-investor-money/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-039",
+      "kind": "page",
+      "slug": "APP-P-039-amb-overview",
+      "title": "Амбассадор · Обзор",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-039-amb-overview.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/ambassador",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-039-amb-overview/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-040",
+      "kind": "page",
+      "slug": "APP-P-040-amb-reps",
+      "title": "Амбассадор · Структура",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-040-amb-reps.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/ambassador/reps",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-040-amb-reps/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-041",
+      "kind": "page",
+      "slug": "APP-P-041-amb-training",
+      "title": "Амбассадор · Обучение",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-041-amb-training.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/ambassador/training",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-041-amb-training/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-042",
+      "kind": "page",
+      "slug": "APP-P-042-amb-income",
+      "title": "Амбассадор · Доход",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-042-amb-income.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/ambassador/income",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-042-amb-income/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-043",
+      "kind": "page",
+      "slug": "APP-P-043-amb-chats",
+      "title": "Амбассадор · Чаты",
+      "group": "Платформа/Инвестор/Амб",
+      "card_local": "../canon/APP_PAGES/APP-P-043-amb-chats.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/ambassador/chats",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "заглушка ChatStub (эксперимент) · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-043-amb-chats/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-044",
+      "kind": "page",
+      "slug": "APP-P-044-msp-overview",
+      "title": "Кабинет МСП — Обзор («Мой магазин»)",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-044-msp-overview.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-044-msp-overview/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "branch-switcher",
+              "is_default": false,
+              "img": "../screens/APP-P-044-msp-overview/v1-2026-10-03/branch-switcher.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "branch-switcher",
+              "is_default": false,
+              "img": "../screens/APP-P-044-msp-overview/v2-2026-10-03/branch-switcher.png",
+              "code": "BranchSwitcher.vue (SZ-076)",
+              "note": "Свитчер точки (BranchSwitcher)"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-045",
+      "kind": "page",
+      "slug": "APP-P-045-msp-payment",
+      "title": "МСП — Счёт верификации",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-045-msp-payment.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/payment",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-045-msp-payment/v1-2026-10-02/default.png",
+              "code": "базовый кадр T-032 (v1-2026-10-02) — верхний уровень",
+              "note": "Счёт верификации МСП"
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-046",
+      "kind": "page",
+      "slug": "APP-P-046-msp-orders",
+      "title": "МСП — Заказы точки",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-046-msp-orders.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/orders",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-046-msp-orders/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            },
+            {
+              "state": "history",
+              "is_default": false,
+              "img": "../screens/APP-P-046-msp-orders/v1-2026-10-02/history.png",
+              "code": "вкладка «История»",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "empty-active",
+              "is_default": false,
+              "img": "../screens/APP-P-046-msp-orders/v1-2026-10-03/empty-active.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "empty-active",
+              "is_default": false,
+              "img": "../screens/APP-P-046-msp-orders/v2-2026-10-03/empty-active.png",
+              "code": "MspOrders.vue",
+              "note": "Заказы точки — пустые активные"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-047",
+      "kind": "page",
+      "slug": "APP-P-047-msp-order-detail",
+      "title": "МСП — Заказ точки (деталь)",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-047-msp-order-detail.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/orders/441",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "actions",
+              "is_default": false,
+              "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-03/actions.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "cancel-confirm",
+              "is_default": false,
+              "img": "../screens/APP-P-047-msp-order-detail/v1-2026-10-03/cancel-confirm.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "actions",
+              "is_default": false,
+              "img": "../screens/APP-P-047-msp-order-detail/v2-2026-10-03/actions.png",
+              "code": "MspOrderDetail.vue:370-385",
+              "note": "Деталь заказа — кнопки статусов"
+            },
+            {
+              "state": "cancel-confirm",
+              "is_default": false,
+              "img": "../screens/APP-P-047-msp-order-detail/v2-2026-10-03/cancel-confirm.png",
+              "code": "MspOrderDetail.vue:394-443",
+              "note": "Деталь заказа — подтверждение отмены"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-048",
+      "kind": "page",
+      "slug": "APP-P-048-msp-products",
+      "title": "МСП — Товары",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-048-msp-products.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/products",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-048-msp-products/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "add-category",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/add-category.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "add-product",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/add-product.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "category-rename",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/category-rename.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "edit-product",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v1-2026-10-03/edit-product.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "add-category",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v2-2026-10-03/add-category.png",
+              "code": "MspProducts.vue:601+",
+              "note": "Товары МСП — создание категории"
+            },
+            {
+              "state": "add-product",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v2-2026-10-03/add-product.png",
+              "code": "MspProducts.vue:443-600",
+              "note": "Товары МСП — форма «Добавить товар»"
+            },
+            {
+              "state": "category-rename",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v2-2026-10-03/category-rename.png",
+              "code": "MspProducts.vue:622-665",
+              "note": "Товары МСП — переименование категории"
+            },
+            {
+              "state": "edit-product",
+              "is_default": false,
+              "img": "../screens/APP-P-048-msp-products/v2-2026-10-03/edit-product.png",
+              "code": "MspProducts.vue (edit)",
+              "note": "Товары МСП — правка товара"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-049",
+      "kind": "page",
+      "slug": "APP-P-049-msp-loyalty",
+      "title": "МСП — Промо (лояльность)",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-049-msp-loyalty.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/loyalty",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "mech-cashback",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-cashback.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "mech-combo",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-combo.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "mech-hours",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-hours.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "mech-stamps",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-stamps.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "mech-threshold",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/mech-threshold.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-cashback",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-cashback.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-combo-BLOCKED-at-step1",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-combo-BLOCKED-at-step1.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-combo-FIXED",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-combo-FIXED.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-hours",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-hours.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-stamps-BLOCKED-at-step1",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-stamps-BLOCKED-at-step1.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-stamps-FIXED",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-stamps-FIXED.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step2-threshold",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step2-threshold.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "step3-publish",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/step3-publish.png",
+              "code": null,
+              "note": null
+            },
+            {
+              "state": "wizard-step1",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v1-2026-10-03/wizard-step1.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "mech-cashback",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/mech-cashback.png",
+              "code": "msp/loyalty.ts:184",
+              "note": "Механика «Группа товаров» (cashback)"
+            },
+            {
+              "state": "mech-combo",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/mech-combo.png",
+              "code": "msp/loyalty.ts:165",
+              "note": "Механика «Комбо» (combo)"
+            },
+            {
+              "state": "mech-hours",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/mech-hours.png",
+              "code": "msp/loyalty.ts:178",
+              "note": "Механика «Счастливые часы» (hours)"
+            },
+            {
+              "state": "mech-stamps",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/mech-stamps.png",
+              "code": "msp/loyalty.ts:172",
+              "note": "Механика «Штампы — N-й в подарок» (stamps)"
+            },
+            {
+              "state": "mech-threshold",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/mech-threshold.png",
+              "code": "msp/loyalty.ts:157",
+              "note": "Механика «Сумма чека» (threshold)"
+            },
+            {
+              "state": "step2-cashback",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-cashback.png",
+              "code": "LoyaltyGroupEditor.vue",
+              "note": "Шаг 2 — группа товаров (cashback)"
+            },
+            {
+              "state": "step2-combo-BLOCKED-at-step1",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-combo-BLOCKED-at-step1.png",
+              "code": "валидация draftValidationError требует ≥2 товара, выбираемые только на шаге 2",
+              "note": "🔴 Комбо — шаг 2 НЕДОСТИЖИМ (Далее заблокирован на шаге 1)"
+            },
+            {
+              "state": "step2-combo-FIXED",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-combo-FIXED.png",
+              "code": "LoyaltyRuleWizard: stepError (шаг 1 без валидации механики)",
+              "note": "ФИКС: Комбо — шаг 2 достигается (ветка t034-wizard-step-validation, :5174)"
+            },
+            {
+              "state": "step2-hours",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-hours.png",
+              "code": "DayChips + TimeField",
+              "note": "Шаг 2 — часы и дни (hours)"
+            },
+            {
+              "state": "step2-stamps-BLOCKED-at-step1",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-stamps-BLOCKED-at-step1.png",
+              "code": "giftOfferId пуст → error≠null → Далее disabled",
+              "note": "🔴 Штампы — шаг 2 НЕДОСТИЖИМ (нужен товар-подарок с шага 2)"
+            },
+            {
+              "state": "step2-stamps-FIXED",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-stamps-FIXED.png",
+              "code": "там же",
+              "note": "ФИКС: Штампы — шаг 2 достигается (та же ветка)"
+            },
+            {
+              "state": "step2-threshold",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step2-threshold.png",
+              "code": "LoyaltyRuleWizard.vue",
+              "note": "Шаг 2 — порог и награда (threshold)"
+            },
+            {
+              "state": "step3-publish",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/step3-publish.png",
+              "code": "BudgetMeter + BuyerPreview",
+              "note": "Шаг 3 — бюджет и предпросмотр покупателя"
+            },
+            {
+              "state": "wizard-step1",
+              "is_default": false,
+              "img": "../screens/APP-P-049-msp-loyalty/v2-2026-10-03/wizard-step1.png",
+              "code": "LoyaltyRuleWizard.vue + MechanicPicker.vue",
+              "note": "Визард акции — шаг 1: выбор механики"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-050",
+      "kind": "page",
+      "slug": "APP-P-050-msp-branch-settings",
+      "title": "МСП — Настройки точки",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-050-msp-branch-settings.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/settings",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-050-msp-branch-settings/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "delivery-zone",
+              "is_default": false,
+              "img": "../screens/APP-P-050-msp-branch-settings/v1-2026-10-03/delivery-zone.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "delivery-zone",
+              "is_default": false,
+              "img": "../screens/APP-P-050-msp-branch-settings/v2-2026-10-03/delivery-zone.png",
+              "code": "MspBranchSettings.vue:148-222",
+              "note": "Настройки точки — зона доставки (радиус)"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-051",
+      "kind": "page",
+      "slug": "APP-P-051-msp-team",
+      "title": "МСП — Команда",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-051-msp-team.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/team",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-051-msp-team/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "invite-form",
+              "is_default": false,
+              "img": "../screens/APP-P-051-msp-team/v1-2026-10-03/invite-form.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "invite-form",
+              "is_default": false,
+              "img": "../screens/APP-P-051-msp-team/v2-2026-10-03/invite-form.png",
+              "code": "MspTeam.vue:309+ (SZ-047)",
+              "note": "Команда — форма приглашения (бренд→точки→роль→телефон)"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-052",
+      "kind": "page",
+      "slug": "APP-P-052-msp-starter",
+      "title": "МСП — Запуск точки («Начать»)",
+      "group": "МСП",
+      "card_local": "../canon/APP_PAGES/APP-P-052-msp-starter.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/msp/starter",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-052-msp-starter/v1-2026-10-02/default.png",
+              "code": "базовый кадр T-032 (v1-2026-10-02) — верхний уровень",
+              "note": "Запуск точки («Начать», 4 шага)"
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-053",
+      "kind": "page",
+      "slug": "APP-P-053-team-orders",
+      "title": "Кабинет команды — Заказы",
+      "group": "Команда",
+      "card_local": "../canon/APP_PAGES/APP-P-053-team-orders.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/team",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-053-team-orders/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            },
+            {
+              "state": "history",
+              "is_default": false,
+              "img": "../screens/APP-P-053-team-orders/v1-2026-10-02/history.png",
+              "code": "вкладка «История»",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-054",
+      "kind": "page",
+      "slug": "APP-P-054-team-order-detail",
+      "title": "Команда — Заказ точки (деталь)",
+      "group": "Команда",
+      "card_local": "../canon/APP_PAGES/APP-P-054-team-order-detail.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/team/orders/441",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-054-team-order-detail/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-055",
+      "kind": "page",
+      "slug": "APP-P-055-team-products",
+      "title": "Команда — Товары",
+      "group": "Команда",
+      "card_local": "../canon/APP_PAGES/APP-P-055-team-products.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/team/products",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-055-team-products/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v1-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "team-products",
+              "is_default": false,
+              "img": "../screens/APP-P-055-team-products/v1-2026-10-03/team-products.png",
+              "code": null,
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": null,
+          "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "app_slice": "staging-рабочее дерево lovii-app",
+          "notes": null,
+          "frames": [
+            {
+              "state": "team-products",
+              "is_default": false,
+              "img": "../screens/APP-P-055-team-products/v2-2026-10-03/team-products.png",
+              "code": "TeamProducts.vue",
+              "note": "Кабинет команды — товары (read-only)"
+            }
+          ]
+        }
+      ],
+      "current_version": "v2-2026-10-03"
+    },
+    {
+      "id": "APP-P-056",
+      "kind": "page",
+      "slug": "APP-P-056-team-team",
+      "title": "Команда — Команда",
+      "group": "Команда",
+      "card_local": "../canon/APP_PAGES/APP-P-056-team-team.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/cabinet/team/team",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-056-team-team/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-057",
+      "kind": "page",
+      "slug": "APP-P-057-payment-result",
+      "title": "Результат оплаты заказа",
+      "group": "Оплата и служебные",
+      "card_local": "../canon/APP_PAGES/APP-P-057-payment-result.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/payment/result?order=440",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "страница статуса оплаты заказа · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-057-payment-result/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-058",
+      "kind": "page",
+      "slug": "APP-P-058-fake-terminal",
+      "title": "Тестовый терминал (mock-банк)",
+      "group": "Оплата и служебные",
+      "card_local": "../canon/APP_PAGES/APP-P-058-fake-terminal.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/payment/fake?order=440&payment=338",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "mock-банк (dev/staging): тестовая платёжная форма · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-058-fake-terminal/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-059",
+      "kind": "page",
+      "slug": "APP-P-059-auth-by-binding",
+      "title": "Вход по magic link",
+      "group": "Оплата и служебные",
+      "card_local": "../canon/APP_PAGES/APP-P-059-auth-by-binding.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/auth/by-binding",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "magic link без токена — состояние страницы · baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-059-auth-by-binding/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    },
+    {
+      "id": "APP-P-060",
+      "kind": "page",
+      "slug": "APP-P-060-not-found",
+      "title": "Страница не найдена",
+      "group": "Оплата и служебные",
+      "card_local": "../canon/APP_PAGES/APP-P-060-not-found.md",
+      "versions": [
+        {
+          "version": "v1-2026-10-02",
+          "date": "2026-10-02",
+          "route": "/this-page-does-not-exist-404",
+          "stand": "app-staging.lovii.ru",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "baseline — первый полный срез (T-032)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-060-not-found/v1-2026-10-02/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        }
+      ],
+      "current_version": "v1-2026-10-02"
+    }
+  ]
+}
