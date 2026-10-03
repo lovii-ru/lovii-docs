@@ -1,0 +1,17 @@
+{
+  "id": "APP-P-022-business-apply",
+  "title": "APP-P-022-business-apply",
+  "version": "v4-2026-10-03",
+  "date": "2026-10-03",
+  "stand": "app-staging.lovii.ru",
+  "app_slice": "cf33ef2 (origin/staging)",
+  "profile": "+79009990001 (throwaway, заявка №16)",
+  "tool": "Playwright 390×844 @2x, fullPage",
+  "route": "/business/apply",
+  "final_url": null,
+  "states": {
+    "default.png": "форма заполнена: имя, ИНН, адрес из геоподсказки, телефон, согласия отмечены",
+    "address-suggest.png": "геоподсказка адреса открыта (выбор дома)"
+  },
+  "notes": "форма заполнена: имя, ИНН, адрес из геоподсказки, телефон, согласия отмечены · шаги подачи заявки: заполненная форма + геоподсказка адреса (пересъёмка онбординга)"
+}
