@@ -36,8 +36,7 @@
   (routes/console.php:11–13), окна `PUSH_REMINDER_DELAY_MINUTES=2` …
   `PUSH_REMINDER_MAX_MINUTES=60` (RemindNewOrdersCommand.php:42–47).
 - Чистка мёртвых подписок: `push:prune-dead` **в планировщике с 29.09** (daily,
-  F-073; ранее была только чистка при отправке).
-  добавлена** (routes/console.php:5–15).
+  F-073; ранее была только чистка при отправке; routes/console.php:5–15).
 
 ## Per-device темы (SZ-069, дельта 21.09 — в staging)
 

@@ -116,6 +116,15 @@ on_the_way → completed`; боковые: `cancelled`, `failed` (термина
     флаг `payments.split.rep_subscription_gate=true`): реп без активной подписки
     (актив/grace) теряет 40% пула в пользу Компании, амбассадор не задет
     (DistributeOrderPoolAction.php:250–263).
+  - **Дельта 02.10 (инцидент №442, core `1be693fe`, деплой ✅):** точка без
+    `partner_id` молча пропускала ногу order_income («доля точки» застревала
+    на номинале). Фикс: фолбэк branch→merchant partner в
+    DistributeOrderPoolAction/PostChargebackBankFeeAction; `partner_id`
+    заполняется при создании точки (MSP + заявка); команды
+    `branches:audit-partners` (инварианты) и `billing:backfill-point-legs`
+    (коррекция ног, `--apply`). На staging применено (17 точек, заказ №442
+    допроведён); 9 точек старых сидов без партнёра — мусор тестовых данных
+    (оплат не имеют).
 
 ## Чего нет / ограничения (факты)
 
@@ -129,8 +138,8 @@ on_the_way → completed`; боковые: `cancelled`, `failed` (термина
   реальной отправки во внешние системы (POS/CRM) нет (SubmitOrderJob.php:42–53).
 - `orders.method` (канал эквайринга) в БД нет — пул считается как «карта» по
   умолчанию (DistributeOrderPoolAction.php:220–229).
-- accepted/ready — без уведомлений клиенту (по карте выше): клиент не узнает
-  «заказ принят» и «можно забирать» из пуша.
+- ~~accepted/ready — без уведомлений клиенту~~ — **устарело (правка 04.10)**:
+  пуши на accepted/ready реализованы 29.09 (T-009, merge `ed3478b2`; см. [07](07-pushi-uvedomleniya.md)).
 
 ## Кандидаты в «не хватает» (решает владелец)
 
