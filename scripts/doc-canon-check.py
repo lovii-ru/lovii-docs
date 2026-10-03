@@ -29,7 +29,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repo root
 SCAN_DIRS = ["workspace/docs", "docs", "."]
 EXCLUDE_DIRS = {".git", "node_modules", "archive", "__pycache__"}
 
-# 1) Устаревшие/неверные числовые паттерны (канон из PARAMS.md v1.6)
+# 1) Устаревшие/неверные числовые паттерны (канон из PARAMS.md v1.7)
 STALE_PATTERNS = [
     ("OLD_CARD_VAT20", r"3[.,]108\s*%", "старая эфф. ставка карты с НДС 20% (канон: 3,16% с НДС 22%)", "high"),
     ("OLD_POOL_VAT20", r"6[.,]892\s*%", "старый пул LOVII с НДС 20% (канон: 6,84%)", "high"),
