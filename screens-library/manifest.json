@@ -1,12 +1,12 @@
 {
-  "generated": "2026-10-03 09:37 UTC",
+  "generated": "2026-10-03 12:13 UTC",
   "source": "screens/ (append-only) + screens-gallery/{manifest,states}.json + canon/APP_PAGES",
   "build": "node screens-library/_tools/build-library.mjs",
   "counts": {
     "pages": 60,
     "modals": 9,
-    "versions": 86,
-    "frames": 126
+    "versions": 98,
+    "frames": 138
   },
   "groups": [
     "Модалки",
@@ -887,9 +887,27 @@
               "note": "Шаг 1 — «ЛОВИ Бизнес»: лендинг подключения точки"
             }
           ]
+        },
+        {
+          "version": "v4-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-021-business-landing/v4-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v3-2026-10-02"
+      "current_version": "v4-2026-10-03"
     },
     {
       "id": "APP-P-022",
@@ -916,9 +934,45 @@
               "note": "Шаг 2 — форма заявки «Добавить точку»"
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/apply",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-022-business-apply/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/apply",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000013 (ACT-03 msp-pending)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "онбординг: заявка на модерации (submitted №14) — настоящий статус новичка",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-022-business-apply/v3-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v3-2026-10-03"
     },
     {
       "id": "APP-P-023",
@@ -945,9 +999,45 @@
               "note": "Шаг 3 — статус заявки на модерации"
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000013 (ACT-03 msp-pending)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "онбординг: заявка на модерации (submitted №14) — настоящий статус новичка",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v3-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v3-2026-10-03"
     },
     {
       "id": "APP-P-024",
@@ -974,9 +1064,27 @@
               "note": "Шаги 6/7 — результат заявки (успех/ошибки)"
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/result",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-024-business-result/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-025",
@@ -1032,9 +1140,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/representative",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-026-rep-overview/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-027",
@@ -1445,9 +1571,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/ambassador",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-039-amb-overview/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-040",
@@ -1626,9 +1770,45 @@
               "note": "Свитчер точки (BranchSwitcher)"
             }
           ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/msp",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-044-msp-overview/v3-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v4-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/msp",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000013 (ACT-03 msp-pending)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "онбординг: заявка на модерации (submitted №14) — настоящий статус новичка",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-044-msp-overview/v4-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v2-2026-10-03"
+      "current_version": "v4-2026-10-03"
     },
     {
       "id": "APP-P-045",
@@ -1655,9 +1835,27 @@
               "note": "Счёт верификации МСП"
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/msp/payment",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-045-msp-payment/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-046",
@@ -2319,9 +2517,27 @@
               "note": "Запуск точки («Начать», 4 шага)"
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/msp/starter",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79000000012 (ACT-02 msp-new)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "пересъёмка онбординга глазами нового МСП: заявки нет (картотека TEST_PROFILES)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-052-msp-starter/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-053",
