@@ -74,6 +74,7 @@ for (const slug of readdirSync(SCREENS, { withFileTypes: true })
       date: meta.date ?? vdir.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? '',
       route: meta.route ?? null,
       stand: meta.stand ?? null,
+      profile: meta.profile ?? null,
       app_slice: meta.app_slice ?? null,
       notes: meta.notes ?? null,
       frames,

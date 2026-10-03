@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-03 09:13 UTC",
+  "generated": "2026-10-03 09:37 UTC",
   "source": "screens/ (append-only) + screens-gallery/{manifest,states}.json + canon/APP_PAGES",
   "build": "node screens-library/_tools/build-library.mjs",
   "counts": {
@@ -123,6 +123,7 @@
           "date": "2026-10-02",
           "route": "/",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -151,6 +152,7 @@
           "date": "2026-10-02",
           "route": "/popular",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -179,6 +181,7 @@
           "date": "2026-10-02",
           "route": "/stores",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -196,6 +199,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -213,6 +217,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -241,6 +246,7 @@
           "date": "2026-10-02",
           "route": "/stores/542",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -258,6 +264,7 @@
           "date": "2026-10-02",
           "route": "/stores/542",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "правка F-3 (T-032): заголовки подшапки 013/021, сабхедер 004 убран — возврат на баннере",
           "frames": [
@@ -286,6 +293,7 @@
           "date": "2026-10-02",
           "route": "/stores/542/product/80021",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -314,6 +322,7 @@
           "date": "2026-10-02",
           "route": "/cart",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "авторизованная корзина — приоритетный скрин · baseline — первый полный срез (T-032)",
           "frames": [
@@ -349,6 +358,7 @@
           "date": "2026-10-02",
           "route": "/cart/205",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "оформление заказа · baseline — первый полный срез (T-032)",
           "frames": [
@@ -373,6 +383,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -390,6 +401,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -418,6 +430,7 @@
           "date": "2026-10-02",
           "route": "/profile",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "профиль авторизованного — хаб · baseline — первый полный срез (T-032)",
           "frames": [
@@ -453,6 +466,7 @@
           "date": "2026-10-02",
           "route": "/profile/wallet",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -481,6 +495,7 @@
           "date": "2026-10-02",
           "route": "/profile/wallet/transfer",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -509,6 +524,7 @@
           "date": "2026-10-02",
           "route": "/profile/balance",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "redirect-карточка (removed) · baseline — первый полный срез (T-032)",
           "frames": [
@@ -537,6 +553,7 @@
           "date": "2026-10-02",
           "route": "/profile/operations",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "redirect-карточка (removed) · baseline — первый полный срез (T-032)",
           "frames": [
@@ -565,6 +582,7 @@
           "date": "2026-10-02",
           "route": "/profile/edit",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -582,6 +600,7 @@
           "date": "2026-10-02",
           "route": "/profile/edit",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "правка F-3 (T-032): заголовки подшапки 013/021, сабхедер 004 убран — возврат на баннере",
           "frames": [
@@ -610,6 +629,7 @@
           "date": "2026-10-02",
           "route": "/profile/edit/email/verify",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -638,6 +658,7 @@
           "date": "2026-10-02",
           "route": "/profile/orders",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -666,6 +687,7 @@
           "date": "2026-10-02",
           "route": "/profile/orders/440",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -694,6 +716,7 @@
           "date": "2026-10-02",
           "route": "/profile/addresses",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -722,6 +745,7 @@
           "date": "2026-10-02",
           "route": "/profile/addresses/create",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -750,6 +774,7 @@
           "date": "2026-10-02",
           "route": "/profile/addresses → клик ✎ → /profile/addresses/edit/:id",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "форма открыта кликом из списка (прямой заход редиректит: стор пуст) · baseline — первый полный срез (T-032)",
           "frames": [
@@ -785,6 +810,7 @@
           "date": "2026-10-02",
           "route": "/settings",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -813,6 +839,7 @@
           "date": "2026-10-02",
           "route": "/business",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -830,6 +857,7 @@
           "date": "2026-10-02",
           "route": "/business",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "правка F-3 (T-032): заголовки подшапки 013/021, сабхедер 004 убран — возврат на баннере",
           "frames": [
@@ -847,6 +875,7 @@
           "date": "2026-10-02",
           "route": "/business",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "правка F-3 (T-032): название только в подшапке — дубль из hero убран",
           "frames": [
@@ -875,6 +904,7 @@
           "date": "2026-10-02",
           "route": "/business/apply",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -903,6 +933,7 @@
           "date": "2026-10-02",
           "route": "/business/status",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -931,6 +962,7 @@
           "date": "2026-10-02",
           "route": "/business/result",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -959,6 +991,7 @@
           "date": "2026-10-02",
           "route": "/business/point",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "redirect-карточка (removed) · baseline — первый полный срез (T-032)",
           "frames": [
@@ -987,6 +1020,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/representative",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1015,6 +1049,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/representative/points",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1043,6 +1078,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/representative/approvals",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1060,6 +1096,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1077,6 +1114,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1105,6 +1143,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/representative/income",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1133,6 +1172,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/representative/profile",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1161,6 +1201,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/representative/chats",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "заглушка ChatStub (эксперимент) · baseline — первый полный срез (T-032)",
           "frames": [
@@ -1189,6 +1230,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/platform",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "легаси-хаб · baseline — первый полный срез (T-032)",
           "frames": [
@@ -1217,6 +1259,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/owner",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1245,6 +1288,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/owner/finance",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1273,6 +1317,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/owner/structure",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1301,6 +1346,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/investor",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1329,6 +1375,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/investor/points",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1357,6 +1404,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/investor/money",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1385,6 +1433,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/ambassador",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1413,6 +1462,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/ambassador/reps",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1441,6 +1491,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/ambassador/training",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1469,6 +1520,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/ambassador/income",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1497,6 +1549,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/ambassador/chats",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "заглушка ChatStub (эксперимент) · baseline — первый полный срез (T-032)",
           "frames": [
@@ -1525,6 +1578,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1542,6 +1596,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1559,6 +1614,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1587,6 +1643,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/payment",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1615,6 +1672,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/orders",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1639,6 +1697,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1656,6 +1715,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1684,6 +1744,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/orders/441",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1701,6 +1762,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1725,6 +1787,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1760,6 +1823,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/products",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1777,6 +1841,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1815,6 +1880,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1864,6 +1930,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/loyalty",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -1881,6 +1948,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -1989,6 +2057,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2108,6 +2177,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/settings",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2125,6 +2195,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2142,6 +2213,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2170,6 +2242,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/team",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2187,6 +2260,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2204,6 +2278,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2232,6 +2307,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/msp/starter",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2260,6 +2336,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/team",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2295,6 +2372,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/team/orders/441",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2323,6 +2401,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/team/products",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2340,6 +2419,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2357,6 +2437,7 @@
           "date": "2026-10-03",
           "route": null,
           "stand": "localhost:5174 (локальный стенд, OrbStack)",
+          "profile": "+79119287478 (user 51, АТМОСФЕРА, точка 1024)",
           "app_slice": "staging-рабочее дерево lovii-app",
           "notes": null,
           "frames": [
@@ -2385,6 +2466,7 @@
           "date": "2026-10-02",
           "route": "/cabinet/team/team",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
@@ -2413,6 +2495,7 @@
           "date": "2026-10-02",
           "route": "/payment/result?order=440",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "страница статуса оплаты заказа · baseline — первый полный срез (T-032)",
           "frames": [
@@ -2441,6 +2524,7 @@
           "date": "2026-10-02",
           "route": "/payment/fake?order=440&payment=338",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "mock-банк (dev/staging): тестовая платёжная форма · baseline — первый полный срез (T-032)",
           "frames": [
@@ -2469,6 +2553,7 @@
           "date": "2026-10-02",
           "route": "/auth/by-binding",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "magic link без токена — состояние страницы · baseline — первый полный срез (T-032)",
           "frames": [
@@ -2497,6 +2582,7 @@
           "date": "2026-10-02",
           "route": "/this-page-does-not-exist-404",
           "stand": "app-staging.lovii.ru",
+          "profile": "+79119287478 (user 51)",
           "app_slice": "cf33ef2 (origin/staging)",
           "notes": "baseline — первый полный срез (T-032)",
           "frames": [
