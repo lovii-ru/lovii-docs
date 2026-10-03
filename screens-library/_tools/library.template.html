@@ -117,9 +117,9 @@ function renderPage(item) {
     const fs = visibleFrames(item, ver);
     const bar = document.createElement('div'); bar.className = 'vbar';
     if (state.allVersions) {
-      bar.innerHTML = `<span class="vmeta">${ver.version} · ${ver.date}${ver.stand ? ' · ' + ver.stand : ''}${ver.notes ? ' · ' + ver.notes : ''}</span>`;
+      bar.innerHTML = `<span class="vmeta">${ver.version} · ${ver.date}${ver.stand ? ' · ' + ver.stand : ''}${ver.profile ? ' · 👤 ' + ver.profile : ''}${ver.notes ? ' · ' + ver.notes : ''}</span>`;
     } else {
-      bar.innerHTML = `<span class="vmeta">${ver.date}${ver.stand ? ' · ' + ver.stand : ''}${ver.notes ? ' · ' + ver.notes : ''}</span>`;
+      bar.innerHTML = `<span class="vmeta">${ver.date}${ver.stand ? ' · ' + ver.stand : ''}${ver.profile ? ' · 👤 ' + ver.profile : ''}${ver.notes ? ' · ' + ver.notes : ''}</span>`;
     }
     // переключатель версий: клик по версии = показать только её
     for (const v of item.versions) {
