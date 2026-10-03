@@ -1,0 +1,16 @@
+{
+  "id": "APP-P-028-rep-approvals",
+  "title": "APP-P-028-rep-approvals",
+  "version": "v3-2026-10-03",
+  "date": "2026-10-03",
+  "stand": "app-staging.lovii.ru",
+  "app_slice": "cf33ef2 (origin/staging)",
+  "profile": "+79009990003 (REP AAT3ST, user 369)",
+  "tool": "Playwright 390×844 @2x, fullPage",
+  "route": "/cabinet/representative/approvals",
+  "final_url": null,
+  "states": {
+    "default.png": "основной кадр"
+  },
+  "notes": "живой кабинет представителя: код AAT3ST, очередь на модерации · реп-кабинет с живой ролью: код AAT3ST (картотека)"
+}

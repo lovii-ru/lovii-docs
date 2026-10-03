@@ -1,12 +1,12 @@
 {
-  "generated": "2026-10-03 15:42 UTC",
+  "generated": "2026-10-03 17:11 UTC",
   "source": "screens/ (append-only) + screens-gallery/{manifest,states}.json + canon/APP_PAGES",
   "build": "node screens-library/_tools/build-library.mjs",
   "counts": {
     "pages": 60,
     "modals": 9,
-    "versions": 101,
-    "frames": 142
+    "versions": 111,
+    "frames": 152
   },
   "groups": [
     "Модалки",
@@ -1078,9 +1078,63 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v5-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990004 (новичок по AAT3ST, user 370)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "статус «Ждём подтверждения представителя» (заявка с промо репа) · ветка заявки по промокоду: awaiting_rep_approval",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v5-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v6-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990004 (новичок по AAT3ST, user 370)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "«Счёт выдан» после верификации репом — инсталляционный счёт выставлен · верификация репом: счёт выставлен (не перескочен)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v6-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
+        },
+        {
+          "version": "v7-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/business/status",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990005 (новичок2, user 371)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "«Заявку отклонили»: причина репа, «Отправить заново»/«Написать в поддержку» · ветка отклонения репом (reason зафиксирован)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-023-business-status/v7-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v4-2026-10-03"
+      "current_version": "v7-2026-10-03"
     },
     {
       "id": "APP-P-024",
@@ -1219,9 +1273,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/representative",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990003 (REP AAT3ST, user 369)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "живой кабинет представителя: код AAT3ST, очередь на модерации · реп-кабинет с живой ролью: код AAT3ST (картотека)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-026-rep-overview/v3-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v2-2026-10-03"
+      "current_version": "v3-2026-10-03"
     },
     {
       "id": "APP-P-027",
@@ -1248,9 +1320,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/representative/points",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990003 (REP AAT3ST, user 369)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "живой кабинет представителя: код AAT3ST, очередь на модерации · реп-кабинет с живой ролью: код AAT3ST (картотека)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-027-rep-points/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-028",
@@ -1313,9 +1403,27 @@
               "note": "Кабинет представителя — карточки заявок"
             }
           ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/representative/approvals",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990003 (REP AAT3ST, user 369)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "живой кабинет представителя: код AAT3ST, очередь на модерации · реп-кабинет с живой ролью: код AAT3ST (картотека)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-028-rep-approvals/v3-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v2-2026-10-03"
+      "current_version": "v3-2026-10-03"
     },
     {
       "id": "APP-P-029",
@@ -1342,9 +1450,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/representative/income",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990003 (REP AAT3ST, user 369)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "живой кабинет представителя: код AAT3ST, очередь на модерации · реп-кабинет с живой ролью: код AAT3ST (картотека)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-029-rep-income/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-030",
@@ -1371,9 +1497,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v2-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/representative/profile",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990003 (REP AAT3ST, user 369)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "живой кабинет представителя: код AAT3ST, очередь на модерации · реп-кабинет с живой ролью: код AAT3ST (картотека)",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-030-rep-profile/v2-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v1-2026-10-02"
+      "current_version": "v2-2026-10-03"
     },
     {
       "id": "APP-P-031",
@@ -1867,9 +2011,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v5-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/msp",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990004 (новичок по AAT3ST, user 370)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "обзор МСП со счётом на верификацию (точки ещё нет) · обзор МСП до оплаты счёта",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-044-msp-overview/v5-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v4-2026-10-03"
+      "current_version": "v5-2026-10-03"
     },
     {
       "id": "APP-P-045",
@@ -1914,9 +2076,27 @@
               "note": null
             }
           ]
+        },
+        {
+          "version": "v3-2026-10-03",
+          "date": "2026-10-03",
+          "route": "/cabinet/msp/payment",
+          "stand": "app-staging.lovii.ru",
+          "profile": "+79009990004 (новичок по AAT3ST, user 370)",
+          "app_slice": "cf33ef2 (origin/staging)",
+          "notes": "счёт верификации: инсталляционный платёж выставлен после апрува репа · экран счёта после верификации репом",
+          "frames": [
+            {
+              "state": "default",
+              "is_default": true,
+              "img": "../screens/APP-P-045-msp-payment/v3-2026-10-03/default.png",
+              "code": "основной кадр",
+              "note": null
+            }
+          ]
         }
       ],
-      "current_version": "v2-2026-10-03"
+      "current_version": "v3-2026-10-03"
     },
     {
       "id": "APP-P-046",
