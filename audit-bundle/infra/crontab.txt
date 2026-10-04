@@ -1,0 +1,6 @@
+# LOVII CI: self-hosted GitHub Actions runners (autostart after reboot)
+@reboot cd /home/deploy/actions-runner-core && nohup ./run.sh >>/tmp/runner-core.log 2>&1 </dev/null &
+@reboot cd /home/deploy/actions-runner-app && nohup ./run.sh >>/tmp/runner-app.log 2>&1 </dev/null &
+@reboot cd /home/deploy/actions-runner-b2b && nohup ./run.sh >>/tmp/runner-b2b.log 2>&1 </dev/null &
+@reboot cd /home/deploy/actions-runner-admin && nohup ./run.sh >>/tmp/runner-admin.log 2>&1 </dev/null &
+17 4 * * * /home/deploy/backups/backup-staging-db.sh >> /home/deploy/backups/backup.log 2>&1

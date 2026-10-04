@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 21,
+  "agentName": "gostiny-ci-core",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "***REDACTED***",
+  "gitHubUrl": "https://github.com/lovii-tech/lovii-core",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}

@@ -1,0 +1,436 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            target: app
+            args:
+                # Build-time only: package mirrors (pecl.php.net etc.) are unreachable from the
+                # prod host without the local HTTP->SOCKS bridge. Empty in dev/CI = no proxy.
+                HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+                HTTPS_PROXY: ${BUILD_HTTP_PROXY:-}
+                NO_PROXY: localhost,127.0.0.1
+        image: ${IMAGE_PREFIX:-lovii-core}/app
+        restart: always
+        env_file: .env
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=64M
+        networks:
+            - default
+            - caddy
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            meilisearch:
+                condition: service_healthy
+        labels:
+            caddy: ${APP_DOMAIN}
+            caddy.import: common
+            caddy.reverse_proxy: "{{upstreams 8080}}"
+        healthcheck:
+            test: ["CMD", "curl", "-sf", "http://127.0.0.1:8080/healthz"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 15s
+        deploy:
+            resources:
+                limits:
+                    memory: 2G
+                reservations:
+                    memory: 256M
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+    horizon:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            target: worker
+            args:
+                # Build-time only: package mirrors (pecl.php.net etc.) are unreachable from the
+                # prod host without the local HTTP->SOCKS bridge. Empty in dev/CI = no proxy.
+                HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+                HTTPS_PROXY: ${BUILD_HTTP_PROXY:-}
+                NO_PROXY: localhost,127.0.0.1
+        image: ${IMAGE_PREFIX:-lovii-core}/worker
+        restart: always
+        env_file: .env
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        healthcheck:
+            test: ["CMD", "php", "artisan", "horizon:status"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 10s
+        deploy:
+            resources:
+                limits:
+                    memory: 384M
+                reservations:
+                    memory: 128M
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
+        stop_grace_period: 10s
+
+    scheduler:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            target: scheduler
+            args:
+                # Build-time only: package mirrors (pecl.php.net etc.) are unreachable from the
+                # prod host without the local HTTP->SOCKS bridge. Empty in dev/CI = no proxy.
+                HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+                HTTPS_PROXY: ${BUILD_HTTP_PROXY:-}
+                NO_PROXY: localhost,127.0.0.1
+        image: ${IMAGE_PREFIX:-lovii-core}/scheduler
+        restart: always
+        env_file: .env
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        healthcheck:
+            test: ["CMD", "php", "artisan", "schedule:list", "--next"]
+            interval: 60s
+            timeout: 10s
+            retries: 3
+            start_period: 15s
+        deploy:
+            resources:
+                limits:
+                    memory: 192M
+                reservations:
+                    memory: 64M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+    # Telegram getUpdates long-poll workers (webhook alternative: inbound
+    # delivery from Telegram is blocked for this host, session 016). One
+    # process per bot so long polls never block each other. Each start
+    # deletes the webhook (setWebhook/getUpdates are mutually exclusive).
+    # To go back to webhooks: stop these services, then run
+    # `php artisan telegram:setup-webhook --bot=...` per bot.
+    telegram-poller-otp:
+        image: ${IMAGE_PREFIX:-lovii-core}/worker
+        restart: always
+        env_file: .env
+        command: ["php", "artisan", "telegram:poll-updates", "--bot=otp", "--timeout=50"]
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        deploy:
+            resources:
+                limits:
+                    memory: 192M
+                reservations:
+                    memory: 64M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 10s
+
+    telegram-poller-support:
+        image: ${IMAGE_PREFIX:-lovii-core}/worker
+        restart: always
+        env_file: .env
+        command: ["php", "artisan", "telegram:poll-updates", "--bot=support", "--timeout=50"]
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        deploy:
+            resources:
+                limits:
+                    memory: 192M
+                reservations:
+                    memory: 64M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 10s
+
+    telegram-poller-orders:
+        image: ${IMAGE_PREFIX:-lovii-core}/worker
+        restart: always
+        env_file: .env
+        command: ["php", "artisan", "telegram:poll-updates", "--bot=orders", "--timeout=50"]
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        deploy:
+            resources:
+                limits:
+                    memory: 192M
+                reservations:
+                    memory: 64M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 10s
+
+    pgsql:
+        image: imresamu/postgis:17-3.5-alpine
+        restart: always
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - pgsql:/var/lib/postgresql/data
+        tmpfs:
+            - /tmp:size=128M
+        networks:
+            - default
+        command: >
+            postgres
+            -c shared_buffers=256MB
+            -c effective_cache_size=768MB
+            -c work_mem=4MB
+            -c maintenance_work_mem=64MB
+            -c max_connections=60
+            -c random_page_cost=1.1
+            -c effective_io_concurrency=200
+            -c wal_buffers=8MB
+            -c max_wal_size=256MB
+            -c min_wal_size=64MB
+            -c checkpoint_completion_target=0.9
+            -c checkpoint_timeout=10min
+            -c wal_compression=zstd
+            -c huge_pages=off
+            -c jit=off
+            -c log_min_duration_statement=500
+            -c idle_in_transaction_session_timeout=60000
+            -c statement_timeout=30000
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            interval: 10s
+            retries: 5
+            timeout: 5s
+            start_period: 30s
+        deploy:
+            resources:
+                limits:
+                    memory: 1G
+                reservations:
+                    memory: 512M
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "5"
+        stop_grace_period: 60s
+
+    redis:
+        image: redis:alpine
+        restart: always
+        command: >
+            redis-server
+            --requirepass ${REDIS_PASSWORD}
+            --maxmemory 256mb
+            --maxmemory-policy allkeys-lru
+            --save 60 1000
+            --appendonly yes
+            --appendfsync everysec
+            --tcp-backlog 511
+        volumes:
+            - redis:/data
+        networks:
+            - default
+        healthcheck:
+            test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+            interval: 10s
+            retries: 5
+            timeout: 5s
+            start_period: 10s
+        deploy:
+            resources:
+                limits:
+                    memory: 384M
+                reservations:
+                    memory: 128M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+    meilisearch:
+        image: getmeili/meilisearch:v1.40.0
+        restart: always
+        environment:
+            MEILI_ENV: production
+            MEILI_NO_ANALYTICS: ${MEILISEARCH_NO_ANALYTICS:-true}
+            MEILI_MASTER_KEY: ${MEILISEARCH_KEY}
+            MEILI_MAX_INDEXING_MEMORY: 1000MB
+            MEILI_MAX_INDEXING_THREADS: 1
+        volumes:
+            - meilisearch:/meili_data
+        networks:
+            - default
+        healthcheck:
+            test: ["CMD", "wget", "--no-verbose", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:7700/health"]
+            interval: 10s
+            retries: 5
+            timeout: 5s
+            start_period: 15s
+        deploy:
+            resources:
+                limits:
+                    memory: 1536M
+                reservations:
+                    memory: 512M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+    tlsclient:
+        build:
+            context: ./docker/tlsclient
+            dockerfile: Dockerfile
+        restart: always
+        networks:
+            - default
+        deploy:
+            resources:
+                limits:
+                    memory: 128M
+                reservations:
+                    memory: 32M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 10s
+
+    # Mock stand of the T-Bank Multisplit API (see tbank-mock/README.md).
+    # Never routes production traffic: the app talks to it only when
+    # TBANK_API_URL points at http://tbank-mock:3100/v2 in .env.
+    # Port is bound to localhost for admin/console access from the host.
+    tbank-mock:
+        # F-077: профиль mock — контур без мока (прод с боевым Т-Банком)
+        # не поднимает контейнер, чтобы не ловить конфликт порта 3100 со
+        # стейджинговым моком на общем сервере. Включение: COMPOSE_PROFILES=mock
+        # в .env контура (на staging уже включено).
+        profiles: ['mock']
+        image: node:22-alpine
+        restart: always
+        working_dir: /srv
+        command: ['node', 'server.js']
+        env_file: .env
+        ports:
+            - '127.0.0.1:3100:3100'
+        # T-014: мок-канал staging — платёжная форма должна открываться из
+        # браузера покупателя. Caddy (docker-лейблы) проксирует
+        # https://mock-pay-staging.lovii.ru -> контейнер:3100; в .env
+        # MOCK_PUBLIC_BASE_URL=https://mock-pay-staging.lovii.ru.
+        labels:
+            caddy: mock-pay-staging.lovii.ru
+            caddy.import: common
+            caddy.reverse_proxy: '{{upstreams 3100}}'
+        volumes:
+            - ./tbank-mock:/srv:ro
+        networks:
+            - default
+            - caddy
+        healthcheck:
+            test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3100/health']
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 5s
+        deploy:
+            resources:
+                limits:
+                    memory: 128M
+                reservations:
+                    memory: 32M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 10s
+
+networks:
+    default:
+        driver: bridge
+    caddy:
+        external: true
+
+volumes:
+    storage:
+        driver: local
+    pgsql:
+        driver: local
+    redis:
+        driver: local
+    meilisearch:
+        driver: local

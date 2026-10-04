@@ -1,0 +1,225 @@
+name: CI
+
+# Полный пайплайн (порт из бывшего .gitlab-ci.yml):
+#   checks → yarn install → lint (Oxlint+ESLint) + type-check + unit (Vitest)
+#   deploy-staging (auto, push в staging) / deploy-production (manual) → SSH на сервер, git reset + docker compose build/up + health-check
+# Проверки гоняются в Docker-образе target=ci (как в GitLab через $DOCKER_RUN).
+# Frontend: статика за nginx, без БД/миграций/horizon — один сервис `web` (порт 9000, /health).
+#
+# Где исполняется CI: переменная репозитория CI_RUNNER (Settings → Secrets and
+# variables → Actions → Variables).
+#   CI_RUNNER=self-hosted  → наш раннер gostiny-ci-* (сервер gostiny-prod-01; бесплатно, лимиты Actions не тратятся)
+#   CI_RUNNER не задан     → ubuntu-latest (GitHub-hosted; вернуть при сбросе лимита биллинга)
+
+on:
+  push:
+    branches: [master, staging]
+    # Doc-only изменения не гоняют checks и не передеплоивают приложение — код не менялся.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - 'specs/**'
+      - '.junie/**'
+      - '.ai/**'
+      - '.claude/**'
+      - 'LICENSE'
+  pull_request:
+    # Doc-only изменения не гоняют checks и не передеплоивают приложение — код не менялся.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - 'specs/**'
+      - '.junie/**'
+      - '.ai/**'
+      - '.claude/**'
+      - 'LICENSE'
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI_IMAGE: lovii-app-ci-node:ci
+
+jobs:
+  checks:
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build CI image (target=ci)
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/Dockerfile
+          target: ci
+          tags: ${{ env.CI_IMAGE }}
+          load: true
+          # gha-кэш имеет смысл только на GitHub-hosted раннерах (там нет
+          # локальных слоёв); на self-hosted buildx кэширует локально сам.
+          cache-from: ${{ vars.CI_RUNNER == 'self-hosted' && '' || 'type=gha' }}
+          cache-to: ${{ vars.CI_RUNNER == 'self-hosted' && '' || 'type=gha,mode=max' }}
+
+      - name: Cache node_modules
+        id: yarn-cache
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-
+
+      - name: Define docker run helper
+        run: |
+          echo "DOCKER_RUN=docker run --rm --user $(id -u):$(id -g) -v ${{ github.workspace }}:/app -w /app" >> "$GITHUB_ENV"
+
+      # Точный кэш-хит (yarn.lock не менялся) — install пропускается.
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: $DOCKER_RUN $CI_IMAGE sh -c "yarn install --frozen-lockfile"
+
+      # lint / type-check / unit — БЛОКИРУЮЩИЕ: падение любой валит checks и не
+      # допускает deploy (deploy needs: checks). Кодовая база чистая:
+      # eslint 0/0 (--max-warnings 0), vue-tsc 0 ошибок, unit зелёные.
+      - name: Lint (Oxlint + ESLint)
+        run: $DOCKER_RUN $CI_IMAGE sh -c "yarn lint"
+
+      - name: Type check
+        run: $DOCKER_RUN $CI_IMAGE sh -c "yarn type-check"
+
+      - name: Unit tests
+        run: $DOCKER_RUN $CI_IMAGE sh -c "yarn test:unit"
+
+  # ---------------------------------------------------------------------------
+  # Деплой. Два окружения, один и тот же SSH-скрипт:
+  #   deploy-staging    — АВТОМАТИЧЕСКИ на каждый push в ветку `staging`
+  #   deploy-production — ВРУЧНУЮ: Actions → CI → Run workflow с ветки `master`
+  # DEPLOY_PATH хранится в GitHub Environment (staging / production),
+  # DEPLOY_SSH_KEY / DEPLOY_HOST / DEPLOY_USER — общие секреты репозитория.
+  # Шаги продублированы намеренно: GitHub Actions не поддерживает YAML-anchors.
+  # ---------------------------------------------------------------------------
+  deploy-staging:
+    needs: checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    environment:
+      name: staging
+      url: https://app-staging.lovii.ru
+    env:
+      DEPLOY_BRANCH: staging
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" <<'ENDSSH'
+            set -e
+            DC="docker compose -f docker-compose.prod.yml"
+            cd "$DEPLOY_PATH"
+            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
+            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
+            # и команды после неё (up -d, health-check) не выполнятся.
+
+            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
+            git fetch origin
+            git reset --hard "origin/${DEPLOY_BRANCH}"
+
+            echo "==> Building images..."
+            # SZ-031: .git в билд-контекст не попадает — версию сборки передаём
+            # build-arg'ом из git на сервере (vite инлайнит её в бандл).
+            export APP_VERSION="${DEPLOY_BRANCH}·$(git rev-parse --short HEAD)"
+            $DC build --pull < /dev/null
+
+            echo "==> Recreating containers..."
+            $DC up -d --remove-orphans -t 5 < /dev/null
+
+            echo "==> Health check..."
+            for i in 1 2 3 4 5; do
+              sleep 3
+              if $DC exec -T web curl -sf http://127.0.0.1:9000/health < /dev/null > /dev/null; then
+                echo "Health check passed (attempt $i)"
+                break
+              fi
+              if [ "$i" -eq 5 ]; then
+                echo "Health check failed after 5 attempts!"
+                $DC logs --tail=50 web
+                exit 1
+              fi
+              echo "Health check attempt $i failed, retrying..."
+            done
+
+            echo "==> Deploy complete!"
+          ENDSSH
+
+  deploy-production:
+    needs: checks
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://app.lovii.ru
+    env:
+      DEPLOY_BRANCH: master
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" <<'ENDSSH'
+            set -e
+            DC="docker compose -f docker-compose.prod.yml"
+            cd "$DEPLOY_PATH"
+            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
+            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
+            # и команды после неё (up -d, health-check) не выполнятся.
+
+            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
+            git fetch origin
+            git reset --hard "origin/${DEPLOY_BRANCH}"
+
+            echo "==> Building images..."
+            # SZ-031: .git в билд-контекст не попадает — версию сборки передаём
+            # build-arg'ом из git на сервере (vite инлайнит её в бандл).
+            export APP_VERSION="${DEPLOY_BRANCH}·$(git rev-parse --short HEAD)"
+            $DC build --pull < /dev/null
+
+            echo "==> Recreating containers..."
+            $DC up -d --remove-orphans -t 5 < /dev/null
+
+            echo "==> Health check..."
+            for i in 1 2 3 4 5; do
+              sleep 3
+              if $DC exec -T web curl -sf http://127.0.0.1:9000/health < /dev/null > /dev/null; then
+                echo "Health check passed (attempt $i)"
+                break
+              fi
+              if [ "$i" -eq 5 ]; then
+                echo "Health check failed after 5 attempts!"
+                $DC logs --tail=50 web
+                exit 1
+              fi
+              echo "Health check attempt $i failed, retrying..."
+            done
+
+            echo "==> Deploy complete!"
+          ENDSSH

@@ -1,0 +1,273 @@
+name: CI
+
+# Полный пайплайн (порт из бывшего .gitlab-ci.yml):
+#   checks → lint (Pint+Rector) + PHPStan + type-coverage + Pest (Postgres/PostGIS)
+#   deploy-staging (auto, push в staging) / deploy-production (manual) → SSH на сервер, git reset + docker compose build/migrate/up
+# Проверки гоняются в Docker-образе target=ci (как в GitLab через $DOCKER_RUN).
+#
+# Где исполняется CI: переменная репозитория CI_RUNNER (Settings → Secrets and
+# variables → Actions → Variables).
+#   CI_RUNNER=self-hosted  → наш раннер gostiny-ci-* (сервер gostiny-prod-01; бесплатно, лимиты Actions не тратятся)
+#   CI_RUNNER не задан     → ubuntu-latest (GitHub-hosted; вернуть при сбросе лимита биллинга)
+
+on:
+  push:
+    branches: [master, staging]
+    # Doc-only изменения не гоняют checks и не передеплоивают приложение — код не менялся.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - 'specs/**'
+      - '.junie/**'
+      - '.ai/**'
+      - '.claude/**'
+      - 'LICENSE'
+  pull_request:
+    # Doc-only изменения не гоняют checks и не передеплоивают приложение — код не менялся.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - 'specs/**'
+      - '.junie/**'
+      - '.ai/**'
+      - '.claude/**'
+      - 'LICENSE'
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI_IMAGE: lovii-admin-ci-php:ci
+  PG_IMAGE: imresamu/postgis:17-3.5-alpine
+
+jobs:
+  checks:
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    env:
+      # Уникальный суффикс docker-объектов прогона: на self-hosted раннере
+      # тестовые Postgres/сети нескольких репо живут на одном docker-хосте.
+      # Имя контейнера суффиксируется, но DNS-алиас остаётся стабильным
+      # (pgsql-testing) — на него указывает DB_HOST в phpunit.xml.
+      RUN_TAG: run-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build CI image (target=ci)
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/Dockerfile
+          target: ci
+          tags: ${{ env.CI_IMAGE }}
+          load: true
+          # gha-кэш имеет смысл только на GitHub-hosted раннерах (там нет
+          # локальных слоёв); на self-hosted buildx кэширует локально сам.
+          cache-from: ${{ vars.CI_RUNNER == 'self-hosted' && '' || 'type=gha' }}
+          cache-to: ${{ vars.CI_RUNNER == 'self-hosted' && '' || 'type=gha,mode=max' }}
+
+      - name: Cache Composer vendor
+        uses: actions/cache@v5
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Define docker run helper
+        run: |
+          echo "DOCKER_RUN=docker run --rm --user $(id -u):$(id -g) -e XDEBUG_MODE=off -v ${{ github.workspace }}:/app -w /app" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: |
+          $DOCKER_RUN $CI_IMAGE sh -c "\
+            composer install --no-interaction --prefer-dist --no-progress \
+            && cp .env.example .env \
+            && php artisan key:generate"
+
+      - name: Lint (Pint + Rector)
+        run: |
+          $DOCKER_RUN $CI_IMAGE sh -c "\
+            vendor/bin/pint --parallel --test \
+            && vendor/bin/rector --dry-run"
+
+      # PHPStan / type-coverage / tests are informational (мирроринг бывшего
+      # GitLab `allow_failure: true` для jobs types/type-coverage/unit).
+      # Deploy гейтится только на lint, как и в .gitlab-ci.yml (deploy needs: lint).
+      - name: Static analysis (PHPStan)
+        continue-on-error: true
+        run: $DOCKER_RUN $CI_IMAGE sh -c "vendor/bin/phpstan"
+
+      - name: Type coverage
+        continue-on-error: true
+        run: |
+          $DOCKER_RUN $CI_IMAGE sh -c "\
+            vendor/bin/pest --type-coverage --min=70 --compact"
+
+      - name: Start Postgres (PostGIS)
+        run: |
+          docker network create ci-net-$RUN_TAG || true
+          docker run -d --name pgsql-testing-$RUN_TAG --network-alias pgsql-testing --network ci-net-$RUN_TAG \
+            -e POSTGRES_DB=testing \
+            -e POSTGRES_USER=sail \
+            -e POSTGRES_PASSWORD=password \
+            $PG_IMAGE
+          docker run --rm --network ci-net-$RUN_TAG $PG_IMAGE \
+            sh -c "until pg_isready -h pgsql-testing-$RUN_TAG -U sail -d testing; do sleep 1; done"
+
+      - name: Tests (Pest + coverage)
+        continue-on-error: true
+        run: |
+          docker run --rm --user $(id -u):$(id -g) \
+            --network ci-net-$RUN_TAG \
+            -e XDEBUG_MODE=coverage \
+            -e DB_HOST=pgsql-testing-$RUN_TAG \
+            -v ${{ github.workspace }}:/app -w /app \
+            $CI_IMAGE sh -c "\
+              vendor/bin/pest --parallel --coverage --min=70 --compact"
+
+      - name: Cleanup Postgres
+        if: always()
+        run: |
+          docker rm -f pgsql-testing-$RUN_TAG || true
+          docker network rm ci-net-$RUN_TAG || true
+
+  # ---------------------------------------------------------------------------
+  # Деплой. Два окружения, один и тот же SSH-скрипт:
+  #   deploy-staging    — АВТОМАТИЧЕСКИ на каждый push в ветку `staging`
+  #   deploy-production — ВРУЧНУЮ: Actions → CI → Run workflow с ветки `master`
+  # DEPLOY_PATH хранится в GitHub Environment (staging / production),
+  # DEPLOY_SSH_KEY / DEPLOY_HOST / DEPLOY_USER — общие секреты репозитория.
+  # Шаги продублированы намеренно: GitHub Actions не поддерживает YAML-anchors.
+  # ---------------------------------------------------------------------------
+  deploy-staging:
+    needs: checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    environment:
+      name: staging
+      url: https://admin-staging.lovii.ru
+    env:
+      DEPLOY_BRANCH: staging
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" <<'ENDSSH'
+            set -e
+            DC="docker compose -f docker-compose.prod.yml"
+            cd "$DEPLOY_PATH"
+            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
+            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
+            # и команды после неё (up -d, health-check) не выполнятся.
+
+            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
+            git fetch origin
+            git reset --hard "origin/${DEPLOY_BRANCH}"
+
+            echo "==> Building images..."
+            $DC build --pull < /dev/null
+
+            echo "==> Running migrations..."
+            $DC run --rm -T app php artisan migrate --force < /dev/null
+
+            echo "==> Terminating Horizon workers (if any)..."
+            $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
+
+            echo "==> Recreating containers..."
+            $DC up -d --remove-orphans -t 5 < /dev/null
+
+            echo "==> Health check..."
+            for i in 1 2 3 4 5; do
+              sleep 3
+              if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then
+                echo "Health check passed (attempt $i)"
+                break
+              fi
+              if [ "$i" -eq 5 ]; then
+                echo "Health check failed after 5 attempts!"
+                $DC logs --tail=50 app
+                exit 1
+              fi
+              echo "Health check attempt $i failed, retrying..."
+            done
+
+            echo "==> Deploy complete!"
+          ENDSSH
+
+  deploy-production:
+    needs: checks
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://admin.lovii.ru
+    env:
+      DEPLOY_BRANCH: master
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" <<'ENDSSH'
+            set -e
+            DC="docker compose -f docker-compose.prod.yml"
+            cd "$DEPLOY_PATH"
+            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
+            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
+            # и команды после неё (up -d, health-check) не выполнятся.
+
+            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
+            git fetch origin
+            git reset --hard "origin/${DEPLOY_BRANCH}"
+
+            echo "==> Building images..."
+            $DC build --pull < /dev/null
+
+            echo "==> Running migrations..."
+            $DC run --rm -T app php artisan migrate --force < /dev/null
+
+            echo "==> Terminating Horizon workers (if any)..."
+            $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
+
+            echo "==> Recreating containers..."
+            $DC up -d --remove-orphans -t 5 < /dev/null
+
+            echo "==> Health check..."
+            for i in 1 2 3 4 5; do
+              sleep 3
+              if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then
+                echo "Health check passed (attempt $i)"
+                break
+              fi
+              if [ "$i" -eq 5 ]; then
+                echo "Health check failed after 5 attempts!"
+                $DC logs --tail=50 app
+                exit 1
+              fi
+              echo "Health check attempt $i failed, retrying..."
+            done
+
+            echo "==> Deploy complete!"
+          ENDSSH

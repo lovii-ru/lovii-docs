@@ -1,0 +1,55 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: prod
+      args:
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+        VITE_YANDEX_MAP_API_KEY: ${VITE_YANDEX_MAP_API_KEY}
+        VITE_APP_ENV: ${APP_ENV:-production}
+        # SZ-031: версия сборки из деплой-скрипта (git rev-parse на сервере).
+        APP_VERSION: ${APP_VERSION:-}
+    # IMAGE_PREFIX differs per environment so prod and staging builds on the
+    # same host do not overwrite each other's :latest tag.
+    image: ${IMAGE_PREFIX:-lovii-frontend}:latest
+    restart: always
+    environment:
+      TZ: UTC
+    tmpfs:
+      - /tmp:size=128M
+    networks:
+      - default
+      - caddy
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:9000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.5"
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+        labels: "app=lovii-frontend"
+    stop_grace_period: 15s
+    labels:
+      caddy: "${APP_DOMAIN}"
+      caddy.reverse_proxy: "{{upstreams 9000}}"
+      caddy.reverse_proxy.health_timeout: "5s"
+      caddy.reverse_proxy.health_interval: "10s"
+
+networks:
+  default:
+    driver: bridge
+  caddy:
+    external: true

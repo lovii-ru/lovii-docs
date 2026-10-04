@@ -1,0 +1,131 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            target: app
+            args:
+                # Build-time only: package mirrors (pecl.php.net etc.) are unreachable from the
+                # prod host without the local HTTP->SOCKS bridge. Empty in dev/CI = no proxy.
+                HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+                HTTPS_PROXY: ${BUILD_HTTP_PROXY:-}
+                NO_PROXY: localhost,127.0.0.1
+        image: ${IMAGE_PREFIX:-lovii-b2b}/app
+        restart: always
+        env_file: .env
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=64M
+        networks:
+            - default
+            - caddy
+            - lovii-core
+        labels:
+            caddy: ${APP_DOMAIN}
+            caddy.reverse_proxy: "{{upstreams 8080}}"
+        healthcheck:
+            test: ["CMD", "curl", "-sf", "http://127.0.0.1:8080/healthz"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 15s
+        deploy:
+            resources:
+                limits:
+                    memory: 512M
+                reservations:
+                    memory: 192M
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+    scheduler:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            target: scheduler
+            args:
+                # Build-time only: package mirrors (pecl.php.net etc.) are unreachable from the
+                # prod host without the local HTTP->SOCKS bridge. Empty in dev/CI = no proxy.
+                HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+                HTTPS_PROXY: ${BUILD_HTTP_PROXY:-}
+                NO_PROXY: localhost,127.0.0.1
+        image: ${IMAGE_PREFIX:-lovii-b2b}/scheduler
+        restart: always
+        env_file: .env
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+            - lovii-core
+        healthcheck:
+            test: ["CMD", "php", "artisan", "schedule:list", "--next"]
+            interval: 60s
+            timeout: 10s
+            retries: 3
+            start_period: 15s
+        deploy:
+            resources:
+                limits:
+                    memory: 128M
+                reservations:
+                    memory: 48M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+    # SZ-037: queued-джобы (мост b2b -> core и будущие) требуют воркера —
+    # без него redis-очередь никто не потребляет.
+    queue:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            target: queue
+            args:
+                HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+                HTTPS_PROXY: ${BUILD_HTTP_PROXY:-}
+                NO_PROXY: localhost,127.0.0.1
+        image: ${IMAGE_PREFIX:-lovii-b2b}/queue
+        restart: always
+        env_file: .env
+        volumes:
+            - storage:/var/www/html/storage
+        tmpfs:
+            - /tmp:size=32M
+        networks:
+            - default
+            - lovii-core
+        deploy:
+            resources:
+                limits:
+                    memory: 128M
+                reservations:
+                    memory: 48M
+        logging:
+            driver: json-file
+            options:
+                max-size: "5m"
+                max-file: "3"
+        stop_grace_period: 30s
+
+networks:
+    default:
+        driver: bridge
+    caddy:
+        external: true
+    lovii-core:
+        external: true
+        name: ${CORE_NETWORK:-lovii-core_default}
+
+volumes:
+    storage:
+        driver: local
