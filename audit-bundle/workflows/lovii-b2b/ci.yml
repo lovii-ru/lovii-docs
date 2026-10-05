@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 # Полный пайплайн (порт из бывшего .gitlab-ci.yml):
 #   checks → lint (Pint+Rector) + PHPStan + type-coverage + Pest (Postgres/PostGIS)
 #   deploy-staging (auto, push в staging) / deploy-production (manual) → SSH на сервер, git reset + docker compose build/migrate/up
@@ -44,7 +47,7 @@ env:
 
 jobs:
   checks:
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     env:
       # Уникальный суффикс docker-объектов прогона: на self-hosted раннере
@@ -53,13 +56,13 @@ jobs:
       # (pgsql-testing) — на него указывает DB_HOST в phpunit.xml.
       RUN_TAG: run-${{ github.run_id }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
       - name: Set up Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
       - name: Build CI image (target=ci)
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           file: docker/Dockerfile
@@ -72,7 +75,7 @@ jobs:
           cache-to: ${{ vars.CI_RUNNER == 'self-hosted' && '' || 'type=gha,mode=max' }}
 
       - name: Cache Composer vendor
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: vendor
           key: composer-${{ hashFiles('composer.lock') }}
@@ -156,8 +159,11 @@ jobs:
   deploy-staging:
     needs: checks
     if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false
     environment:
       name: staging
       url: https://b2b-staging.lovii.ru
@@ -169,13 +175,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" <<'ENDSSH'
+            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
             set -e
             DC="docker compose -f docker-compose.prod.yml"
             cd "$DEPLOY_PATH"
@@ -185,7 +191,7 @@ jobs:
 
             echo "==> Fetching latest ${DEPLOY_BRANCH}..."
             git fetch origin
-            git reset --hard "origin/${DEPLOY_BRANCH}"
+            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
 
             echo "==> Building images..."
             $DC build --pull < /dev/null
@@ -217,11 +223,19 @@ jobs:
             echo "==> Deploy complete!"
           ENDSSH
 
+
+      - name: Cleanup SSH key
+        if: always()
+        run: shred -u ~/.ssh/deploy_key 2>/dev/null || rm -f ~/.ssh/deploy_key
+
   deploy-production:
     needs: checks
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false
     environment:
       name: production
       url: https://b2b.lovii.ru
@@ -233,13 +247,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" <<'ENDSSH'
+            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
             set -e
             DC="docker compose -f docker-compose.prod.yml"
             cd "$DEPLOY_PATH"
@@ -249,7 +263,7 @@ jobs:
 
             echo "==> Fetching latest ${DEPLOY_BRANCH}..."
             git fetch origin
-            git reset --hard "origin/${DEPLOY_BRANCH}"
+            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
 
             echo "==> Building images..."
             $DC build --pull < /dev/null
@@ -280,3 +294,8 @@ jobs:
 
             echo "==> Deploy complete!"
           ENDSSH
+
+
+      - name: Cleanup SSH key
+        if: always()
+        run: shred -u ~/.ssh/deploy_key 2>/dev/null || rm -f ~/.ssh/deploy_key

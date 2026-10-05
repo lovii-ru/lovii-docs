@@ -48,3 +48,18 @@ SRV).
 4. Риски docker-socket-proxy у gateway и docker.sock у раннеров.
 5. Бэкапы: сейчас один крон staging-БД 04:17 на тот же диск — чего не хватает?
 6. Идемпотентность/откат деплоя (сейчас `git reset --hard` + compose up).
+
+## Дополнение 05.10 (после волны 1)
+
+- `compose-core-prod.yml` и `compose-core-staging.yml` на сервере — ОДИН И ТОТ ЖЕ
+  файл (md5 совпадает, дизайн осознанный): мок-банк включается профилем
+  `COMPOSE_PROFILES=mock` в staging-.env, в прод-.env профиля нет. Раньше пакет
+  ошибочно показывал их как разные (M-2 арены — гипотеза E-2 подтверждена).
+- `compose-gateway.yml` в пакете отсутствует осознанно: /opt/gateway — root:root,
+  пользователь deploy его не читает (экспорт требует root-сессии).
+- runner-*.json: agentId=21 во всех четырёх — реальное состояние машинных
+  файлов (не артефакт экспорта), перепроверено на SRV 05.10.
+- Workflows обновлены до состояния после Волны 1: shred deploy_key,
+  permissions: contents: read, deploy-concurrency без cancel, деплой на
+  проверенный DEPLOY_SHA, known_hosts из vars (StrictHostKeyChecking=yes),
+  actions запинены по SHA, pull_request уходит на ubuntu-latest.
