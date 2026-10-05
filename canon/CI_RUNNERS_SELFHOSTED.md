@@ -170,3 +170,33 @@ bash ~/LOVII/tools/staging-status.sh
   кэшированием vendor/node_modules в слоях — низкий приоритет.
 - Полное покрытие тестами (--coverage) сейчас нигде не гонится автоматически:
   решить, добавить ли еженедельный schedule-прогон (вопрос владельцу).
+
+---
+
+## Волна 1 аудита CI/CD (05.10.2026, В ДЕЙСТВЕ во всех 4 репо)
+
+Внешний аудит (arena/01a10967 lovii-docs) + вердикт zcode
+(`audit-bundle/AUDIT-VERDICT-ZCODE-2026-10-05.md`). Исполнено и проверено
+живым деплоем 05.10 (core/app/b2b/admin: CI ✅, деплоенный SHA = запушенный,
+ключ со диска стёрт):
+
+| Правка | Что изменилось в ci.yml |
+|---|---|
+| R-1.1 | `Cleanup SSH key` (if: always) после каждого Deploy — приватный ключ не оседает на диске раннера |
+| R-1.2 | `permissions: contents: read` на workflow — GITHUB_TOKEN без прав |
+| R-1.3 | deploy-job'ы имеют собственный `concurrency: deploy-<ref>, cancel-in-progress: false` — второй пуш не отменяет деплой посреди миграций (checks отменяются как раньше) |
+| R-1.4 | деплоится ПРОВЕРЕННЫЙ `DEPLOY_SHA` (`git reset --hard "${DEPLOY_SHA:-origin/branch}"`), а не вершина ветки |
+| R-1.5 | known_hosts из переменной `DEPLOY_HOST_KEY` (задана ×4), `StrictHostKeyChecking=yes`, ssh-keyscan убран |
+| R-1.6 | actions запинены по SHA (checkout v5.1.0, cache v5.1.0, buildx v4.4.1, build-push v7.4.0) — обновлять осознанно, коммитом |
+| R-1.7 | pull_request уходит на `ubuntu-latest` (сейчас = Queued, биллинг исчерпан — осознанный компромисс безопасности) |
+| R-1.9 | redis healthcheck: пароль через `REDISCLI_AUTH` env, не в argv (lovii-core compose; применится при следующем recreate redis) |
+
+**Что осталось (окна обслуживания / волна 2):** R-1.8 (REF_RE заперт leading `-`
+в gostiny-deploy — файл root:root), R-2.1 (деплой на forced-command — главный
+рефакторинг), R-2.2 (прод-бэкап off-site — P0), R-2.3 (ключи по окружениям +
+required reviewers на прод), R-3.x (раннеры в контейнеры, GHCR по SHA).
+
+**Правило для агентов:** при изменении `.github/workflows/ci.yml` правки
+делаются в репо (ветка → гейт → пуш), НИКОГДА руками на сервере; серверный
+compose (`docker-compose.prod.yml`) — тоже из репо. Секреты — только
+GitHub Secrets; новые actions — только с SHA-пином.
