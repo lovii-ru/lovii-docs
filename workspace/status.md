@@ -1,3 +1,13 @@
+## 2026-10-06 (ночь, 3) — MAX-OTP подтверждён живым прогоном на проде
+
+- Первая правка NO_PROXY была неполной: реальный хост отправки MAX —
+  platform-api2.max.ru (не botapi). NO_PROXY расширен (botapi/platform-api2/
+  dev.max.ru, max.ru), app/horizon/scheduler пересозданы на prod+staging.
+- Живой тест: POST /api/v1/auth/send-code (channel=max, телефон Основателя) —
+  «OTP code sent via max», auth_otp_sessions #67 last_sent_at заполнен,
+  ошибок по MAX в логе нет (только ожидаемые TG 503). Владельцу ушёл код в MAX.
+- Остаток: OTP по Telegram = только после нового upstream (swap-upstream.sh).
+
 ## 2026-10-06 (ночь, 2) — MAX-OTP восстановлен через NO_PROXY; прод-деплой прошёл
 
 - 🔴→✅ OTP через MAX восстановлен без нового прокси: Guzzle гнал botapi.max.ru
