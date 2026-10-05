@@ -60,14 +60,20 @@ docker start lovii-core-staging-app-1 lovii-core-staging-horizon-1 \
   `~/backups/pre-migrate/pre-migrate-<stack>-<UTC>.dump`; провал дампа =
   ABORT деплоя (R-2.4).
 
-## Off-site — ⏳ НЕ ГОТОВО (блокер: владелец)
+## Off-site — ✅ ГОТОВО (05.10 вечер, C1 закрыт)
 
-Единственное хранилище — тот же диск. Вариант Б выбран владельцем
-(ключ Яндекс.Диска для сервера, rclone). После подключения ключа:
-ночная выгрузка дампа на `yandex:lovii-backups/prod-db/` + retention
-+ ежемесячный restore-тест на непроизводственном стенде.
+- rclone v1.75.1 на SRV (`~/bin/rclone`), ремоут `yandex:` — OAuth-токен
+  владельца (тот же Яндекс-аккаунт, что lovii-backups с 18.09; конфиг передан
+  на сервер защищённо, в чате не светился).
+- `backup-prod-db.sh` после локального дампа выгружает на
+  `yandex:lovii-backups/prod-db/`, off-site retention 14 дней.
+- Restore-тест 05.10: sha256 локальной и off-site копий совпадают
+  (07186453…), `pg_restore --list` = 113 TABLE DATA — дамп читаем
+  (attestation исполнителя: SRV аудитор не проверял).
+- Лог: `~/backups/prod-db/backup.log` (OFFSITE OK/FAIL).
+- Ежемесячный restore-тест на непроизводственном стенде — планово.
 
-## Restore-тест
+## Restore-тест (статус)
 
-Не проводился (первый ночной дамп 05.10). После off-site — обязательно:
-`pg_restore --list` + поднятие на непроизводственном стенде.
+05.10: чтение дампа проверено (`pg_restore --list`, 113 TABLE DATA).
+Полное поднятие на стенде — планово, следующий шаг после C2.
