@@ -1,0 +1,64 @@
+# Ansible managed
+# Gateway: caddy-docker-proxy + docker-socket-proxy (read-only).
+# Деплоится Ansible (docker-gateway.yml). Параметры — в group_vars/highload.yml.
+#
+# Принцип безопасности: ТОЛЬКО этот стек публикует порты (80/443).
+# Все app/SSR/Laravel-контейнеры портов НЕ публикуют — Caddy ходит к ним
+# по сети «caddy». Postgres/Redis остаются на хосте.
+
+networks:
+  caddy:
+    external: true          # общая ingress-сеть; app-стеки подключаются к ней
+  socket:
+    driver: bridge
+    internal: true          # Caddy ↔ socket-proxy, без выхода в интернет
+
+services:
+  # Read-only прокси к Docker API — Caddy НЕ получает прямой доступ к docker.sock
+  dockerproxy:
+    image: tecnativa/docker-socket-proxy:0.3.0
+    container_name: gateway-dockerproxy
+    restart: unless-stopped
+    environment:
+      CONTAINERS: 1
+      NETWORKS: 1
+      SERVICES: 1
+      TASKS: 1
+      INFO: 1              # swarm-availability check (read-only)
+      SWARM: 1
+      NODES: 1
+      POST: 0               # read-only: запрещены любые изменяющие вызовы
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [socket]
+
+  caddy:
+    image: gostiny-gateway-caddy:2.11.4
+    container_name: gateway-caddy
+    restart: unless-stopped
+    environment:
+      CADDY_DOCKER_MODE: standalone
+      CADDY_DOCKER_CADDYFILE_PATH: /etc/caddy/Caddyfile
+      DOCKER_HOST: tcp://dockerproxy:2375   # ходит к Docker через read-only прокси
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"       # HTTP/3 (QUIC)
+    volumes:
+      - /opt/gateway/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /data/caddy/data:/data       # серты/ACME — персистентно (/data)
+      - /data/caddy/config:/config
+      - /data/geoip:/data/geoip   # GeoIP mmdb (авто-обновляется)
+      - /data/caddy/logs:/var/log/caddy   # access-логи (persistent на /data)
+    networks: [caddy, socket]
+    depends_on: [dockerproxy]
+
+  # HTTP→SOCKS5 мост для сборок образов (build-args BUILD_HTTP_PROXY) и apt на хосте.
+  # network_mode: host — слушает ТОЛЬКО на адресе docker0 (172.17.0.1:3128),
+  # снаружи порт закрыт nftables (firewall_docker_bridge_tcp_ports). Upstream — секрет.
+  httpproxy:
+    image: ginuerzh/gost:2.12.0
+    container_name: gateway-httpproxy
+    restart: unless-stopped
+    network_mode: host
+    command: ["-L", "http://172.17.0.1:3128", "-F", "socks5://GOST-UPSTREAM-REDACTED"]
