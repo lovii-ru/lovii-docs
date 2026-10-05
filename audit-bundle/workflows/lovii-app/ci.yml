@@ -2,6 +2,7 @@ name: CI
 
 permissions:
   contents: read
+  packages: write
 
 # Полный пайплайн (порт из бывшего .gitlab-ci.yml):
 #   checks → yarn install → lint (Oxlint+ESLint) + type-check + unit (Vitest)
@@ -97,6 +98,15 @@ jobs:
       - name: Unit tests
         run: $DOCKER_RUN $CI_IMAGE sh -c "yarn test:unit"
 
+      - name: Build & push app image (R-3.2)
+        if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build --pull --build-arg APP_VERSION="staging·${{ github.sha }}" -t ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }} -f docker/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }}
+          docker tag ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-app:latest
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-app:latest
+
   # ---------------------------------------------------------------------------
   # Деплой. Два окружения, один и тот же SSH-скрипт:
   #   deploy-staging    — АВТОМАТИЧЕСКИ на каждый push в ветку `staging`
@@ -124,50 +134,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_HOST }} ${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
-            set -e
-            DC="docker compose -f docker-compose.prod.yml"
-            cd "$DEPLOY_PATH"
-            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
-            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
-            # и команды после неё (up -d, health-check) не выполнятся.
-
-            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
-            git fetch origin
-            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
-
-            echo "==> Building images..."
-            # SZ-031: .git в билд-контекст не попадает — версию сборки передаём
-            # build-arg'ом из git на сервере (vite инлайнит её в бандл).
-            export APP_VERSION="${DEPLOY_BRANCH}·$(git rev-parse --short HEAD)"
-            $DC build --pull < /dev/null
-
-            echo "==> Recreating containers..."
-            $DC up -d --remove-orphans -t 5 < /dev/null
-
-            echo "==> Health check..."
-            for i in 1 2 3 4 5; do
-              sleep 3
-              if $DC exec -T web curl -sf http://127.0.0.1:9000/health < /dev/null > /dev/null; then
-                echo "Health check passed (attempt $i)"
-                break
-              fi
-              if [ "$i" -eq 5 ]; then
-                echo "Health check failed after 5 attempts!"
-                $DC logs --tail=50 web
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-            done
-
-            echo "==> Deploy complete!"
-          ENDSSH
+            "deploy lovii-app-staging '${{ github.sha }}' '${{ github.event.before }}'"
 
 
       - name: Cleanup SSH key
@@ -193,50 +166,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_HOST }} ${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
-            set -e
-            DC="docker compose -f docker-compose.prod.yml"
-            cd "$DEPLOY_PATH"
-            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
-            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
-            # и команды после неё (up -d, health-check) не выполнятся.
-
-            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
-            git fetch origin
-            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
-
-            echo "==> Building images..."
-            # SZ-031: .git в билд-контекст не попадает — версию сборки передаём
-            # build-arg'ом из git на сервере (vite инлайнит её в бандл).
-            export APP_VERSION="${DEPLOY_BRANCH}·$(git rev-parse --short HEAD)"
-            $DC build --pull < /dev/null
-
-            echo "==> Recreating containers..."
-            $DC up -d --remove-orphans -t 5 < /dev/null
-
-            echo "==> Health check..."
-            for i in 1 2 3 4 5; do
-              sleep 3
-              if $DC exec -T web curl -sf http://127.0.0.1:9000/health < /dev/null > /dev/null; then
-                echo "Health check passed (attempt $i)"
-                break
-              fi
-              if [ "$i" -eq 5 ]; then
-                echo "Health check failed after 5 attempts!"
-                $DC logs --tail=50 web
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-            done
-
-            echo "==> Deploy complete!"
-          ENDSSH
+            "deploy lovii-app '${{ github.sha }}' '${{ github.event.before }}'"
 
 
       - name: Cleanup SSH key

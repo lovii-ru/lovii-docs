@@ -112,3 +112,17 @@ curl -I https://axiiom-ru.github.io/lovii/docs/money_flow_public.html
 
 > **Правило:** когда сбой отнял больше 10 минут — добавляй сюда. Этот файл
 > экономит время следующему разработчику или агенту.
+
+## Деплой зелёный, а образ/сервис не тот — что смотреть
+
+1. **Проверить ID образа контейнера vs ожидаемый GHCR:**
+   `docker inspect <container> --format '{{.Config.Image}} {{.Image}}'`
+   и `docker image inspect ghcr.io/lovii-tech/<repo>-<svc>:<sha> --format '{{.Id}}'`.
+   Если ID разные — образ перетерт чужим `docker tag`.
+2. **Смотреть свежие `docker tag`** — журнал не ведётся, но lovii-deploy пишет
+   `Tagged … -> …` в `~/lovii-deploy.log`.
+3. **Сторонние образы** (`redis:alpine`, `postgis`, `meilisearch`, `node:*`)
+   лечатся `docker pull <образ>` — они оффициальные, digest сверить с Hub.
+4. Локально собранные (`*-tlsclient`) — `docker compose build <svc>`.
+5. После починки — деплой повторить: `deploy <stack> <sha>` (pull-путь,
+   15 сек). См. F-083 — почему чужие теги трогать нельзя.

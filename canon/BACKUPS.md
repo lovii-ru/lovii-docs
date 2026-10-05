@@ -45,3 +45,29 @@ docker start lovii-core-staging-app-1 lovii-core-staging-horizon-1 \
 
 Первый бэкап: 2026-09-27 20:25 (202 МБ, валидность проверена `pg_restore --list`).
 Прода это не касается (там своя чистая БД со справочниками) — бэкапится только staging.
+
+---
+
+# Прод-БД: ночной бэкап (с 05.10.2026, волна 2 аудита)
+
+## Что и где
+
+- **Скрипт:** `/home/deploy/bin/backup-prod-db.sh`, крон **03:47 UTC** ежедневно.
+- **Дамп:** `pg_dump -Fc` прод-БД (`lovii-core-pgsql-1`, БД `lovii-core`;
+  схемы public + lovii_b2b + lovii_admin — один дамп).
+- **Путь:** `/home/deploy/backups/prod-db/lovii-core-<UTC>.dump`, retention 7 копий.
+- **Pre-migrate дампы:** перед КАЖДОЙ прод-миграцией lovii-deploy кладёт
+  `~/backups/pre-migrate/pre-migrate-<stack>-<UTC>.dump`; провал дампа =
+  ABORT деплоя (R-2.4).
+
+## Off-site — ⏳ НЕ ГОТОВО (блокер: владелец)
+
+Единственное хранилище — тот же диск. Вариант Б выбран владельцем
+(ключ Яндекс.Диска для сервера, rclone). После подключения ключа:
+ночная выгрузка дампа на `yandex:lovii-backups/prod-db/` + retention
++ ежемесячный restore-тест на непроизводственном стенде.
+
+## Restore-тест
+
+Не проводился (первый ночной дамп 05.10). После off-site — обязательно:
+`pg_restore --list` + поднятие на непроизводственном стенде.

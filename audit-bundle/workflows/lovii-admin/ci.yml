@@ -2,6 +2,7 @@ name: CI
 
 permissions:
   contents: read
+  packages: write
 
 # Полный пайплайн (порт из бывшего .gitlab-ci.yml):
 #   checks → lint (Pint+Rector) + PHPStan + type-coverage + Pest (Postgres/PostGIS)
@@ -98,15 +99,13 @@ jobs:
             vendor/bin/pint --parallel --test \
             && vendor/bin/rector --dry-run"
 
-      # PHPStan / type-coverage / tests are informational (мирроринг бывшего
-      # GitLab `allow_failure: true` для jobs types/type-coverage/unit).
-      # Deploy гейтится только на lint, как и в .gitlab-ci.yml (deploy needs: lint).
+      # R-3.3 (волна 3 аудита): continue-on-error снят — красные тесты/PHPStan
+      # блокируют деплой. Легаси-долг (121 mixed) зафиксирован baseline'ом
+      # (phpstan-baseline.neon) — новые ошибки падают, старые не мешают.
       - name: Static analysis (PHPStan)
-        continue-on-error: true
         run: $DOCKER_RUN $CI_IMAGE sh -c "vendor/bin/phpstan"
 
       - name: Type coverage
-        continue-on-error: true
         run: |
           $DOCKER_RUN $CI_IMAGE sh -c "\
             vendor/bin/pest --type-coverage --min=70 --compact"
@@ -121,9 +120,17 @@ jobs:
             $PG_IMAGE
           docker run --rm --network ci-net-$RUN_TAG $PG_IMAGE \
             sh -c "until pg_isready -h pgsql-testing-$RUN_TAG -U sail -d testing; do sleep 1; done"
+          # R-3.3: схема lovii_admin нужна в свежей тестовой БД (search_path
+          # из config/database.php); локальная testing-база имеет её с ручных
+          # времён — в CI создаём идемпотентно.
+          docker run --rm --network ci-net-$RUN_TAG \
+            -e PGPASSWORD=password $PG_IMAGE \
+            sh -c "psql -h pgsql-testing-$RUN_TAG -U sail -d testing -c \"CREATE SCHEMA IF NOT EXISTS lovii_admin AUTHORIZATION sail\"" \
+          && docker run --rm --network ci-net-$RUN_TAG --user $(id -u):$(id -g) \
+            -v ${{ github.workspace }}:/app -w /app -e PGPASSWORD=password $CI_IMAGE \
+            sh -c "PGPASSWORD=password psql -h pgsql-testing-$RUN_TAG -U sail -d testing -q -f tests/Support/core-schema.sql"
 
       - name: Tests (Pest + coverage)
-        continue-on-error: true
         run: |
           docker run --rm --user $(id -u):$(id -g) \
             --network ci-net-$RUN_TAG \
@@ -133,6 +140,18 @@ jobs:
             $CI_IMAGE sh -c "\
               vendor/bin/pest --parallel --coverage --min=70 --compact"
 
+      - name: Build & push images (R-3.2)
+        if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build --pull -f docker/Dockerfile --target app -t ghcr.io/${{ github.repository_owner }}/lovii-admin-app:${{ github.sha }} .
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-admin-app:${{ github.sha }}
+          docker tag ghcr.io/${{ github.repository_owner }}/lovii-admin-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-admin-app:latest
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-admin-app:latest
+          docker build --pull -f docker/Dockerfile --target scheduler -t ghcr.io/${{ github.repository_owner }}/lovii-admin-scheduler:${{ github.sha }} .
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-admin-scheduler:${{ github.sha }}
+          docker tag ghcr.io/${{ github.repository_owner }}/lovii-admin-scheduler:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-admin-scheduler:latest
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-admin-scheduler:latest
       - name: Cleanup Postgres
         if: always()
         run: |
@@ -166,53 +185,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_HOST }} ${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
-            set -e
-            DC="docker compose -f docker-compose.prod.yml"
-            cd "$DEPLOY_PATH"
-            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
-            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
-            # и команды после неё (up -d, health-check) не выполнятся.
-
-            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
-            git fetch origin
-            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
-
-            echo "==> Building images..."
-            $DC build --pull < /dev/null
-
-            echo "==> Running migrations..."
-            $DC run --rm -T app php artisan migrate --force < /dev/null
-
-            echo "==> Terminating Horizon workers (if any)..."
-            $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
-
-            echo "==> Recreating containers..."
-            $DC up -d --remove-orphans -t 5 < /dev/null
-
-            echo "==> Health check..."
-            for i in 1 2 3 4 5; do
-              sleep 3
-              if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then
-                echo "Health check passed (attempt $i)"
-                break
-              fi
-              if [ "$i" -eq 5 ]; then
-                echo "Health check failed after 5 attempts!"
-                $DC logs --tail=50 app
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-            done
-
-            echo "==> Deploy complete!"
-          ENDSSH
+            "deploy lovii-admin-staging '${{ github.sha }}' '${{ github.event.before }}'"
 
 
       - name: Cleanup SSH key
@@ -238,53 +217,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_HOST }} ${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
-            set -e
-            DC="docker compose -f docker-compose.prod.yml"
-            cd "$DEPLOY_PATH"
-            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
-            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
-            # и команды после неё (up -d, health-check) не выполнятся.
-
-            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
-            git fetch origin
-            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
-
-            echo "==> Building images..."
-            $DC build --pull < /dev/null
-
-            echo "==> Running migrations..."
-            $DC run --rm -T app php artisan migrate --force < /dev/null
-
-            echo "==> Terminating Horizon workers (if any)..."
-            $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
-
-            echo "==> Recreating containers..."
-            $DC up -d --remove-orphans -t 5 < /dev/null
-
-            echo "==> Health check..."
-            for i in 1 2 3 4 5; do
-              sleep 3
-              if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then
-                echo "Health check passed (attempt $i)"
-                break
-              fi
-              if [ "$i" -eq 5 ]; then
-                echo "Health check failed after 5 attempts!"
-                $DC logs --tail=50 app
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-            done
-
-            echo "==> Deploy complete!"
-          ENDSSH
+            "deploy lovii-admin '${{ github.sha }}' '${{ github.event.before }}'"
 
 
       - name: Cleanup SSH key

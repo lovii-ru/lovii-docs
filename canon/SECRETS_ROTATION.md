@@ -61,3 +61,14 @@
   последовательно, отмечает `[x]`.
 - zcode: сверка полноты инвентаризации с известными источниками (серверные
   `.env`, `lovii-docs`, чаты, BACKLOG).
+
+## GHCR-PAT (read:packages) — pull-деплой с сервера
+
+| Поле | Значение |
+|---|---|
+| Где используется | docker login ghcr.io на SRV (deploy) для pull образов в lovii-deploy |
+| Права | только read:packages (classic PAT, bestdeejay-design) |
+| Срок | 90 дней |
+| Ротация | отозвать на github.com/settings/tokens → создать новый → `echo <НОВЫЙ> \| ssh deploy@SRV "docker login ghcr.io -u bestdeejay-design --password-stdin"` |
+| Статус 05.10 | ⚠️ Токен светился в чате аудита — сменить при следующей ротации (после приёмки арены); канал передачи нового — вне чата (через терминал владельца) |
+| План A1 | переход на эфемерный login (login при деплое + logout после, паттерн gostiny-deploy) — патч lovii-deploy |

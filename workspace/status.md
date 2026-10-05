@@ -5,7 +5,7 @@
   -c раннерах. Docker из CI видит только dind.
 - R-3.2: образы ghcr.io/<repo>-<svc>:<sha>; lovii-deploy пуллит по SHA и
   тегирует по имени сервиса; деплой 15 сек, откат = старый SHA.
-- R-3.4: tbank-mock в staging-extras. R-3.5: restart:always + месячная сводка.
+- R-3.4: tbank-mock в staging-extras. R-3.5: restart: unless-stopped у контейнерных раннеров + месячная сводка.
 - Инцидент: ошибочное тегирование сторонних образов (redis/node) при первом
   pull-деплое — восстановлено, маппинг переписан по имени сервиса.
 - Детали: audit-bundle/EXECUTION-WAVE3-2026-10-05.md.

@@ -2,6 +2,7 @@ name: CI
 
 permissions:
   contents: read
+  packages: write
 
 # Полный пайплайн (порт из бывшего .gitlab-ci.yml):
 #   checks → lint (Pint+Rector) + PHPStan + type-coverage + Pest (Postgres/PostGIS)
@@ -142,6 +143,22 @@ jobs:
               # Порог coverage 70→66: карантин SZ-025-тестов снял покрытие их кода; восстановить 70 после ремонта SZ-025 (SZ-078).
               vendor/bin/pest --coverage --min=66 --compact --exclude-testsuite=E2e --exclude-group=arch --exclude-group=wip-webauthn --exclude-group=sz025-quarantine"
 
+      - name: Build & push images (R-3.2)
+        if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build --pull -f docker/Dockerfile --target app -t ghcr.io/${{ github.repository_owner }}/lovii-b2b-app:${{ github.sha }} .
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-b2b-app:${{ github.sha }}
+          docker tag ghcr.io/${{ github.repository_owner }}/lovii-b2b-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-b2b-app:latest
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-b2b-app:latest
+          docker build --pull -f docker/Dockerfile --target scheduler -t ghcr.io/${{ github.repository_owner }}/lovii-b2b-scheduler:${{ github.sha }} .
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-b2b-scheduler:${{ github.sha }}
+          docker tag ghcr.io/${{ github.repository_owner }}/lovii-b2b-scheduler:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-b2b-scheduler:latest
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-b2b-scheduler:latest
+          docker build --pull -f docker/Dockerfile --target queue -t ghcr.io/${{ github.repository_owner }}/lovii-b2b-queue:${{ github.sha }} .
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-b2b-queue:${{ github.sha }}
+          docker tag ghcr.io/${{ github.repository_owner }}/lovii-b2b-queue:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-b2b-queue:latest
+          docker push ghcr.io/${{ github.repository_owner }}/lovii-b2b-queue:latest
       - name: Cleanup Postgres
         if: always()
         run: |
@@ -175,53 +192,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_HOST }} ${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
-            set -e
-            DC="docker compose -f docker-compose.prod.yml"
-            cd "$DEPLOY_PATH"
-            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
-            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
-            # и команды после неё (up -d, health-check) не выполнятся.
-
-            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
-            git fetch origin
-            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
-
-            echo "==> Building images..."
-            $DC build --pull < /dev/null
-
-            echo "==> Running migrations..."
-            $DC run --rm -T app php artisan migrate --force < /dev/null
-
-            echo "==> Terminating Horizon workers (if any)..."
-            $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
-
-            echo "==> Recreating containers..."
-            $DC up -d --remove-orphans -t 5 < /dev/null
-
-            echo "==> Health check..."
-            for i in 1 2 3 4 5; do
-              sleep 3
-              if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then
-                echo "Health check passed (attempt $i)"
-                break
-              fi
-              if [ "$i" -eq 5 ]; then
-                echo "Health check failed after 5 attempts!"
-                $DC logs --tail=50 app
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-            done
-
-            echo "==> Deploy complete!"
-          ENDSSH
+            "deploy lovii-b2b-staging '${{ github.sha }}' '${{ github.event.before }}'"
 
 
       - name: Cleanup SSH key
@@ -247,53 +224,13 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_HOST }} ${{ vars.DEPLOY_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Deploy
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "DEPLOY_PATH='${{ secrets.DEPLOY_PATH }}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' DEPLOY_SHA='${{ github.sha }}' bash -s" <<'ENDSSH'
-            set -e
-            DC="docker compose -f docker-compose.prod.yml"
-            cd "$DEPLOY_PATH"
-            # NB: каждая `compose run/exec/up` получает `< /dev/null`, иначе
-            # `docker compose run -T` съедает остаток heredoc как stdin контейнера
-            # и команды после неё (up -d, health-check) не выполнятся.
-
-            echo "==> Fetching latest ${DEPLOY_BRANCH}..."
-            git fetch origin
-            git reset --hard "${DEPLOY_SHA:-origin/${DEPLOY_BRANCH}}"
-
-            echo "==> Building images..."
-            $DC build --pull < /dev/null
-
-            echo "==> Running migrations..."
-            $DC run --rm -T app php artisan migrate --force < /dev/null
-
-            echo "==> Terminating Horizon workers (if any)..."
-            $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
-
-            echo "==> Recreating containers..."
-            $DC up -d --remove-orphans -t 5 < /dev/null
-
-            echo "==> Health check..."
-            for i in 1 2 3 4 5; do
-              sleep 3
-              if $DC exec -T app curl -sf http://127.0.0.1:8080/healthz < /dev/null > /dev/null; then
-                echo "Health check passed (attempt $i)"
-                break
-              fi
-              if [ "$i" -eq 5 ]; then
-                echo "Health check failed after 5 attempts!"
-                $DC logs --tail=50 app
-                exit 1
-              fi
-              echo "Health check attempt $i failed, retrying..."
-            done
-
-            echo "==> Deploy complete!"
-          ENDSSH
+            "deploy lovii-b2b '${{ github.sha }}' '${{ github.event.before }}'"
 
 
       - name: Cleanup SSH key

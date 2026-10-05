@@ -63,3 +63,19 @@ SRV).
   permissions: contents: read, deploy-concurrency без cancel, деплой на
   проверенный DEPLOY_SHA, known_hosts из vars (StrictHostKeyChecking=yes),
   actions запинены по SHA, pull_request уходит на ubuntu-latest.
+
+## Снимок после Волны 3 (05.10, вечер)
+
+- workflows ×4 = после Волн 1–3 (push образов в GHCR, deploy через
+  forced-command `deploy <stack> <sha>`, known_hosts из vars).
+- infra/lovii-deploy.sh = каноничный деплой-скрипт (копия ~/bin/lovii-deploy
+  SRV; версия с A4-предохранителями: allowlist источника/таргета,
+  ABORT-проверка image-ID до up).
+- infra/runners-compose.yml = 4 runner-контейнера + 4 dind, сеть
+  lovii-ci-isolated; токены регистрации в env контейнеров (одноразовые,
+  протухшие) — значения в пакете не секреты, но рекомендуются к чистке.
+- infra/compose-core-staging-extras.yml = мок вынесен из prod-файла (R-3.4).
+- infra/crontab.txt = после Волн 2–3 (прод-бэкап, env-parity, месячная
+  сводка; @reboot раннеров и watchdog удалены).
+- GHCR read: классический PAT (read:packages) владельца, персистентный
+  docker login на SRV; ротация — см. canon/SECRETS_ROTATION.md и A1 follow-up.

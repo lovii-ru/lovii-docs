@@ -1240,3 +1240,27 @@ staging-инстанс или висящий воркер на проде). Не
 5. **Проверить приёмку владельцем**: страница
    `https://b2b.lovii.ru/panel/aksiona-operator/security` — должна
    открываться (фикс PR #7 в проде с 05.10).
+
+### F-083 · прод-инфра · мутация image store через `docker tag` на общем демоне (05.10, волна 3)
+
+**Что случилось:** `lovii-deploy` v1 тегировал запулленные из GHCR образы
+приложения в ВСЕ image-имена из `docker compose config --images` — включая
+сторонние (`redis:alpine`, `imresamu/postgis:…`, `getmeili/meilisearch:…`,
+`node:22-alpine`). GHCR-образ приложения перезаписывал их локальные теги.
+Радиус: **общий docker-демон хоста — образы общие для прод и staging**;
+прод спасла только инвариантность запущенных контейнеров (пересоздания не
+было). core-staging рухнул (`exec: redis-server: not found`), восстановлен
+pull'ом + пересборкой tlsclient.
+
+**Правило:** `docker tag` чужих образов запрещён. Тегирование — только
+по сопоставлению «имя сервиса → его образ» из `compose config --format
+json`, таргет не из стороннего allowlist-исключения. Предохранители в
+`lovii-deploy`: allowlist источника `ghcr.io/lovii-tech/`, DENY на
+сторонний таргет, ABORT-проверка image-ID до `up` (A4 волны 3).
+
+**Целевое состояние:** compose переходит на `image:
+ghcr.io/lovii-tech/<repo>-<svc>:${TAG}` — шим тегирования исчезает
+(решение зафиксировано, под-итерация).
+
+**Связанное:** `audit-bundle/EXECUTION-WAVE3-CLOSEOUT` (B6), TROUBLESHOOTING
+«деплой зелёный, а образ/сервис не тот».

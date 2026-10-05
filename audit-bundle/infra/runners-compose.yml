@@ -1,0 +1,129 @@
+services:
+  # Раннеры в контейнерах (R-3.1, волна 3): изоляция от прод-стеков.
+  # Каждому раннеру — свой dind (docker-in-docker) для сборок и своих job.
+  # Хост-docker.sock НЕ монтируется нигде — прод-стеки из CI не видны.
+  runner-core:
+    image: ghcr.io/lovii-tech/ci-runner:latest
+    container_name: gostiny-runner-core
+    restart: unless-stopped
+    env_file: .env.ci
+    environment:
+      RUNNER_NAME: gostiny-ci-core-c
+      RUNNER_REPO: lovii-tech/lovii-core
+      DOCKER_HOST: tcp://dind-core:2376
+      DOCKER_TLS_CERTDIR: ""
+      BUILDKIT_HOST: tcp://dind-core:1234
+    volumes:
+      - runner-core:/home/runner/_work
+    depends_on: [dind-core]
+    networks: [ci-net]
+
+  dind-core:
+    image: docker:27-dind
+    container_name: gostiny-dind-core
+    restart: unless-stopped
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    command: ["--host=tcp://0.0.0.0:2376", "--data-root=/dind-data"]
+    volumes:
+      - dind-core:/dind-data
+    networks: [ci-net]
+
+  runner-app:
+    image: ghcr.io/lovii-tech/ci-runner:latest
+    container_name: gostiny-runner-app
+    restart: unless-stopped
+    env_file: .env.ci
+    environment:
+      RUNNER_NAME: gostiny-ci-app-c
+      RUNNER_REPO: lovii-tech/lovii-app
+      DOCKER_HOST: tcp://dind-app:2376
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - runner-app:/home/runner/_work
+    depends_on: [dind-app]
+    networks: [ci-net]
+
+  dind-app:
+    image: docker:27-dind
+    container_name: gostiny-dind-app
+    restart: unless-stopped
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    command: ["--host=tcp://0.0.0.0:2376", "--data-root=/dind-data"]
+    volumes:
+      - dind-app:/dind-data
+    networks: [ci-net]
+
+  runner-b2b:
+    image: ghcr.io/lovii-tech/ci-runner:latest
+    container_name: gostiny-runner-b2b
+    restart: unless-stopped
+    env_file: .env.ci
+    environment:
+      RUNNER_NAME: gostiny-ci-b2b-c
+      RUNNER_REPO: lovii-tech/lovii-b2b
+      DOCKER_HOST: tcp://dind-b2b:2376
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - runner-b2b:/home/runner/_work
+    depends_on: [dind-b2b]
+    networks: [ci-net]
+
+  dind-b2b:
+    image: docker:27-dind
+    container_name: gostiny-dind-b2b
+    restart: unless-stopped
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    command: ["--host=tcp://0.0.0.0:2376", "--data-root=/dind-data"]
+    volumes:
+      - dind-b2b:/dind-data
+    networks: [ci-net]
+
+  runner-admin:
+    image: ghcr.io/lovii-tech/ci-runner:latest
+    container_name: gostiny-runner-admin
+    restart: unless-stopped
+    env_file: .env.ci
+    environment:
+      RUNNER_NAME: gostiny-ci-admin-c
+      RUNNER_REPO: lovii-tech/lovii-admin
+      DOCKER_HOST: tcp://dind-admin:2376
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - runner-admin:/home/runner/_work
+    depends_on: [dind-admin]
+    networks: [ci-net]
+
+  dind-admin:
+    image: docker:27-dind
+    container_name: gostiny-dind-admin
+    restart: unless-stopped
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    command: ["--host=tcp://0.0.0.0:2376", "--data-root=/dind-data"]
+    volumes:
+      - dind-admin:/dind-data
+    networks: [ci-net]
+
+networks:
+  ci-net:
+    name: lovii-ci-isolated
+    driver: bridge
+    # Отдельная сеть: без gateway-маршрутов в прод-стеки (все прод-стеки в
+    # своих compose-сетях). Наружу только интернет (пул образов, GitHub).
+
+volumes:
+  runner-core: {}
+  runner-app: {}
+  runner-b2b: {}
+  runner-admin: {}
+  dind-core: {}
+  dind-app: {}
+  dind-b2b: {}
+  dind-admin: {}
