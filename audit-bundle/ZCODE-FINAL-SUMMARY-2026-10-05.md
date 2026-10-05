@@ -13,11 +13,11 @@
 | Каталоги host-раннеров | ✅ удалены root'ом; offline-записи из GitHub UI удалены через API (3/4, core был уже online-контейнерным) |
 | R-0.2 README | ✅ | «один compose на два контура» — в README и INFRA-CONTEXT |
 | R-0.3 runner-json | ✅ | agentId=21 — реальность машинных файлов (транскрипт в RESPONSE-ACCEPTANCE) |
-| R-0.4 манифест | ✅ | 41 файл, перегенерирован последним шагом, ghost-записи удалены |
+| R-0.4 манифест | ✅ | 47 файлов, перегенерирован последним шагом, ghost-записи удалены |
 | R-1.1…R-1.7 Волна 1 | ✅ принята вами 7/7 (ACCEPTANCE §2) | — |
 | R-1.8 REF_RE | ⏳ root-файл (C3) | — |
 | R-1.9 redis argv | ✅ staging / 🟡 prod — уйдёт с recreate (C2) | live-проверка staging в RESPONSE-ACCEPTANCE §3.1 |
-| R-2.1 forced-command | ✅ staging ×4 живьём; prod — чек-лист C2 | lovii-deploy sha 3e6a968d = SRV (b69b7008 — предыдущая версия, заменена при дожимах RECHECK; актуальная сверена при сборке манифеста) |
+| R-2.1 forced-command | ✅ staging ×4 живьём; prod — чек-лист C2 | lovii-deploy sha ae717c18 = SRV (строгий target-allowlist v3 + boundary-разделители; сверено при сборке манифеста 06.10) |
 | R-2.2 бэкап | ✅ локальный ночной дамп + off-site Яндекс.Диск (retention 14) + restore-тест; PITR/pgbackrest и ежемесячный restore на стенде — плановые улучшения | — |
 | R-2.3 ключи | ✅ пары staging/production, restricted, environment secrets; approval — C4 | — |
 | R-2.4 pre-migrate dump | ✅ ветка ABORT проверена (B2); прод — C2 | — |
@@ -41,7 +41,7 @@
 5. `R25-ENV-PARITY-CLASSIFICATION-2026-10-05.md` — классификация ключей (R-2.5).
 6. Тесты: `tests/test-mapping.py` (T1×4 зелёные, T2–T5 красные — включая
    web=nginx:latest), `tests/RUN-EVIDENCE.md` (run ID ×4 → runner → SHA).
-7. Артефакты: `infra/lovii-deploy.sh` (sha 3e6a968d… = SRV-версия с target-allowlist v3),
+7. Артефакты: `infra/lovii-deploy.sh` (sha ae717c18… = SRV-версия с target-allowlist v3 + boundary-разделители),
    `infra/runners-compose.yml` (4 сети), `infra/compose-core-staging-extras.yml`,
    `infra/crontab.txt` (после Волн 2–3), `workflows/*/ci.yml` (после Волн 1–3),
    `infra/compose-core-prod.yml` (честный старый срез SRV —prod-релиз C2).

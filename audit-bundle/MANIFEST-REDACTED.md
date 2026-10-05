@@ -32,7 +32,11 @@
 
 ## Инвентарь (sha256, генерируется при сборке — R-0.4)
 
-ФИНАЛ 06.10: R-0.1/B-4 закрыты (compose-gateway.yml экспортирован root-сессией: socket-proxy read-only POST:0, docker.sock ro, internal-only сеть), R-1.8 REF_RE пропатчен root, host-раннер-каталоги удалены. lovii-deploy = SRV (b69b7008+strict). 42 файла без манифеста.
+Финал 06.10 (после ZCODE-REVIEW-RESPONSE-RECHECK-2): 47 файлов без манифеста,
+включая ZCODE-RESPONSE-RECHECK-2. lovii-deploy = SRV-версия ae717c18…(strict
+target-allowlist v3 + boundary-разделители). Манифест перегенерирован последним
+шагом; предыдущие счётчики (41, 44, 45) — исторические срезы, признаны
+устаревшими в ZCODE-REVIEW-RESPONSE-RECHECK-2 арены.
 
 ```
 a856058d16471d9fc8671aabfa337d48d7821032b35b240335ef0d3e50dce5ea  ./ARENA-FOLLOWUP-ZCODE-WAVE2-2026-10-05.md
