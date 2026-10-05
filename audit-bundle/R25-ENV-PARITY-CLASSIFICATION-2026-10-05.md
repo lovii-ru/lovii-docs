@@ -8,7 +8,7 @@ default / намеренно различный» + fixture-тест (sentinel �
 
 Тест выполнен на копии `.env` (live-файлы не менялись): из копии удалён
 `APP_KEY` → env-parity детектирует его в списке отсутствующих — **ДА**
-(полный вывод в EXECUTION-WAVE3-CLOSEOUT-2, B3). Live-прогон: exit 1,
+(полный вывод в EXECUTION-WAVE3-CLOSEOUT, B3). Live-прогон: exit 1,
 находки в логе `~/backups/env-parity.log`. Крон 05:07 UTC ежедневно.
 
 ## 2. Классификация ключей (admin-стек, единственный с расхождениями)

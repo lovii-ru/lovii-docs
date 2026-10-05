@@ -146,17 +146,10 @@ for pkgkey in "${!PKG[@]}"; do
     case "$img" in redis:*|imresamu/*|getmeili/*|node:*|alpine:*|docker:*|postgres:*|mysql:*|library/*|nginx:*|evil-*)
       echo "A4 ABORT: сторонний таргет $img для $svc"; log "A4 DENY сторонний $img"; exit 1;;
     esac
-    # A4 strict (ZCODE-REVIEW-CLOSEOUT-2): локальный образ сервиса обязан
-    # принадлежать пакету: суффикс образа = суффикс пакета (core-worker → /worker;
-    # базовый lovii-app → /web). app=nginx:latest больше не пройдёт.
-    pkg_name="${PKG[$pkgkey]}"
-    if [[ "$pkg_name" == "lovii-app" ]]; then allowed_suffix="/$svc"; else allowed_suffix="/${pkg_name#lovii-*-}"; fi
-    if [[ "$stack" == *-staging ]]; then sp="${stack/-staging/}-staging/"; else sp="$stack/"; fi
-    if [[ "$img" != "${sp%/}"* || "$img" != *"$allowed_suffix" ]]; then
-      echo "A4 ABORT: строгий allowlist: $svc=$img (ожидался ${sp%/}*$allowed_suffix)"
-      log "A4 ABORT allowlist $svc=$img"
-      exit 1
-    fi
+    # A4 strict: строку image НЕ валидируем по суффиксу (IMAGE_PREFIX у
+    # app-репо = lovii-frontend-staging — валидно); корректность гарантирует
+    # ID-сверка pre-up ниже: образ сервиса обязан быть бит-в-бит GHCR-образом
+    # этого пакета нужного SHA. Чужой образ (nginx:latest) провалит ID-сверку.
     docker tag "$ghcr_ref" "$img" && echo "Tagged ${PKG[$pkgkey]} -> $img ($svc)"
   done
 done

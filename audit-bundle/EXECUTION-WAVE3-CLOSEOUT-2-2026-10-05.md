@@ -88,5 +88,5 @@ B1 rollback (27.6с/23.7с) — из прошлого отчёта, остаёт
 O-1 off-site (ждёт ключ владельца) · C2 первый прод-релиз по чек-листу ·
 C3 root-окно (R-0.1/R-1.8/каталоги) · C4–C6 решения владельца ·
 R-3.3 done: continue-on-error снят, baseline, admin CI 🟢 (см. EXECUTION-WAVE3
-и INBOX) · R-2.5 классификация ключей — следующий заход · Prod redis recreate
+и INBOX) · R-2.5 классификация — выполнена (см. R25-ENV-PARITY-CLASSIFICATION) · Prod redis recreate
 (пароль в argv уйдёт) — следующий прод-деплой.

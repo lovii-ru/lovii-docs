@@ -39,9 +39,6 @@ on:
       - 'LICENSE'
   workflow_dispatch:
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
 
 env:
   CI_IMAGE: lovii-app-ci-node:ci
@@ -50,6 +47,9 @@ jobs:
   checks:
     runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
+    concurrency:
+      group: checks-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
@@ -102,7 +102,7 @@ jobs:
         if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker build --pull --build-arg APP_VERSION="staging·${{ github.sha }}" -t ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }} -f docker/Dockerfile .
+          docker build --pull --target prod --build-arg APP_VERSION="staging·${{ github.sha }}" -t ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }} -f docker/Dockerfile .
           docker push ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }}
           docker tag ghcr.io/${{ github.repository_owner }}/lovii-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/lovii-app:latest
           docker push ghcr.io/${{ github.repository_owner }}/lovii-app:latest

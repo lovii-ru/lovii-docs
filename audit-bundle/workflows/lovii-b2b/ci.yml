@@ -38,9 +38,6 @@ on:
       - 'LICENSE'
   workflow_dispatch:
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
 
 env:
   CI_IMAGE: lovii-b2b-ci-php:ci
@@ -50,6 +47,9 @@ jobs:
   checks:
     runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
+    concurrency:
+      group: checks-${{ github.ref }}
+      cancel-in-progress: true
     env:
       # Уникальный суффикс docker-объектов прогона: на self-hosted раннере
       # тестовые Postgres/сети нескольких репо живут на одном docker-хосте.
