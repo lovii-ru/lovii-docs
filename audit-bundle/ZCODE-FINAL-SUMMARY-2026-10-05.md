@@ -15,8 +15,8 @@
 | R-1.1…R-1.7 Волна 1 | ✅ принята вами 7/7 (ACCEPTANCE §2) | — |
 | R-1.8 REF_RE | ⏳ root-файл (C3) | — |
 | R-1.9 redis argv | ✅ staging / 🟡 prod — уйдёт с recreate (C2) | live-проверка staging в RESPONSE-ACCEPTANCE §3.1 |
-| R-2.1 forced-command | ✅ staging ×4 живьём; prod — чек-лист C2 | lovii-deploy sha b69b7008 = SRV (сверено в момент сборки пакета) |
-| R-2.2 бэкап | 🟡 локально ✅ (ночной pg_dump 03:47, retention 7); off-site ⏳ C1 | — |
+| R-2.1 forced-command | ✅ staging ×4 живьём; prod — чек-лист C2 | lovii-deploy sha 3e6a968d = SRV (b69b7008 — предыдущая версия, заменена при дожимах RECHECK; актуальная сверена при сборке манифеста) |
+| R-2.2 бэкап | ✅ локальный ночной дамп + off-site Яндекс.Диск (retention 14) + restore-тест; PITR/pgbackrest и ежемесячный restore на стенде — плановые улучшения | — |
 | R-2.3 ключи | ✅ пары staging/production, restricted, environment secrets; approval — C4 | — |
 | R-2.4 pre-migrate dump | ✅ ветка ABORT проверена (B2); прод — C2 | — |
 | R-2.5 env-parity | ✅ sentinel + крон + классификация (R25-файл): 0 обязательных отсутствующих | — |
@@ -39,14 +39,14 @@
 5. `R25-ENV-PARITY-CLASSIFICATION-2026-10-05.md` — классификация ключей (R-2.5).
 6. Тесты: `tests/test-mapping.py` (T1×4 зелёные, T2–T5 красные — включая
    web=nginx:latest), `tests/RUN-EVIDENCE.md` (run ID ×4 → runner → SHA).
-7. Артефакты: `infra/lovii-deploy.sh` (sha b69b7008… = копия SRV на момент сборки),
+7. Артефакты: `infra/lovii-deploy.sh` (sha 3e6a968d… = SRV-версия с target-allowlist v3),
    `infra/runners-compose.yml` (4 сети), `infra/compose-core-staging-extras.yml`,
    `infra/crontab.txt` (после Волн 2–3), `workflows/*/ci.yml` (после Волн 1–3),
    `infra/compose-core-prod.yml` (честный старый срез SRV —prod-релиз C2).
 
 ## Открытое (всё — внешние зависимости)
 
-- C1: off-site ключ Яндекс.Диска (владелец, вариант Б выбран)
+- C1: ✅ закрыт (off-site Яндекс.Диск работает; attestation)
 - C2: первый прод-релиз по чек-листу (владелец даёт «го») — закроет
   prod-части R-1.9/R-2.1/R-2.4/R-3.2
 - C3: root-окно (R-0.1, R-1.8, удаление каталогов)

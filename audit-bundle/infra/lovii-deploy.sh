@@ -156,11 +156,15 @@ for pkgkey in "${!PKG[@]}"; do
     #   <sp><что-угодно>/<sfx>[:tag]   <sp><sfx>[:tag]
     # app-стек дополнительно: IMAGE_PREFIX[:tag] (задаётся в .env контура)
     ok=0
-    [[ "$img" == "${sp}"*"/$sfx" || "$img" == "${sp}"*"/$sfx:"* || "$img" == "${sp}${sfx}"* ]] && ok=1
+    # Разделители обязательны (ревью арены: boundary bypass):
+    #  path-форма   <sp>…/<sfx>[:…]
+    #  short-форма  <sp><sfx>[:…]
+    #  app-стек     IMAGE_PREFIX:<tag> или точный IMAGE_PREFIX
+    [[ "$img" == "${sp}"*"/$sfx" || "$img" == "${sp}"*"/$sfx:"* || "$img" == "${sp}${sfx}:"* || "$img" == "${sp}${sfx}" ]] && ok=1
     if [[ "$TYPE" == "app" ]]; then
       prefix_env="${IMAGE_PREFIX:-lovii-frontend}"
       [[ "$stack" == *-staging ]] && prefix_env="${prefix_env}-staging"
-      [[ "$img" == "${prefix_env}"* ]] && ok=1
+      [[ "$img" == "${prefix_env}:${tag}" || "$img" == "${prefix_env}:latest" || "$img" == "${prefix_env}" ]] && ok=1
     fi
     if [[ "$ok" != 1 ]]; then
       echo "A4 ABORT: строгий allowlist: $svc=$img (ожидался ${sp}*$sfx* или ${prefix_env}:*)"
