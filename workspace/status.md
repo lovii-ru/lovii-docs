@@ -1,3 +1,18 @@
+## 2026-10-06 (ночь) — чистка истории Git + 🔴 прокси-инцидент (OTP/TG лежит)
+
+- Владелец не смог ротировать SOCKS5 сразу → git filter-repo по lovii_docs
+  (main + arena-ветка) и lovii-tech/security, force-push hub/mirror/origin.
+  Хэши изменились (5092d7d→64062cc, de69bfe→fd7a298, e0ef3c9→1689fb6);
+  маппинг в ZCODE-RESPONSE-ARENA-RECHECK-3, дополнение запушено (cd1cb8a).
+- Бэкапы старой истории С СЕКРЕТОМ: /tmp/lovii_docs-pre-rewrite.bundle,
+  /tmp/lovii-security-pre-rewrite.bundle — удалить после ротации.
+- SRV: /opt/gateway/.env (root:600, GOST_UPSTREAM), compose на ${GOST_UPSTREAM}
+  (бэкап .bak-20261006-secret), контейнер не пересоздавался.
+- 🔴 попутно найдено: upstream 83.171.233.222:30001 refused минимум с
+  05.10 00:50 UTC; через httpproxy ходят TG-поллеры staging+prod, прямого
+  доступа к api.telegram.org у SRV нет ⇒ OTP по Telegram не доставляется
+  ~сутки. Нужен новый рабочий прокси (и это же закроет ротацию секрета).
+
 ## 2026-10-06 — CI-аудит RECHECK-3: SOCKS5-секрет, A4 unified, синхронизация статусов
 
 - Вердикт арены (e0ef3c9, ветка arena/01a10c48) отработан полностью, ответ —
