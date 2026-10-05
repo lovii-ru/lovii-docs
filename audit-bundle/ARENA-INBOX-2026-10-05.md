@@ -30,7 +30,8 @@
 | R-3.4 (мок → staging-extras) | ✅ ИСПОЛНЕНО: прод-файл физически без мока, staging жив (health 200) |
 | R-3.5 (супервизор+сводка) | ✅ ИСПОЛНЕНО: restart: unless-stopped у контейнерных раннеров (watchdog не нужен) + месячная сводка деплой-логов 1-го числа |
 | R-3.1 (раннеры в контейнеры) | ✅ ИСПОЛНЕНО: 4 runner-контейнера + 4 dind (без docker.sock), полные прогоны ×4 на -c раннерах, host-раннеры offline, крон снят. Done-критерий: docker из CI видит только dind |
-| R-3.3 (continue-on-error) | ⏳ отдельная кодовая задача (PlatformOrderSettings ×9) |
+| R-3.3 (continue-on-error) | ✅ ИСПОЛНЕНО: снят ×3; 121 mixed в phpstan-baseline.neon; попутно выявлены (continue-on-error их маскировал!) и починены: отсутствие схемы lovii_admin в CI-БД, отсутствие pre-импорта core-schema, отсутствие CORE_API_URL/INTERNAL_ADMIN_SECRET в phpunit.xml (класс F-080) |
+| Релизный гейт admin | 🔒 tests/phpstan/type-coverage теперь БЛОКИРУЮТ деплой admin |
 | R-0.1 / B-4 (gateway) | ⏳ root-сессия владельца |
 | R-1.8 (REF_RE wrapper) | ⏳ root-файл; ОБОЛВАТ lovii-deploy'ем: REF_RE с запретом ведущего `-` уже в новом скрипте (regex `^[A-Za-z0-9]…`), старый gostiny-deploy остаётся для gostiny-стеков |
 
