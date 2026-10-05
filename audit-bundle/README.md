@@ -12,7 +12,7 @@ LOVII внешним моделям/агентам для независимог
 | `workflows/<repo>/ci.yml` | GitHub Actions workflows всех 4 боевых репо (core, app, b2b, admin) |
 | `infra/gostiny-deploy.sh` | Forced-command SSH deploy-wrapper на сервере (прод+staging) |
 | `infra/compose-core-prod.yml` | прод-стек ядра (app/horizon/scheduler/pollers/pgsql/redis/meili/tlsclient) |
-| `infra/compose-core-staging.yml` | staging-стек ядра (+ tbank-mock, mailpit, pgsql-testing) |
+| `infra/compose-core-staging.yml` | Тот же файл, что prod (md5 идентичны — осознанный дизайн, R-0.2): один compose на два контура, мок включается профилем через `COMPOSE_PROFILES=mock` в staging-.env. Файл `compose-core-staging-extras.yml` — staging-надстройка R-3.4 |
 | `infra/compose-gateway.yml` | единая точка входа (caddy + docker-socket-proxy + gost) |
 | `infra/compose-lovii-{app,b2b,admin}.yml` | прод-стеки остальных репо |
 | `infra/runner-*.json` | конфиги 4 self-hosted раннеров (идентификаторы, без токенов) |

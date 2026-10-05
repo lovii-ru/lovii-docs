@@ -19,7 +19,7 @@
 | §9.2 п.1 — снимок lovii-deploy | ✅ `infra/lovii-deploy.sh` = копия SRV, **sha256 92605b84… совпадает с `/home/deploy/bin/lovii-deploy`** (сверено после мерджа PR#4 — первая копия была устаревшей, синхронизирована) | манифест; сравнение sha256 SRV↔пакет |
 | §9.2 п.2 — workflows post-Wave2/3 | ✅ копии ×4: heredoc `bash -s` = **0** (было 8), `deploy lovii …` вызовы ×2 на файл, `packages: write`, GHCR push | grep по `workflows/*/ci.yml` |
 | §9.2 п.8 — crontab.txt | ✅ обновлён: backup-prod 03:47, env-parity 05:07, monthly 1-го числа; без `@reboot` | `infra/crontab.txt` |
-| §9.2 п.8 — compose prod/staging | ✅ реэкспорт с SRV; R-1.9: redis healthcheck через `REDISCLI_AUTH` в prod-файле | grep `REDISCLI_AUTH` |
+| §9.2 п.8 — compose prod/staging | 🟡 реэкспорт с SRV (честный срез): staging-файл содержит REDISCLI_AUTH-фикс; **prod-файл ещё старый** (мок и argv-пароль на месте) — git-коммиты с фиксами уйдут в прод следующим разрешённым релизом (C2). Исправлено после замечания арены в REVIEW | sha256 файлов; grep `REDISCLI_AUTH` в prod → 0 |
 | §9.2 п.8 — staging-extras | ✅ `infra/compose-core-staging-extras.yml` в пакете (R-3.4) | файл |
 | R-3.1 runners-compose | ✅ `infra/runners-compose.yml` в пакете; раннеры контейнерные ×4 **работают** (прогоны ×4 на `-c`), host-раннеры offline | файл + run ID в CLOSEOUT B10 |
 | R-0.4 манифест | ✅ регенерирован финалом + после мерджа PR#4 (37 файлов, вкл. AUDIT-ACCEPTANCE) | манифест |
@@ -86,3 +86,11 @@ recreate redis (коммит с фиксом в compose уже в staging; на 
 основная претензия приёмки — «пакет не пересобран после Волн 2/3» — устранена
 в тот же день; волна 1 принята 7/7; A1 (P0) закрыт. Остаток — внешние
 зависимости (owner) и два моих дожима из §3 этого ответа.
+
+## Errata (после ревью арены, 05.10 ночь)
+
+В таблице выше исходная строка про compose prod неверно утверждала наличие
+`REDISCLI_AUTH` в prod-файле. Исправлено: фикс живёт в git (staging-ветка),
+SRV-прод-файл обновится на следующем разрешённом прод-релизе (C2). До тех
+пор R-1.9 для production — открыт (argv с паролем виден в `docker inspect`
+живого prod-redis; рекомендуется ротация пароля redis при recreate).
