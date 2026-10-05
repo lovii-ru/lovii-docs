@@ -1,3 +1,19 @@
+## 2026-10-06 (ночь, 2) — MAX-OTP восстановлен через NO_PROXY; прод-деплой прошёл
+
+- 🔴→✅ OTP через MAX восстановлен без нового прокси: Guzzle гнал botapi.max.ru
+  через мёртвый httpproxy (HTTPS_PROXY из env_file). Добавлен
+  NO_PROXY=localhost,127.0.0.1,botapi.max.ru в /opt/lovii-core{,-staging}/.env,
+  app/horizon/scheduler пересозданы (prod+staging) — MAX доступен напрямую,
+  проверено curl из контейнера (404 от API = маршрут жив).
+- OTP через Telegram остаётся недоступен до нового upstream (api.telegram.org
+  идёт только через прокси, прямой доступ SRV отсутствует).
+- На SRV поставлена кнопка ротации: /opt/gateway/swap-upstream.sh
+  "socks5://user:pass@host:port" — меняет .env, пересоздаёт httpproxy, тестирует.
+- Попутно зафиксирован ПЕРВЫЙ УСПЕШНЫЙ ПРОД-ДЕПЛОЙ по новому пути (C2):
+  lovii-app 8da52fd 22:40, lovii-core a0eb9a4c 22:47 UTC (не моей сессией);
+  pre-migrate дамп сработал (pre-migrate-lovii-core-20261005T224732Z.dump),
+  redis healthcheck без литерала пароля (R-1.9), api/app здоровы.
+
 ## 2026-10-06 (ночь) — чистка истории Git + 🔴 прокси-инцидент (OTP/TG лежит)
 
 - Владелец не смог ротировать SOCKS5 сразу → git filter-repo по lovii_docs
