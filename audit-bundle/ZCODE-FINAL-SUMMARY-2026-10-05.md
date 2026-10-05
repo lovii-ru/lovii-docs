@@ -18,11 +18,11 @@
 | R-1.8 REF_RE | ⏳ root-файл (C3) | — |
 | R-1.9 redis argv | ✅ staging / 🟡 prod — уйдёт с recreate (C2) | live-проверка staging в RESPONSE-ACCEPTANCE §3.1 |
 | R-2.1 forced-command | ✅ staging ×4 живьём; prod — чек-лист C2 | lovii-deploy sha ae717c18 = SRV (строгий target-allowlist v3 + boundary-разделители; сверено при сборке манифеста 06.10) |
-| R-2.2 бэкап | ✅ локальный ночной дамп + off-site Яндекс.Диск (retention 14) + restore-тест; PITR/pgbackrest и ежемесячный restore на стенде — плановые улучшения | — |
+| R-2.2 бэкап | ✅ локальный ночной дамп + off-site Яндекс.Диск (retention 14) + restore-тест (attestation исполнителя: SRV/Диск аудитором не проверялись); PITR/pgbackrest и ежемесячный restore на стенде — плановые улучшения | — |
 | R-2.3 ключи | ✅ пары staging/production, restricted, environment secrets; approval — C4 | — |
 | R-2.4 pre-migrate dump | ✅ ветка ABORT проверена (B2); прод — C2 | — |
 | R-2.5 env-parity | ✅ sentinel + крон + классификация (R25-файл): 0 обязательных отсутствующих | — |
-| R-3.1 изоляция | 🟡 сети+лимиты CPU/RAM ✅; открытые: privileged dind, TLS off (внутри изолированной сети), образы без digest-пинов, нет pids-limits/дисковой квоты — перечислено как residual risks | — |
+| R-3.1 изоляция | 🟡 сети+лимиты CPU/RAM dind ✅; открытые residuals (перечень полный): privileged dind ×4, TLS off (внутри изолированной сети пары), образы без digest-пинов, нет runner-лимитов CPU/RAM/pids, нет дисковой квоты/cleanup dind-data, host bind mount daemon.json. Явная приёмка рисков или remediation — с владельцем (связано C6) | — |
 | R-3.2 GHCR+откат | ✅ pull по SHA, деплой 15 сек, откат той же командой; strict allowlist маппинга (A4 v3) + тесты T1–T5 | — |
 | R-3.3 continue-on-error | ✅ снят ×3 (lovii-admin: PHPStan, Type coverage, Tests; b2b Type coverage — advisory, вне критерия R-3.3): baseline 121; найдены и починены 3 скрытых дефекта CI (схема lovii_admin, core-schema импорт, CORE_API_URL в phpunit); PlatformOrderSettings зелёные (557 passed) | — |
 | R-3.4 мок → extras | 🟡 частично: staging-extras работает и принят, но prod-compose на SRV ещё содержит профиль mock — уйдёт с прод-релизом (C2) | — |
