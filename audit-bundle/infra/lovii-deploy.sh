@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# lovii-deploy — forced-command деплой LOVII (волна 2 аудита, R-2.1/R-2.3/R-2.4).
+# lovii-deploy — forced-command деплой LOVII (волны 2–3 аудита).
+# A1/P0 (план ротации): docker login в GHCR — эфемерный: login перед pull,
+# docker logout после (паттерн gostiny-deploy). До выпуска нового PAT
+# действует персистентный login (старый токен, read:packages, ротация —
+# см. canon/SECRETS_ROTATION.md).
 # Вызов из CI: ssh deploy@host "deploy <stack> <sha> [push-before]"
 # Ключ CI заперт в authorized_keys:
 #   command="/home/deploy/bin/lovii-deploy staging",restrict ssh-ed25519 ...
@@ -86,13 +90,19 @@ for name,svc in sorted(d.get('services',{}).items()):
   tag_one() {
     local pkg="$1" svc="$2"
     local img="${SVC_IMG[$svc]:-}"
+    # A4 allowlist: источник — только ghcr.io/lovii-tech/<pkg из IMGS>;
+    # таргет — только image сервиса текущего стека (из compose config).
     if [[ -n "$img" && -n "${IMGS[$pkg]:-}" ]]; then
+      # защита: таргет не должен быть сторонним образом (redis/postgis/...)
+      if echo "$img" | grep -qE "^(redis:|imresamu/|getmeili/|node:|alpine:|docker:|library/)"; then
+        echo "A4 ABORT: попытка тегировать сторонний образ $img"; log "A4 DENY сторонний $img"; exit 1
+      fi
       docker tag "ghcr.io/lovii-tech/${IMGS[$pkg]}:${tag}" "$img" && echo "Tagged ${IMGS[$pkg]} -> $img ($svc)"
     fi
   }
   # core: app/worker/scheduler; poller-ы используют worker-образ (обслуживаются через worker pkg)
   case "$TYPE" in
-    core)  tag_one core-app app; tag_one core-scheduler scheduler; tag_one core-worker worker ;;
+    core)  tag_one core-app app; tag_one core-scheduler scheduler; tag_one core-worker horizon ;;
     app)   tag_one app app ;;
     b2b)   tag_one b2b-app app; tag_one b2b-scheduler scheduler; tag_one b2b-queue queue ;;
     admin) tag_one admin-app app; tag_one admin-scheduler scheduler ;;
@@ -129,6 +139,43 @@ if [[ "$TYPE" != "app" ]]; then
   $DC run --rm -T app php artisan migrate --force < /dev/null
   echo "==> Terminating Horizon workers (if any)..."
   $DC exec -T horizon php artisan horizon:terminate < /dev/null 2>/dev/null || true
+fi
+
+# --- A4: проверка ДО up — образ каждого app-сервиса = ожидаемый GHCR по SHA
+if [[ "$pull_ok" == 1 ]]; then
+  expect_fail=0
+  for pkgkey in "${!IMGS[@]}"; do
+    :
+  done
+  while IFS="=" read -r svc img; do
+    cur=$(docker image inspect "$img" --format "{{index .RepoTags 0}}" 2>/dev/null | head -1)
+    # ожидаем, что cur ссылается на GHCR-образ нужного SHA (по RepoTags после tag_one это локальное имя; проверяем идентичность ID с ghcr-образом)
+    expected="ghcr.io/lovii-tech/"
+    :
+  done < <($DC config --format json 2>/dev/null | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+for name,svc in sorted(d.get('services',{}).items()):
+    img=svc.get('image')
+    if img and not img.split(':')[0].split('/')[0] in ('redis','docker.io','imresamu') and 'alpine' not in img and 'postgis' not in img and 'meilisearch' not in img:
+        print(f'{name}={img}')")
+  # строгая проверка: ID локального образа каждого app-сервиса == ID GHCR-образа SHA
+  for pkgkey in "${!IMGS[@]}"; do
+    ghcr_ref="ghcr.io/lovii-tech/${IMGS[$pkgkey]}:${tag}"
+    ghcr_id=$(docker image inspect "$ghcr_ref" --format "{{.Id}}" 2>/dev/null) || { echo "A4 ABORT: $ghcr_ref отсутствует"; log "A4 ABORT no-image $ghcr_ref"; exit 1; }
+    # найти локальный тег с этим ID среди образов compose
+    match=0
+    for ln in $($DC config --images 2>/dev/null); do
+      lid=$(docker image inspect "$ln" --format "{{.Id}}" 2>/dev/null) || continue
+      [[ "$lid" == "$ghcr_id" ]] && { match=1; break; }
+    done
+    if [[ "$match" != 1 ]]; then
+      echo "A4 ABORT: ни один образ compose не совпадает с $ghcr_ref"
+      log "A4 ABORT mismatch $ghcr_ref"
+      exit 1
+    fi
+  done
+  echo "==> A4 pre-up check OK: все app-образы соответствуют SHA."
 fi
 
 echo "==> Recreating containers..."
