@@ -1,3 +1,15 @@
+## 2026-10-05 (утро) — Волна 3: R-3.2/3.4/3.5 исполнены, R-3.1 ждёт токены владельца
+
+- R-3.2: образы в ghcr.io/lovii-tech/<repo>-<svc>:<sha>; lovii-deploy пуллит
+  по SHA (15 сек деплой, откат = тот же вызов со старым SHA). GHCR read —
+  классический PAT read:packages владельца (docker login на сервере).
+- R-3.4: tbank-mock → staging-extras (прод-файл чист, staging жив).
+- R-3.5: watchdog-крон + месячная сводка деплой-логов.
+- R-3.1: всё готово (образ ci-runner, runners-compose, изолированная сеть) —
+  жду от владельца 4 registration-токена (Settings→Actions→Runners→New runner).
+- R-3.3: отложена в кодовую очередь (PlatformOrderSettings ×9).
+- Детали: audit-bundle/EXECUTION-WAVE3-2026-10-05.md, канон CI_RUNNERS_SELFHOSTED.
+
 ## 2026-10-05 (ночь) — Волна 2 аудита CI/CD исполнена: деплой на forced-command
 
 - R-2.1: lovii-deploy (whitelist стеков + scope, pre-migrate dump, health-check),
