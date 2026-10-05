@@ -1,3 +1,19 @@
+## 2026-10-06 — CI-аудит RECHECK-3: SOCKS5-секрет, A4 unified, синхронизация статусов
+
+- Вердикт арены (e0ef3c9, ветка arena/01a10c48) отработан полностью, ответ —
+  `audit-bundle/ZCODE-RESPONSE-ARENA-RECHECK-3-2026-10-06.md`, коммит eb60036 (hub+mirror).
+- 🔴 CRITICAL: в `audit-bundle/infra/compose-gateway.yml:64` с 5092d7d лежал
+  литерал SOCKS5 upstream с userinfo. Убран из среза (`${GOST_UPSTREAM}` из
+  /opt/gateway/.env); история: 1 коммит, 1 файл, разошёлся по hub/mirror/arena-ветке.
+  **Ротация кредов — ВЛАДЕЛЕЦ, срочно** (внешний платный proxy).
+- A4: lovii-deploy больше не содержит inline-логику — source-ит
+  `infra/a4-predicate.sh` (fail-closed); predicate перенесён tests→infra;
+  тест структурный (10/10). Пакетный SHA wrapper теперь 478b9572… —
+  синк SRV (wrapper+predicate парой) при следующем деплой-касании.
+- gostiny-deploy REF_RE: ведущий `-` отвергнут (regex-тест OK).
+- Манифест перегенерирован последним шагом: 51/51 OK; INBOX/SUMMARY
+  синхронизированы (C1 «ЗАКРЫТ»-склейка, R-1.8 дубль, C4–C6 → memo,
+  R-3.1 residuals разделены на принятые/открытые).
 ## 2026-10-05 — COPYRIGHT_STANDARD: адрес аксиомы + ИНН без скобок
 
 - Решение владельца (образец его редакции):
