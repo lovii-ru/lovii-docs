@@ -13,6 +13,7 @@
 | `AUDIT-RECONCILIATION-2026-10-05.md` | сверка 18/18, R-1.7b, R-2.5 | arena |
 | `AUDIT-RESPONSE-ZCODE-R2-2026-10-05.md` | решение по R-1.7b (422), принятие R-2.5 | zcode |
 | `EXECUTION-WAVE2-2026-10-05.md` | отчёт об исполнении Волны 2 | zcode |
+| `ARENA-FOLLOWUP-ZCODE-WAVE2-2026-10-05.md` | вопросы и критерии контрольной приёмки Волны 2 | arena |
 
 ## 2. Статус исполнения (вечер 05.10)
 
@@ -20,11 +21,11 @@
 |---|---|
 | Волна 1 (R-1.1…1.9) | ✅ исполнена ×4, живые деплои проверены (R-1.8 ⏳ root) |
 | R-1.7b | ❌ неисполнима: required reviewers = платная защита, HTTP 422 (доказательство в RESPONSE §2); действует R-1.7 |
-| **R-2.1 forced-command** | ✅ **ИСПОЛНЕНА**: `/home/deploy/bin/lovii-deploy` + authorized_keys `command=,restrict` ×2 ключа; heredoc'и ×8 удалены; негативные тесты (id/чужой стек/`-ref`) → DENY; позитивные — деплои ×4 через wrapper, SHA=запушенному |
-| **R-2.3 ключи по окружениям** | ✅ отдельные пары lovii-ci-deploy-{staging,production}, scope в wrapper (staging-ключ физически не может деплоить прод и наоборот); environment secrets ×8; repo-level DEPLOY_SSH_KEY удалены ×4; **старые 4 неограниченных CI-ключа УДАЛЕНЫ из authorized_keys** (бэкап authorized_keys.bak-20261005-postwave2) |
-| **R-2.2 прод-бэкап** | 🟡 локальная часть: ночной `pg_dump -Fc` прод-БД 03:47 UTC, retention 7 (`~/backups/prod-db/`), первый дамп снят. Off-site ⏳ ждёт bucket/ключ от владельца |
-| **R-2.4 pre-migrate dump** | ✅ в lovii-deploy: на production перед миграциями, провал дампа = ABORT деплоя |
-| **R-2.5 env-parity** | ✅ `~/bin/env-parity-check.sh` + крон 05:07 UTC; первый прогон уже нашёл расхождения ключей в admin-стеках (лог `~/backups/env-parity.log`) |
+| **R-2.1 forced-command** | ✅ реализация заявлена и проверена на staging ×4 через wrapper; негативные тесты (id/чужой стек/`-ref`) → DENY, SHA совпал. Production-путь ещё не вызывался; приёмка там — на следующем разрешённом релизе |
+| **R-2.3 ключи по окружениям** | 🟡 отдельные пары lovii-ci-deploy-{staging,production}, scope в wrapper, environment secrets ×8, repo-level secrets и старые 4 CI-ключа удалены. Required reviewers заблокированы планом (422); решение по альтернативе ожидается. Ещё 4 shell-доступа (2 интерактивных, 2 turokserials) — отдельное решение владельца |
+| **R-2.2 прод-бэкап** | 🟡 локальная часть: ночной `pg_dump -Fc` прод-БД 03:47 UTC, retention 7 (`~/backups/prod-db/`), первый дамп снят. Off-site ⏳ ждёт bucket/ключ от владельца; restore-тест не заявлен |
+| **R-2.4 pre-migrate dump** | ✅ логика в lovii-deploy заявлена; факт первого production-вызова ожидает следующего разрешённого релиза |
+| **R-2.5 env-parity** | 🟡 `~/bin/env-parity-check.sh` + крон 05:07 UTC; первый прогон нашёл расхождения в admin-стеках. Baseline-классификация и отрицательный тест — на контрольной приёмке |
 | R-0.1 / B-4 (gateway) | ⏳ root-сессия владельца |
 | R-1.8 (REF_RE wrapper) | ⏳ root-файл; ОБОЛВАТ lovii-deploy'ем: REF_RE с запретом ведущего `-` уже в новом скрипте (regex `^[A-Za-z0-9]…`), старый gostiny-deploy остаётся для gostiny-стеков |
 | Волна 3 (R-3.1…3.5) | ⏳ следующий «го» |
