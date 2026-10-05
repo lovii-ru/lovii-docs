@@ -10,7 +10,8 @@ REGISTRY="ghcr.io"
 REGISTRY_USER="gostiny-ci"
 LOG="/var/log/gostiny-deploy.log"
 NAME_RE='^[a-z][a-z0-9-]{1,30}$'
-REF_RE='^[A-Za-z0-9._/-]+$'
+# Первый символ — не '-': ref не может быть принят за опцию git (ревью арены R-1.8)
+REF_RE='^[A-Za-z0-9._/][A-Za-z0-9._/-]*$'
 WHO="$(id -un)"
 
 log()  { echo "$(date -u +%FT%TZ) [$WHO] $*" >> "$LOG" 2>/dev/null || true; }

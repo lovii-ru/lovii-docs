@@ -61,4 +61,8 @@ services:
     container_name: gateway-httpproxy
     restart: unless-stopped
     network_mode: host
-    command: ["-L", "http://172.17.0.1:3128", "-F", "socks5://GOST-UPSTREAM-REDACTED"]
+    command: ["-L", "http://172.17.0.1:3128", "-F", "${GOST_UPSTREAM}"]
+    # GOST_UPSTREAM (socks5://user:pass@host:port) — секрет, задаётся в
+    # /opt/gateway/.env на хосте (root:600), НЕ в этом файле и НЕ в git.
+    # ⚠️ 06.10: в git-истории (5092d7d, до этого коммита) literal уже
+    # публиковался — учётные данные считать раскрытыми, ротировать.

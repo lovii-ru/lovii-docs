@@ -10,6 +10,13 @@
 #   command="/home/deploy/bin/lovii-deploy staging",restrict ssh-ed25519 ...
 #   command="/home/deploy/bin/lovii-deploy production",restrict ssh-ed25519 ...
 set -euo pipefail
+# A4-логика allowlist — ЕДИНЫЙ источник с тестом (tests/a4-predicate.sh).
+# Predicate лежит рядом с wrapper'ом на SRV (/home/deploy/bin/a4-predicate.sh);
+# при отсутствии — fail-closed (деплой запрещён, а не «пропускаем проверку»).
+PREDICATE="$(dirname "${BASH_SOURCE[0]}")/a4-predicate.sh"
+[[ -f "$PREDICATE" ]] || { echo "lovii-deploy: a4-predicate.sh не найден рядом с wrapper (fail-closed)" >&2; exit 2; }
+# shellcheck disable=SC1090
+source "$PREDICATE"
 LOG="$HOME/lovii-deploy.log"
 SCOPE="${1:-}"
 read -r action stack sha push_before _ <<< "${SSH_ORIGINAL_COMMAND:-}"
@@ -147,27 +154,12 @@ for pkgkey in "${!PKG[@]}"; do
     # <stack>/<суффикс пакета>[:tag] — чужой образ (nginx:latest, произвольный
     # registry) не будет перетегирован
     pkg_name="${PKG[$pkgkey]}"
-    # хвост пакета: lovii-core-worker → worker; базовый lovii-app → имя сервиса
-    sfx=""
-    if [[ "$pkg_name" == "lovii-app" ]]; then sfx="$svc"; else sfx="${pkg_name#lovii-*-}"; fi
-
-    [[ "$stack" == *-staging ]] && sp="${stack/-staging/}-staging/" || sp="$stack/"
-    # допустимые формы (слэш префикса обязателен — блокирует <stack>evil):
+    # strict target allowlist — единая логика из a4-predicate.sh (тот же
+    # источник, что у tests/test-wrapper-guard.bash). Допустимые формы:
     #   <sp><что-угодно>/<sfx>[:tag]   <sp><sfx>[:tag]
-    # app-стек дополнительно: IMAGE_PREFIX[:tag] (задаётся в .env контура)
-    ok=0
-    # Разделители обязательны (ревью арены: boundary bypass):
-    #  path-форма   <sp>…/<sfx>[:…]
-    #  short-форма  <sp><sfx>[:…]
-    #  app-стек     IMAGE_PREFIX:<tag> или точный IMAGE_PREFIX
-    [[ "$img" == "${sp}"*"/$sfx" || "$img" == "${sp}"*"/$sfx:"* || "$img" == "${sp}${sfx}:"* || "$img" == "${sp}${sfx}" ]] && ok=1
-    if [[ "$TYPE" == "app" ]]; then
-      prefix_env="${IMAGE_PREFIX:-lovii-frontend}"
-      [[ "$stack" == *-staging ]] && prefix_env="${prefix_env}-staging"
-      [[ "$img" == "${prefix_env}:${tag}" || "$img" == "${prefix_env}:latest" || "$img" == "${prefix_env}" ]] && ok=1
-    fi
-    if [[ "$ok" != 1 ]]; then
-      echo "A4 ABORT: строгий allowlist: $svc=$img (ожидался ${sp}*$sfx* или ${prefix_env}:*)"
+    #   app-стек: IMAGE_PREFIX[:tag|:latest] (задаётся в .env контура)
+    if ! a4_target_allowed "$TYPE" "$stack" "$svc" "$img" "$pkg_name" "$tag" "${IMAGE_PREFIX:-lovii-frontend}"; then
+      echo "A4 ABORT: строгий allowlist: $svc=$img"
       log "A4 ABORT allowlist $svc=$img"
       exit 1
     fi
