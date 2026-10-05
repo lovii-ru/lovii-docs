@@ -200,3 +200,21 @@ required reviewers на прод), R-3.x (раннеры в контейнеры
 делаются в репо (ветка → гейт → пуш), НИКОГДА руками на сервере; серверный
 compose (`docker-compose.prod.yml`) — тоже из репо. Секреты — только
 GitHub Secrets; новые actions — только с SHA-пином.
+
+---
+
+## Волна 3 (05.10, ночь/утро) — статус
+
+| R | Статус |
+|---|---|
+| R-3.2 артефакт+откат | ✅ checks пушат образы `ghcr.io/lovii-tech/<repo>-<svc>:<sha>`; lovii-deploy пуллит по SHA и тегирует в локальные имена compose; pull-деплой = 15 сек; откат = деплой предыдущего SHA. Fallback сборки сохранён. GHCR read — PAT `read:packages` владельца (docker login на сервере) |
+| R-3.4 мок | ✅ tbank-mock → `docker-compose.staging-extras.yml`; lovii-deploy для core-staging включает оба файла; прод-файл чист |
+| R-3.5 супервизор | 🟡 watchdog-крон (5 мин) + месячная сводка; systemd — в root-окно |
+| R-3.1 изоляция | ⏳ образ ci-runner + runners-compose (4×runner + 4×dind, сеть lovii-ci-isolated) готовы; жду 4 registration-токена (владелец, UI); после переключения — старые host-раннеры стоп, крон-@reboot убрать, watchdog не нужен (restart: always) |
+| R-3.3 continue-on-error | ⏳ отдельная кодовая задача (PlatformOrderSettings ×9) |
+
+Грабли волны: `--target` сверять с реальными `FROM … AS` стейджами Dockerfile;
+GHCR-пулл приватных пакетов требует логина даже после первого успешного
+(job-токен перепушивает пакет — login state должен быть свежим); docker
+демон падает (rpc EOF) при 4 параллельных build — reran по очереди;
+AppLock-тест app — vi-флейк, уходит при реране.
