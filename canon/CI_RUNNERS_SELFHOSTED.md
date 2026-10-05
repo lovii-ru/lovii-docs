@@ -210,7 +210,11 @@ GitHub Secrets; новые actions — только с SHA-пином.
 | R-3.2 артефакт+откат | ✅ checks пушат образы `ghcr.io/lovii-tech/<repo>-<svc>:<sha>`; lovii-deploy пуллит по SHA и тегирует в локальные имена compose; pull-деплой = 15 сек; откат = деплой предыдущего SHA. Fallback сборки сохранён. GHCR read — PAT `read:packages` владельца (docker login на сервере) |
 | R-3.4 мок | ✅ tbank-mock → `docker-compose.staging-extras.yml`; lovii-deploy для core-staging включает оба файла; прод-файл чист |
 | R-3.5 супервизор | 🟡 watchdog-крон (5 мин) + месячная сводка; systemd — в root-окно |
-| R-3.1 изоляция | ⏳ образ ci-runner + runners-compose (4×runner + 4×dind, сеть lovii-ci-isolated) готовы; жду 4 registration-токена (владелец, UI); после переключения — старые host-раннеры стоп, крон-@reboot убрать, watchdog не нужен (restart: always) |
+| R-3.1 изоляция | ✅ ИСПОЛНЕНО: 4 runner-контейнера (gostiny-runner-*, actions-runner 2.337) + 4 dind, сеть lovii-ci-isolated; host-раннеры offline, @reboot снят; полные прогоны ×4 на -c |
+| R-3.2 артефакт+откат | ✅ образы ghcr.io/<repo>-<svc>:<sha>, lovii-deploy пуллит по SHA и тегирует ПО ИМЕНИ СЕРВИСА; деплой 15 сек; A4-предохранители (allowlist, DENY сторонних, ABORT-проверка ID до up) |
+| R-3.4 мок | ✅ staging-extras; прод-compose чист (проверено config --services) |
+| R-3.5 супервизор | ✅ restart: unless-stopped; месячная сводка 1-го числа; host-watchdog удалён |
+| R-3.3 continue-on-error | ✅ снят ×3; baseline 121; найдены и починены 3 скрытых CI-дефекта (схема lovii_admin, core-schema импорт, CORE_API_URL в phpunit) |
 | R-3.3 continue-on-error | ⏳ отдельная кодовая задача (PlatformOrderSettings ×9) |
 
 Грабли волны: `--target` сверять с реальными `FROM … AS` стейджами Dockerfile;
