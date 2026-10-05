@@ -92,3 +92,27 @@ GitHub Actions API — остаются attestations/границами дост
 - Синхронизация wrapper+predicate на SRV — следующее деплой-касание.
 - Полный DR-restore на стенде — план; runner-лимиты/квоты — решение
   владельца или remediation.
+
+## Дополнение 06.10 (позднее): история Git переписана, секрет вычищен
+
+Владелец не смог ротировать upstream немедленно → выполнен `git filter-repo`
+(замена литерала на `socks5://GOST-UPSTREAM-REDACTED`) по всем веткам
+lovii_docs (main + arena/01a10c48) и lovii-tech/security, force-push в
+hub/mirror/origin 06.10. **Хэши коммитов изменились**, маппинг для сверки:
+
+| старый | новый |
+|---|---|
+| 5092d7d (ввод литерала) | 64062cc |
+| de69bfe (срез ревью) | fd7a298 |
+| eb60036 (этот response, 1-я редакция) | c44bf32 → f9ac5e3 (статус-док) |
+| e0ef3c9 (верделs арены) | 1689fb6 |
+
+Бэкап старой истории (СОДЕРЖИТ секрет, только локально): /tmp/lovii_docs-pre-rewrite.bundle,
+/tmp/lovii-security-pre-rewrite.bundle — удалить после ротации.
+На сервере: /opt/gateway/.env (root:600) с GOST_UPSTREAM создан, compose
+переведён на `${GOST_UPSTREAM}` (бэкап .bak-20261006-secret), контейнер не
+пересоздавался (конфиг идентичен). ⚠️ Обнаружено попутно: upstream
+83.171.233.222:30001 отдаёт connection refused минимум с 05.10 00:50 UTC —
+через него идут TG-поллеры (вкл. OTP) staging и prod, прямой доступ SRV к
+api.telegram.org отсутствует ⇒ доставка OTP по Telegram ЛЕЖИТ ~сутки.
+Ротация/замена прокси — срочно, не только ради секрета.
