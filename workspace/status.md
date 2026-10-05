@@ -1,3 +1,28 @@
+## 2026-10-05 — Карантин SZ-025 снят полностью (3 части, всё в проде) + WebAuthn был сломан насквозь
+
+- Снятие карантина вскрыло: **passkey на живом стенде не работали бы вообще** —
+  `CborDecoder`/`AuthenticatorData`/`CoseKey` резали бинарные данные
+  `mb_substr`, rpIdHash сверялся с hex вместо сырых байтов, подпись считалась
+  по base64-строке и hex-хэшу. Всё исправлено по WebAuthn spec (PR #8).
+- Часть 2: PartnerSecurityTest (membership, строгий Eloquent) — PR #9.
+- Часть 3: `nav.security` в en, `b2b:sessions:cleanup` numeric-опция,
+  P-256 паддинг координат (CI-флейк) — PR #10.
+- Гейт 576 passed; pint `mb_str_functions` конфликтовал с байтовым кодом —
+  WebAuthn-каталог в `notPath`. Карантинной группы в tests/ больше нет.
+- Детали: `lovii-b2b/docs/sessions/010-…`. В ворк-дереве b2b лежит чужая
+  незакоммиченная правка `.github/workflows/ci.yml` — не моя, не трогал.
+
+## 2026-10-05 — Прод-хотфиксы b2b: 500 на «Безопасности» + 401 internal secret — В ПРОДЕ
+
+- 500 на `/panel/*/security`: blade звал `getDevices()/getPasskeys()/getEvents()`
+  (Livewire 2), в Livewire 3 это `#[Computed]`-свойства. Фикс 92ca99d
+  (fix/security-page-computed → PR #7 → master), гейт 546 passed, CI 🟢.
+  Причина провоза: сьют SZ-025 в карантине — страница без тестов.
+- 401 «Invalid internal secret» (очередь b2b→core, пуш-события статусов
+  заказов): в `/opt/lovii-b2b/.env` не было `INTERNAL_ADMIN_SECRET`.
+  Добавлен (= core), контейнеры пересозданы, джоба проверена живьём (DONE).
+- Детали: `lovii-b2b/docs/sessions/010-…`. Хвост: раскарантинить sz025.
+
 ## 2026-10-05 — Стандарт копирайт-шапок: ресёрч RES-015 + COPYRIGHT_STANDARD §5 (на приёмке владельца)
 
 - Запрос: шапка+подвал копирайта в каждом файле + «шифр» для точного
