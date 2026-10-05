@@ -143,6 +143,30 @@ for pkgkey in "${!PKG[@]}"; do
     if [[ -z "$img" ]]; then
       echo "A4 ABORT: сервис $svc из таблицы отсутствует в compose"; log "A4 ABORT no-svc $svc"; exit 1
     fi
+    # strict target allowlist (строка image, ДО docker tag): только
+    # <stack>/<суффикс пакета>[:tag] — чужой образ (nginx:latest, произвольный
+    # registry) не будет перетегирован
+    pkg_name="${PKG[$pkgkey]}"
+    # хвост пакета: lovii-core-worker → worker; базовый lovii-app → имя сервиса
+    sfx=""
+    if [[ "$pkg_name" == "lovii-app" ]]; then sfx="$svc"; else sfx="${pkg_name#lovii-*-}"; fi
+
+    [[ "$stack" == *-staging ]] && sp="${stack/-staging/}-staging/" || sp="$stack/"
+    # допустимые формы (слэш префикса обязателен — блокирует <stack>evil):
+    #   <sp><что-угодно>/<sfx>[:tag]   <sp><sfx>[:tag]
+    # app-стек дополнительно: IMAGE_PREFIX[:tag] (задаётся в .env контура)
+    ok=0
+    [[ "$img" == "${sp}"*"/$sfx" || "$img" == "${sp}"*"/$sfx:"* || "$img" == "${sp}${sfx}"* ]] && ok=1
+    if [[ "$TYPE" == "app" ]]; then
+      prefix_env="${IMAGE_PREFIX:-lovii-frontend}"
+      [[ "$stack" == *-staging ]] && prefix_env="${prefix_env}-staging"
+      [[ "$img" == "${prefix_env}"* ]] && ok=1
+    fi
+    if [[ "$ok" != 1 ]]; then
+      echo "A4 ABORT: строгий allowlist: $svc=$img (ожидался ${sp}*$sfx* или ${prefix_env}:*)"
+      log "A4 ABORT allowlist $svc=$img"
+      exit 1
+    fi
     case "$img" in redis:*|imresamu/*|getmeili/*|node:*|alpine:*|docker:*|postgres:*|mysql:*|library/*|nginx:*|evil-*)
       echo "A4 ABORT: сторонний таргет $img для $svc"; log "A4 DENY сторонний $img"; exit 1;;
     esac

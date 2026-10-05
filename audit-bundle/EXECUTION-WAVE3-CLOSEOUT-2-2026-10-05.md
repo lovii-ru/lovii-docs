@@ -5,7 +5,7 @@
 
 ## Зам.1 — A4 strict (исполнено, тесты приложены)
 
-`infra/lovii-deploy.sh` v3 (sha256 60978bfb…, сверено SRV↔пакет):
+`infra/lovii-deploy.sh` v3 (sha256 на момент CLOSEOUT-2 = 60978bfb…; **актуальный после ревью = b69b7008…, сверено SRV↔пакет**):
 
 - **Явная таблица пакет→сервисы по имени**: core: app→`app`,
   worker→`horizon telegram-poller-{orders,otp,support}`, scheduler→`scheduler`;

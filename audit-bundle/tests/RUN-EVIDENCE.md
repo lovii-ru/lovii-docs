@@ -28,3 +28,8 @@ runner-core → dind-core:  REACHABLE (свой dind)
 TCP dind-app:2376 → CLOSED; docker --host tcp://dind-app:2376 ps → lookup fail
 ```
 Сети: lovii-ci-{core,app,b2b,admin}, пары runner↔свой dind; прод-сети недостижимы.
+
+---
+**Аттестация:** run ID сняты исполнителем (zcode) через `gh api` под аккаунтом
+bestdeejay-design; из среды аудитора приватные lovii-tech репо дают 404 — это
+граница доступа, не доказательство отсутствия прогонов.
