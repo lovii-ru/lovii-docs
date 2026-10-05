@@ -31,7 +31,7 @@ case "$stack" in
   *) deny "unknown stack: $stack" ;;
 esac
 
-[[ -z "$sha" || "$sha" =~ ^[A-Za-z0-9][A-Za-z0-9._/-]*$ ]] || deny "invalid sha: $sha"
+[[ -n "$sha" && "$sha" =~ ^[0-9a-f]{7,40}$ ]] || deny "требуется commit SHA (7–40 hex): $sha"
 [[ -z "$push_before" || "$push_before" =~ ^[0-9a-f]{40}$ ]] || deny "invalid push-before: $push_before"
 
 TYPE="${stack%-staging}"; TYPE="${TYPE#lovii-}"
@@ -118,6 +118,9 @@ if [[ "$pull_ok" != 1 ]]; then
   if [[ "$build" == 1 ]]; then
     if [[ "$TYPE" == "app" ]]; then export APP_VERSION="${BRANCH}·$(git rev-parse --short HEAD)"; fi
     $DC build --pull < /dev/null
+    # A4 fallback-режим: сверка ниже использует ghcr_ref; в fallback он
+    # указывает на локальное image-имя compose (build тегирует в него),
+    # поэтому сверка ID продолжает работать и в fallback.
   fi
 fi
 
@@ -126,7 +129,12 @@ declare -A TAGGED_ID
 missing=0
 for pkgkey in "${!PKG[@]}"; do
   ghcr_ref="ghcr.io/lovii-tech/${PKG[$pkgkey]}:${tag}"
-  [[ "$pull_ok" != 1 ]] && ghcr_ref="${PKG[$pkgkey]}:${tag}"  # fallback: локальный билд-тег
+  if [[ "$pull_ok" != 1 ]]; then
+    # fallback: образы собраны compose локально — сверяем ID с образом
+    # ПЕРВОГО сервиса этого пакета (например core: worker-пакет → horizon)
+    first_svc=$(echo ${SVC[$pkgkey]} | awk "{print \$1}")
+    ghcr_ref="${SVC_IMG[$first_svc]:-}"
+  fi
   ghcr_id=$(docker image inspect "$ghcr_ref" --format "{{.Id}}" 2>/dev/null) || {
     echo "A4 ABORT: образ $ghcr_ref недоступен локально"; log "A4 ABORT no-image $ghcr_ref"; exit 1; }
   TAGGED_ID[$pkgkey]="$ghcr_id"
@@ -135,9 +143,20 @@ for pkgkey in "${!PKG[@]}"; do
     if [[ -z "$img" ]]; then
       echo "A4 ABORT: сервис $svc из таблицы отсутствует в compose"; log "A4 ABORT no-svc $svc"; exit 1
     fi
-    case "$img" in redis:*|imresamu/*|getmeili/*|node:*|alpine:*|docker:*|postgres:*|mysql:*|library/*)
+    case "$img" in redis:*|imresamu/*|getmeili/*|node:*|alpine:*|docker:*|postgres:*|mysql:*|library/*|nginx:*|evil-*)
       echo "A4 ABORT: сторонний таргет $img для $svc"; log "A4 DENY сторонний $img"; exit 1;;
     esac
+    # A4 strict (ZCODE-REVIEW-CLOSEOUT-2): локальный образ сервиса обязан
+    # принадлежать пакету: суффикс образа = суффикс пакета (core-worker → /worker;
+    # базовый lovii-app → /web). app=nginx:latest больше не пройдёт.
+    pkg_name="${PKG[$pkgkey]}"
+    if [[ "$pkg_name" == "lovii-app" ]]; then allowed_suffix="/$svc"; else allowed_suffix="/${pkg_name#lovii-*-}"; fi
+    if [[ "$stack" == *-staging ]]; then sp="${stack/-staging/}-staging/"; else sp="$stack/"; fi
+    if [[ "$img" != "${sp%/}"* || "$img" != *"$allowed_suffix" ]]; then
+      echo "A4 ABORT: строгий allowlist: $svc=$img (ожидался ${sp%/}*$allowed_suffix)"
+      log "A4 ABORT allowlist $svc=$img"
+      exit 1
+    fi
     docker tag "$ghcr_ref" "$img" && echo "Tagged ${PKG[$pkgkey]} -> $img ($svc)"
   done
 done

@@ -16,3 +16,15 @@ lovii-admin| 37311758968 | deploy-staging → gostiny-ci-admin-c | success | 612
 --jq '.jobs[] | "\(.name) runner=\(.runner_name) \(.conclusion)"'`
 (нужен доступ к приватным репо lovii-tech; из песочницы аудитора — 404,
 что подтверждает границу доступа, отмеченную в ACCEPTANCE §1).
+
+## Negative test: изоляция сетей (Зам.5 ревью, SRV 05.10)
+
+Из `gostiny-runner-core` (тот же netns, что у job):
+```
+runner-core → dind-app:   NXDOMAIN
+runner-core → dind-b2b:   NXDOMAIN
+runner-core → dind-admin: NXDOMAIN
+runner-core → dind-core:  REACHABLE (свой dind)
+TCP dind-app:2376 → CLOSED; docker --host tcp://dind-app:2376 ps → lookup fail
+```
+Сети: lovii-ci-{core,app,b2b,admin}, пары runner↔свой dind; прод-сети недостижимы.

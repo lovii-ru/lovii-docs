@@ -16,7 +16,7 @@
 
 | Замечание приёмки | Статус в main | Доказательство |
 |---|---|---|
-| §9.2 п.1 — снимок lovii-deploy | ✅ `infra/lovii-deploy.sh` = копия SRV, **sha256 92605b84… совпадает с `/home/deploy/bin/lovii-deploy`** (сверено после мерджа PR#4 — первая копия была устаревшей, синхронизирована) | манифест; сравнение sha256 SRV↔пакет |
+| §9.2 п.1 — снимок lovii-deploy | ✅ ИСТОРИЧЕСКАЯ запись (срез на момент ACCEPTANCE). Актуально: v3+strict, sha **60978bfb…** = SRV (см. CLOSEOUT-2 и манифест). 92605b84 был срезом между Волнами 2 и 3 | манифест (финал) |
 | §9.2 п.2 — workflows post-Wave2/3 | ✅ копии ×4: heredoc `bash -s` = **0** (было 8), `deploy lovii …` вызовы ×2 на файл, `packages: write`, GHCR push | grep по `workflows/*/ci.yml` |
 | §9.2 п.8 — crontab.txt | ✅ обновлён: backup-prod 03:47, env-parity 05:07, monthly 1-го числа; без `@reboot` | `infra/crontab.txt` |
 | §9.2 п.8 — compose prod/staging | 🟡 реэкспорт с SRV (честный срез): staging-файл содержит REDISCLI_AUTH-фикс; **prod-файл ещё старый** (мок и argv-пароль на месте) — git-коммиты с фиксами уйдут в прод следующим разрешённым релизом (C2). Исправлено после замечания арены в REVIEW | sha256 файлов; grep `REDISCLI_AUTH` в prod → 0 |

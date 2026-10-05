@@ -222,3 +222,19 @@ GHCR-пулл приватных пакетов требует логина да
 (job-токен перепушивает пакет — login state должен быть свежим); docker
 демон падает (rpc EOF) при 4 параллельных build — reran по очереди;
 AppLock-тест app — vi-флейк, уходит при реране.
+
+### R-1.3 (05.10 ночь, дожим по ревью арены)
+
+Workflow-level `cancel-in-progress: true` отменял ЦЕЛИКОМ предыдущий run
+включая активный deploy. Разведено: workflow-level concurrency УДАЛЁН;
+checks-job имеет свою группу `checks-<ref>` (cancel: true — старые проверки
+отменяются), deploy-job'ы — `deploy-<ref>` (cancel: false). Новый пуш
+отменяет только проверки, деплой доживает. Проверено живыми прогонами ×4.
+
+### App unit-тесты стабилизация (05.10)
+
+auth-guard/ProfileModule таймауты на контейнерном раннере: CI-контейнер без
+.env → axios baseURL undefined → сетевые запросы HomeModule/PromoFeed висят.
+Фикс: `testTimeout/hookTimeout 15s` + fetch-мок в `src/test-setup.ts`
+(активен только при undefined VITE_BACKEND_URL). Локально с .env поведение
+не изменилось.
