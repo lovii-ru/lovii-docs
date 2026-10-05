@@ -1,3 +1,22 @@
+## 2026-10-05 — Волна 1 аудита CI/CD исполнена во всех 4 репо (zcode, «го» владельца)
+
+- Внешний аудит арены (audit-bundle/, ветка arena/01a10967) проверен живьём,
+  17/18 находок принято; вердикт — `audit-bundle/AUDIT-VERDICT-ZCODE-2026-10-05.md`.
+- R-1.1..1.7 в ci.yml ×4: shred deploy_key, permissions: contents:read,
+  deploy-concurrency, деплой проверенного DEPLOY_SHA, known_hosts из vars
+  (DEPLOY_HOST_KEY задана ×4), SHA-пины actions, PR → ubuntu-latest.
+  R-1.9: redis healthcheck без пароля в argv (core compose).
+  Проверено живым деплоем ×4: HEAD = запушенный SHA, deploy_key со диска стёрт.
+- Гейты: core unit ✅, b2b full ✅, app unit/type/build ✅; admin — локальный
+  PHPStan красный (121, предсуществующий долг, к правкам отношения не имеет;
+  снятие continue-on-error = R-3.3).
+- Канон: `canon/CI_RUNNERS_SELFHOSTED.md` раздел «Волна 1»; RULES lovii-tech/security
+  +п.18–23; AGENTS.md п.4 дополнен. Хвосты: R-1.8 (root-файл wrapper),
+  R-2.1 forced-command, R-2.2 прод-бэкап off-site (P0), R-2.3 ключи по окружениям,
+  R-3.x (раннеры в контейнеры, GHCR).
+- Уточнение к записи ниже: «чужая незакоммиченная правка ci.yml» в b2b была МОЯ
+  (волна 1), уже закоммичена и запушена (5bd029c).
+
 ## 2026-10-05 — Карантин SZ-025 снят полностью (3 части, всё в проде) + WebAuthn был сломан насквозь
 
 - Снятие карантина вскрыло: **passkey на живом стенде не работали бы вообще** —
