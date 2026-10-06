@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOVII · пакет T-014 / T-015 / T-016 — итог (2026-09-22)</title>
+<style>
+  :root{
+    --bg:#f7f6f3; --panel:#fbfaf8; --ink:#15171a; --ink-soft:#4a4f57; --ink-faint:#7a808a;
+    --rule:rgba(20,22,26,.14); --rule-soft:rgba(20,22,26,.08);
+    --accent:#0f6f63; --accent-soft:rgba(15,111,99,.10);
+    --ok:#1c6b3f; --warn:#8a5410; --block:#9a2b1e;
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:"Avenir Next","Segoe UI","Helvetica Neue",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:56px 40px 96px}
+  .measure{max-width:74ch}
+  header.doc{border-bottom:1px solid var(--rule);padding-bottom:34px;margin-bottom:44px}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 16px}
+  h1{font-size:44px;line-height:1.08;letter-spacing:-.022em;font-weight:600;margin:0 0 14px;max-width:27ch}
+  .lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:0 0 26px;max-width:62ch}
+  .metarow{display:flex;flex-wrap:wrap;gap:10px 30px;font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+  .metarow b{color:var(--ink-soft);font-weight:500}
+  h2{font-size:15px;font-family:var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin:56px 0 18px;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+  h3{font-size:20px;letter-spacing:-.01em;font-weight:600;margin:30px 0 10px}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin:0 0 7px}
+  code{font-family:var(--mono);font-size:.855em;background:var(--accent-soft);padding:1px 5px;border-radius:3px;color:#0c4f47}
+  .path{font-family:var(--mono);font-size:.84em;color:var(--ink-soft)}
+  table{border-collapse:collapse;width:100%;margin:18px 0 22px;font-size:14.5px}
+  th,td{text-align:left;vertical-align:top;padding:10px 14px 10px 0;border-bottom:1px solid var(--rule-soft)}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);border-bottom:1px solid var(--rule)}
+  td.k{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);white-space:nowrap}
+  .chip{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--rule);border-radius:3px;color:var(--ink-soft);white-space:nowrap}
+  .chip.ok{color:var(--ok);border-color:rgba(28,107,63,.4)}
+  .chip.warn{color:var(--warn);border-color:rgba(138,84,16,.4)}
+  .chip.block{color:var(--block);border-color:rgba(154,43,30,.4)}
+  pre{border:1px solid var(--rule);background:var(--panel);padding:15px 18px;overflow-x:auto;font-family:var(--mono);font-size:12.3px;line-height:1.55;margin:16px 0 22px;color:#23262b}
+  .callout{border:1px solid var(--rule);border-left:3px solid var(--accent);background:var(--panel);padding:18px 22px;margin:22px 0}
+  .callout.warn{border-left-color:var(--warn)}
+  .callout.block{border-left-color:var(--block)}
+  .callout h4{margin:0 0 8px;font-size:16px}
+  footer.doc{margin-top:70px;padding-top:24px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);line-height:1.7}
+  @media (max-width:720px){.wrap{padding:34px 20px 70px}h1{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <p class="eyebrow">LOVII · волна «Деньги» · блок A · сценарии 9–16</p>
+  <h1>Пакет T-014 / T-015 / T-016 — итог</h1>
+  <p class="lede">Все три карточки реализованы, локально проверены, запушены и задеплоены на staging; отчёты исполнителя внесены в канон. Осталось три живых прогона и два семантических вопроса — они требуют участия владельца и перечислены отдельно.</p>
+  <div class="metarow">
+    <span><b>Дата</b> 2026-09-22</span>
+    <span><b>Workspace</b> /Users/best/LOVII</span>
+    <span><b>Репозитории</b> lovii-app · lovii-core · lovii_docs</span>
+    <span><b>Исполнитель</b> AutoClaw</span>
+  </div>
+</header>
+
+<section>
+<h2>Кратко</h2>
+<ul>
+  <li><span class="chip ok">сделано</span> <b>T-014 п.1</b> — честное копирование ссылки-приглашения + клипборд-фолбэк, включая два дубликата (<span class="path">AmbassadorReps.vue</span>, <span class="path">MspPayment.vue</span>). App: <code>454d957</code>, <code>38dece0</code>; CI и деплой 🟢.</li>
+  <li><span class="chip ok">сделано</span> <b>T-015</b> — маска <code>+7 000…</code> перенаправляет код владельцу; резолвер до гейтов, флаг default <code>false</code>, прод-запрет, лог. Core: <code>dad7f84</code>.</li>
+  <li><span class="chip ok">сделано</span> <b>T-016</b> — команда <code>subscription:reset</code>: сброс штатными переходами + <code>forceFill</code> + перевыпуск промокода, прод-гейт. Core: <code>27f9b54</code>. CI и деплой 🟢.</li>
+  <li><span class="chip ok">сделано</span> Отчёты исполнителя внесены в три карточки канона и запушены: <code>bestdeejay-design/lovii_docs</code> @ <code>7166ce2</code>.</li>
+  <li><span class="chip warn">осталось</span> Живые staging-прогоны (T-015 с реальной доставкой, T-016 «сброс → активация», T-014 п.2 кэшбэк) — требуют владельца (см. ниже).</li>
+  <li><span class="chip block">инцидент</span> Один тестовый прогон ушёл в локальную dev-БД core из-за закэшированного конфига и обнулил её (не staging/prod). Восстановление возможно; ждёт решения владельца.</li>
+</ul>
+</section>
+
+<section>
+<h2>Что сделано и где</h2>
+<table>
+  <thead><tr><th>Задача</th><th>Репозиторий</th><th>Коммит</th><th>Локальные гейты</th><th>CI</th><th>Деплой</th></tr></thead>
+  <tbody>
+    <tr><td>T-014 п.1</td><td class="k">lovii-app</td><td class="k">454d957</td><td>lint 0 · tsc 0 · unit 884</td><td><span class="chip ok">run 35677643809 🟢</span></td><td><span class="chip ok">🟢</span></td></tr>
+    <tr><td>T-014 п.1 хвост</td><td class="k">lovii-app</td><td class="k">38dece0</td><td>lint 0 · tsc 0 · unit 890 · build 0</td><td><span class="chip ok">run 35679345824 🟢</span></td><td><span class="chip ok">🟢</span></td></tr>
+    <tr><td>T-015</td><td class="k">lovii-core</td><td class="k">dad7f84</td><td>pint 979 PASS · rector OK · phpstan 0 · pest 1449</td><td><span class="chip ok">run 35680798035 🟢</span></td><td><span class="chip ok">🟢</span></td></tr>
+    <tr><td>T-016</td><td class="k">lovii-core</td><td class="k">27f9b54</td><td>pint · rector · phpstan · pest 1449</td><td><span class="chip ok">тот же run 🟢</span></td><td><span class="chip ok">🟢</span></td></tr>
+    <tr><td>Отчёты в карточках</td><td class="k">lovii_docs</td><td class="k">7166ce2</td><td>task_guard 🟢 · doc-canon-check 🟢 · fact-guard 🟢</td><td>—</td><td>канон main</td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <h4>Проверено на стенде (read-only)</h4>
+  <p class="measure">Стенд: <code>/opt/lovii-core-staging</code> = <code>27f9b54</code>, <code>/opt/lovii-app-staging</code> = <code>38dece0</code>; команда <code>subscription:reset</code> зарегистрирована.</p>
+  <pre>T-015 гейт (флаг по умолчанию выключен):
+POST /api/v1/auth/send-code  {"phone":"+70001234567","channel":"sms"}
+→ HTTP 422  {"code":"otp_test_phone_disabled","message":"Тестовый номер +7 000… сейчас недоступен: доставка тестовых кодов выключена."}
+
+Обычный номер не затронут: +79990000099 / max → HTTP 200 (max_link_required)
+Активная loyalty_rules = 1 из 1 (предусловие кэшбэк-прогона)</pre>
+</div>
+</section>
+
+<section>
+<h2>Выборы реализации</h2>
+<h3>T-014 — clipboard</h3>
+<p class="measure">Отдельный helper <span class="path">src/package/global-helpers/clipboard.ts</span>: <code>Clipboard API → legacy textarea+execCommand</code>, возвращает <code>boolean</code>, никогда не бросает. При неудаче — честный тост, ссылка/код остаются читаемым выделяемым текстом. <span class="path">referral.ts</span> не тронут: его «тихие return» — корректная семантика чистых функций, уже выведенная в UI.</p>
+<h3>T-015 — тестовая OTP-маска</h3>
+<p class="measure">Вариант (б): резолвер <span class="path">OtpDeliveryTargetResolver</span> вызывается в <code>SendOtpAction</code> <b>до</b> гейтов каналов и доставки (единой общей точки у транспортов нет — MAX/TG/VK паркуют сессию раньше). Сессия, cooldown, профиль и dev-стор — по маске; в проверки привязки и в <code>send()</code> идёт эффективный телефон. Маска — одна константа <code>/^\+7000\d{7}$/</code>. Флаг <code>OTP_TEST_REDIRECT_ENABLED</code> (default <b>false</b>), получатель <code>OTP_TEST_REDIRECT_TO</code>; в production маска запрещена (<code>otp_test_phone_forbidden</code>); каждый редирект пишется логом.</p>
+<h3>T-016 — сброс подписки</h3>
+<p class="measure">Статус — только машиной состояний: <code>Active → Cancelled</code> (reason <code>admin_action</code>); из <code>GracePeriod</code>/<code>Suspended</code> — легальным двухшаговым путём через <code>Active</code>; <code>Cancelled</code> — идемпотентный no-op. <code>forceFill</code> служебных полей — в одной внешней транзакции со всем сбросом. Перевыпуск промокода — <code>RepresentativePromoService::issue()</code> с фолбэком на ветку Основателя <code>AA</code>. Прод-гейт через <code>app()->environment('production')</code>.</p>
+</section>
+
+<section>
+<h2>Осталось: нужно участие владельца</h2>
+<ol class="measure">
+  <li><b>T-015 живой прогон.</b> Включить на staging <code>OTP_TEST_REDIRECT_ENABLED=true</code> и <code>OTP_TEST_REDIRECT_TO=&lt;ваш номер&gt;</code> (с бэкапом <code>.env</code> и рестартом), зарегистрировать маску и подтвердить получение кода. Затем B2(а) T-014 — честный 403 нового юзера.</li>
+  <li><b>T-016 стенд-прогон.</b> «сброс → повторная активация (SZ-056) → код выдан заново». На стенде одна подписка (user 51, <code>+79119287478</code>, active) — автономный сброс оставит её <code>Cancelled</code>, поэтому не выполнен без вас.</li>
+  <li><b>T-014 п.2 кэшбэк-прогон.</b> Провести заказ через витрину до <code>CONFIRMED</code>, снять <code>cashback</code>/<code>cashback_fee</code> в <code>ledger_entries</code> счёта точки + зеркала номинального. Предусловие подтверждено.</li>
+  <li><b>Семантика T-016.</b> <code>status=cancelled</code> при <code>cancelled_at=null</code> — оставить так? Финалом сброса — <code>Cancelled</code> или «живой» <code>Active</code>?</li>
+  <li><b>Локальная dev-БД (инцидент).</b> Восстанавливать через <code>stand-bootstrap.sh</code> (контейнер общий с соседними сессиями) — жду решения.</li>
+  <li><b>Пуш <code>454d957</code></b> ушёл на staging не из этой сессии — подтвердить, что он ожидаемый.</li>
+</ol>
+</section>
+
+<section>
+<h2>Риски и оговорки</h2>
+<table>
+  <thead><tr><th>Риск</th><th>Уровень</th><th>Комментарий</th></tr></thead>
+  <tbody>
+    <tr><td>Сброс оставляет подписку в <code>Cancelled</code> (гейт вывода закрыт)</td><td><span class="chip warn">средний</span></td><td>Решение карточки исполнено буквально; если замысел «живой старт» — нужен финал <code>Active</code></td></tr>
+    <tr><td>Маска на проде при ошибке в дефолте флага</td><td><span class="chip warn">средний</span></td><td>Флаг default <code>false</code> + жёсткий прод-запрет; проверено на стенде (422)</td></tr>
+    <tr><td>Ложный успех у «лгущего» браузера (legacy execCommand)</td><td><span class="chip">низкий</span></td><td>Неустранимо на клиенте; узкий сценарий</td></tr>
+    <tr><td>Индукция из-за кэша конфига core</td><td><span class="chip">низкий</span></td><td>Локальный артефакт среды; CI кэша не имеет</td></tr>
+  </tbody>
+</table>
+</section>
+
+<footer class="doc">
+  <div>LOVII · пакет T-014/T-015/T-016 · 2026-09-22 · исполнитель AutoClaw</div>
+  <div>app 454d957 + 38dece0 · core dad7f84 + 27f9b54 · docs 7166ce2 · CI без красных прогонов, deploy-staging 🟢</div>
+  <div>Материалы разбора/ревью: .cluster/lovii-money-wave-t014-t016-20260922/ (plan.md, subagent_01–04.md, review.md)</div>
+</footer>
+
+</div>
+</body>
+</html>
