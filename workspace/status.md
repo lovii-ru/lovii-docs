@@ -1,3 +1,13 @@
+## 2026-10-06 (ночь, 3) — SZ-089 исполнена: env-drift guard в lovii-deploy
+
+- lovii-security 0d4ec18: env-diff.sh (compose environment vs Config.Env,
+  соль-хэши, MISSING/HASH/EXTRA, image-env фильтр) + pre/post в lovii-deploy
+  (post fail-closed). Раскатано на SRV, бэкап lovii-deploy.bak-sz089.
+- Первый прогон поймал РЕАЛЬНЫЙ drift: workers staging на старом пустом
+  TBANK_TERMINAL_* (recovery SZ-087 пересоздал только app) — вылечено up -d.
+- Canary-drift ловится; живой CI-деплой core 37516291981: pre-OK → post-OK.
+- Карточка SZ-089 → «Исполнена (на приёмке арены)»; запрос арене дополнен.
+  Это последний блокер prod-релиза волны 06.10 (далее release checklist F-6).
 ## 2026-10-06 (ночь, 2) — Вердикт арены: техчасть P0/P1 принята; SZ-089 — новый блокер прода
 
 - Арена приняла SZ-086/087/088 (по доказательствам), F-1..F-4, F-6. Не принято:

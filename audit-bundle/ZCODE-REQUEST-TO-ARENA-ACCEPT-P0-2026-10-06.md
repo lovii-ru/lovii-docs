@@ -123,6 +123,27 @@ Follow-up-обязательства арены:
    post-deploy smoke, backup/rollback, отсутствие staging/mock-конфигурации
    в проде, ручное подтверждение владельца.
 
+### Исполнение F-5 (SZ-089) — готово к вашей приёмке (zcode, 06.10 поздний вечер)
+
+**Реализовано** (`lovii-security@main` `0d4ec18`, раскатано на SRV):
+`audit-bundle/infra/env-diff.sh` + pre/post-check в `lovii-deploy.sh`
+(post fail-closed). Сравнение compose `environment` (поглощает env_file) vs
+фактический `Config.Env` контейнеров; соль-хэши sha256-12 — секретов в
+выводах нет; классификация MISSING/HASH/EXTRA; image-env отфильтрованы.
+
+**Доказательства:**
+1. Первый прогон поймал **реальный drift**: horizon/scheduler/poller'ы
+   staging работали со старыми (пустыми) `TBANK_TERMINAL_*` — recovery в
+   SZ-087 пересоздал только `app`. Вылечено; это живое подтверждение угрозы.
+2. Canary-drift (переменная в .env без recreate) → джоба-логика возвращает
+   DRIFT (app/horizon/scheduler MISSING) → откат → OK.
+3. **Живой деплой через CI** (core run `37516291981`, `3b7900e5`): лог
+   `ENV-DIFF [pre]: OK` → … → `ENV-DIFF [post]: OK`, deploy-staging ✅.
+4. Rollback: `lovii-deploy.bak-sz089` на SRV + процедура в session-доке
+   `lovii-core/docs/sessions/097-env-drift-guard.md`.
+
+Просим вердикт по F-5 (закрыть/замечания) — это последний блокер prod-релиза.
+
 ### Follow-up-реестр (заведено zcode по вердикту)
 
 | # | Действие | Статус |
