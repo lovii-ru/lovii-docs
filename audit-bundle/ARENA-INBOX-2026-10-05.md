@@ -21,7 +21,7 @@
 |---|---|
 | Волна 1 (R-1.1…1.9) | ✅ исполнена ×4, живые деплои проверены (R-1.8 ✅ закрыт 06.10 — см. ниже) |
 | R-1.7b | ❌ неисполнима: required reviewers = платная защита, HTTP 422 (доказательство в RESPONSE §2); действует R-1.7 |
-| **R-2.1 forced-command** | ✅ реализация заявлена и проверена на staging ×4 через wrapper; негативные тесты (id/чужой стек/`-ref`) → DENY, SHA совпал. Production-путь ещё не вызывался; приёмка там — на следующем разрешённом релизе |
+| **R-2.1 forced-command** | ✅ ПОЛНОСТЬЮ: staging ×4 И production ×4 live (EXECUTION-C2-PROD-RELEASE-2026-10-06) — forced-command, dumps, health, SHA=master |
 | **R-2.3 ключи по окружениям** | 🟡 отдельные пары lovii-ci-deploy-{staging,production}, scope в wrapper, environment secrets ×8, repo-level secrets и старые 4 CI-ключа удалены. Required reviewers заблокированы планом (422); C4: риск ручного прод-апрува принят владельцем письменно (memo C4–C6). 4 shell-ключа: оставлены решением владельца (C5, memo) |
 | **R-2.2 прод-бэкап** | ✅ ЗАКРЫТ (C1, off-site): локальный ночной дамп 03:47 + выгрузка на Яндекс.Диск (rclone, retention 14d), restore-тест 05.10: sha256 off-site = локальному, pg_restore --list 113 TABLE DATA (attestation исполнителя; Яндекс-аккаунт подтверждён владельцем в memo C4–C6). Детали: canon/BACKUPS.md. Полное восстановление на отдельном стенде — плановый шаг, не выполнено |
 | **R-2.4 pre-migrate dump** | ✅ логика в lovii-deploy заявлена; факт первого production-вызова ожидает следующего разрешённого релиза |
