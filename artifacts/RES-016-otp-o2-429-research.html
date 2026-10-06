@@ -1,0 +1,1213 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>O-2: ложный 429 «Слишком много попыток» на OTP-экране</title>
+<style>
+  :root {
+    --paper: #f6f6f2;
+    --surface: #fcfcfa;
+    --ink: #16191c;
+    --ink-2: #454c53;
+    --muted: #7c848b;
+    --line: #dbdbd3;
+    --line-strong: #c3c3b9;
+    --accent: #1f4a68;
+    --accent-soft: #e9eef2;
+    --crit: #8f3b32;
+    --crit-soft: #f7ecea;
+    --sans: "Avenir Next", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    --measure: 68ch;
+    --nav-width: clamp(210px, 17vw, 252px);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.62;
+    font-weight: 400; text-rendering: optimizeLegibility;
+  }
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--accent); }
+
+  /* ---------- Cover ---------- */
+  .cover { padding: clamp(40px, 7vw, 88px) clamp(20px, 5vw, 56px) clamp(28px, 4vw, 44px); border-bottom: 1px solid var(--line-strong); }
+  .cover-inner { max-width: 1120px; margin: 0 auto; }
+  .kicker { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+  .kicker b { color: var(--accent); font-weight: 600; }
+  h1.cover-title { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.12; letter-spacing: -0.02em; font-weight: 600; margin: 18px 0 14px; max-width: 26ch; }
+  .cover-sub { font-size: clamp(16px, 1.6vw, 18.5px); line-height: 1.55; color: var(--ink-2); max-width: 68ch; margin: 0 0 30px; }
+  .cover-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+  .cover-meta div { padding: 13px 18px 13px 0; border-bottom: 1px solid var(--line); }
+  .cover-meta dt { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin: 0 0 5px; }
+  .cover-meta dd { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+
+  /* ---------- Layout ---------- */
+  .layout { display: grid; grid-template-columns: var(--nav-width) minmax(0, 1fr); max-width: 1260px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 40px); }
+  .sidebar { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; padding: 34px 22px 40px 0; border-right: 1px solid var(--line); }
+  .sidebar .toc-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .toc { list-style: none; margin: 0; padding: 0; }
+  .toc li { margin: 0 0 2px; }
+  .toc a { display: block; font-size: 13px; line-height: 1.45; color: var(--ink-2); text-decoration: none; padding: 4px 8px 4px 0; border-left: 2px solid transparent; }
+  .toc a:hover { color: var(--accent); }
+  .toc .lvl2 > a { font-weight: 500; }
+  .toc .lvl3 a { font-size: 12.5px; color: var(--muted); padding-left: 12px; }
+  .side-note { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 11.5px; line-height: 1.5; color: var(--muted); }
+  main { min-width: 0; padding: 34px 0 72px clamp(18px, 3.4vw, 46px); }
+
+  /* ---------- Content ---------- */
+  article { max-width: var(--measure); }
+  article.wide { max-width: 100%; }
+  article h1 { font-size: clamp(26px, 3vw, 32px); line-height: 1.2; letter-spacing: -0.015em; font-weight: 600; margin: 0 0 20px; }
+  h2 { font-size: clamp(22px, 2.4vw, 27px); line-height: 1.2; letter-spacing: -0.012em; font-weight: 600; margin: 58px 0 16px; padding-top: 22px; border-top: 1px solid var(--line-strong); }
+  h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  h2 .sec-no { font-family: var(--mono); font-size: 13px; color: var(--muted); font-weight: 500; margin-right: 12px; letter-spacing: 0.02em; }
+  h3 { font-size: 18.5px; line-height: 1.3; font-weight: 600; letter-spacing: -0.008em; margin: 34px 0 10px; }
+  h4 { font-size: 15.5px; font-weight: 600; margin: 24px 0 8px; }
+  p { margin: 0 0 14px; }
+  ul, ol { margin: 0 0 16px; padding-left: 22px; }
+  li { margin: 0 0 5px; }
+  li > ul, li > ol { margin-top: 5px; }
+  strong { font-weight: 600; }
+  code { font-family: var(--mono); font-size: 0.88em; background: #ecece6; padding: 1px 5px; border-radius: 3px; color: var(--accent); }
+  pre { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; overflow-x: auto; }
+  pre code { background: transparent; padding: 0; color: var(--ink); font-size: 12.6px; line-height: 1.55; }
+  blockquote { margin: 18px 0; padding: 2px 0 2px 18px; border-left: 2px solid var(--accent); color: var(--ink-2); }
+  blockquote p { margin: 0 0 8px; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 18px 0 22px; background: transparent; }
+  th, td { text-align: left; vertical-align: top; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.5; }
+  th { font-family: var(--mono); font-size: 10.8px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line-strong); }
+  td code, th code { font-size: 0.86em; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  /* status chips */
+  .chip { display: inline-block; font-family: var(--mono); font-size: 10.6px; letter-spacing: 0.03em; padding: 1px 7px 2px; border: 1px solid var(--line-strong); border-radius: 4px; color: var(--ink-2); background: var(--surface); white-space: nowrap; }
+  .chip.dashed { border-style: dashed; color: var(--muted); background: transparent; }
+  .chip.crit { border-color: var(--crit); color: var(--crit); background: var(--crit-soft); }
+
+  /* critical block (used by §6) */
+  .crit-block { border: 1px solid var(--line-strong); border-top: 3px solid var(--crit); background: var(--surface); padding: 20px 24px 8px; margin: 26px 0; border-radius: 4px; }
+  .crit-block .crit-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--crit); margin: 0 0 10px; }
+  .crit-block h2 { border-top: 0; margin-top: 2px; padding-top: 0; }
+  .crit-block h3 { margin-top: 4px; }
+
+  .callout { border: 1px dashed var(--line-strong); border-radius: 4px; padding: 14px 18px 4px; margin: 20px 0; background: transparent; }
+  .callout .co-label { font-family: var(--mono); font-size: 10.6px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+
+  footer.colophon { border-top: 1px solid var(--line-strong); margin-top: 64px; padding-top: 18px; display: flex; justify-content: space-between; gap: 20px; font-family: var(--mono); font-size: 11.3px; color: var(--muted); flex-wrap: wrap; }
+
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; padding: 0 clamp(14px, 4vw, 28px); }
+    .sidebar { display: none; }
+    main { padding-left: 0; }
+    .cover-meta { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    body { background: #fff; }
+    .sidebar { display: none; }
+    .layout { display: block; max-width: none; padding: 0; }
+    main { padding: 0; }
+    article { max-width: none; }
+    a { text-decoration: none; color: inherit; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <p class="kicker">LOVII · Трек O «Каналы доставки OTP» · Задача <b>O-2</b> · P1 · запрос владельца 2026-10-06</p>
+    <h1 class="cover-title">O-2: ложный 429 «Слишком много попыток» на OTP-экране</h1>
+    <p class="cover-sub">Почему сообщение о превышении попыток появлялось до фактической отправки кода, какие механизмы к этому приводят и что делать поэтапно — с доказательствами по коду, историей инцидентов и внешними практиками.</p>
+    <dl class="cover-meta">
+      <div><dt>Дата</dt><dd>6 октября 2026</dd></div>
+      <div><dt>Репозитории</dt><dd><code>lovii-core</code> · <code>lovii-app</code> · <code>lovii_docs</code></dd></div>
+      <div><dt>Режим</dt><dd>read-only (ресёрч; без изменений кода)</dd></div>
+      <div><dt>Метод</dt><dd>код · доки · внешние практики (29 источников) · независимая сверка · red team</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="toc-label">Содержание</p>
+    <ul class="toc">
+<li class="lvl2"><a href="#1-резюме">§1 Резюме</a></li>
+<li class="lvl2"><a href="#2-контекст-задача-и-метод">§2 Контекст, задача и метод</a></li>
+<li class="lvl2"><a href="#3-симптом-и-механика-почему-сообщение-появляется-до-отправки">§3 Симптом и механика: почему сообщение появляется «до отправки»</a></li>
+<li class="lvl3"><a href="#31-полная-цепочка-as-is">§3.1 Полная цепочка (as-is)</a></li>
+<li class="lvl3"><a href="#32-три-места-текста-слишком-много-попыток">§3.2 Три места текста «Слишком много попыток»</a></li>
+<li class="lvl3"><a href="#33-почему-у-новых-и-почему-каналы-недоступны">§3.3 Почему «у новых» и почему каналы недоступны</a></li>
+<li class="lvl3"><a href="#34-почему-счётчик-растёт-хотя-код-не-отправлен">§3.4 Почему счётчик «растёт», хотя код не отправлен</a></li>
+<li class="lvl3"><a href="#35-лимитеры-otp-эндпоинтов-дефолты-прод">§3.5 Лимитеры OTP-эндпоинтов (дефолты = прод)</a></li>
+<li class="lvl3"><a href="#36-ремоунт-цикл-и-усилители">§3.6 Ремоунт-цикл и усилители</a></li>
+<li class="lvl2"><a href="#4-причины-и-доказательства">§4 Причины и доказательства</a></li>
+<li class="lvl3"><a href="#41-пять-механизмов-ложного-429-ae">§4.1 Пять механизмов ложного 429 (A–E)</a></li>
+<li class="lvl3"><a href="#42-кулдаун-механика-код-не-доставлялся-а-окно-уже-идёт">§4.2 Кулдаун-механика: «код не доставлялся, а окно уже идёт»</a></li>
+<li class="lvl3"><a href="#43-три-гипотезы-карточки-o-2-что-нашли">§4.3 Три гипотезы карточки O-2: что нашли</a></li>
+<li class="lvl3"><a href="#44-хронология-инциденты-фикс-выкатка">§4.4 Хронология: инциденты → фикс → выкатка</a></li>
+<li class="lvl3"><a href="#45-со-стороны-злоумышленника">§4.5 Со стороны злоумышленника</a></li>
+<li class="lvl2"><a href="#5-достоверность-и-верификация">§5 Достоверность и верификация</a></li>
+<li class="lvl3"><a href="#51-вердикты-сверки-все-восемь-подтверждено">§5.1 Вердикты сверки (все восемь — [подтверждено])</a></li>
+<li class="lvl3"><a href="#52-апгрейды-и-уточнения">§5.2 Апгрейды и уточнения</a></li>
+<li class="lvl3"><a href="#53-отрицательные-результаты">§5.3 Отрицательные результаты</a></li>
+<li class="lvl3"><a href="#54-как-читать-статусы-и-что-остаётся-вне-проверки">§5.4 Как читать статусы и что остаётся вне проверки</a></li>
+<li class="lvl2"><a href="#6-критическая-находка-вне-контура-o-2-кандидат-p0">§6 Критическая находка вне контура O-2 (кандидат P0)</a></li>
+<li class="lvl3"><a href="#61-цепочка-a-binding-token-в-http-ответе-redemption-parked-сессии">§6.1 Цепочка A — binding_token в HTTP-ответе + redemption parked-сессии</a></li>
+<li class="lvl3"><a href="#62-цепочка-b-привязка-чужого-чата-через-deeplink">§6.2 Цепочка B — привязка чужого чата через deeplink</a></li>
+<li class="lvl3"><a href="#63-последствия-статус-и-заготовка-решения">§6.3 Последствия, статус и заготовка решения</a></li>
+<li class="lvl2"><a href="#7-решение-целевая-модель-и-анти-абьюз">§7 Решение: целевая модель и анти-абьюз</a></li>
+<li class="lvl3"><a href="#71-принципы-и-рамка-фаз">§7.1 Принципы и рамка фаз</a></li>
+<li class="lvl3"><a href="#72-эшелоны-ключей">§7.2 Эшелоны ключей</a></li>
+<li class="lvl3"><a href="#73-сигнал-ограничение-стартовый-ориентир">§7.3 Сигнал → ограничение → стартовый ориентир</a></li>
+<li class="lvl3"><a href="#74-наблюдаемость-основание-для-фазы-2">§7.4 Наблюдаемость — основание для фазы 2</a></li>
+<li class="lvl3"><a href="#75-антипаттерны-чего-не-делать">§7.5 Антипаттерны (чего не делать)</a></li>
+<li class="lvl3"><a href="#76-что-не-закрывается-лимитами">§7.6 Что не закрывается лимитами</a></li>
+<li class="lvl3"><a href="#77-требуются-решения-владельца">§7.7 Требуются решения владельца</a></li>
+<li class="lvl2"><a href="#8-план-внедрения-и-проверок">§8 План внедрения и проверок</a></li>
+<li class="lvl3"><a href="#81-фазы-04">§8.1 Фазы 0–4</a></li>
+<li class="lvl3"><a href="#82-гипотезы-h1h8-чек-лист-стенда">§8.2 Гипотезы H1–H8 — чек-лист стенда</a></li>
+<li class="lvl3"><a href="#83-приоритеты-верификации">§8.3 Приоритеты верификации</a></li>
+<li class="lvl2"><a href="#9-риски-открытые-вопросы-и-непроверенное">§9 Риски, открытые вопросы и непроверенное</a></li>
+<li class="lvl3"><a href="#91-непроверяемое-из-репозитория-требует-стенда-закрывается-фазой-0">§9.1 Непроверяемое из репозитория ([требует стенда]; закрывается фазой 0)</a></li>
+<li class="lvl3"><a href="#92-риски-решения-учитывать-при-внедрении">§9.2 Риски решения (учитывать при внедрении)</a></li>
+<li class="lvl3"><a href="#93-долговые-и-сопутствующие">§9.3 Долговые и сопутствующие</a></li>
+<li class="lvl2"><a href="#10-передача-файлы-порядок-использования-решения-владельца">§10 Передача: файлы, порядок использования, решения владельца</a></li>
+<li class="lvl3"><a href="#101-что-где-лежит">§10.1 Что где лежит</a></li>
+<li class="lvl3"><a href="#102-порядок-использования">§10.2 Порядок использования</a></li>
+<li class="lvl3"><a href="#103-чек-лист-требуется-решение-владельца">§10.3 Чек-лист «требуется решение владельца»</a></li>
+<li class="lvl2"><a href="#приложение-a-внешние-источники">Приложение A. Внешние источники</a></li>
+<li class="lvl2"><a href="#приложение-b-реестр-ключевых-доказательств">Приложение B. Реестр ключевых доказательств</a></li>
+    </ul>
+    <div class="side-note">
+      Внутренний документ. Статусы фактов помечены инлайн: сплошная рамка — подтверждено по коду/докам, пунктирная — требует проверки на стенде.
+    </div>
+  </aside>
+  <main>
+    <article id="report">
+<h2 id="1-резюме">§1 Резюме</h2>
+<p><strong>Как читать отчёт.</strong> Суть — ниже; критическая находка и её контекст — §6; чек-лист решений владельца — §10.3. Статусы утверждений: <strong><span class="chip">наблюдалось</span></strong> — прямое свидетельство в коде/доках; <strong><span class="chip dashed">кандидат</span></strong> — механика сходится по коду и топологии, но без рантайм-подтверждения; <strong><span class="chip">подтверждено</span></strong> — перепроверено независимо (повторное чтение/эквивалентные команды), где применимо — дополнено живым наблюдением (пометка в тексте); <strong><span class="chip dashed">требует стенда</span></strong> — закрывается только проверкой на стенде (фаза 0, §8).</p>
+<p><strong>1. Симптом объяснён.</strong> «Слишком много попыток» на чистом устройстве — это 429 на автоматическом запросе списка каналов (<code>POST /auth/request-code</code>), который уходит при каждом монтировании экрана выбора канала; код при этом не отправлялся. При 429 список каналов заменяется блоком ошибки — отсюда впечатление «каналы заблокированы». <span class="chip">наблюдалось</span></p>
+<p><strong>2. Почему «счётчик вырос».</strong> Счётчики лимитеров считают HTTP-запросы: инкремент — до контроллера и валидации; окно — фиксированные 60 с от первого хита; ключи — только <code>ip:</code>/<code>phone:</code>; измерения «девайс» нет; отбой по лимиту счётчик не увеличивает. «Код не отправлен, а бюджет сожжён» — следствие этой семантики, а не отдельный сбой. <span class="chip">подтверждено</span></p>
+<p><strong>3. Пять усилителей (A–E, §4.1).</strong> (A) глобальные IP-бакеты из-за отсутствия trusted proxies — IP-ключи фактически «на весь прод» [кандидат; H1/H5]; (B) авто-вызовы и ремоунт-цикл экрана <span class="chip">наблюдалось</span>; (C) кулдаун без доставки у parked-сессий MAX/TG/VK <span class="chip">наблюдалось</span>; (D) исторический общий бакет request-code + send-code (снят фиксом <code>043d8ff6</code>; на прод фикс документированно пришёл только с C2) <span class="chip">наблюдалось</span>; (E) пустой <code>phone</code> → общий ключ <code>'phone:'</code> <span class="chip dashed">кандидат</span>. Механизм A действует и после фикса.</p>
+<p><strong>4. Критическая находка вне O-2 — кандидат P0 (§6).</strong> Вход по <code>binding_token</code> без владения телефоном/чатом: цепочка умещается в два запроса, лимиты бессильны. [кандидат: полная цепочка подтверждена чтением кода; обязательна live-проверка H8 (§8), решение владельца, гейт до фаз 3–4]. Материал не публиковать вовне до устранения.</p>
+<p><strong>5. Направление фикса (§7–§8).</strong> Фазы 0–4: верификация на стенде → availability-first (trust-прокси — отдельным коммитом 1a; кулдаун от фактической доставки; клиентская устойчивость; точные 429) → наблюдаемость и dark launch → ужесточение анти-абьюза → P0-контур. Принципы: первый код всегда доходит; 429 — только по факту и с точным <code>Retry-After</code>; пер-канальный fallback; фазы 1 и 3 — не в одном релизе.</p>
+<p><strong>6. Что ещё не проверено (фаза 0; §8–§9).</strong> Рантайм <code>ip()</code> и ip-ключи в redis; заголовки limiter-429 на проде; версия прод-кода на момент жалобы; полевой сетевой лог при открытии экрана; живое репро «чистое устройство». Режим работы — read-only: «НЕ чинить до вердикта и решения владельца».</p>
+<p><strong>7. Решения владельца (§10.3).</strong> Шесть пунктов чек-листа; в первую очередь — модель P0 (§6) и мягкая политика per-IP и порогов.</p>
+<h2 id="2-контекст-задача-и-метод">§2 Контекст, задача и метод</h2>
+<p><strong>Задача.</strong> 2026-10-06 владелец поставил в трек O пункт <strong>O-2 (P1, серьёзная)</strong> — «Ресёрч: 429 „Слишком много попыток“ на OTP-экране без реального запроса кода» (<code>lovii_docs/canon/BACKLOG.md:225-243</code>). Симптом из карточки:</p>
+<blockquote>
+<p>«у новых пользователей при первом касании: „Слишком много попыток. Подождите около минуты“ появляется ДО отправки кода; код фактически не ушёл, форма ввода не открылась, альтернативные каналы заблокированы» (<code>lovii_docs/canon/BACKLOG.md:227-231</code>).</p>
+</blockquote>
+<p>Карточка фиксирует три гипотезы: (1) клиент дёргает лимитируемый эндпоинт при каждом открытии/перерисовке экрана; (2) лимитер по IP, а не по телефону (NAT операторов; известен флейк «OTP-429 между e2e-прогонами»); (3) блокировка глобальная вместо пер-канальной. Требуемый результат — as-is-факты и фазировка фикса: счётчик только по реальному <code>request-code</code>, пер-канальная блокировка, fallback UI при известном провале доставки. Жёсткое ограничение: <strong>«НЕ чинить до вердикта и решения владельца»</strong> (<code>lovii_docs/canon/BACKLOG.md:242-243</code>).</p>
+<p><strong>Что анализировалось.</strong> lovii-core (Laravel API — лимитеры, маршруты, отправка кода), lovii-app (Vue SPA — OTP-экраны и сетевые вызовы), доки lovii_docs (канон и история). Режим — <strong>read-only</strong>: код не изменялся, живые прогоны и нагрузочные проверки не выполнялись.</p>
+<p><strong>Метод.</strong> Четыре параллельные линии доказательств: (1) серверный код, (2) клиентский код, (3) доки и история, (4) внешние практики — 29 проверенных источников (приложение A), нумерация [1]–[29]. Далее — независимая перекрёстная сверка ключевых утверждений по репозиторию и адверсариальный аудит (red team) предлагаемых объяснений. Живое воспроизведение симптома не выполнялось; всё, что закрывается только рантайм-проверкой, помечено как <span class="chip dashed">требует стенда</span>.</p>
+<p><strong>Статусы.</strong> В тексте используются четыре статуса — <span class="chip">наблюдалось</span>, <span class="chip dashed">кандидат</span>, <span class="chip">подтверждено</span>, <span class="chip dashed">требует стенда</span>; словарь — §1.</p>
+<h2 id="3-симптом-и-механика-почему-сообщение-появляется-до-отправки">§3 Симптом и механика: почему сообщение появляется «до отправки»</h2>
+<p><strong>Короткий ответ.</strong> Текст «Слишком много попыток…» на OTP-пути — клиентская надпись для ровно одного условия: HTTP 429. На экране выбора каналов она появляется, когда 429 получает <strong>автоматический запрос списка каналов</strong> <code>POST /api/v1/auth/request-code</code> — он уходит при каждом монтировании экрана. Это не отправка кода: ни одна отправка ещё не выполнялась. <span class="chip">наблюдалось</span></p>
+<h3 id="31-полная-цепочка-as-is">§3.1 Полная цепочка (as-is)</h3>
+<ol>
+<li>Вход в модуль → экран телефона (<code>lovii-app/src/modules/auth-module/AuthModule.vue:96</code>); сетевых OTP-вызовов нет.</li>
+<li>Ввод телефона → монтируется экран каналов — компонент <code>AuthCallCoders</code> с условием <code>v-if="phone &amp;&amp; !callCoder &amp;&amp; !maxLink &amp;&amp; !telegramLink &amp;&amp; !vkLink"</code> (<code>AuthModule.vue:98-105</code>).</li>
+<li><code>onMounted</code> (<code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:179-193</code>): свежий кэш каналов (ключ <code>loviOtpChannels</code>, TTL 5 мин — <code>:62-63</code>) мгновенно заполняет UI (<code>:188-190</code>), но <strong>сетевой вызов не подавляется</strong> — всегда выполняется <code>loadChannels()</code> (<code>:192</code>).</li>
+<li><code>loadChannels()</code> → <code>POST api/v1/auth/request-code</code> с телом <code>{ phone }</code> и timeout 15 с (<code>AuthCallCoders.vue:89-117</code>; <code>lovii-app/src/modules/auth-module/api/auth-api.ts:61-67</code>; <code>OTP_CALL_TIMEOUT = 15_000</code> — <code>:59</code>). Контракт: «Get available OTP delivery channels» — список каналов, не отправка (<code>lovii-app/docs/openapi.yaml:1382-1420</code>).</li>
+<li><code>send-code</code> автоматически не вызывается: только по клику по каналу (<code>AuthCallCoders.vue:119-131</code>; guard <code>sendingChannel</code> — <code>:120-122</code>).</li>
+</ol>
+<p>Итог: к моменту любого действия пользователя на экране каналов уже отправлен минимум один запрос, способный получить 429, — при этом «отправкой» он не является. <span class="chip">наблюдалось</span></p>
+<h3 id="32-три-места-текста-слишком-много-попыток">§3.2 Три места текста «Слишком много попыток»</h3>
+<table>
+<thead>
+<tr>
+<th>Место (файл:строка)</th>
+<th>Триггер</th>
+<th>Что реально означает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AuthCallCoders.vue:84</code></td>
+<td>429 на <strong>загрузке списка каналов</strong> (request-code); маппинг — <code>:110-113</code></td>
+<td>Список не получен; вместо списка — блок ошибки: текст + «Повторить» (<code>:247-256</code>)</td>
+</tr>
+<tr>
+<td><code>AuthCallCoders.vue:171</code></td>
+<td>429 на <strong>отправке кода</strong> (send-code по клику канала); маппинг — <code>:165-173</code></td>
+<td>Отправка отклонена; список остаётся, текст — под списком (<code>auth-otp-error</code>, <code>:262-264</code>)</td>
+</tr>
+<tr>
+<td><code>AuthCode.vue:92</code></td>
+<td>429 на <strong>ре-сенде</strong> кода с экрана кода; маппинг — <code>:89-94</code></td>
+<td>Повторная отправка отклонена; текст в статусной строке (<code>auth-resend-error</code>, <code>:232-233</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Надписи почти одинаковы; различающий маркер — хвост фразы: загрузка/отправка — «…и попробуйте снова.», ре-сенд — «…около минуты.». Различать по контексту: текст <strong>на месте списка</strong> с «Повторить» = 429 на загрузке; <strong>под списком</strong> = на отправке; на экране кода = на ре-сенде. <span class="chip">наблюдалось</span></p>
+<p>На confirm-экране показывается серверное сообщение, а не «Слишком много попыток» (<code>AuthCode.vue:119-127</code>) — к симптому не относится. <span class="chip">наблюдалось</span></p>
+<h3 id="33-почему-у-новых-и-почему-каналы-недоступны">§3.3 Почему «у новых» и почему каналы недоступны</h3>
+<p>На чистом устройстве кэша <code>loviOtpChannels</code> нет (<code>callCoders</code> пуст), и при 429 рендер идёт по ветке <code>v-else-if="loadError"</code> (<code>AuthCallCoders.vue:247</code>): список каналов <strong>заменяется</strong> блоком ошибки. Это объясняет карточку пункт за пунктом:</p>
+<ul>
+<li>альтернативные каналы «заблокированы» — их не отрисовали; пер-канального выбора не существует, пока не получен список;</li>
+<li>форма ввода не открылась и код не ушёл — экран кода открывает только успешный <code>send-code</code>, а он не вызывался;</li>
+<li>«Повторить» стреляет немедленно (<code>@click="loadChannels"</code>, guard только от параллельного вызова — <code>:90-92</code>, <code>:254</code>): пока окно лимита активно, повтор может снова получить 429 (вид «зациклено»).</li>
+</ul>
+<p>У повторного пользователя свежий кэш (TTL 5 мин — <code>:62-63</code>, <code>:188-190</code>) рисует список сразу, и та же фоновая 429 <strong>невидима</strong> (блок ошибки рендерится только без списка — <code>:247</code>). «У новых пользователей» = «на устройствах без кэша». <span class="chip">наблюдалось</span></p>
+<h3 id="34-почему-счётчик-растёт-хотя-код-не-отправлен">§3.4 Почему счётчик «растёт», хотя код не отправлен</h3>
+<ul>
+<li>Ключ лимитера = <code>md5(имя лимитера + ключ)</code> — <code>lovii-core/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:134</code>.</li>
+<li>Порядок: сначала <code>tooManyAttempts</code> — при отбое исключение бросается <strong>до</strong> <code>hit()</code>, счётчики не растут (<code>:156-160</code>); затем <code>hit()</code> — <strong>до</strong> контроллера и валидации (<code>:162-166</code>; <code>$next($request)</code> — <code>:168</code>). Любой пропущенный мидлварью запрос — включая невалидный (422) и завершившийся 500 — уже израсходовал бюджет.</li>
+<li>Окно — фиксированные 60 с от первого хита: <code>increment()</code> ставит таймер <code>add(key:':timer', availableAt(60s), 60s)</code> (<code>lovii-core/vendor/laravel/framework/src/Illuminate/Cache/RateLimiter.php:160-166</code>), <code>availableIn()</code> = timer − now (<code>:271-275</code>). «Около минуты» из текста — оценка окна лимитера, а не времени доставки.</li>
+</ul>
+<p>Прямой ответ на вопрос карточки («счётчик вырос» vs «код не отправлен»): счётчики считают HTTP-запросы, а не доставки. Инкремент — по факту запроса, а не успешной отправки; отбой по выбитому лимиту счётчик не увеличивает и окно не продлевает (окно истекает через 60 с от первого хита). В семантике ключей нет понятий «доставлено» и «канал»: ключи — только <code>ip:</code> и <code>phone:</code> (состав — <code>lovii-core/app/Providers/AppServiceProvider.php:184-216</code>), измерения «девайс» нет. [подтверждено: код + независимая перекрёстная сверка; серия <code>1..5:200, 6:429</code> наблюдалась на staging 10.09 — <code>lovii_docs/canon/TASKS/SZ-012-clean-device-channels-otp-copy.md:18-20</code> (хронология — §4.4)]</p>
+<h3 id="35-лимитеры-otp-эндпоинтов-дефолты-прод">§3.5 Лимитеры OTP-эндпоинтов (дефолты = прод)</h3>
+<table>
+<thead>
+<tr>
+<th>Эндпоинт</th>
+<th>Лимитер</th>
+<th>IP-лимит</th>
+<th>Телефон-лимит</th>
+<th>Где определено</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/v1/auth/request-code</code></td>
+<td><code>otp-channels</code></td>
+<td>30/мин</td>
+<td>15/мин</td>
+<td><code>lovii-core/app/Providers/AppServiceProvider.php:200-207</code></td>
+</tr>
+<tr>
+<td><code>POST /api/v1/auth/send-code</code></td>
+<td><code>otp-send</code></td>
+<td>6/мин</td>
+<td>2/мин</td>
+<td><code>AppServiceProvider.php:184-191</code></td>
+</tr>
+<tr>
+<td><code>POST /api/v1/auth/confirm</code>, <code>POST /api/v1/auth/confirm-by-binding</code></td>
+<td><code>otp-confirm</code></td>
+<td>20/мин</td>
+<td>5/мин</td>
+<td><code>AppServiceProvider.php:209-216</code>; <code>lovii-core/routes/api.php:147-149,157</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ключей <code>otp.rate_limit.*</code> в <code>lovii-core/config/otp.php</code> нет (проверено; 175 строк) — действуют дефолты из кода; в тестах их меняет только <code>config()-&gt;set</code> (<code>lovii-core/tests/Pest.php:37-41</code>). Для прода это фактические значения. <span class="chip">наблюдалось</span></p>
+<h3 id="36-ремоунт-цикл-и-усилители">§3.6 Ремоунт-цикл и усилители</h3>
+<p>Каждый маунт <code>AuthCallCoders</code> (монтирование экрана) = новый <code>request-code</code> — даже при свежем кэше (см. §3.1). Триггеры новых запросов <span class="chip">наблюдалось</span>:</p>
+<ul>
+<li>«назад» с экрана кода (<code>callCoder = ""</code>, <code>AuthModule.vue:78-81</code>; в коде: «ремоунт = лишний request-code», <code>AuthCode.vue:64-68</code>);</li>
+<li>«назад» с link-экранов MAX/TG/VK (<code>maxLink</code>/<code>telegramLink</code>/<code>vkLink</code> = null, <code>AuthModule.vue:55-71</code>);</li>
+<li>повторный вход в модуль (телефон сбрасывается — цикл заново);</li>
+<li>полный релоад страницы; 401-интерцептор может инициировать reload, но только при совпадении Bearer-токена и не для гостя (<code>lovii-app/src/package/config/axios.ts:35-65</code>);</li>
+<li>кнопка «Повторить» — новый запрос немедленно, без кулдауна (<code>AuthCallCoders.vue:254</code>).</li>
+</ul>
+<p>Усилитель первого визита — SW-precache-шторм: прогрев service worker вместе с ремоунт-циклом «быстро набирают 6 запросов с IP → 429 (carrier-NAT усиливает)» (<code>lovii_docs/canon/TASKS/SZ-012-clean-device-channels-otp-copy.md:27-30</code>, живое наблюдение 10.09). Те же бакеты расходуют e2e/QA-прогоны: «повторный прогон раньше чем через минуту — 429 (это штатный анти-спам core)» (<code>lovii-app/e2e/README.md:53-56</code>). <span class="chip">наблюдалось</span></p>
+<p><strong>Границы разбора.</strong> В §3 намеренно не разворачивались механизмы A, C, D, E (§4.1): глобальные IP-бакеты; кулдаун без доставки (parked-сессии); исторический общий бакет; пустой <code>phone</code>. Механизм B (авто-вызовы/ремоунт) развёрнут в §3.6; §3 фиксирует только цепочку «до отправки», три точки текста и семантику счётчика.</p>
+<h2 id="4-причины-и-доказательства">§4 Причины и доказательства</h2>
+<p>Раздел сводит «ложный 429» к пяти механизмам (A–E), разбирает гипотезы карточки O-2, кулдаун-механику и хронологию «инцидент → фикс → выкатка». Пути к коду — от корня <code>/Users/best/LOVII</code>; словарь статусов — §1. Расхождение «счётчик вырос — код не отправлен» разобрано в §3 и здесь не дублируется.</p>
+<h3 id="41-пять-механизмов-ложного-429-ae">§4.1 Пять механизмов ложного 429 (A–E)</h3>
+<p><strong>A. Глобальные IP-бакеты из-за отсутствия trusted proxies — [кандидат (код/топология сверены — §5.1; рантайм — H1/H5)].</strong> Доверенные прокси не настроены: <code>$request-&gt;ip()</code> = REMOTE_ADDR = IP контейнера Caddy — единый для всех внешних пользователей; <code>ip:</code>-ключи трёх OTP-лимитеров (send 6/мин, channels 30/мин, confirm 20/мин) фактически общие на весь прод (<code>lovii-core/app/Providers/AppServiceProvider.php:184-216</code>). Доказательства: <code>lovii-core/bootstrap/app.php:37-47</code> — <code>trustProxies()</code> не вызывается; <code>lovii-core/config/trustedproxy.php</code> отсутствует; без конфига vendor-мидлварь никому не доверяет, XFF игнорируется (<code>lovii-core/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php:52-94</code>); топология Caddy → app — <code>lovii-core/docker-compose.prod.yml:30-43</code>; в <code>docker/nginx/default.conf</code> — без <code>real_ip</code>. <strong>Фикс 043d8ff6 ограничение не снимает</strong>: бюджеты request-code и send-code разведены, но 30/15 и 6/2 остаются общими на одном IP Caddy — механизм действует и после фикса. Не проверено: конфиг Caddy и слои перед app (вне репо), фактический <code>ip()</code>, ip-ключи в redis; рантайм — H1/H5 (§8).</p>
+<p><strong>B. Авто-вызовы и ремоунт-цикл — <span class="chip">наблюдалось</span>.</strong> Каждый маунт экрана каналов автоматически шлёт <code>POST /api/v1/auth/request-code</code>; кэш заполняет UI, но не подавляет сетевой вызов; «назад», повторный вход, релоад — новые маунты, каждый — новый запрос; «Повторить» стреляет немедленно. Доказательства: <code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:179-193</code> (кэш :188-190, вызов :192), :249-255; ремоунт-триггеры — <code>lovii-app/src/modules/auth-module/AuthModule.vue:42-84,98-105</code>; описание проблемы — <code>lovii_docs/canon/TASKS/SZ-012-clean-device-channels-otp-copy.md:27-30</code>. Полный перечень ремоунт-триггеров — §3.6. Не проверено: полевой сетевой лог app (в доках отсутствует).</p>
+<p><strong>C. Кулдаун без доставки (parked-сессии MAX/TG/VK) — <span class="chip">наблюдалось</span>.</strong> Parked-сессия — сессия создана, код не доставлялся; окно стартует при её создании, до проверок привязки («код не доставлялся, а окно уже идёт»); повторный тап жжёт <code>otp-send</code>. Детали — в §4.2.</p>
+<p><strong>D. Исторический общий бакет request-code + send-code (до фикса 043d8ff6) — <span class="chip">наблюдалось</span>.</strong> До фикса request-code шёл через лимитер <code>otp-send</code> (6/мин IP + 2/мин телефон) и делил бюджет с реальной отправкой: «пара открытий экрана» выбивала 2/мин, и 429 прилетал на отправку (инцидент владельца на проде 04.10). Доказательства: коммит 043d8ff6 (04.10 18:50:33) → master 3def2196 (19:14:17); комментарий-документация инцидента — <code>lovii-core/app/Providers/AppServiceProvider.php:193-199</code>; «на проде старый код до ручной выкатки» — <code>lovii-core/docs/sessions/087-max-bots-per-stand.md:136-137</code>; регресс-тест — <code>lovii-core/tests/Feature/MaxBot/OtpThrottleTest.php:141-180</code>. Не проверено: дата выкатки фикса на прод (серверный лог, вне репо; см. §9).</p>
+<p><strong>E. Пустой phone → общий ключ <code>'phone:'</code> — <span class="chip dashed">кандидат</span>.</strong> Ключ собирается как <code>'phone:'.$request-&gt;string('phone')-&gt;value()</code>; без поля в запросе он вырождается в общий <code>'phone:'</code> (15/мин channels, 2/мин send, 5/мин confirm). Мидлварь идёт до валидации: запрос без телефона жжёт общий бакет и падает 422. Доказательства: <code>lovii-core/app/Providers/AppServiceProvider.php:185,201,210</code>; null → '' — <code>lovii-core/vendor/laravel/framework/src/Illuminate/Support/Traits/InteractsWithData.php:247-250</code>; <code>phone</code> required — <code>lovii-core/app/Http/Requests/Api/V1/RequestOtpRequest.php:14-17</code>. Не проверено: триггер не найден (отрицательный результат, §5); стенд — H6 (§8).</p>
+<h3 id="42-кулдаун-механика-код-не-доставлялся-а-окно-уже-идёт">§4.2 Кулдаун-механика: «код не доставлялся, а окно уже идёт»</h3>
+<ul>
+<li>Гейт исполняется первым: <code>lovii-core/app/Application/Auth/Actions/SendOtpAction.php:38-45</code>; окно 30 с — дефолт <code>lovii-core/config/otp.php:126</code>.</li>
+<li>Окно считается от <code>last_sent_at ?? created_at</code> последней неподтверждённой сессии: <code>lovii-core/app/Models/Core/AuthOtpSession.php:40-57</code>.</li>
+<li>Сессия создаётся до проверок привязки (<code>SendOtpAction.php:59-61</code>); ветки <code>linkRequired</code> MAX/TG/VK (:75-113) возвращают <code>sent:false</code> — код не доставляется, <code>last_sent_at</code> не ставится (пишется лишь при фактической отправке, :131).</li>
+<li>Следствие: у parked-сессий окно стартует с момента создания — повторный тап в течение 30 с получает 429 «Код уже отправлен. Повторите через N сек.» (<code>lovii-core/app/Http/Controllers/Api/V1/Auth/SendOtpController.php:27-31</code>), хотя кода пользователь не видел (закреплено тестом: <code>lovii-core/tests/Feature/MaxBot/OtpThrottleTest.php:124-125</code>).</li>
+<li>Формула: «1 отправка + 2 тапа ≈ минута блока» (повторы жгут <code>otp-send</code>; механика — §3).</li>
+</ul>
+<h3 id="43-три-гипотезы-карточки-o-2-что-нашли">§4.3 Три гипотезы карточки O-2: что нашли</h3>
+<p>Карточка O-2 (<code>lovii_docs/canon/BACKLOG.md:227-243</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Гипотеза карточки</th>
+<th>Что нашли</th>
+<th>Вердикт</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1) Клиент дёргает лимитируемый эндпоинт при каждом открытии/перерисовке; счётчик растёт не по факту <code>request-code</code></td>
+<td>request-code шлётся при каждом маунте, кэш не подавляет (<code>AuthCallCoders.vue:179-193</code>), ремоунт-цикл подтверждён (<code>AuthModule.vue:42-84</code>); счётчик = HTTP-запросы (§3); расхождение «код не отправлен, а бюджет сожжён» — до 04.10 (механизм D).</td>
+<td>Подтверждена</td>
+</tr>
+<tr>
+<td>(2) Лимитер по IP, а не по телефону (NAT операторов; флейк e2e)</td>
+<td>Лимитируются оба измерения — IP и телефон (<code>AppServiceProvider.php:184-216</code>); IP-плечо для carrier-NAT (<code>SZ-012…:48-49</code>) критичнее, чем казалось: без trust-прокси фактически глобально (механизм A).</td>
+<td>Частично (телефон тоже лимитируется; глобально именно IP-плечо)</td>
+</tr>
+<tr>
+<td>(3) Блокировка глобальная вместо пер-канальной; при известном провале нельзя переключить канал</td>
+<td>Ключи только <code>phone:</code>/<code>ip:</code> — канала нет (<code>AppServiceProvider.php:185-189,201-205,210-214</code>); кулдаун — на телефон (<code>AuthOtpSession.php:40-57</code>); при 429 список каналов заменён блоком ошибки (<code>AuthCallCoders.vue:247-264</code>); пер-канального fallback-UI нет (<code>link_required</code> — про привязку бота).</td>
+<td>Подтверждена (пер-канальной логики нет)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-хронология-инциденты-фикс-выкатка">§4.4 Хронология: инциденты → фикс → выкатка</h3>
+<ul>
+<li><strong>08–10.09</strong> — введены OTP-лимитеры 6/2 (P0-безопасность; <code>lovii-core/docs/sessions/012-max-multibot-and-otp-security.md:66-70</code>). Инцидент «чистое устройство»: серия request-code с одного IP <code>1..5:200, 6:429, 7–8:429</code>, Retry-After нет (10.09; <code>lovii_docs/canon/TASKS/SZ-012-clean-device-channels-otp-copy.md:18-20</code>). Клиентский фикс <code>14e87a0</code> («Повторить», таймаут 15 с; lovii-app, пуш в ночь 09→10.09).</li>
+<li><strong>03.10</strong> — первая прод-волна staging→master (<code>lovii_docs/workspace/status.md:273-285</code>); OTP-каналы прода восстановлены (:248-262) — до фикса.</li>
+<li><strong>04.10</strong> — инцидент владельца («пара открытий → 429 на send») → фикс 043d8ff6 (18:50:33) → master 3def2196 (19:14:17); «на проде старый код до ручной выкатки» (<code>lovii-core/docs/sessions/087-max-bots-per-stand.md:136-137</code>).</li>
+<li><strong>05→06.10 (ночь)</strong> — релиз C2 <code>a0eb9a4c</code> (06.10 01:32:35): первый прод-деплой по новому контуру, включает фикс; выкатка 22:47 UTC ≈ 01:47 МСК (<code>lovii_docs/workspace/status.md:47-50</code>). «Первый» — по новому контуру; первая волна — 03.10.</li>
+<li><strong>06.10 (утро)</strong> — прод-деплой TG IPv4 (dispatch 37426058414; <code>lovii-core/docs/sessions/096-tg-direct-ipv4.md:42-43</code>); 06.10 — постановка O-2.</li>
+</ul>
+<p><strong>Конфликт-заметка.</strong> <code>lovii_docs/canon/BACKLOG_ARCHIVE.md:18-21</code> («закрыты прод-волнами 03.10–05.10… По памяти сессий») буквально допускает выкатку core 04–05.10; детальные доки этого не подтверждают (087:136 — «на проде старый код»; 04–05.10 — b2b-хотфиксы и staging-волны, не core). Закрыть по серверному логу деплоя (вне репо); мягкий конфликт формулировок (§5).</p>
+<h3 id="45-со-стороны-злоумышленника">§4.5 Со стороны злоумышленника</h3>
+<p>Сжато; контур P0 (<code>binding_token</code>) здесь не раскрыт — он в §6.</p>
+<ul>
+<li><strong>Выжигание бюджетов.</strong> При глобальном IP-бакете (A) ~6–7 запросов/мин одной машины без авторизации покрывают весь прод 429-ми на отправку (порог send — 6/мин, <code>AppServiceProvider.php:184-191</code>); первыми падают новые пользователи. [кандидат; H5, §8]</li>
+<li><strong>Таргетный лок номера.</strong> 2 запроса/мин с валидным номером выбивают его бюджет <code>otp-send</code> — жертва получает 429 на своей отправке (<code>AppServiceProvider.php:189</code>). [наблюдалось (механика)]</li>
+<li><strong>Пустой phone → общий <code>'phone:'</code></strong> (E): общий бакет жгут любые запросы без телефона; ценность для атакующего ограничена (не пересекается с ключами номеров), но счётчик загрязняется. <span class="chip dashed">кандидат</span></li>
+<li><strong>Перебор кода с бесконечным сбросом.</strong> 5 попыток на сессию (<code>lovii-core/app/Domain/Auth/Services/OtpService.php:13-15</code>), но переотправка создаёт новую сессию с <code>attempts=0</code> (<code>OtpService.php:26-48</code>), reissue тоже сбрасывает (<code>:66-78</code>); накопительного счётчика фейлов и инвалидации нет — сессия лишь перестаёт валидировать код до TTL 10 мин (<code>:107-125</code>). Скорость ≈5 попыток/мин/номер (упор в <code>otp-confirm</code> 5/мин; <code>AppServiceProvider.php:209-216</code>) ⇒ ~300/час; для 4-значного кода — оценка: медиана ~23 ч, сутки ≈51%. Для parked-номеров перебор невидим владельцу; принцип NIST SP 800-63B (накопление фейлов) нарушен. [наблюдалось по коду; модель — оценка]</li>
+</ul>
+<h2 id="5-достоверность-и-верификация">§5 Достоверность и верификация</h2>
+<p>Базис: независимая перекрёстная проверка (повторное чтение первоисточников и самостоятельная перепроверка по коду четырёх репозиториев; read-only, тесты не запускались). Итог: сводная доказательная база высоко достоверна, все ключевые проверяемые утверждения подтверждены.</p>
+<h3 id="51-вердикты-сверки-все-восемь-подтверждено">§5.1 Вердикты сверки (все восемь — <span class="chip">подтверждено</span>)</h3>
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th>Проверка</th>
+<th>Вердикт</th>
+<th>Рантайм-хвост</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>trustProxies / «глобальные IP-бакеты»</td>
+<td><span class="chip">подтверждено</span> по коду и топологии</td>
+<td>точный <code>ip()</code> через Caddy — <span class="chip dashed">требует стенда</span> (H1/H5)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Лимитеры: ключи, md5-неймспейс, пороги 6/2, 30/15, 20/5, <code>'phone:'</code>, отсутствие ключей <code>rate_limit</code></td>
+<td><span class="chip">подтверждено</span></td>
+<td>—</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Семантика счётчика (hit до контроллера; отбой не инкрементирует; окно 60 с)</td>
+<td><span class="chip">подтверждено</span> (+ живое наблюдение отсутствия Retry-After, 10.09)</td>
+<td>прод-чек заголовков <code>curl -i</code> — <span class="chip dashed">требует стенда</span></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Кулдаун: окно от <code>last_sent_at ?? created_at</code>; сессия создаётся до <code>linkRequired</code>; регресс-тест каналов</td>
+<td><span class="chip">подтверждено</span></td>
+<td>стендовое воспроизведение parked — <span class="chip dashed">требует стенда</span></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Клиент: 3 места текста; request-code только из <code>loadChannels</code> и всегда на маунт; кэш <code>loviOtpChannels</code> (5 мин); нет ретраев на 429; таймер только на экране кода</td>
+<td><span class="chip">подтверждено</span></td>
+<td>полевой сетевой лог — в доках отсутствует</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Хронология/деплой: даты коммитов; «фикс на проде задокументирован только с C2»</td>
+<td><span class="chip">подтверждено</span> для дат и документной цепочки</td>
+<td>более ранняя выкатка документами не исключена; серверный лог — <span class="chip dashed">требует стенда</span> (§9.1)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Упущенное: другие источники 429 и другие вызовы request-code</td>
+<td><span class="chip">подтверждено</span> — критичных упущений нет</td>
+<td>—</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Воспроизведение перепроверок доказательной базы (6 пунктов)</td>
+<td><span class="chip">подтверждено</span> — воспроизведены эквивалентными командами</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-апгрейды-и-уточнения">§5.2 Апгрейды и уточнения</h3>
+<ul>
+<li><strong>Limiter-429 и Retry-After.</strong> Помимо код-инференса (кастомный render не пробрасывает заголовки исключения — <code>lovii-core/bootstrap/app.php:88-93</code>) есть живое наблюдение на staging 10.09: «заголовка Retry-After нет» (<code>lovii_docs/canon/TASKS/SZ-012-clean-device-channels-otp-copy.md:18-20</code>). Статус повышен до «подтверждено кодом + живым наблюдением»; остаётся прод-проверка <code>curl -i</code> — <span class="chip dashed">требует стенда</span>.</li>
+<li><strong>Уточнённые строки</strong> (использованы в §4): <code>lovii-core/tests/Feature/MaxBot/OtpThrottleTest.php:33-59</code> и <code>:141-180</code>; <code>lovii_docs/canon/BACKLOG_ARCHIVE.md:18-21</code>; <code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:179-193</code> (onMounted); <code>lovii-app/e2e/README.md:53-56</code>.</li>
+</ul>
+<h3 id="53-отрицательные-результаты">§5.3 Отрицательные результаты</h3>
+<ul>
+<li>Других текстов «Слишком много попыток» на OTP-пути нет — только три места: <code>AuthCallCoders.vue:84,171</code>, <code>AuthCode.vue:92</code>.</li>
+<li>Других вызовов request-code нет: единственный call site — <code>loadChannels</code> (<code>lovii-app/src/modules/auth-module/api/auth-api.ts:61-67</code>); у b2b — сервер-сервер те же эндпоинты (<code>lovii-b2b/app/Support/CoreApi/CoreApiClient.php:38,52,67</code>), у admin/demo вызовов нет.</li>
+<li>Других 429-источников на OTP-пути нет: три лимитера + кулдаун; глобального <code>throttle:api</code> нет; в nginx лимитов нет; webhooks без throttle.</li>
+<li>Триггер запросов без <code>phone</code> не найден (механизм E остаётся <span class="chip dashed">кандидат</span>).</li>
+<li>Доков, фиксирующих core-деплой 04–05.10 (с фиксом), нет — диапазон закрывают b2b-хотфиксы и staging-волны.</li>
+</ul>
+<h3 id="54-как-читать-статусы-и-что-остаётся-вне-проверки">§5.4 Как читать статусы и что остаётся вне проверки</h3>
+<ul>
+<li>Статусы — по словарю §1 (единая легенда; здесь не дублируется).</li>
+<li>Вне проверки остаётся (кратко): фактический <code>ip()</code> через Caddy и число уникальных ip-ключей в redis; заголовки limiter-429 на проде; прод-версия core на момент жалобы; стендовые <code>.env</code> и конфиг Caddy; триггер пустого phone; живое репро «чистое устройство»; серверный лог деплоя. Полный список — §9.</li>
+</ul>
+<div class="crit-block"><p class="crit-kicker">P0-кандидат · вне контура O-2 · подтверждено по коду, требуется стенд-проверка</p><h2 id="6-критическая-находка-вне-контура-o-2-кандидат-p0">§6 Критическая находка вне контура O-2 (кандидат P0)</h2>
+<p>Adversarial-аудит решения (red team) выявил вне контура задачи O-2 механику, которая перекрывает анти-абьюз-контур и требует отдельного решения владельца. Ниже — только механика, достаточная для понимания и защиты (без пошаговых сценариев). Статус: <strong><span class="chip dashed">кандидат</span>: полная цепочка подтверждена чтением кода (file:line ниже), обязательна live-проверка H8 (§8).</strong> Материал служебный: не публиковать вовне до устранения.</p>
+<h3 id="61-цепочка-a-binding-token-в-http-ответе-redemption-parked-сессии">§6.1 Цепочка A — <code>binding_token</code> в HTTP-ответе + redemption parked-сессии</h3>
+<p>Для телефона, не привязанного к боту канала, <code>POST /auth/send-code</code> возвращает в HTTP-ответе <code>binding_token</code> (токен привязки) и deeplink — ветка «link required»: <code>lovii-core/app/Http/Controllers/Api/V1/Auth/SendOtpController.php:34-67</code>. Далее <code>POST /auth/confirm-by-binding</code> принимает этот токен, и если сессия ещё не подтверждена (parked — код никуда не доставлялся), redemption сам подтверждает её: <code>findConfirmedByBindingToken() ?? findPendingByBindingToken()</code> и <code>confirmed_at = now()</code> — <code>lovii-core/app/Application/Auth/Actions/ConfirmByBindingAction.php:36-47</code>; поиск parked-сессии по токену — <code>lovii-core/app/Domain/Auth/Services/OtpService.php:84-92</code>. Цепочка завершается выдачей access-токена — <code>lovii-core/app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php:74</code>.</p>
+<p>Комментарий в коде (<code>ConfirmByBindingAction.php:20-25</code>) обосновывает pending-redemption так: владение токеном внутри чата пользователя — «тот же уровень доверия» (пер. с англ.: «the same trust level as the OTP code delivered there»), что и у доставленного туда кода. Посылка верна, пока токен есть только у владельца чата; но в parked-ветке сервер отдаёт его в HTTP-ответе и <strong>не проверяет на этом пути ни владение телефоном, ни владение чатом</strong>. Итог: знание номера (при канале без привязки) потенциально достаточно для access-токена аккаунта — входа или захвата; лимитами это не закрывается (единицы запросов).</p>
+<h3 id="62-цепочка-b-привязка-чужого-чата-через-deeplink">§6.2 Цепочка B — привязка чужого чата через deeplink</h3>
+<p>Webhook-и обновляют связку телефон→чат, не верифицируя, что чат принадлежит владельцу номера:</p>
+<ul>
+<li>MAX: <code>handleBotStarted</code> выполняет <code>updateOrCreate</code> (телефон — из сессии, <code>chat_id</code> — из апдейта) без верификации — <code>lovii-core/app/Http/Controllers/Api/V1/Auth/MaxWebhookController.php:96-125</code>; верифицированный путь — только contact-share с HMAC (<code>:171-178</code>);</li>
+<li>Telegram: <code>/start &lt;binding_token&gt;</code> → <code>bindAndDeliverCode()</code> привязывает чат через <code>upsertForBot(...)</code> без <code>verified</code> — <code>lovii-core/app/Application/TelegramBot/Handlers/TelegramOtpBotHandler.php:119-158</code>; аналогично устроен VK — <code>lovii-core/app/Application/VK/Handlers/VKCallbackHandler.php:164-185</code>;</li>
+<li><code>upsertForBot()</code> по умолчанию <code>verified=false</code>, а <code>updateOrCreate</code> перезаписывает <code>chat_id</code> — <code>lovii-core/app/Models/Core/MaxBotLink.php:38-56</code>.</li>
+</ul>
+<p>Следствие: тот, кто первым предъявит deeplink с валидным токеном, получает привязку к чужому номеру — код и magic-ссылка («одно касание = вход») уходят в его чат; легитимный пользователь в parked-сценарии этого не замечает. Ограничение обеих цепочек: нужен канал, к которому телефон ещё не привязан (для активной аудитории найдётся хотя бы один из MAX/TG/VK).</p>
+<h3 id="63-последствия-статус-и-заготовка-решения">§6.3 Последствия, статус и заготовка решения</h3>
+<ul>
+<li>Совокупный риск: <strong>потенциальный захват входа по знанию номера</strong> — access-токен аккаунта, повторные входы, перезапись привязки (жертве коды перестают доставляться), создание аккаунтов на незарегистрированные номера.</li>
+<li>Ключевое для плана: <strong>P0 не закрывается лимитами</strong> — цепочка умещается в два запроса, ни один порог не участвует. Поэтому: эскалация владельцу — до работ по анти-абьюзу; при подтверждении H8 — стоп фаз 3–4 до исправления; P0-контур — отдельный трек (фаза 4; §7.1).</li>
+<li>Варианты решения: (а) верифицировать владение каналом до доставки/redemption (contact-share в MAX/TG; для VK эквивалента нет — отдельный дизайн, вплоть до исключения VK из входа до появления верификации); (б) не отдавать <code>binding_token</code> в HTTP-ответе parked-ветки — доставлять его только через мессенджер; (в) принять риск с компенсациями — не рекомендуется.</li>
+</ul>
+</div><h2 id="7-решение-целевая-модель-и-анти-абьюз">§7 Решение: целевая модель и анти-абьюз</h2>
+<p>Раздел собирает целевое решение в двух слоях: (1) рамка фаз внедрения — что делаем и в каком порядке; (2) целевая модель лимитов и анти-абьюза. Внешние практики — по приложению A (ссылки [n]); серверные факты — <code>file:line</code>. Все числовые ориентиры в модели помечены как <strong>предложение, калибровать</strong> (методика — dark launch, §7.4), это не норматив.</p>
+<h3 id="71-принципы-и-рамка-фаз">§7.1 Принципы и рамка фаз</h3>
+<p>Принципы владельца, задающие рамку: легитимному пользователю ничто не мешает получить первый код; при этом должны останавливаться боты, злоупотребление вызовами API и подбор кода. Отсюда порядок «сначала убрать ложные блокировки, затем ужесточать» и правило: <strong>ужесточение (фаза 3) не выходит в одном релизе с availability-работой (фаза 1)</strong> — иначе рискуем повторить O-2 с другой стороны.</p>
+<p><strong>Рамка фаз (согласована с §8.1):</strong> 0 — верификация на стенде (без изменений кода); 1 — availability (trust-прокси — отдельный коммит 1a); 2 — наблюдаемость и dark launch; 3 — ужесточение (гейт H8); 4 — P0-контур (§6). Детали коммитов и точек отката — только в §8.1.</p>
+<ul>
+<li><strong>Фаза 0 — верификация на стенде (без изменений кода).</strong> Стенд-проверки H1–H8 и фиксация версии прод-кода (§8); по H8 — решение владельца до старта фаз 3–4.</li>
+<li><strong>Фаза 1 — ложные блокировки (availability-first).</strong> Фазу открывает отдельный коммит <strong>1a — trust-прокси и ключевая модель</strong>: пока трафик идёт Caddy→app без trusted-proxy настройки, <code>$request-&gt;ip()</code> — единый IP контейнера Caddy для всех (<code>lovii-core/bootstrap/app.php:37-47</code>; <code>lovii-core/docker-compose.prod.yml:30-43</code>), и IP-бакеты фактически глобальные; trust только для сети Caddy, закрытие прямого доступа к backend, регресс XFF-спуфинга (H7, §8); меняет ВСЕ ключи лимитеров. Далее по фазе (1b–1e): Кулдаун — по факту доставки, не по созданию сессии (parked-сессии MAX/TG/VK не держат окно; идемпотентная парковка ≤30 с против гонки токенов); клиентская устойчивость: при 429 список каналов не исчезает (сейчас заменяется блоком ошибки — <code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:204,247-256</code>), инлайн-статус, backoff; точные 429 — проброс <code>Retry-After</code>/<code>X-RateLimit-*</code> и scope-тексты; стендовые конфиг-ручки + kill switch. Детали коммитов, точек отката и критериев приёмки — §8.1.</li>
+<li><strong>Фаза 2 — наблюдаемость и dark launch.</strong> Новые пороги сначала «в тени» (1–2 недели): считаем, кого заблокировали бы; метрики — §7.4.</li>
+<li><strong>Фаза 3 — ужесточение анти-абьюза (после калибровки).</strong> Verify: инвалидация кода при исчерпании попыток и при новой отправке, накопительный пер-телефонный счётчик фейлов (не сбрасывается resend/reissue), step-up; send: caps на повторные отправки; пер-канальные состояния доставки + fallback UI; идемпотентность — по решению владельца.</li>
+<li><strong>Фаза 4 — P0-контур безопасности (§6) отдельным треком.</strong> По решению владельца, релиз после ревью; без «отката к уязвимости».</li>
+</ul>
+<p><strong>Ответ на триаду карточки.</strong> (1) Счётчик — по реальным действиям: 429 — только по факту лимита (§7.3), кулдаун — от фактической доставки (1b), авто-перезапросы списка дедуплицируются и не подменяют действия пользователя (1c), запросы без <code>phone</code> — на отдельном ключе (фаза 3). (2) Пер-канальность — состояния доставки и переключение/fallback; бюджет отправок остаётся тотальным per-phone (иначе смена канала обходит бюджет — §7.2–§7.3). (3) Fallback UI — при известном провале канала: явный <code>delivery_failed</code> от сервера + fallback после 2–3 неудач (§7.3, §8.1 фаза 3).</p>
+<h3 id="72-эшелоны-ключей">§7.2 Эшелоны ключей</h3>
+<table>
+<thead>
+<tr>
+<th>Эшелон</th>
+<th>Роль</th>
+<th>Границы применения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Телефон (E.164)</td>
+<td><strong>Жёсткий ключ</strong>: кулдаун и caps на повторные отправки; попытки verify; «одна активная сессия кода»</td>
+<td>Caps считать на «повторы без успеха» (успешные повторные входы не наказывать); сессия — на телефон, caps общие для всех устройств пользователя</td>
+</tr>
+<tr>
+<td>IP</td>
+<td><strong>Мягкий, широкий</strong>: сбор аномалий; challenge/эскалация только при устойчивом превышении</td>
+<td>Никогда не блокирует первую отправку; CGNAT — «городской» ключ, баны короткие [27, 28]</td>
+</tr>
+<tr>
+<td>Канал</td>
+<td><strong>Состояние доставки, не бюджет</strong>: «этот канал не доставил» → переключение/fallback</td>
+<td>Бюджет отправок остаётся тотальным per-phone (иначе смена каналов обходит бюджет); ключи канала брать из валидации, не из сырого запроса</td>
+</tr>
+<tr>
+<td>Устройство/сессия</td>
+<td>Soft-контекст: капы сессии, риск-сигнал</td>
+<td>Не блокировать: fingerprint sha256(UA+AL) слабый (инкогнито, обновления, общие устройства)</td>
+</tr>
+<tr>
+<td>Префикс/оператор/ASN</td>
+<td>Сигналы анти-фрода: ужесточение/ослабление политик</td>
+<td>Вне объёма O-2 — отдельный трек</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73-сигнал-ограничение-стартовый-ориентир">§7.3 Сигнал → ограничение → стартовый ориентир</h3>
+<table>
+<thead>
+<tr>
+<th>Сигнал</th>
+<th>Что ограничиваем</th>
+<th>Стартовый ориентир (предложение, калибровать)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Повторная отправка на тот же телефон</td>
+<td>Кулдаун между повторами; caps на повторы</td>
+<td>Первая отправка — всегда; далее 30 с → 60 с → 120 с → 300 с (по числу ресендов); cap 3/10 мин и 5/час [3, 25]</td>
+</tr>
+<tr>
+<td>Ввод кода</td>
+<td>Попытки на код; число активных сессий</td>
+<td>3 попытки на код (диапазон 3–5); после исчерпания код инвалидируется; одна активная сессия на телефон+назначение [3, 24, 4]</td>
+</tr>
+<tr>
+<td>Исчерпания попыток на телефон</td>
+<td>Накопительный счётчик фейлов + лестница ожидания</td>
+<td>Счётчик не сбрасывается resend/reissue; 30 с → 1 мин → 5 мин → 15 мин → 1 ч; step-up после 2–3 фейлов [24, 3, 4]</td>
+</tr>
+<tr>
+<td>Объём с одного IP (после включения trust-прокси — коммит 1a)</td>
+<td>Challenge/эскалация, не мгновенная блокировка</td>
+<td>Ориентир масштаба: десятки/мин и сотни/час; без 429 на первую отправку; блок — только при устойчивом превышении (2 окна подряд) [2, 25]</td>
+</tr>
+<tr>
+<td>Запросы с устройства/сессии</td>
+<td>Soft-кап отправок на сессию</td>
+<td>По калибровке; не блокировать — использовать для эскалации [25]</td>
+</tr>
+<tr>
+<td>Весь send-эндпоинт</td>
+<td>Token bucket по ключу</td>
+<td>Короткие burst'ы допускаются; пустой бакет → 429/challenge [21]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verify-контур</strong> (отдельно от send): считать только неуспешные проверки (response-based counting — иначе страдают вводящие верный код), объём запросов — пре-лимитом (защита от CPU-abuse <code>Hash::check</code>); фейлы копятся на телефоне, а не на сессии [14, 24].</p>
+<p><strong>Каналы.</strong> Пер-канальные состояния доставки; при известном провале — переключение канала, а не общий 429; альтернативные каналы не блокируются целиком; fallback-действие показывается после 2–3 неудач основного канала и не должно быть «бесконечно дёргаемым» [19, 25]. Состояние провала доставки обязан возвращать сервер явно — клиент не может его угадать (сейчас: TG-исключение → необработанный 500, MAX → тихая повторная парковка).</p>
+<p><strong>Точные 429.</strong> 429 — только по факту срабатывания реального лимита, никогда «предохранительно» до действия; точный <code>Retry-After</code>; текст называет, что именно ограничено («лимит запроса списка» / «лимит отправки на этот номер» / «кулдаун доставки»), чтобы человек мог переключить канал [16, 15]. Таймер повторной отправки стартует после фактической отправки, а не при открытии экрана [3, 25] (вывод из практик, не прямая цитата).</p>
+<p><strong>Fail-open, kill switch, идемпотентность.</strong> Недоступность лимитера/Redis не должна блокировать отправку (fail-open) + kill switch и алерт; новые пороги — отключаемы на staging без переопределения прод-дефолтов [21]. Идемпотентность send (<code>Idempotency-Key</code>) — по решению владельца, контрактное изменение синхронно с app [22, 3].</p>
+<h3 id="74-наблюдаемость-основание-для-фазы-2">§7.4 Наблюдаемость — основание для фазы 2</h3>
+<ul>
+<li>«Attempts vs sends» по ключам: блокировка без фактической отправки = ложное срабатывание (санити-чек O-2) [23, 25].</li>
+<li>Конверсия OTP (verified/sent), с алертами по каналам/операторам [19].</li>
+<li>Доля и топ-K ключей по 429/челленджам; логи лимитера с причиной и ключом, регулярный ревью [25].</li>
+<li>Dark launch новых порогов: «кого бы заблокировали» → калибровка → включение [21].</li>
+</ul>
+<h3 id="75-антипаттерны-чего-не-делать">§7.5 Антипаттерны (чего не делать)</h3>
+<table>
+<thead>
+<tr>
+<th>Антипаттерн</th>
+<th>Почему плохо</th>
+<th>Вместо</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Жёсткий per-IP как первичный ключ</td>
+<td>CGNAT: «блокируем город», страдают невиновные [27, 28]</td>
+<td>Per-phone жёсткий + per-IP мягкий [25]</td>
+</tr>
+<tr>
+<td>Доверять XFF вне доверенной цепочки</td>
+<td>Спуфинг = обход лимитов (реальный инцидент) [9, 6]</td>
+<td>Trusted-proxy список/счётчик; закрытый backend</td>
+</tr>
+<tr>
+<td>Считать все verify-запросы, включая успешные</td>
+<td>Ловим легитимных, вводящих верный код [14]</td>
+<td>Response-based counting (только ошибки)</td>
+</tr>
+<tr>
+<td>429 «до реального действия»</td>
+<td>Ломает воронку (наш O-2); семантика RFC 6585 [16]</td>
+<td>429 только по факту + Retry-After</td>
+</tr>
+<tr>
+<td>Сброс счётчика фейлов при resend/новом коде</td>
+<td>NIST: не сбрасывать; перебор не закрывается [24, 4]</td>
+<td>Накопительный счётчик + инвалидация кода</td>
+</tr>
+<tr>
+<td>Fail-closed при сбое лимитера</td>
+<td>Отказ хранилища → блокировка всех [21]</td>
+<td>Fail-open + kill switch + алерт</td>
+</tr>
+<tr>
+<td>Скрытый/зацикленный resend, молчаливый fallback</td>
+<td>«Never hide the resend option»; провал доставки без статуса [3, 29]</td>
+<td>Видимый countdown; явные per-channel состояния</td>
+</tr>
+</tbody>
+</table>
+<h3 id="76-что-не-закрывается-лимитами">§7.6 Что не закрывается лимитами</h3>
+<ul>
+<li><strong>P0 (§6)</strong> — вне контура лимитов: цепочка из пары запросов не упирается ни в один порог; лечится только верификацией привязки/redemption (фаза 4, отдельный трек).</li>
+<li><strong>XFF-спуфинг</strong> — после включения trust это вопрос корректности конфигурации и регресс-тестов (H7, §8), а не порогов: ошибка здесь обнуляет ключевую модель разом [6, 9].</li>
+</ul>
+<h3 id="77-требуются-решения-владельца">§7.7 Требуются решения владельца</h3>
+<ol>
+<li><strong>P0 (§6):</strong> подтвердить на стенде (H8) и выбрать модель: (а) верификация канала до доставки/redemption; (б) не отдавать <code>binding_token</code> в HTTP-ответе parked-ветки; (в) принять риск с компенсациями (не рекомендуется); плюс отдельный дизайн для VK.</li>
+<li>Политика порогов: первая отправка и per-IP soft-лимиты (стартовые числа — калибровать в dark launch).</li>
+<li>Fail-open / kill-switch политика; допустимость env-релаксации порогов на staging.</li>
+<li><code>Idempotency-Key</code> для send (изменение контракта, синхронно с app).</li>
+<li>Считать ли caps на успешные повторные входы (или только на «повторы без успеха»).</li>
+<li>Гигиена: проверка маски в проде до side-effects; <code>.env.example</code> <code>dev_bypass=false</code>; мёртвые config-ключи; TTL подтверждённых сессий привязки.</li>
+</ol>
+<h2 id="8-план-внедрения-и-проверок">§8 План внедрения и проверок</h2>
+<p>План двухтрековый: стенд-верификация (фаза 0), затем исправление в четыре фазы (1–4). Сквозной порядок: <strong>сначала ложные блокировки, затем ужесточение анти-абьюза</strong>. Фазы 1 и 3 не выходят в одном релизе; фазу 3 предваряет гейт H8 (§8.2). Trusted proxies — отдельным коммитом 1a: он разом меняет ключи всех лимитеров, смешивать его с другими правками нельзя. Рамка фаз и принципы — §7.1; ниже — план внедрения с точками отката.</p>
+<h3 id="81-фазы-04">§8.1 Фазы 0–4</h3>
+<p><strong>Фаза 0 — верификация на стенде.</strong>
+- Цель: подтвердить/снять H1–H8; зафиксировать версию прод-кода (жив ли <code>throttle:otp-channels</code>) и время выкатки фикса относительно жалобы.
+- Изменения: отсутствуют (read-only; H8 — только согласованные тестовые профили). Что может сломаться: ничего; откат не требуется.
+- Проверка: методы §8.2 + приоритеты §8.3. Критерий выхода: факты зафиксированы; решение владельца по H8 принято до старта фаз 3–4.</p>
+<p><strong>Фаза 1 — ложные блокировки (availability-first).</strong> Один релиз из независимо отключаемых коммитов.</p>
+<ul>
+<li>1a. Trusted proxies: <code>lovii-core/bootstrap/app.php:37-47</code> — доверять только сетям Caddy; прямой доступ к app закрыть; после включения — XFF-тест (H7) и redis-аудит ключей. <em>Сломается:</em> тесты с ожиданием «единого» ip-ключа (ключей станет много — это цель). <em>Откат:</em> реверт коммита/конфиг-флаг; критерий — спуф проходит либо растут 5xx.</li>
+<li>1b. Кулдаун «после фактической доставки»: <code>lovii-core/app/Application/Auth/Actions/SendOtpAction.php:38-45,59-61,131</code>; <code>lovii-core/app/Models/Core/AuthOtpSession.php:40-57</code> — parked/linkRequired не стартуют окно; повторная парковка ≤30 с идемпотентна (тот же <code>binding_token</code>). <em>Сломается:</em> link-флоу (гонки токенов), b2b-ожидания «1 код в минуту». <em>Откат:</em> вернуть логику от <code>created_at</code>; критерий — всплеск потерянных токенов.</li>
+<li>1c. Клиентская устойчивость: <code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:82-86,179-193,204,247-256</code>; <code>lovii-app/src/modules/auth-module/components/AuthCode.vue:64-95</code> — список каналов не исчезает при 429 (кэш/дефолт + инлайн-статус), дедупликация request-code, backoff с учётом <code>Retry-After</code>, гашение ремоунт-шторма. <em>Сломается:</em> тесты, фиксирующие «сообщение + retry», — обновить согласованно. <em>Откат:</em> реверт релиза app; критерий — падение конверсии экрана каналов.</li>
+<li>1d. Точные 429: проброс <code>Retry-After</code>/<code>X-RateLimit-*</code> в render (<code>lovii-core/bootstrap/app.php:88-93</code>; заголовки формирует vendor-мидлварь <code>ThrottleRequests.php:297-319</code>, кастомный render их теряет) + тексты со scope («лимит списка» / «лимит отправки» / «кулдаун»). <em>Сломается:</em> формат ответа — только добавления, существующее не трогаем. <em>Откат:</em> прежний render.</li>
+<li>1e. Стендовые ручки: ключи <code>otp.rate_limit.*</code> в <code>lovii-core/config/otp.php</code> (env, только staging) + kill switch; прод-дефолты неизменны; паттерн тестов <code>lovii-core/tests/Pest.php:37-41</code> (<code>config()-&gt;set</code>) сохранить. <em>Сломается:</em> ничего в проде. <em>Откат:</em> конфиг-коммит.</li>
+<li>Приёмка фазы 1: e2e зелёный; «чистое устройство» с двух сетей не получает 429 при нормальных действиях; любой 429 — по факту и с точным временем.</li>
+</ul>
+<p><strong>Фаза 2 — наблюдаемость и dark launch.</strong>
+- Цель: неблокирующие метрики (§7.4: attempts/sends/blocks, конверсия OTP, топ-ключи 429); признак ложной блокировки — «attempts без sends». Новые пороги считаются «в тени» и ничего не блокируют.
+- Проверка: логи/дашборд за 1–2 недели. <em>Откат:</em> выключить метрики; критерий — данные непригодны или дороги.</p>
+<p><strong>Фаза 3 — ужесточение анти-абьюза (после калибровки; гейт — H8).</strong>
+- verify: 3 попытки + инвалидация (пометка в БД); накопительный пер-телефонный счётчик фейлов, не сбрасываемый resend/reissue (<code>lovii-core/app/Domain/Auth/Services/OtpService.php:15,38-47,66-78,107-129</code>); прогрессивное ожидание; объём — пре-лимитом, фейлы — пост-фактум.
+- send: пер-телефонные caps по калибровке (только «повторы без успеха»), token-bucket; Idempotency-Key — если решено (синхронно с app).
+- Ключи и доставка: тотальный per-phone бюджет сохраняется; пер-канальные состояния доставки; отдельный ключ для пустого phone; проверка маски до side-effects (<code>lovii-core/app/Domain/Auth/Services/OtpDeliveryTargetResolver.php:41,50-77</code> против <code>SendOtpAction.php:47-61</code>); явный <code>delivery_failed</code> для TG/MAX/VK (<code>lovii-core/app/Infrastructure/Auth/Senders/TelegramSender.php:62-67</code>; <code>SendOtpAction.php:125-133</code>) + fallback UI; не смешивать со «Скоро».
+- Проверка: метрики фазы 2 до/после; стенд-прогон брутфорс-сценария; регресс b2b.
+- Что может сломаться: e2e/QA (нужны ручки 1e), b2b-цепочки, повторные входы. <em>Откат:</em> по подсистемам (пункт = коммит/флаг); критерий — блокировки без отправок, конверсия, жалобы.</p>
+<p><strong>Фаза 4 — P0-структура безопасности (отдельный трек).</strong>
+- Верификация привязки/redemption по решению владельца (гейт H8); security-тесты, H8 — регрессионный сценарий; «откат к уязвимости» не предусмотрен: только вперёд, после отдельного ревью.</p>
+<h3 id="82-гипотезы-h1h8-чек-лист-стенда">§8.2 Гипотезы H1–H8 — чек-лист стенда</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Гипотеза</th>
+<th>Метод</th>
+<th>«Плохо»</th>
+<th>«Хорошо»</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H1</td>
+<td><code>$request-&gt;ip()</code> через Caddy — единый IP контейнера</td>
+<td>staging: временное эхо ip() для двух разных внешних клиентов; <code>redis-cli --scan</code> по маскам <code>md5('otp-*ip:*')</code></td>
+<td>один ip-ключ на всех клиентов</td>
+<td>ключи различаются по клиентам</td>
+</tr>
+<tr>
+<td>H2</td>
+<td>limiter-429 теряет <code>Retry-After</code>/<code>X-RateLimit-*</code></td>
+<td><code>curl -i</code> ×7 на send-code с одного IP (номера чередовать, чтобы не сбил кулдаун) → 7-й — limiter-429</td>
+<td>заголовков нет</td>
+<td>заголовки присутствуют</td>
+</tr>
+<tr>
+<td>H3</td>
+<td>Кулдаун стартует без доставки (parked)</td>
+<td>send-code (номер без линка, канал max/tg) → 200 link_required; сразу повтор</td>
+<td>429 «Код уже отправлен…» при нуле доставок; канал не переключить</td>
+<td>повтор не блокируется жёстко; state различает «не доставлено»</td>
+</tr>
+<tr>
+<td>H4</td>
+<td>Бюджет попыток обновляется на resend/reissue</td>
+<td>5 неверных confirm → 6-й otp_invalid; пауза 30 с; новый send → снова принимаются 5 попыток</td>
+<td>попытки сбрасываются бесконечно</td>
+<td>после фикса — накопление/инвалидация между сессиями</td>
+</tr>
+<tr>
+<td>H5</td>
+<td>Глобальный DoS ip-бакета</td>
+<td>6–7 запросов/мин на send-code (можно с невалидным телом) → легитимный новый профиль с другой сети</td>
+<td>429 «до отправки» у легитима с любого клиента</td>
+<td>429 не глобальный; легитим не задет (после trust-фикса)</td>
+</tr>
+<tr>
+<td>H6</td>
+<td>Пустой phone жжёт общий ключ <code>'phone:'</code></td>
+<td><code>POST send-code {}</code> ×3 (422) → проверить ключ <code>md5('otp-send'.'phone:')</code> в redis</td>
+<td>ключ растёт от мусорных запросов; 3-й → 429</td>
+<td>невалидный запрос не жжёт бакет либо изолирован</td>
+</tr>
+<tr>
+<td>H7</td>
+<td>XFF-спуф после включения trust</td>
+<td>staging: серия <code>curl -H 'X-Forwarded-For: 203.0.113.7'</code>; сверить ключ бакета; проверить недоступность backend напрямую</td>
+<td>ключ = спуфленному IP (обход лимитов)</td>
+<td>ключ = реальный IP; спуф не влияет</td>
+</tr>
+<tr>
+<td>H8</td>
+<td>P0: вход по <code>binding_token</code> без владения телефоном/чатом</td>
+<td>staging, тестовые профили: send-code (чужой номер, канал без линка) → <code>binding_token</code> из ответа; не открывая deeplink — confirm-by-binding{token} → проверить ответ</td>
+<td>200 + access-token чужого профиля → P0 подтверждён: СТОП фаз 3–4, эскалация владельцу</td>
+<td>403/422 — токен требует верифицированного канала (иного фактора)</td>
+</tr>
+</tbody>
+</table>
+<p>Примечания: H1, H5, H7 требуют двух сетевых точек (сервер + мобильная сеть). H8 — только staging, согласованные тестовые номера, часы с командой; результат — гейт до фаз 3–4.</p>
+<h3 id="83-приоритеты-верификации">§8.3 Приоритеты верификации</h3>
+<ol>
+<li><code>~/lovii-deploy.log</code> (SRV) — независимое свидетельство даты прод-выкатки (C2/фикса); закрывает «до/после жалобы».</li>
+<li><code>curl -i</code> на limiter-429 в проде — наличие <code>Retry-After</code>/<code>X-RateLimit-*</code> (staging-наблюдение от 10.09 есть; прод — нет).</li>
+<li><code>redis-cli --scan</code> по маскам <code>md5('otp-*ip:*')</code> — число уникальных ip-ключей: «один ключ на всех» подтверждает глобальные бакеты (стендовые <code>.env</code> и конфиг Caddy (<code>/opt/gateway</code>) — там же, вне репозитория).</li>
+<li>Сетевой лог app при открытии экрана (чистое устройство, staging): число <code>request-code</code> на первый визит и коды ответов — закрывает пункт карточки «сетевой лог app при открытии экрана» (в доках лога нет; цепочка восстановлена по коду — §3.1).</li>
+</ol>
+<h2 id="9-риски-открытые-вопросы-и-непроверенное">§9 Риски, открытые вопросы и непроверенное</h2>
+<p>Материал сведён в три группы. Граница проводится явно: «риски решения» — свойства будущих изменений, которыми управляют выбором параметров; «непроверяемое из репозитория» — факты, которые нельзя закрыть чтением кода (закрывает фаза 0, §8); долговые пункты — сопутствующие дефекты и отставание документации.</p>
+<h3 id="91-непроверяемое-из-репозитория-требует-стенда-закрывается-фазой-0">§9.1 Непроверяемое из репозитория (<span class="chip dashed">требует стенда</span>; закрывается фазой 0)</h3>
+<ul>
+<li>Рантайм <code>$request-&gt;ip()</code> при трафике через Caddy и фактическое число уникальных ip-ключей лимитеров в Redis: центральное звено механизма «глобальных бакетов» остаётся <span class="chip dashed">кандидат</span>; закрывает фаза 0 (<code>redis-cli --scan</code>, H1).</li>
+<li>Конфиг Caddy (<code>caddy.import: common</code>, <code>/opt/gateway</code>, Ansible): обработка XFF и закрытость прямого backend — вне репозитория (H7).</li>
+<li>Стендовые <code>.env</code>: фактические CACHE_STORE и префиксы ключей; поведение лимитеров при отказе Redis (fail-open или отказ запроса) — код-инференс, не протестировано.</li>
+<li>Прод-логи и версия: <code>~/lovii-deploy.log</code> — что именно и когда выкатывалось в прод; документами подтверждена выкатка фикса только ночью 05→06.10 (C2, 01:47 МСК), более ранняя не исключена. Сопутствующая заметка: формулировка <code>lovii_docs/canon/BACKLOG_ARCHIVE.md:18-21</code> («волны 03.10–05.10… по памяти сессий») буквальному чтению не подлежит — мягкий конфликт хронологии.</li>
+<li>Точное время жалобы владельца 06.10 относительно выкаток (C2 01:47; TG IPv4 09:50 МСК) — ветка «симптом до/после фикса» не закрыта.</li>
+<li>Живое воспроизведение сценария «чистое устройство» не выполнялось (режим read-only); полевой сетевой лог app при открытии экрана в доках отсутствует (снять — §8.3, п.4); триггер запросов без <code>phone</code> не найден <span class="chip dashed">кандидат</span>; прод-наличие заголовков limiter-429 не проверялось (staging-наблюдение от 10.09 есть); лимиты/квоты Bot API MAX, Telegram и VK не измерены (публичных нет).</li>
+</ul>
+<h3 id="92-риски-решения-учитывать-при-внедрении">§9.2 Риски решения (учитывать при внедрении)</h3>
+<table>
+<thead>
+<tr>
+<th>Риск</th>
+<th>В чём заключается</th>
+<th>Что учесть</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CGNAT</td>
+<td>После включения trust per-IP становится «городским» ключом: один адрес — сотни абонентов</td>
+<td>Мягкие пороги, никакого 429 на первую отправку; блок только при устойчивом превышении (2 окна)</td>
+</tr>
+<tr>
+<td>Мультидевайс</td>
+<td>Сессии и caps привязаны к телефону, а не к устройству — все устройства делят бюджет</td>
+<td>Caps считать по «повторам без успеха», не по всем отправкам; задокументировать</td>
+</tr>
+<tr>
+<td>b2b</td>
+<td>b2b ходит в те же эндпоинты (<code>CoreApiClient</code>, без ретраев, timeout 10 с): телефонные бакеты общие с app</td>
+<td>Решить: отдельный контур/purpose-ключи; иначе контуры гасят друг друга</td>
+</tr>
+<tr>
+<td>e2e/QA</td>
+<td>Новые пороги порвут прогоны; сейчас релаксация только через <code>config()-&gt;set</code></td>
+<td>Стендовые ручки и kill switch (1e); иначе тесты и калибровка мешают друг другу</td>
+</tr>
+<tr>
+<td>Redis <code>allkeys-lru</code></td>
+<td>Вытеснение счётчиков под давлением памяти — лимиты могут «сами выключаться»</td>
+<td>Мониторить память/evicted keys</td>
+</tr>
+<tr>
+<td>Fail-open</td>
+<td>Поведение при отказе Redis не определено; целевая политика — soft-ключи fail-open + алерт + kill switch</td>
+<td>Счётчики фейлов verify держать в БД (уже так); fail-open — только soft-ключи</td>
+</tr>
+<tr>
+<td>Брутфорс</td>
+<td>Бюджет попыток сбрасывается resend/reissue: ~5 попыток/мин, медиана подбора 4-значного кода ~23 ч</td>
+<td>Закрывается только фазой 3; до неё цель «стопить подбор» не выполнена — не декларировать иначе</td>
+</tr>
+<tr>
+<td>P0 (<code>binding_token</code>)</td>
+<td>Полный обход OTP вне контура лимитов</td>
+<td>Любая полировка лимитов его не закрывает; отдельный трек, решение владельца (§10.3)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-долговые-и-сопутствующие">§9.3 Долговые и сопутствующие</h3>
+<p><strong>Проектный долг (документация и код).</strong>
+- OpenAPI: <code>lovii-core/public/openapi.yaml</code> (и копия <code>lovii-app/docs/openapi.yaml</code>) не описывает 429 и лимиты auth-роутов; enum каналов включает заглушки, «6-digit» устарел (канон — 4 цифры).
+- Doc-lag: <code>lovii_docs/as-is/06-vhod-otp.md</code> не знает <code>otp-channels</code> (старые строки <code>AppServiceProvider</code>); <code>lovii-app/e2e/README.md</code> и <code>e2e/helpers/journey.ts</code> частично устарели после 043d8ff6 — обновить одновременно с фиксом, иначе ложные диагнозы при следующих разборах.
+- Мёртвые конфиг-ключи <code>otp.ttl_minutes</code>/<code>otp.max_attempts</code>: код использует константы (<code>lovii-core/app/Domain/Auth/Services/OtpService.php:13,15</code>; ttl читает только dev-стор) — прокинуть в код или удалить.
+- Пер-канальные состояния доставки отсутствуют: fallback UI не отличит «провал доставки» от «первой привязки», пока сервер не отдаёт state.
+- SMS-вектор: при включении SMS (трек O; по SZ-019 — «не планируется») платный канал вернёт toll-fraud-поверхность — пер-канальные состояния и лимиты должны быть готовы заранее.</p>
+<p><strong>Мелкие дефекты (безопасность и надёжность).</strong>
+- Маска T-015: в проде падает 422 уже после side-effects (пользователь/сессия/карта созданы) — перенести проверку до side-effects; лимиты и антифрод маска обходить не должна.
+- TG-провал доставки → необработанный 500: <code>lovii-core/app/Infrastructure/Auth/Senders/TelegramSender.php:62-67</code> (исключение не ловится в <code>SendOtpAction.php:125-133</code>) — нужен явный <code>delivery_failed</code>.
+- Гигиена: <code>.env.example:94</code> <code>OTP_DEV_BYPASS=true</code> при обязательном прод-<code>false</code>; TTL подтверждённых сессий привязки бессрочен (<code>OtpService.php:98-105</code> без фильтра <code>expires_at</code>).</p>
+<h2 id="10-передача-файлы-порядок-использования-решения-владельца">§10 Передача: файлы, порядок использования, решения владельца</h2>
+<h3 id="101-что-где-лежит">§10.1 Что где лежит</h3>
+<ul>
+<li>Итоговый отчёт (Native Long Doc): <code>DELIVERY/2026-10-06-lovii-otp-o2-429-report.html</code>; markdown-источник <code>DELIVERY/2026-10-06-lovii-otp-o2-429-report.md</code>; бриф — <code>brief.md</code> (control workspace).</li>
+<li>Материалы расследования — папка <code>.cluster/lovii-otp-429-20261006/</code> (control workspace, <code>/Users/best/.openclaw-autoclaw/agents/auto-coder/workspace/</code>):</li>
+<li><code>plan.md</code> — план и карта артефактов;</li>
+<li><code>code_report.md</code> — сводная доказательная база;</li>
+<li><code>subagent_01.md</code> — внешние практики анти-абьюза OTP (29 источников);</li>
+<li><code>subagent_02.md</code> — доки/история OTP и инцидентов;</li>
+<li><code>subagent_03.md</code> — серверный контур (лимитеры, ключи, IP);</li>
+<li><code>subagent_04.md</code> — клиентский контур (экраны, 429-маппинг);</li>
+<li><code>subagent_05.md</code> — независимая перекрёстная проверка;</li>
+<li><code>subagent_06.md</code> — adversarial-аудит решения (P0-кандидат, фазы 0–4, H1–H8).</li>
+<li>Главы отчёта (<code>subagent_07.md</code>–<code>subagent_10.md</code>) и ревью-отчёты (<code>review_R1.md</code>, <code>review_R2.md</code>) — там же (полная карта — в <code>plan.md</code>).</li>
+<li>Ссылки на код в отчёте — относительно <code>/Users/best/LOVII/</code>.</li>
+</ul>
+<h3 id="102-порядок-использования">§10.2 Порядок использования</h3>
+<ol>
+<li>Стенд: подтвердить версию прод-кода; выполнить фазу 0 (прежде всего H1 и H8); закрыть непроверяемое из §9.1.</li>
+<li>Владелец: принять решения по §6/§7 отчёта (чек-лист §10.3); H8 — гейт до фаз 3–4.</li>
+<li>Внедрение: фазы §8 по одной; trust-прокси — отдельным коммитом; фазы 1 и 3 — не в одном релизе.</li>
+<li>После решений — обновить доки: <code>lovii_docs/as-is/06-vhod-otp.md</code>, <code>lovii-core/public/openapi.yaml</code> (+ копия в lovii-app), <code>lovii-app/e2e/README.md</code>, карточку O-2 в <code>lovii_docs/canon/BACKLOG.md</code> (со ссылкой на отчёт); зафиксировать в session-доках (<code>lovii-core/docs/sessions/</code> — нумерация после 096; <code>lovii_docs/workspace/status.md</code>).</li>
+</ol>
+<h3 id="103-чек-лист-требуется-решение-владельца">§10.3 Чек-лист «требуется решение владельца»</h3>
+<table>
+<thead>
+<tr>
+<th>Вопрос</th>
+<th>Варианты</th>
+<th>Почему важно</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0: вход по <code>binding_token</code> (H8)</td>
+<td>(а) верификация канала до доставки кода + запрет redemption pending-токена без верифицированной привязки; (б) не отдавать <code>binding_token</code> в HTTP-ответе parked-ветки (только через мессенджер); (в) принять риск с компенсациями (не рекомендуется). Отдельно — дизайн для VK (нет contact-share)</td>
+<td>Знание номера может давать вход в аккаунт; лимиты здесь бессильны; гейт для фаз 3–4</td>
+</tr>
+<tr>
+<td>Пороги первой отправки и per-IP soft-лимиты</td>
+<td>Ориентиры внешних практик (приложение A, [n]) + калибровка dark launch</td>
+<td>Без мягкой политики вернём ложные блокировки с другой стороны (CGNAT)</td>
+</tr>
+<tr>
+<td>Fail-open и kill-switch</td>
+<td>Мягкие ключи fail-open + алерт + kill switch; env-релаксация — только staging</td>
+<td>Отказ Redis сейчас не определён: либо дыра, либо отказ входа</td>
+</tr>
+<tr>
+<td>Idempotency-Key для send</td>
+<td>Вводить / не вводить (контрактное изменение, синхронно с app)</td>
+<td>Защита от дублей при ретраях; не бесплатна</td>
+</tr>
+<tr>
+<td>Caps на успешные повторные входы</td>
+<td>Считать только «повторы без успеха» / считать все отправки</td>
+<td>Иначе страдают легитимные повторные входы (logout/login, смена устройства)</td>
+</tr>
+<tr>
+<td>Пакет мелких</td>
+<td>Маска до side-effects; <code>.env.example</code> dev_bypass=false; мёртвые config-ключи; TTL подтверждённых сессий привязки</td>
+<td>Дешёвые исправления гигиены и безопасности</td>
+</tr>
+</tbody>
+</table>
+<h2 id="приложение-a-внешние-источники">Приложение A. Внешние источники</h2>
+<p>29 источников — внешняя доказательная база отчёта; все открыты 06.10.2026. Даты публикации приведены там, где они явно указаны на странице (иначе «—»). Нумерация [1]–[29] — сквозная по отчёту (§2, §7).</p>
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th>Источник</th>
+<th>URL</th>
+<th>Дата публикации</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>OWASP Cheat Sheet Series — Authentication</td>
+<td>https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Firebase — Authentication Limits</td>
+<td>https://firebase.google.com/docs/auth/limits</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>StartMessaging — OTP Expiry and Attempt Limits: Design Guide</td>
+<td>https://startmessaging.com/blog/otp-expiry-attempt-limits</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[4]</td>
+<td>Greywatch — OTP Brute Force: Prevention &amp; Pattern</td>
+<td>https://www.greywatch.ai/journal/otp-brute-force/</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[5]</td>
+<td>Arkesel — OTP Security Best Practices</td>
+<td>https://arkesel.com/securing-transactions-with-otp-apis-10-best-practices/</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[6]</td>
+<td>MDN — X-Forwarded-For</td>
+<td>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Forwarded-For</td>
+<td>обновл. 04.07.2025</td>
+</tr>
+<tr>
+<td>[7]</td>
+<td>adam-p — The perils of the “real” client IP</td>
+<td>https://adam-p.ca/blog/2022/03/x-forwarded-for/</td>
+<td>04.03.2022</td>
+</tr>
+<tr>
+<td>[8]</td>
+<td>HTTP Toolkit — What is X-Forwarded-For and when can you trust it?</td>
+<td>https://httptoolkit.com/blog/what-is-x-forwarded-for/</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[9]</td>
+<td>StackHawk — Do You Trust Your X-Forwarded-For Header?</td>
+<td>https://www.stackhawk.com/blog/do-you-trust-your-x-forwarded-for-header/</td>
+<td>18.04.2023</td>
+</tr>
+<tr>
+<td>[10]</td>
+<td>nginx — ngx_http_realip_module</td>
+<td>http://nginx.org/en/docs/http/ngx_http_realip_module.html</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[11]</td>
+<td>AWS WAF Dev Guide — Rate-based rule statement</td>
+<td>https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[12]</td>
+<td>AWS WAF Dev Guide — Using forwarded IP addresses</td>
+<td>https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-forwarded-ip-address.html</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[13]</td>
+<td>AWS Security Blog — The three most important AWS WAF rate-based rules</td>
+<td>https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules/</td>
+<td>обновл. 05.05.2025</td>
+</tr>
+<tr>
+<td>[14]</td>
+<td>Cloudflare — Rate limiting rules: best practices</td>
+<td>https://developers.cloudflare.com/waf/rate-limiting-rules/best-practices/</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[15]</td>
+<td>MDN — Retry-After</td>
+<td>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After</td>
+<td>обновл. 21.11.2025</td>
+</tr>
+<tr>
+<td>[16]</td>
+<td>RFC 6585 (IETF)</td>
+<td>https://www.rfc-editor.org/rfc/rfc6585.txt</td>
+<td>апрель 2012</td>
+</tr>
+<tr>
+<td>[17]</td>
+<td>Google Cloud — Detect and prevent SMS fraud (reCAPTCHA SMS defense)</td>
+<td>https://docs.cloud.google.com/recaptcha/docs/sms-fraud-detection</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[18]</td>
+<td>Twilio — Verify API Overview</td>
+<td>https://www.twilio.com/docs/verify/api</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[19]</td>
+<td>Twilio — Preventing toll fraud</td>
+<td>https://www.twilio.com/docs/verify/preventing-toll-fraud</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[20]</td>
+<td>Twilio — Automatic channel selection</td>
+<td>https://www.twilio.com/docs/verify/automatic-channel-selection</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[21]</td>
+<td>Stripe Blog — Scaling your API with rate limiters</td>
+<td>https://stripe.com/blog/rate-limiters</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[22]</td>
+<td>Stripe Docs — Idempotent requests</td>
+<td>https://docs.stripe.com/api/idempotent_requests</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[23]</td>
+<td>Google SRE Book — Handling Overload</td>
+<td>https://sre.google/sre-book/handling-overload/</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[24]</td>
+<td>NIST SP 800-63B-4</td>
+<td>https://pages.nist.gov/800-63-4/sp800-63b.html</td>
+<td>2025</td>
+</tr>
+<tr>
+<td>[25]</td>
+<td>Prelude — OTP Best Practices</td>
+<td>https://prelude.so/blog/otp-best-practices</td>
+<td>16.12.2024</td>
+</tr>
+<tr>
+<td>[26]</td>
+<td>Cisco — Carrier Grade NAT</td>
+<td>https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book/iadnat-cgn.html</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[27]</td>
+<td>SubnetHistory — CGNAT explained</td>
+<td>https://subnethistory.com/blog/what-is-cgnat</td>
+<td>12.08.2026</td>
+</tr>
+<tr>
+<td>[28]</td>
+<td>МегаФон — пресс-релиз о CGNAT</td>
+<td>https://corp.megafon.ru/press/news/federalnye_novosti/federal/20251021-1020.html</td>
+<td>21.10.2025</td>
+</tr>
+<tr>
+<td>[29]</td>
+<td>AboutMartech — RCS SMS Fallback (вендор-блог)</td>
+<td>https://aboutmartech.com/blog/rcs-sms-fallback</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h2 id="приложение-b-реестр-ключевых-доказательств">Приложение B. Реестр ключевых доказательств</h2>
+<p>Все пути — от корня <code>/Users/best/LOVII</code>. Опорные <code>file:line</code> по темам; контекст и разборы — в соответствующих разделах отчёта.</p>
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th>Тема</th>
+<th>Где</th>
+<th>Суть</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Лимитеры OTP</td>
+<td><code>lovii-core/app/Providers/AppServiceProvider.php:184-216</code></td>
+<td>send 6/мин IP + 2/мин телефон; channels 30/15; confirm 20/5; ключи <code>ip:</code>/<code>phone:</code>; докблок об инциденте 04.10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Маршруты → лимитеры</td>
+<td><code>lovii-core/routes/api.php:147-149,157</code></td>
+<td>request-code→<code>otp-channels</code>; send-code→<code>otp-send</code>; confirm/confirm-by-binding→<code>otp-confirm</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Конфиг OTP</td>
+<td><code>lovii-core/config/otp.php</code> (<code>:108,:110,:112,:126</code>)</td>
+<td>код 4 цифры; TTL 10 мин; 5 попыток; кулдаун 30 с; ключей <code>rate_limit</code> нет — дефолты = прод</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Счётчик лимитера</td>
+<td><code>lovii-core/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:134,156-168</code></td>
+<td>ключ <code>md5(limiter+key)</code>; отбой до <code>hit()</code>; <code>hit()</code> до <code>$next</code> (до контроллера и валидации)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Окно 60 с</td>
+<td><code>lovii-core/vendor/laravel/framework/src/Illuminate/Cache/RateLimiter.php:160-166,271-275</code></td>
+<td>таймер фиксированного окна от первого хита; <code>availableIn</code> (= <code>Retry-After</code>)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>limiter-429 (render)</td>
+<td><code>lovii-core/bootstrap/app.php:88-93</code></td>
+<td>кастомный render отдаёт свежий JsonResponse без заголовков исключения</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Trust-прокси</td>
+<td><code>lovii-core/bootstrap/app.php:37-47</code>; <code>lovii-core/config/trustedproxy.php</code> (отсутствует)</td>
+<td><code>trustProxies()</code> не вызывается; XFF не доверяется; IP-бакеты фактически глобальные</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Топология Caddy → app</td>
+<td><code>lovii-core/docker-compose.prod.yml:30-43</code>; <code>lovii-core/docker/nginx/default.conf</code></td>
+<td>сеть <code>caddy</code>, метки reverse_proxy; без <code>real_ip</code>/<code>limit_req</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Кулдаун-гейт и parked</td>
+<td><code>lovii-core/app/Application/Auth/Actions/SendOtpAction.php:38-45,59-61,75-113,131</code></td>
+<td>гейт первым; сессия до link-веток; <code>last_sent_at</code> — только при фактической отправке</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Отсчёт окна</td>
+<td><code>lovii-core/app/Models/Core/AuthOtpSession.php:40-57</code></td>
+<td><code>last_sent_at ?? created_at</code> последней неподтверждённой сессии</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Кулдаун-429 и link-ветки</td>
+<td><code>lovii-core/app/Http/Controllers/Api/V1/Auth/SendOtpController.php:27-31,34-67</code></td>
+<td>текст + <code>Retry-After</code>; <code>binding_token</code> в теле link-веток</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Тест: parked-окно</td>
+<td><code>lovii-core/tests/Feature/MaxBot/OtpThrottleTest.php:124-125</code></td>
+<td>«creation itself starts the window…» — кулдаун стартует без доставки</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Тест: регресс каналов</td>
+<td><code>lovii-core/tests/Feature/MaxBot/OtpThrottleTest.php:141-180</code></td>
+<td>15×request-code=200, 16-й=429; затем send 2/3 — бакеты разведены</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Тестовые ручки</td>
+<td><code>lovii-core/tests/Pest.php:37-41</code></td>
+<td>релаксация лимитеров через <code>config()-&gt;set</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Клиент: автозапрос на маунт</td>
+<td><code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:179-193</code></td>
+<td>кэш (:188-190) не подавляет сетевой вызов (:192)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Клиент: три точки 429</td>
+<td><code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:84,171</code>; <code>lovii-app/src/modules/auth-module/components/AuthCode.vue:92</code></td>
+<td>load-ошибка / отправка / ре-сенд — текст «Слишком много попыток»</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Клиент: блок ошибки</td>
+<td><code>lovii-app/src/modules/auth-module/components/AuthCallCoders.vue:247-256,262-264</code></td>
+<td>список каналов заменяется блоком ошибки; «Повторить» (:254) без кулдауна</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Клиент: ремоунт-триггеры</td>
+<td><code>lovii-app/src/modules/auth-module/AuthModule.vue:55-71,78-81,98-105</code>; <code>lovii-app/src/modules/auth-module/components/AuthCode.vue:64-68</code></td>
+<td>«назад» с link-экранов/кода → новый маунт → новый request-code</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Коммиты: фикс и выкатка</td>
+<td>git (lovii-core): <code>043d8ff6</code> (04.10 18:50:33) → <code>3def2196</code> (04.10 19:14:17); <code>a0eb9a4c</code> (06.10 01:32:35)</td>
+<td>request-code выведен из <code>otp-send</code>; фикс входит в релиз C2 (ночь 05→06.10)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>P0: redemption parked-сессии</td>
+<td><code>lovii-core/app/Application/Auth/Actions/ConfirmByBindingAction.php:36-47</code>; <code>lovii-core/app/Domain/Auth/Services/OtpService.php:84-92</code>; <code>lovii-core/app/Application/Auth/Actions/ActivateUserAfterConfirmAction.php:74</code></td>
+<td>подтверждение parked-сессии по <code>binding_token</code>; выдача access-токена</td>
+</tr>
+</tbody>
+</table>
+    </article>
+    <footer class="colophon">
+      <span>AutoCoder · подготовлено для команды LOVII · 2026-10-06</span>
+      <span>Исходные артефакты: .cluster/lovii-otp-429-20261006/</span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
