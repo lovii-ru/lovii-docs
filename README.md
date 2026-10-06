@@ -7,8 +7,7 @@
 > `axiiom-ru/lovii` — публичный лендинг для пользователей и банка: наполняется ТОЛЬКО
 > из папки [`public/`](public/) этого репо скриптом `scripts/sync-public.sh`
 > (в т.ч. README — из `public/README.md`, не из корня репо).
-> **Путь обновления:** правка в workspace → commit в `main` источника → автосинк Actions `sync-mirror` (push в `main` — сразу; резервный cron пн/чт 07:30 МСК; secret `MIRROR_SSH_KEY`) или ручной `git push mirror main`,
-> где `mirror` = `git@github.com-lovii-ru:lovii-ru/lovii-docs.git`. Не копить локальные коммиты в зеркале: правки — только через источник, пуш только fast-forward.
+> **Путь обновления (решение владельца 2026-10-06):** правка в workspace → commit → push **ТОЛЬКО в личный профиль владельца** `bestdeejay-design/lovii_docs` (`hub`). Агенты в `mirror` НЕ пушат. Синхронизация зеркала — отдельный шаг: автосинк Actions `sync-mirror` источника (push в `main` — сразу; резервный cron пн/чт 07:30 МСК; secret `MIRROR_SSH_KEY`) либо сам владелец вручную. Не копить локальные коммиты в зеркале: правки — только через источник, пуш только fast-forward.
 
 ## Раскладка
 
