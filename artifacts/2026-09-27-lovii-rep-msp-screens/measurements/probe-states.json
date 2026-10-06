@@ -1,0 +1,112 @@
+{
+  "main_light": {
+    "disabled": [
+      {
+        "label": "Подтвердить disabled",
+        "opacity": 0.5,
+        "color": "rgb(255, 255, 255)",
+        "contrastWorst": 1.87
+      },
+      {
+        "label": "Отклонить disabled",
+        "opacity": 0.5,
+        "color": "rgb(26, 26, 26)",
+        "contrastWorst": 3.34
+      }
+    ],
+    "sheetPresent": true,
+    "sheetConfirmColor": "rgb(255, 255, 255)",
+    "sheetBtnBox": {
+      "w": 127,
+      "h": 44
+    },
+    "cancelBox": {
+      "w": 127,
+      "h": 44
+    },
+    "loadingConfirm": {
+      "opacity": 0.7,
+      "contrastWorst": 2.41
+    }
+  },
+  "reject_light": {
+    "textarea": {
+      "color": "rgb(26, 26, 26)",
+      "bg": "rgb(248,248,248)",
+      "border": "rgb(236, 229, 218)",
+      "borderWidth": "1px",
+      "minH": "44px",
+      "contrast": 16.39
+    },
+    "reasonLabel": {
+      "color": "rgb(107, 107, 107)",
+      "bg": "rgb(255,255,255)",
+      "contrast": 5.33
+    },
+    "reasonCount": {
+      "color": "rgb(107, 107, 107)",
+      "bg": "rgb(255,255,255)",
+      "contrast": 5.33
+    },
+    "sheetText": {
+      "color": "rgb(26, 26, 26)",
+      "bg": "rgb(255,255,255)",
+      "contrast": 17.4
+    }
+  },
+  "main_dark": {
+    "disabled": [
+      {
+        "label": "Подтвердить disabled",
+        "opacity": 0.5,
+        "color": "rgb(255, 255, 255)",
+        "contrastWorst": 2.36
+      },
+      {
+        "label": "Отклонить disabled",
+        "opacity": 0.5,
+        "color": "rgb(243, 235, 240)",
+        "contrastWorst": 4.56
+      }
+    ],
+    "sheetPresent": true,
+    "sheetConfirmColor": "rgb(255, 255, 255)",
+    "sheetBtnBox": {
+      "w": 127,
+      "h": 44
+    },
+    "cancelBox": {
+      "w": 127,
+      "h": 44
+    },
+    "loadingConfirm": {
+      "opacity": 0.7,
+      "contrastWorst": 2.85
+    }
+  },
+  "reject_dark": {
+    "textarea": {
+      "color": "rgb(243, 235, 240)",
+      "bg": "rgb(43,35,49)",
+      "border": "rgb(55, 45, 62)",
+      "borderWidth": "1px",
+      "minH": "44px",
+      "contrast": 12.94
+    },
+    "reasonLabel": {
+      "color": "rgb(167, 152, 166)",
+      "bg": "rgb(33,27,38)",
+      "contrast": 6.15
+    },
+    "reasonCount": {
+      "color": "rgb(167, 152, 166)",
+      "bg": "rgb(33,27,38)",
+      "contrast": 6.15
+    },
+    "sheetText": {
+      "color": "rgb(243, 235, 240)",
+      "bg": "rgb(33,27,38)",
+      "contrast": 14.37
+    }
+  }
+}

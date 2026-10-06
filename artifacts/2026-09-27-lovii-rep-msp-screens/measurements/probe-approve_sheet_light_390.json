@@ -1,0 +1,619 @@
+{
+  "headerInfo": {
+    "mainExists": true,
+    "headerExists": true,
+    "headerOutsideMain": true,
+    "headerH1Text": null,
+    "h1InMainCount": 0,
+    "h1Total": 1,
+    "h1FirstInsideMain": null,
+    "contentHeadings": [
+      "H2: Очередь на модерации"
+    ],
+    "sectionHeadText": "Очередь на модерации"
+  },
+  "spacing": {
+    ".rep-approvals": {
+      "padding": "14px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "18px / 18px"
+    },
+    ".rep-approvals__head": {
+      "padding": "14px 16px 0px 16px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "8px / 8px"
+    },
+    ".rep-approvals__list": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "14px / 14px"
+    },
+    ".rep-approvals__card": {
+      "padding": "16px 16px 16px 16px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "16px / 16px"
+    },
+    ".rep-approvals__card-head": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "12px / 12px"
+    },
+    ".rep-approvals__meta": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "8px / 8px"
+    },
+    ".rep-approvals__actions": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "8px / 8px"
+    },
+    ".rep-approvals__hint": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "normal / normal"
+    },
+    ".role-empty": "(нет элемента)",
+    ".rep-approvals__skeleton": "(нет элемента)",
+    ".rep-approvals__state": "(нет элемента)"
+  },
+  "taps": [
+    {
+      "tag": "article",
+      "label": "Пятёрочка на ЛенинаООО «Пять ларьков»ИНН",
+      "testid": "rep-approval-card",
+      "cls": "role-card rep-approvals__card",
+      "boxW": 358,
+      "boxH": 437,
+      "pseudo": null,
+      "effW": 358,
+      "effH": 437,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "label": "+7 999 123-45-67",
+      "testid": null,
+      "cls": "rep-approvals__phone",
+      "boxW": 107,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 107,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "button",
+      "label": "Подтвердить",
+      "testid": "rep-approve-101",
+      "cls": "app-button app-button_l app-button_brand",
+      "boxW": 158,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 158,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "button",
+      "label": "Отклонить",
+      "testid": "rep-reject-101",
+      "cls": "app-button app-button_l app-button_outlined",
+      "boxW": 158,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 158,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "article",
+      "label": "Кофейня «Зерно»ИНН781234567890ОГРН—Адрес",
+      "testid": "rep-approval-card",
+      "cls": "role-card rep-approvals__card",
+      "boxW": 358,
+      "boxH": 437,
+      "pseudo": null,
+      "effW": 358,
+      "effH": 437,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "label": "+7 812 000-11-22",
+      "testid": null,
+      "cls": "rep-approvals__phone",
+      "boxW": 103,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 103,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "button",
+      "label": "Подтвердить",
+      "testid": "rep-approve-102",
+      "cls": "app-button app-button_l app-button_brand",
+      "boxW": 158,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 158,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "button",
+      "label": "Отклонить",
+      "testid": "rep-reject-102",
+      "cls": "app-button app-button_l app-button_outlined",
+      "boxW": 158,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 158,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    }
+  ],
+  "contrasts": [
+    {
+      "sel": "h2",
+      "text": "Очередь на модерации",
+      "fontSize": 16,
+      "fontWeight": 800,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(248,245,240)",
+      "mode": "solid",
+      "contrast": 16,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "span.role-section-head__sub",
+      "text": "2 заявки",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(248,245,240)",
+      "mode": "solid",
+      "contrast": 4.9,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "span",
+      "text": "Пятёрочка на Ленина",
+      "fontSize": 13.5,
+      "fontWeight": 700,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "span.role-row-sub",
+      "text": "ООО «Пять ларьков»",
+      "fontSize": 11.5,
+      "fontWeight": 400,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "ИНН",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "7701234567",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "ОГРН",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "1027700123456",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Адрес торговой точки",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "Москва, ул. Ленина, д. 15, помещение 3",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Контакт",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "a.rep-approvals__phone",
+      "text": "+7 999 123-45-67",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(201, 42, 106)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.22,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Промокод",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "REP-7788",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Подана",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "25 сентября 2026 г.",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "div.app-button__content.brand",
+      "text": "Подтвердить",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(255, 255, 255)",
+      "effBg": "gradient 246,74,138",
+      "mode": "gradient",
+      "contrast": 3.35,
+      "large": false,
+      "pass": false
+    },
+    {
+      "sel": "div.app-button__content.outlined",
+      "text": "Отклонить",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "span",
+      "text": "Кофейня «Зерно»",
+      "fontSize": 13.5,
+      "fontWeight": 700,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "ИНН",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "781234567890",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "ОГРН",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "—",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Адрес торговой точки",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "Санкт-Петербург, Невский проспект, д. 42",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Контакт",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "a.rep-approvals__phone",
+      "text": "+7 812 000-11-22",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(201, 42, 106)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.22,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dt",
+      "text": "Подана",
+      "fontSize": 10,
+      "fontWeight": 800,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 5.33,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "dd",
+      "text": "24 сентября 2026 г.",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "div.app-button__content.brand",
+      "text": "Подтвердить",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(255, 255, 255)",
+      "effBg": "gradient 246,74,138",
+      "mode": "gradient",
+      "contrast": 3.35,
+      "large": false,
+      "pass": false
+    },
+    {
+      "sel": "div.app-button__content.outlined",
+      "text": "Отклонить",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(26, 26, 26)",
+      "effBg": "rgb(255,255,255)",
+      "mode": "solid",
+      "contrast": 17.4,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "p.rep-approvals__hint",
+      "text": "Подтверждение открывает точке верификационный счёт",
+      "fontSize": 11.5,
+      "fontWeight": 400,
+      "color": "rgb(107, 107, 107)",
+      "effBg": "rgb(248,245,240)",
+      "mode": "solid",
+      "contrast": 4.9,
+      "large": false,
+      "pass": true
+    }
+  ],
+  "dataProbe": [
+    {
+      "name": "Пятёрочка на Ленина",
+      "legal": "ООО «Пять ларьков»",
+      "fields": [
+        {
+          "dt": "ИНН",
+          "dd": "7701234567"
+        },
+        {
+          "dt": "ОГРН",
+          "dd": "1027700123456"
+        },
+        {
+          "dt": "Адрес торговой точки",
+          "dd": "Москва, ул. Ленина, д. 15, помещение 3"
+        },
+        {
+          "dt": "Контакт",
+          "dd": "+7 999 123-45-67"
+        },
+        {
+          "dt": "Промокод",
+          "dd": "REP-7788"
+        },
+        {
+          "dt": "Подана",
+          "dd": "25 сентября 2026 г."
+        }
+      ]
+    },
+    {
+      "name": "Кофейня «Зерно»",
+      "legal": null,
+      "fields": [
+        {
+          "dt": "ИНН",
+          "dd": "781234567890"
+        },
+        {
+          "dt": "ОГРН",
+          "dd": "—"
+        },
+        {
+          "dt": "Адрес торговой точки",
+          "dd": "Санкт-Петербург, Невский проспект, д. 42"
+        },
+        {
+          "dt": "Контакт",
+          "dd": "+7 812 000-11-22"
+        },
+        {
+          "dt": "Подана",
+          "dd": "24 сентября 2026 г."
+        }
+      ]
+    }
+  ],
+  "htmlTheme": "light",
+  "bodyBg": "rgb(248, 245, 240)",
+  "counts": {
+    "cards": 2,
+    "empty": false,
+    "error": false,
+    "skeleton": false,
+    "sheet": true
+  }
+}

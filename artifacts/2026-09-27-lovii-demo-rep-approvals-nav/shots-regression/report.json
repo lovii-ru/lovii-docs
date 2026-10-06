@@ -1,0 +1,168 @@
+{
+  "tabs": [
+    {
+      "val": "index",
+      "label": "Обзор",
+      "keyText": "Топ точек по GMV",
+      "activeTab": "Обзор",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 871,
+      "scrollW": 390,
+      "clientW": 390
+    },
+    {
+      "val": "approvals",
+      "label": "Апрув",
+      "keyText": "Очередь апрува",
+      "activeTab": "Апрув",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 644,
+      "scrollW": 390,
+      "clientW": 390
+    },
+    {
+      "val": "connect",
+      "label": "Подключение",
+      "keyText": "Один понятный маршрут для владельца точки",
+      "activeTab": "Подключение",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 1373,
+      "scrollW": 390,
+      "clientW": 390
+    },
+    {
+      "val": "points",
+      "label": "Точки",
+      "keyText": "Мои точки",
+      "activeTab": "Точки",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 1124,
+      "scrollW": 390,
+      "clientW": 390
+    },
+    {
+      "val": "income",
+      "label": "Доход",
+      "keyText": "История выплат",
+      "activeTab": "Доход",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 1070,
+      "scrollW": 390,
+      "clientW": 390
+    },
+    {
+      "val": "profile",
+      "label": "Профиль",
+      "keyText": "Привилегии статуса",
+      "activeTab": "Профиль",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 641,
+      "scrollW": 390,
+      "clientW": 390
+    },
+    {
+      "val": "chats",
+      "label": "Чаты",
+      "keyText": "Чаты с точками",
+      "activeTab": "Чаты 3",
+      "hasKey": true,
+      "heading": "Представитель",
+      "bodyLen": 538,
+      "scrollW": 390,
+      "clientW": 390
+    }
+  ],
+  "layout": {
+    "overview1280": {
+      "scrollW": 1280,
+      "clientW": 1280,
+      "overflow": 0,
+      "wideEls": 0
+    },
+    "approvals1280": {
+      "scrollW": 1280,
+      "clientW": 1280,
+      "overflow": 0,
+      "wideEls": 0
+    },
+    "allTabs1280": {
+      "index": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "approvals": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "connect": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "points": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "income": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "profile": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "chats": {
+        "scrollW": 1280,
+        "clientW": 1280
+      }
+    }
+  },
+  "quickActions": {
+    "count": 5,
+    "titles": [
+      "Апрув 1",
+      "QR-подключение",
+      "Точки",
+      "Доход",
+      "Чаты 3"
+    ],
+    "order": [
+      "approvals",
+      "connect",
+      "points",
+      "income",
+      "chats"
+    ],
+    "grid": {
+      "left": 0,
+      "right": 390,
+      "w": 390
+    },
+    "cardOverflow": [
+      190,
+      374,
+      190,
+      374,
+      190
+    ],
+    "docScrollW": 390,
+    "docClientW": 390
+  },
+  "console": [],
+  "notes": [],
+  "overviewEntry": {
+    "hasKpiQueue": true,
+    "kpi": [
+      "Доход · месяц",
+      "Активные точки",
+      "GMV сети · месяц",
+      "Заявки в очереди"
+    ],
+    "nextStep": "1 заявка в очереди — апрувь сейчас"
+  }
+}

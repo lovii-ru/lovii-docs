@@ -1,0 +1,46 @@
+{
+  "headerInfo": {
+    "mainExists": true,
+    "headerExists": true,
+    "headerOutsideMain": true,
+    "headerH1Text": null,
+    "h1InMainCount": 0,
+    "h1Total": 1,
+    "h1FirstInsideMain": null,
+    "contentHeadings": [],
+    "sectionHeadText": null
+  },
+  "spacing": {
+    ".rep-approvals": {
+      "padding": "14px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "18px / 18px"
+    },
+    ".rep-approvals__head": "(нет элемента)",
+    ".rep-approvals__list": "(нет элемента)",
+    ".rep-approvals__card": "(нет элемента)",
+    ".rep-approvals__card-head": "(нет элемента)",
+    ".rep-approvals__meta": "(нет элемента)",
+    ".rep-approvals__actions": "(нет элемента)",
+    ".rep-approvals__hint": "(нет элемента)",
+    ".role-empty": "(нет элемента)",
+    ".rep-approvals__skeleton": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "12px / 12px"
+    },
+    ".rep-approvals__state": "(нет элемента)"
+  },
+  "taps": [],
+  "contrasts": [],
+  "dataProbe": [],
+  "htmlTheme": "light",
+  "bodyBg": "rgb(248, 245, 240)",
+  "counts": {
+    "cards": 0,
+    "empty": false,
+    "error": false,
+    "skeleton": true,
+    "sheet": false
+  }
+}

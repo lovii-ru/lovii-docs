@@ -1,0 +1,110 @@
+{
+  "light": {
+    "items": [
+      {
+        "what": "tab",
+        "label": "Обзор",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "tab",
+        "label": "Точки",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "tab",
+        "label": "Заявки",
+        "w": 46,
+        "h": 58,
+        "current": "page"
+      },
+      {
+        "what": "tab",
+        "label": "Доход",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "tab",
+        "label": "Профиль",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "exit",
+        "w": 107,
+        "h": 44
+      }
+    ],
+    "titleInfo": {
+      "text": "Представитель",
+      "color": "rgb(26, 26, 26)",
+      "fs": "18px"
+    },
+    "noteInfo": {
+      "text": "Подключение точек района",
+      "color": "rgb(107, 107, 107)",
+      "fs": "11.5px"
+    }
+  },
+  "dark": {
+    "items": [
+      {
+        "what": "tab",
+        "label": "Обзор",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "tab",
+        "label": "Точки",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "tab",
+        "label": "Заявки",
+        "w": 46,
+        "h": 58,
+        "current": "page"
+      },
+      {
+        "what": "tab",
+        "label": "Доход",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "tab",
+        "label": "Профиль",
+        "w": 46,
+        "h": 58,
+        "current": null
+      },
+      {
+        "what": "exit",
+        "w": 107,
+        "h": 44
+      }
+    ],
+    "titleInfo": {
+      "text": "Представитель",
+      "color": "rgb(243, 235, 240)",
+      "fs": "18px"
+    },
+    "noteInfo": {
+      "text": "Подключение точек района",
+      "color": "rgb(167, 152, 166)",
+      "fs": "11.5px"
+    }
+  }
+}

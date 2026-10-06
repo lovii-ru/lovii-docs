@@ -1,0 +1,71 @@
+Вот готовый текст — можно копировать целиком в новую сессию AutoCoder.
+
+```text
+Проект LOVII. Рабочий каталог: /Users/best/LOVII (внутри репозитории lovii-core, lovii-app,
+lovii-b2b, lovii-admin). Первым делом проверь, что рабочий каталог действительно
+/Users/best/LOVII и в нём виден lovii-core — если нет, скажи мне, не начинай работу.
+
+Полный бэклог с решениями владельца от 2026-09-17: /Users/best/LOVII/lovii-docs/BACKLOG_REVIEW.md
+(читать §A1, §B, §C2, §H). Это источник истины по задачам.
+
+Задача на этот проход: SZ-min-order-enforcement — платформенный минимум суммы заказа.
+Часть 1: только репозиторий lovii-core.
+
+Решения владельца:
+- Платформенный минимум 600 ₽ по умолчанию; применяется, если у точки минимум пуст (NULL/0).
+- Значение, задаваемое человеком, — не менее 500 ₽ (валидировать, сообщение внятное).
+- Подпись под полем в UI: «Минимальная сумма заказа — не менее 500 ₽ (по умолчанию
+  применяется 600 ₽)» — это следующая задача по lovii-app, сейчас не делать.
+
+Якоря в коде (проверено):
+- database/migrations/2025_01_01_000006_create_merchant_branches_table.php:26 —
+  min_order_amount, unsignedInteger nullable, копейки.
+- app/Domain/Checkout/Services/CheckoutBuilder.php::build() — общий гвард чекаута для preview
+  и place; уже кидает BusinessException('cart_empty' | 'offer_restricted' |
+  'merchant_unavailable' | 'delivery_not_supported').
+- app/Http/Controllers/Api/V1/Msp/UpdateMspBranchSettingsController.php — установка минимума
+  МСП (рубли → копейки, сейчас validate min:0).
+- app/Http/Resources/Api/V1/Msp/MspBranchSettingsResource.php — отдаёт min_order_amount(_rubles).
+- BusinessException рендерится в bootstrap/app.php как {"error":{"code","message"}}, статус 422.
+- Тесты — Pest (tests/Feature, tests/Unit).
+
+Шаги:
+1. Новый конфиг (например config/orders.php): дефолт 600 ₽ = 60000 коп., floor 500 ₽ = 50000 коп.,
+   через env с дефолтами; комментарий со ссылкой на решение владельца 2026-09-17.
+2. Энфорс в CheckoutBuilder::build(): эффективный минимум = branch->min_order_amount
+   (если не NULL и > 0), иначе платформенный дефолт; и не ниже floor (защита от значений
+   ниже 500 из интеграций Kuper/b2b — импорт не переписываем, floor применяем на расчёте).
+   Сравнивать с ТОВАРНОЙ суммой (subtotal), не с total: доставка и баллы не должны влиять.
+   При недостатке → BusinessException('min_order_amount_not_met', 'Минимальная сумма заказа — N ₽.').
+3. Валидация МСП: min_order_amount_rubles >= 500 (0/null = «использовать платформенный дефолт»
+   — разрешено), понятное сообщение об ошибке.
+4. Новая миграция (старые не трогать): нормализовать существующие min_order_amount = 0 → NULL.
+5. MspBranchSettingsResource: добавить min_order_amount_effective и
+   min_order_amount_effective_rubles — чтобы приложение показало «сейчас применяется 600 ₽».
+6. Тесты Pest: 422 min_order_amount_not_met для preview И place; ровно 600 по дефолту проходит;
+   при заданных 500 — 499 не проходит, 500 проходит; 0/NULL → 600; 700 → 700; МСП сохраняет
+   400 → ошибка валидации, 500 → ок.
+7. Гейт: docker exec lovii-core-app-1 composer test, плюс lint/phpstan по scripts в composer.json.
+
+Границы: только lovii-core. Не трогать lovii-app (UI — отдельная задача), lovii-b2b
+(Filament app/Filament/Resources/BranchResource.php:111), не править lovii-docs/canon/*.
+Ветка feat/min-order-enforcement от текущего HEAD. Не пушить, не мержить ни в staging, ни в master.
+
+Стенд для визуальной приёмки (владелец смотрит сам):
+- lovii-core смонтирован в контейнер lovii-core-app-1 → миграции: docker exec lovii-core-app-1
+  php artisan migrate.
+- PWA-превью: bash ~/LOVII/tools/lovii-app-preview.sh → http://localhost:8081
+- После каждого шага давай владельцу ссылку на стенд и скриншот конкретного экрана.
+
+Отчёт: изменённые файлы и зачем; точная команда тестов с exit code и выводом (не «тесты прошли»);
+что не сделано и что не проверено.
+
+Дальше по приоритету P1 (после приёмки этой): sub-domain, sub-billing, payout-scheduler,
+payout-pull-request, pep-npd-reports — по одной задаче за раз, с показом результата на стенде.
+```
+
+Пара замечаний к запуску:
+
+- Если новый чат откроется с рабочим каталогом `/Users/best/LOVII` — всё пойдёт сразу, промпт самодостаточный.
+- Если он всё равно привяжется к старому пути — скажите, и попробуем план Б (аккуратно переписать запись привязки в реестре AutoClaw, с бэкапом).
+- Решения из ваших уточнений (600/500, автосписание баллов, SZ-042 поглощается) уже учтены в промпте и в обновлённом бэклоге.

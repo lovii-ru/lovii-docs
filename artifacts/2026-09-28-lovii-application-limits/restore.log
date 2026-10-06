@@ -1,0 +1,144 @@
+→ 1/4 Снятие CSV-снапшота со staging → /tmp/lovii-snap-20260927-235711
+   public.cities → 4 строк(и) [4.0K]
+   public.users → 3 строк(и) [4.0K]
+   lovii_b2b.partner_users → 4 строк(и) [4.0K]
+   lovii_b2b.partners → 7 строк(и) [ 20K]
+   public.merchants → 53 строк(и) [208K]
+   public.merchant_branches → 28 строк(и) [ 16K]
+   public.catalog_categories → 73 строк(и) [ 24K]
+   public.catalog_products → 124 строк(и) [132K]
+   public.merchant_offers → 124 строк(и) [ 32K]
+   public.orders → 122 строк(и) [ 76K]
+   public.order_items → 241 строк(и) [ 56K]
+   public.payments → 110 строк(и) [ 40K]
+   public.wallets → 3 строк(и) [4.0K]
+   public.subscriptions → 2 строк(и) [4.0K]
+   public.wallet_transactions → 98 строк(и) [ 12K]
+   public.accounts → 5 строк(и) [4.0K]
+   public.ledger_entries → 1184 строк(и) [160K]
+   public.representative_promo_codes → 3 строк(и) [4.0K]
+   public.ambassadors → 2 строк(и) [4.0K]
+   public.partner_applications → 1 строк(и) [4.0K]
+   public.user_addresses → 8 строк(и) [4.0K]
+   public.loyalty_product_groups → 3 строк(и) [4.0K]
+   public.promo_rules → 12 строк(и) [4.0K]
+→ 2/4 Очистка локальных таблиц (TRUNCATE CASCADE)
+NOTICE:  truncate cascades to table "partner_invitations"
+NOTICE:  truncate cascades to table "partner_audit_logs"
+NOTICE:  truncate cascades to table "partner_notification_channels"
+NOTICE:  truncate cascades to table "partner_ui_preferences"
+NOTICE:  truncate cascades to table "partner_memberships"
+NOTICE:  truncate cascades to table "partner_user_devices"
+NOTICE:  truncate cascades to table "partner_auth_events"
+NOTICE:  truncate cascades to table "partner_passkey_credentials"
+NOTICE:  truncate cascades to table "user_devices"
+NOTICE:  truncate cascades to table "merchant_integration_profiles"
+NOTICE:  truncate cascades to table "merchant_delivery_zones"
+NOTICE:  truncate cascades to table "offer_modifier_groups"
+NOTICE:  truncate cascades to table "carts"
+NOTICE:  truncate cascades to table "cart_items"
+NOTICE:  truncate cascades to table "order_status_histories"
+NOTICE:  truncate cascades to table "order_submissions"
+NOTICE:  truncate cascades to table "order_external_states"
+NOTICE:  truncate cascades to table "integrations"
+NOTICE:  truncate cascades to table "merchant_merchant_category"
+NOTICE:  truncate cascades to table "merchant_offer_product_requirement"
+NOTICE:  truncate cascades to table "user_email_verifications"
+NOTICE:  truncate cascades to table "push_subscriptions"
+NOTICE:  truncate cascades to table "communication_consents"
+NOTICE:  truncate cascades to table "chargeback_logs"
+NOTICE:  truncate cascades to table "cards"
+NOTICE:  truncate cascades to table "subscriptions"
+NOTICE:  truncate cascades to table "external_payment_methods"
+NOTICE:  truncate cascades to table "payouts"
+NOTICE:  truncate cascades to table "pep_reports"
+NOTICE:  truncate cascades to table "partner_offer_acceptances"
+NOTICE:  truncate cascades to table "loyalty_group_categories"
+NOTICE:  truncate cascades to table "loyalty_group_products"
+NOTICE:  truncate cascades to table "merchant_offer_bundle_items"
+NOTICE:  truncate cascades to table "promo_rule_customer_uses"
+NOTICE:  truncate cascades to table "account_transfers"
+NOTICE:  truncate cascades to table "category_branch_hidden"
+NOTICE:  truncate cascades to table "offer_modifiers"
+NOTICE:  truncate cascades to table "integration_entity_mappings"
+NOTICE:  truncate cascades to table "import_jobs"
+NOTICE:  truncate cascades to table "subscription_status_changes"
+NOTICE:  truncate cascades to table "subscription_charges"
+NOTICE:  truncate cascades to table "import_job_errors"
+TRUNCATE TABLE
+→ 2a/4 Миграции core + b2b (должны идти ДО ручных ALTER)
+   INFO  Nothing to migrate.  
+   INFO  Nothing to migrate.  
+→ 2b/4 Доработка локальной lovii_b2b (остатки старой формы таблиц)
+NOTICE:  column "email" of relation "partner_users" already exists, skipping
+NOTICE:  column "phone" of relation "partner_users" already exists, skipping
+NOTICE:  column "last_login_at" of relation "partner_users" already exists, skipping
+NOTICE:  column "contact_email" of relation "partners" already exists, skipping
+NOTICE:  column "contact_phone" of relation "partners" already exists, skipping
+NOTICE:  column "dadata_party" of relation "partners" already exists, skipping
+NOTICE:  column "verified_at" of relation "partners" already exists, skipping
+NOTICE:  column "representative_approved_at" of relation "partners" already exists, skipping
+→ 3/4 Заливка (в порядке зависимостей, список колонок из CSV-заголовка)
+COPY 3
+   public.cities ✓
+COPY 2
+   public.users ✓
+COPY 3
+   lovii_b2b.partner_users ✓
+COPY 6
+   lovii_b2b.partners ✓
+COPY 35
+   public.merchants ✓
+COPY 27
+   public.merchant_branches ✓
+COPY 72
+   public.catalog_categories ✓
+COPY 123
+   public.catalog_products ✓
+COPY 123
+   public.merchant_offers ✓
+COPY 121
+   public.orders ✓
+COPY 240
+   public.order_items ✓
+COPY 109
+   public.payments ✓
+COPY 2
+   public.wallets ✓
+COPY 1
+   public.subscriptions ✓
+COPY 97
+   public.wallet_transactions ✓
+COPY 4
+   public.accounts ✓
+COPY 1183
+   public.ledger_entries ✓
+COPY 2
+   public.representative_promo_codes ✓
+COPY 1
+   public.ambassadors ✓
+COPY 0
+   public.partner_applications ✓
+COPY 7
+   public.user_addresses ✓
+COPY 2
+   public.loyalty_product_groups ✓
+COPY 11
+   public.promo_rules ✓
+→ 4/4 Синхронизация автоинкрементов
+
+Готово. Снапшот: /tmp/lovii-snap-20260927-235711
+      t       | count 
+--------------+-------
+ users        |     2
+ merchants    |    35
+ branches     |    27
+ offers       |   123
+ accounts     |     4
+ ledger       |  1183
+ wallet_tx    |    97
+ applications |     0
+ orders       |   121
+ b2b_partners |     6
+(10 rows)
+

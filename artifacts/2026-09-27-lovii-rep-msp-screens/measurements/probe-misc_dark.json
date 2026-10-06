@@ -1,0 +1,48 @@
+{
+  "headers": [
+    {
+      "cls": "app-header",
+      "outsideMain": true,
+      "h1": null
+    },
+    {
+      "cls": "cabinet__head",
+      "outsideMain": true,
+      "h1": "Представитель"
+    },
+    {
+      "cls": "rep-approvals__card-head",
+      "outsideMain": false,
+      "h1": null
+    }
+  ],
+  "h1s": [
+    {
+      "text": "Представитель",
+      "cls": "cabinet__title",
+      "inMain": false,
+      "parentTag": "DIV",
+      "headerAncestor": true
+    }
+  ],
+  "mainChildren": [
+    "DIV.rep-approvals"
+  ],
+  "disabled": [
+    {
+      "label": "Подтвердить(disabled)",
+      "opacity": 1,
+      "color": "rgb(255, 255, 255)",
+      "bgImage": "linear-gradient(135deg, rgb(246, 74, 138) 0%, rgb(201, 42, 106) 100%)",
+      "contrastWorst": 3.35
+    },
+    {
+      "label": "Отклонить(disabled)",
+      "opacity": 1,
+      "color": "rgb(243, 235, 240)",
+      "bgImage": "none",
+      "contrastWorst": 14.37
+    }
+  ],
+  "hasSheetConfirm": false
+}

@@ -1,0 +1,98 @@
+{
+  "headerInfo": {
+    "mainExists": true,
+    "headerExists": true,
+    "headerOutsideMain": true,
+    "headerH1Text": null,
+    "h1InMainCount": 0,
+    "h1Total": 1,
+    "h1FirstInsideMain": null,
+    "contentHeadings": [],
+    "sectionHeadText": null
+  },
+  "spacing": {
+    ".rep-approvals": {
+      "padding": "14px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "18px / 18px"
+    },
+    ".rep-approvals__head": "(нет элемента)",
+    ".rep-approvals__list": "(нет элемента)",
+    ".rep-approvals__card": "(нет элемента)",
+    ".rep-approvals__card-head": "(нет элемента)",
+    ".rep-approvals__meta": "(нет элемента)",
+    ".rep-approvals__actions": "(нет элемента)",
+    ".rep-approvals__hint": "(нет элемента)",
+    ".role-empty": "(нет элемента)",
+    ".rep-approvals__skeleton": "(нет элемента)",
+    ".rep-approvals__state": {
+      "padding": "0px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "12px / 12px"
+    }
+  },
+  "taps": [
+    {
+      "tag": "div",
+      "label": "Очередь недоступна — проблема с сетью. П",
+      "testid": "rep-approvals-error",
+      "cls": "rep-approvals__state",
+      "boxW": 358,
+      "boxH": 98,
+      "pseudo": null,
+      "effW": 358,
+      "effH": 98,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "button",
+      "label": "Повторить",
+      "testid": null,
+      "cls": "app-button app-button_l app-button_outlined",
+      "boxW": 112,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 112,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    }
+  ],
+  "contrasts": [
+    {
+      "sel": "p.rep-approvals__state-text",
+      "text": "Очередь недоступна — проблема с сетью. Попробуйте ",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "color": "rgb(243, 235, 240)",
+      "effBg": "rgb(23,18,25)",
+      "mode": "solid",
+      "contrast": 15.79,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "div.app-button__content.outlined",
+      "text": "Повторить",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(243, 235, 240)",
+      "effBg": "rgb(33,27,38)",
+      "mode": "solid",
+      "contrast": 14.37,
+      "large": false,
+      "pass": true
+    }
+  ],
+  "dataProbe": [],
+  "htmlTheme": "dark",
+  "bodyBg": "rgb(23, 18, 25)",
+  "counts": {
+    "cards": 0,
+    "empty": false,
+    "error": true,
+    "skeleton": false,
+    "sheet": false
+  }
+}

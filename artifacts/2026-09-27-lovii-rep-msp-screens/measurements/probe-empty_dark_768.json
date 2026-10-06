@@ -1,0 +1,140 @@
+{
+  "headerInfo": {
+    "mainExists": true,
+    "headerExists": true,
+    "headerOutsideMain": true,
+    "headerH1Text": null,
+    "h1InMainCount": 0,
+    "h1Total": 1,
+    "h1FirstInsideMain": null,
+    "contentHeadings": [
+      "H2: Очередь на модерации"
+    ],
+    "sectionHeadText": "Очередь на модерации"
+  },
+  "spacing": {
+    ".rep-approvals": {
+      "padding": "14px 0px 0px 0px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "18px / 18px"
+    },
+    ".rep-approvals__head": {
+      "padding": "14px 16px 0px 16px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "8px / 8px"
+    },
+    ".rep-approvals__list": "(нет элемента)",
+    ".rep-approvals__card": "(нет элемента)",
+    ".rep-approvals__card-head": "(нет элемента)",
+    ".rep-approvals__meta": "(нет элемента)",
+    ".rep-approvals__actions": "(нет элемента)",
+    ".rep-approvals__hint": "(нет элемента)",
+    ".role-empty": {
+      "padding": "18px 18px 18px 18px",
+      "margin": "0px 0px 0px 0px",
+      "gap": "8px / 8px"
+    },
+    ".rep-approvals__skeleton": "(нет элемента)",
+    ".rep-approvals__state": "(нет элемента)"
+  },
+  "taps": [
+    {
+      "tag": "div",
+      "label": "Все заявки обработаны Новая заявка появи",
+      "testid": "rep-approvals-empty",
+      "cls": "role-card role-empty",
+      "boxW": 736,
+      "boxH": 207,
+      "pseudo": null,
+      "effW": 736,
+      "effH": 207,
+      "ok": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "label": "Посмотреть мои точки",
+      "testid": null,
+      "cls": "role-empty__cta",
+      "boxW": 163,
+      "boxH": 44,
+      "pseudo": null,
+      "effW": 163,
+      "effH": 44,
+      "ok": true,
+      "visible": true
+    }
+  ],
+  "contrasts": [
+    {
+      "sel": "h2",
+      "text": "Очередь на модерации",
+      "fontSize": 16,
+      "fontWeight": 800,
+      "color": "rgb(243, 235, 240)",
+      "effBg": "rgb(23,18,25)",
+      "mode": "solid",
+      "contrast": 15.79,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "span.role-section-head__sub",
+      "text": "0 заявок",
+      "fontSize": 13,
+      "fontWeight": 600,
+      "color": "rgb(167, 152, 166)",
+      "effBg": "rgb(23,18,25)",
+      "mode": "solid",
+      "contrast": 6.76,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "span.role-empty__title",
+      "text": "Все заявки обработаны",
+      "fontSize": 16,
+      "fontWeight": 800,
+      "color": "rgb(243, 235, 240)",
+      "effBg": "rgb(33,27,38)",
+      "mode": "solid",
+      "contrast": 14.37,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "p.role-empty__text",
+      "text": "Новая заявка появится здесь, как только владелец т",
+      "fontSize": 13,
+      "fontWeight": 400,
+      "color": "rgb(167, 152, 166)",
+      "effBg": "rgb(33,27,38)",
+      "mode": "solid",
+      "contrast": 6.15,
+      "large": false,
+      "pass": true
+    },
+    {
+      "sel": "a.role-empty__cta",
+      "text": "Посмотреть мои точки",
+      "fontSize": 14,
+      "fontWeight": 700,
+      "color": "rgb(201, 42, 106)",
+      "effBg": "rgb(33,27,38)",
+      "mode": "solid",
+      "contrast": 3.22,
+      "large": false,
+      "pass": false
+    }
+  ],
+  "dataProbe": [],
+  "htmlTheme": "dark",
+  "bodyBg": "rgb(23, 18, 25)",
+  "counts": {
+    "cards": 0,
+    "empty": true,
+    "error": false,
+    "skeleton": false,
+    "sheet": false
+  }
+}

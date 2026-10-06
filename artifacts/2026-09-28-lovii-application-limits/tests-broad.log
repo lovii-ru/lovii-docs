@@ -1,0 +1,20 @@
+
+   INFO  Caching framework bootstrap, configuration, and metadata.  
+
+  config ........................................................ 32.57ms DONE
+  events ........................................................ 13.44ms DONE
+  routes ........................................................ 81.46ms DONE
+  views ........................................................ 133.55ms DONE
+
+  ✓ it respects per_page parameter                                       0.07s  
+  ✓ it returns cursor tokens for pagination                              0.07s  
+  ✓ it MerchantCategory merchants() relationship returns associated mer… 0.03s  
+
+   PASS  Tests\Feature\Merchant\MerchantControllerTest
+  ✓ it filters merchants by city in index                                0.06s  
+  ✓ it filters merchants by type in index                                0.04s  
+  ✓ it shows a single merchant                                           0.03s  
+
+  Tests:    215 passed (1098 assertions)
+  Duration: 21.57s
+

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZ-min-order-enforcement — отчёт о реализации (lovii-core)</title>
+<style>
+  :root{
+    --paper:#f2f3f1;
+    --ink:#13161a;
+    --muted:#5f6873;
+    --faint:#8b939c;
+    --hair:rgba(19,22,26,.14);
+    --hair-strong:rgba(19,22,26,.26);
+    --accent:#0b6b62;
+    --dark:#101315;
+    --dark-ink:#eef0f1;
+    --dark-hair:rgba(255,255,255,.14);
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.58;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+
+  /* ── cover ───────────────────────────────────────────── */
+  .cover{background:var(--dark);color:var(--dark-ink);padding:64px 0 44px;border-bottom:1px solid var(--dark-hair)}
+  .cover .kicker{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:#9fb0ad;margin:0 0 26px
+  }
+  .cover h1{
+    font-family:var(--serif);font-weight:600;letter-spacing:-.02em;
+    font-size:clamp(34px,4.6vw,58px);line-height:1.06;margin:0 0 20px;max-width:19ch
+  }
+  .cover .lede{
+    font-size:17px;line-height:1.55;color:#c8cfcd;max-width:60ch;margin:0 0 36px
+  }
+  .cover .lede em{color:#8fd8ce;font-style:normal;font-family:var(--mono);font-size:15px}
+  .meta{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    border-top:1px solid var(--dark-hair)
+  }
+  .meta div{padding:14px 18px 14px 0;border-bottom:1px solid var(--dark-hair)}
+  .meta dt{
+    font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+    color:#8d9a98;margin:0 0 6px
+  }
+  .meta dd{margin:0;font-size:14px;font-family:var(--mono);color:var(--dark-ink);word-break:break-word}
+
+  /* ── shell: TOC + body ───────────────────────────────── */
+  .shell{display:grid;grid-template-columns:206px minmax(0,1fr);gap:56px;padding:56px 0 80px;align-items:start}
+  nav.toc{position:sticky;top:34px;font-family:var(--mono);font-size:12px;line-height:1.5}
+  nav.toc .toc-h{
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+    padding-bottom:10px;border-bottom:1px solid var(--hair);margin-bottom:12px
+  }
+  nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:s}
+  nav.toc li{counter-increment:s;margin:0 0 9px;padding-left:26px;position:relative}
+  nav.toc li::before{
+    content:counter(s,decimal-leading-zero);position:absolute;left:0;top:0;color:var(--faint);font-size:11px
+  }
+  nav.toc a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent}
+  nav.toc a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+  main{min-width:0}
+  section{margin:0 0 62px;scroll-margin-top:28px}
+  .sec-kicker{
+    font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--faint);margin:0 0 8px
+  }
+  h2{
+    font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.18;letter-spacing:-.015em;
+    margin:0 0 10px;padding-bottom:14px;border-bottom:1px solid var(--hair-strong)
+  }
+  h3{
+    font-family:var(--sans);font-weight:600;font-size:14px;letter-spacing:.02em;
+    margin:30px 0 10px;color:var(--ink)
+  }
+  p{margin:0 0 15px;max-width:68ch}
+  ul,ol.body-list{margin:0 0 15px;padding-left:20px;max-width:68ch}
+  li{margin:0 0 7px}
+  code,.id{
+    font-family:var(--mono);font-size:.88em;background:rgba(19,22,26,.045);
+    padding:1px 4px;border-radius:2px;border:1px solid var(--hair)
+  }
+  .id{border-style:dashed}
+  a.ref{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(11,107,98,.35)}
+  a.ref:hover{border-bottom-color:var(--accent)}
+
+  /* ── tables ──────────────────────────────────────────── */
+  table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;line-height:1.45}
+  caption{
+    caption-side:top;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--faint);padding:0 0 9px
+  }
+  th{
+    text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);font-weight:400;padding:0 14px 8px 0;border-bottom:1px solid var(--hair-strong);
+    vertical-align:bottom
+  }
+  td{padding:10px 14px 10px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+  td:last-child,th:last-child{padding-right:0}
+  td.mono,.mono{font-family:var(--mono);font-size:12.5px}
+  .num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  .plus{color:var(--accent)}
+
+  /* ── status chips ────────────────────────────────────── */
+  .chip{
+    display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+    padding:2px 7px;border:1px solid var(--hair-strong);border-radius:3px;white-space:nowrap;
+    text-transform:uppercase;color:var(--muted)
+  }
+  .chip.ok{color:#0b6b62;border-color:rgba(11,107,98,.45)}
+  .chip.pre{color:#7a6a2e;border-color:rgba(122,106,46,.4)}
+  .chip.no{color:#8d3a2c;border-color:rgba(141,58,44,.4)}
+
+  /* ── code / formula blocks ───────────────────────────── */
+  .formula{
+    font-family:var(--mono);font-size:12.5px;line-height:1.65;white-space:pre;
+    border:1px solid var(--hair);border-left:2px solid var(--accent);
+    padding:16px 18px;margin:0 0 18px;overflow-x:auto;background:rgba(19,22,26,.02)
+  }
+  pre{
+    font-family:var(--mono);font-size:12.5px;line-height:1.6;border:1px solid var(--hair);
+    padding:14px 16px;margin:0 0 18px;overflow-x:auto;background:rgba(19,22,26,.02)
+  }
+  pre code{background:none;border:0;padding:0;font-size:inherit}
+
+  .callout{
+    border-top:1px solid var(--hair-strong);border-bottom:1px solid var(--hair-strong);
+    padding:14px 0;margin:0 0 20px;font-size:14.5px;max-width:68ch
+  }
+  .callout .lbl{
+    font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--accent);display:block;margin-bottom:6px
+  }
+
+  /* ── colophon ────────────────────────────────────────── */
+  .colophon{border-top:1px solid var(--hair-strong);padding-top:20px;margin-top:8px;
+    font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--muted);max-width:78ch}
+
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr;gap:34px}
+    nav.toc{position:static}
+    .wrap{padding:0 20px}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <p class="kicker">LOVII · lovii-core · SZ-min-order-enforcement</p>
+    <h1>Платформенный минимум суммы заказа</h1>
+    <p class="lede">
+      Чек нельзя оформить, если <em>товарная</em> сумма корзины ниже эффективного минимума точки.
+      Эффективный минимум — собственный минимум точки, если он не ниже жёсткого пола,
+      иначе платформенный дефолт <em>600 ₽</em>.
+    </p>
+    <dl class="meta">
+      <div><dt>Репозиторий</dt><dd>lovii-core</dd></div>
+      <div><dt>Ветка</dt><dd>feat/min-order-enforcement</dd></div>
+      <div><dt>Коммит</dt><dd>572361e</dd></div>
+      <div><dt>База</dt><dd>354627b</dd></div>
+      <div><dt>Статус</dt><dd>реализовано · не запушено</dd></div>
+      <div><dt>Дата</dt><dd>2026-09-17</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap shell">
+
+  <nav class="toc">
+    <p class="toc-h">Содержание</p>
+    <ol>
+      <li><a href="#s1">Что сделано</a></li>
+      <li><a href="#s2">Формула и решения</a></li>
+      <li><a href="#s3">Изменённые файлы</a></li>
+      <li><a href="#s4">Верификация</a></li>
+      <li><a href="#s5">Расхождения</a></li>
+      <li><a href="#s6">Не сделано и не проверено</a></li>
+      <li><a href="#s7">Риски и следующий шаг</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- 1 -->
+    <section id="s1">
+      <p class="sec-kicker">01</p>
+      <h2>Что сделано</h2>
+      <p>
+        Задача — единственная в этом проходе. Реализация выполнена в одном репозитории,
+        <code>lovii-core</code>; ветка отведена от <code>354627b</code>, дерево чистое,
+        ни <code>staging</code>, ни <code>master</code> не тронуты, push не выполнялся.
+      </p>
+      <p>
+        Гвард минимального чека стоит в <code>CheckoutBuilder::build()</code> — общей точке
+        для <code>preview</code> и <code>place</code>, поэтому предпросмотр и оформление
+        видят одну и ту же ошибку и один и тот же код <code>min_order_amount_not_met</code> (HTTP 422).
+        Сравнение идёт по <strong>товарной</strong> сумме: ни платная доставка, ни списанные баллы
+        не «дотягивают» корзину до порога.
+      </p>
+      <p>
+        Пороги вынесены в <code>config/orders.php</code> и читаются из окружения
+        (<code>ORDERS_MIN_ORDER_AMOUNT_DEFAULT_KOPECKS</code> = 60000,
+        <code>ORDERS_MIN_ORDER_AMOUNT_HARD_FLOOR_KOPECKS</code> = 50000).
+        Хардкода 500/600 в коде нет — это проверено тестом, который переопределяет конфиг.
+      </p>
+
+      <div class="callout">
+        <span class="lbl">Ключевое следствие</span>
+        Точка, у которой минимум не задан (NULL) или задан значением ниже 500 ₽,
+        на чекауте получает платформенный дефолт 600 ₽. Импорт Kuper / b2b не переписывался:
+        пол применяется на расчёте, а не при записи в БД.
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section id="s2">
+      <p class="sec-kicker">02</p>
+      <h2>Формула и решения владельца</h2>
+      <div class="formula">effective(branch.min_order_amount) =
+      branch.min_order_amount    если он не NULL и &gt;= 50000 коп.
+      60000 коп.                 иначе (NULL, 0, отрицательное, 1..49999)
+
+чек проходит  ⟺  subtotal &gt;= effective(branch.min_order_amount)</div>
+
+      <table>
+        <caption>Решения владельца 2026-09-17 (BACKLOG_REVIEW §A1, §C2)</caption>
+        <thead><tr><th>Параметр</th><th>Значение</th><th>Где реализовано</th></tr></thead>
+        <tbody>
+          <tr><td>Платформенный дефолт</td><td class="mono">600 ₽ = 60000 коп.</td><td class="mono">config/orders.php</td></tr>
+          <tr><td>Жёсткий пол задаваемого значения</td><td class="mono">500 ₽ = 50000 коп.</td><td class="mono">config/orders.php</td></tr>
+          <tr><td>0 / NULL у точки</td><td>«применяется дефолт»</td><td class="mono">MinOrderPolicy::effective()</td></tr>
+          <tr><td>Значение 1..499 ₽ (из импорта или БД)</td><td>не применяется, берётся дефолт</td><td class="mono">MinOrderPolicy::effective()</td></tr>
+          <tr><td>Значение, задаваемое МСП</td><td>от 500 ₽; ниже — ошибка валидации</td><td class="mono">UpdateMspBranchSettingsController</td></tr>
+          <tr><td>База сравнения</td><td>товарная сумма (subtotal)</td><td class="mono">CheckoutBuilder::build()</td></tr>
+          <tr><td>Код ошибки</td><td class="mono">min_order_amount_not_met</td><td class="mono">bootstrap/app.php → 422</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Подпись под полем в UI приложения («Минимальная сумма заказа — не менее 500 ₽,
+        по умолчанию применяется 600 ₽») — отдельная задача по <code>lovii-app</code>,
+        в этом проходе не делалась, как и было решено.
+      </p>
+    </section>
+
+    <!-- 3 -->
+    <section id="s3">
+      <p class="sec-kicker">03</p>
+      <h2>Изменённые файлы</h2>
+      <p>Коммит <code>572361e</code> — 19 файлов, <span class="mono">+885 / −55</span>.</p>
+
+      <table>
+        <caption>Новые</caption>
+        <thead><tr><th>Файл</th><th>Назначение</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">config/orders.php</td>
+            <td>Пороги из env с дефолтами 600 ₽ / 500 ₽; комментарий-обоснование со ссылкой на §A1.</td>
+          </tr>
+          <tr>
+            <td class="mono">app/Domain/Checkout/Services/<br>MinOrderPolicy.php</td>
+            <td>Политика: <code>effective()</code>, <code>assertSatisfied()</code> (422), формат рублей для текста ошибки.</td>
+          </tr>
+          <tr>
+            <td class="mono">database/migrations/2026_09_17_120000_<br>normalize_branch_min_order_amount_zero_to_null.php</td>
+            <td>Нормализация существующих <code>min_order_amount = 0 → NULL</code>. <code>down()</code> — осознанный no-op.</td>
+          </tr>
+          <tr>
+            <td class="mono">tests/Feature/Order/<br>MinOrderEnforcementTest.php</td>
+            <td>12 тестов: preview + place, границы 500/600/700, доставка и баллы, чтение конфига.</td>
+          </tr>
+          <tr>
+            <td class="mono">tests/Feature/Msp/<br>BranchMinOrderSettingsTest.php</td>
+            <td>16 тестов: валидация порога, 0/null → NULL, округление до копеек, effective-поля.</td>
+          </tr>
+          <tr>
+            <td class="mono">docs/sessions/033-min-order-enforcement.md</td>
+            <td>История работы и доказательства гейтов внутри репозитория.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <caption>Изменённые</caption>
+        <thead><tr><th>Файл</th><th>Изменение</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Domain/Checkout/Services/CheckoutBuilder.php</td><td>Инъекция <code>MinOrderPolicy</code> + гвард сразу после расчёта <code>subtotal</code>.</td></tr>
+          <tr><td class="mono">Http/Controllers/Api/V1/Msp/<br>UpdateMspBranchSettingsController.php</td><td>Нижняя граница валидации берётся из конфига; <code>0</code>/<code>null</code> сохраняются как NULL.</td></tr>
+          <tr><td class="mono">Http/Resources/Api/V1/Msp/<br>MspBranchSettingsResource.php</td><td>Добавлены <code>min_order_amount_effective</code> и <code>..._effective_rubles</code>.</td></tr>
+          <tr><td class="mono">lang/ru/errors.php · lang/en/errors.php</td><td>Ключ <code>min_order_amount_too_low</code> с подстановкой пола и дефолта.</td></tr>
+          <tr><td class="mono">8 существующих тестов</td><td>Суммы чекаутов подняты выше минимума; в трёх местах убран случайный снапшот фабрики (тесты были флаки по <code>rand()</code>).</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4 -->
+    <section id="s4">
+      <p class="sec-kicker">04</p>
+      <h2>Верификация</h2>
+      <p>
+        Ниже — прогоны, выполненные <strong>мной независимо</strong> после отчёта исполнителя,
+        в контейнере <code>lovii-core-app-1</code>. Exit code и вывод — как есть.
+      </p>
+
+      <table>
+        <caption>Мои прогоны</caption>
+        <thead><tr><th>Команда</th><th class="num">Exit</th><th>Результат</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">pest tests/Feature/Order/MinOrderEnforcementTest.php --compact</td>
+            <td class="num">0</td>
+            <td><span class="chip ok">pass</span> 12 passed (35 assertions)</td>
+          </tr>
+          <tr>
+            <td class="mono">pest tests/Feature/Order/MinOrderEnforcementTest.php tests/Feature/Msp/BranchMinOrderSettingsTest.php --compact</td>
+            <td class="num">0</td>
+            <td><span class="chip ok">pass</span> 28 passed (107 assertions)</td>
+          </tr>
+          <tr>
+            <td class="mono">pest --parallel --compact --exclude-testsuite=E2e</td>
+            <td class="num">2</td>
+            <td><span class="chip pre">baseline</span> 28 failed, 1154 passed (4021 assertions)</td>
+          </tr>
+          <tr>
+            <td class="mono">pint --test &lt;8 затронутых файлов&gt;</td>
+            <td class="num">0</td>
+            <td><span class="chip ok">pass</span> 8 files</td>
+          </tr>
+          <tr>
+            <td class="mono">artisan openapi:validate</td>
+            <td class="num">0</td>
+            <td><span class="chip ok">valid</span> 38 paths, 44 schemas</td>
+          </tr>
+          <tr>
+            <td class="mono">artisan migrate:status</td>
+            <td class="num">0</td>
+            <td><span class="chip ok">Ran</span> 2026_09_17_120000_normalize_…</td>
+          </tr>
+          <tr>
+            <td class="mono">artisan tinker → merchant_branches</td>
+            <td class="num">0</td>
+            <td class="mono">{"zero":0,"null":15,"total":20}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>28 падений — предсуществующие, не от этой задачи</h3>
+      <p>
+        Полный прогон даёт exit code 2, и это важно проговорить явно. Все 28 падений лежат
+        в областях, которых коммит не касался (в коммите нет ни одного файла из этих наборов),
+        и причины падений не связаны с минимальным чеком:
+      </p>
+      <table>
+        <thead><tr><th>Набор</th><th class="num">Шт.</th><th>Наблюдаемая причина</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Payment/CreateOrderPaymentTest</td><td class="num">4</td><td>Не совпадает URL платёжной страницы: ожидается <code>pay-test.tbank.ru</code>, приходит <code>/payment/fake?</code> — окружение/фикстура платёжного шлюза. Заказ при этом создаётся (amount 9800 ₽, выше порога).</td></tr>
+          <tr><td class="mono">Payment/TBankWebhookTest</td><td class="num">10</td><td>Тот же платёжный контур.</td></tr>
+          <tr><td class="mono">VK/VKCallbackTest · VK/VKOtpAuthTest</td><td class="num">7</td><td>Callback отвечает 403 вместо 200 — подпись/секрет группы.</td></tr>
+          <tr><td class="mono">Roles/MspGrowthTest</td><td class="num">6</td><td><code>Call to undefined function mspMobileStarterFixture()</code> — хелпер отсутствует в наборе.</td></tr>
+          <tr><td class="mono">Events/ListenerRegistrationTest</td><td class="num">1</td><td>Регистрация слушателей.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Исполнитель заявил дополнительно, что сравнивал падения с базовой линией побайтово
+        (через <code>git stash</code>). <strong>Я это сравнение не воспроизводил</strong> —
+        моя проверка ограничена тем, что наборы и причины падений лежат вне зоны изменения
+        и не связаны с минимальным чеком.
+      </p>
+
+      <h3>Изменения существующих тестов</h3>
+      <p>
+        Ровно там, где тест оформлял чек ниже нового минимума — то есть это ожидаемое следствие
+        политики, а не подгонка под зелёный прогон. Бизнес-правило не менялось.
+        Отдельно стоит отметить <code>MspRolesTest</code>: тело запроса поднято со 100 ₽ до 500 ₽,
+        иначе валидация тела срабатывала раньше <code>ensureAbility</code> и тест проверял бы 422
+        вместо ожидаемого 403.
+      </p>
+    </section>
+
+    <!-- 5 -->
+    <section id="s5">
+      <p class="sec-kicker">05</p>
+      <h2>Расхождения с постановкой</h2>
+      <table>
+        <thead><tr><th>Что</th><th>Как поступили</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Код ошибки</td>
+            <td>§A1 бэклога упоминает устаревший <code>min_order_violated</code>. Использован актуальный <code>min_order_amount_not_met</code>, как требовала постановка.</td>
+          </tr>
+          <tr>
+            <td>Текст ошибки валидации МСП</td>
+            <td>Приходит в <code>error.details.min_order_amount_rubles</code>, а не в <code>error.message</code>: <code>bootstrap/app.php</code> для <code>ValidationException</code> всегда отдаёт общий <code>errors.validation_failed</code>. Это свойство всего API, а не этой задачи.</td>
+          </tr>
+          <tr>
+            <td>Отрицательное значение в БД</td>
+            <td>Трактуется как «не задано» → применяется дефолт. Прямого указания в постановке не было.</td>
+          </tr>
+          <tr>
+            <td>Побочная правка</td>
+            <td>В контроллере МСП <code>trim()</code> заменён на <code>mb_trim()</code> в двух местах — требование линтера, к минимуму отношения не имеет.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 6 -->
+    <section id="s6">
+      <p class="sec-kicker">06</p>
+      <h2>Не сделано и не проверено</h2>
+      <ul>
+        <li><strong>UI приложения</strong> — по решению владельца отдельная задача. Потребителя у <code>min_order_amount_effective</code> пока нет.</li>
+        <li><strong>Витринные ресурсы</strong> (<code>StorefrontInfo</code>, <code>NearbyBranch</code>, <code>StoreCard</code>, <code>PopularMerchant</code>, <code>MerchantOfferResource</code>) отдают сырой <code>min_order_amount</code>. Карточка точки может показать «минимум 0 ₽», хотя чек отклонится. В объём не входило — кандидат в задачу.</li>
+        <li><strong>b2b-кабинет</strong> (<code>BranchResource</code>) по-прежнему может записать значение ниже пола — пол сработает на расчёте. Это и есть принятое решение «импорт не переписываем».</li>
+        <li><strong>E2e-набор не запускался</strong> — нужен живой стек; правки там только детерминируют цены.</li>
+        <li><strong>phpstan</strong> — исполнитель сообщил о 10 ошибках в 8 файлах, побайтово совпадающих с базовой линией, при памяти 2 ГБ (на штатных 256 МБ — OOM). Я это не перепроверял.</li>
+        <li><strong>Миграция применена только к локальной dev-БД.</strong> На staging/prod не выкатывалась.</li>
+      </ul>
+    </section>
+
+    <!-- 7 -->
+    <section id="s7">
+      <p class="sec-kicker">07</p>
+      <h2>Риски и следующий шаг</h2>
+      <table>
+        <thead><tr><th>Риск</th><th>Оценка</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Точки с реальным минимумом ниже 500 ₽ внезапно получают 600 ₽ при пустом значении или дефолт вместо своего низкого порога</td>
+            <td>Средний — это и есть цель политики, но эффект заметен на живом трафике</td>
+            <td>При приёмке посмотреть распределение <code>min_order_amount</code> по активным точкам на staging</td>
+          </tr>
+          <tr>
+            <td>Клиент видит «минимум не задан» в витрине, а чек отклоняется</td>
+            <td>Средний — расхождение витрины и чекаута</td>
+            <td>Следующая задача: отдавать effective в витринных ресурсах + подпись в UI</td>
+          </tr>
+          <tr>
+            <td>Предсуществующие 28 падений маскируют регрессию в будущих прогонах</td>
+            <td>Низкий для этой задачи, высокий для процесса</td>
+            <td>Разобрать платёжный контур и VK-подпись отдельно</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Дальше</h3>
+      <p>
+        Ветка готова к визуальной приёмке владельцем: <code>STAGING</code> для показа —
+        <code>docker exec lovii-core-app-1 php artisan migrate</code>, PWA-превью через
+        <code>~/LOVII/tools/lovii-app-preview.sh</code> → <code>http://localhost:8081</code>.
+        После приёмки — по одной задаче из P1: sub-domain, sub-billing, payout-scheduler,
+        payout-pull-request, pep-npd-reports.
+      </p>
+    </section>
+
+    <div class="colophon">
+      Источник решений владельца: BACKLOG_REVIEW.md §A1, §B, §C2, §H (LOVII, 2026-09-17).<br>
+      Верификация выполнена независимо в контейнере lovii-core-app-1; результаты исполнителя,
+      не перепроверенные мной, помечены явно.<br>
+      Отчёт подготовлен AutoClaw.
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
