@@ -1,3 +1,11 @@
+## 2026-10-06 (ночь, 4) — SZ-089: чек-лист арены (8 пунктов) отработан
+
+- Верифицированы по коду/артефактам и дописаны в session 097 (core 0d7f3e39):
+  pre/post во всех 8 стеках, health-fail ветка, PKG[worker]-таблица,
+  PHP_SHA256-фикс, политика MISSING/HASH/EXTRA, воспроизводимый canary
+  (команды), rollback помечен «документирован, живьём не гонялся».
+- Ожидается финальный вердикт арены (SZ-089 ПРИНЯТО / F-5 ЗАКРЫТ), затем
+  release checklist F-6 и ручное «го» владельца на staging→master.
 ## 2026-10-06 (ночь, 3) — SZ-089 исполнена: env-drift guard в lovii-deploy
 
 - lovii-security 0d4ec18: env-diff.sh (compose environment vs Config.Env,
