@@ -1,3 +1,16 @@
+## 2026-10-06 (ночь, 5) — 🚀 ПРОД-РЕЛИЗ P0/P1-волны 06.10 выполнен
+
+- Release gate F-6 пройден полностью (артефакт RELEASE-GATE-F6-2026-10-06.md),
+  вердикт арены: SZ-089 ПРИНЯТО, F-5 ЗАКРЫТ. Ручное «го» владельца — 06.10 вечер.
+- staging→master: core `17413095`, app `081496e2`; workflow_dispatch:
+  deploy-production ✅ у обоих (app: флейк unhandled rejection, reran чисто).
+- Gate поймал и вылечил: staging-mock строку в прод payment_settings (удалена),
+  staging-URL в дефолте fake_payment_url (core 3ee84779), workers без
+  TRUSTED_PROXIES (полный recreate), TRUSTED_PROXIES добавлен явно в прод .env.
+- Post-deploy: env-diff OK на core/app, OTP 200 + нормализация всех форматов
+  живьём на проде, app.lovii.ru 200.
+- Далее по плану арены: T-036 (остатки O-2), UX-toast F-3, живой rollback drill,
+  факт-чек старых P1.
 ## 2026-10-06 (ночь, 4) — SZ-089: чек-лист арены (8 пунктов) отработан
 
 - Верифицированы по коду/артефактам и дописаны в session 097 (core 0d7f3e39):
