@@ -121,7 +121,8 @@ lovii_docs/
 | [`PRD.md`](canon/PRD.md) | B | Что строим |
 | [`FEATURES.md`](canon/FEATURES.md) | B | Какие фичи готовы / запланированы |
 | [`ROADMAP.md`](canon/ROADMAP.md) | B | Когда (вехи) |
-| [`BACKLOG.md`](canon/BACKLOG.md) | B | Очередь задач: платформенные эпики P/E/S (§5) + сводный реестр треков I/R/C/O (§6) |
+| [`BACKLOG.md`](canon/BACKLOG.md) | B | Очередь ТОЛЬКО открытых задач: эпики P/E/S (§5) + реестр треков (§6) + правила жизненного цикла пункта (§0.2) |
+| [`BACKLOG_ARCHIVE.md`](canon/BACKLOG_ARCHIVE.md) | L3 | Журнал закрытых пунктов бэклога (append-only): сжатая строка + указатели на артефакты (archive/tasks/, файл-дом, FINDINGS) |
 | [`ARCHITECTURE.md`](canon/ARCHITECTURE.md) | B | Как устроена система (уровень платформы) |
 | [`SCREEN_MAP.md`](canon/SCREEN_MAP.md) | B | Карта экранов интерфейса |
 | [`SAGA.md`](canon/SAGA.md) | B | Хроника прод-событий и решений |
