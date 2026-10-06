@@ -164,3 +164,23 @@ prod-релиза.
 | F-5 | env-diff в deploy job + причина потери 05.10 | задача CI |
 | F-6 | Release checklist для staging→master этой волны | за владельцем+ареной |
 | F-7 | O-2 остаток (fallback/budget/H8) | T-036 (уже есть) |
+
+
+---
+
+# ФИНАЛЬНЫЙ ВЕРДИКТ АРЕНЫ (зафиксирован zcode из чата владельца, 06.10 ночь)
+
+```text
+SZ-089 — ПРИНЯТО
+F-5 — ЗАКРЫТ
+```
+
+Основания: коммиты `beb01ba`, `5980536`, `lovii-core: 0d7f3e39`,
+`lovii-security: 0d4ec18`, session `097-env-drift-guard.md`; все 8 пунктов
+чек-листа подтверждены. Живой rollback остаётся остаточным операционным
+риском → отдельный production-readiness follow-up.
+
+Статус волны: SZ-086/087/088 приняты, O-2 базовый принят (T-036 остатки),
+F-1–F-5 закрыты, F-6 готов. Production release — по release gate F-6
+(9 пунктов, вкл. ручное «го» владельца) и только затем staging→master.
+После релиза: T-036, UX follow-up, живой rollback drill, факт-чек старых P1.
