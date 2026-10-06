@@ -1,6 +1,6 @@
 # SZ-089 — CI env-diff / container env freshness (блокер прод-релиза)
 
-> Статус: **Открыта**
+> Статус: **Исполнена (на приёмке арены)**
 > Приоритет: **P0-инфраструктура** (единственный блокер production approval
 > по вердикту арены 06.10)
 > Источник: приёмка арены P0/P1-волны
@@ -54,3 +54,42 @@
   читает `docker inspect` фактических env, сравнивает sha256 по именам.
 - Встраивание: шаг в lovii-deploy ДО `up -d` (pre-check) и после (post-check).
 - Отчёт: таблица сервис × имя переменной × статус (ok/mismatch/missing).
+
+
+---
+
+## Отчёт исполнителя (zcode, 06.10 вечер — в тот же день)
+
+**Реализация:**
+- `lovii-security@main` `0d4ec18`: `audit-bundle/infra/env-diff.sh` — сверка
+  compose `environment` (compose поглощает env_file) с фактическим
+  `docker inspect Config.Env`; сравнение по соль-хэшам sha256-12
+  (секреты не выводятся); классификация MISSING/HASH/EXTRA; образные
+  переменные (PATH/PHP_*/NODE_*/PG_*/REDIS_*/MEILI_*/GOSU/LANG/TZ/…) в
+  фильтре `IMAGE_ENV_RE`.
+- `lovii-deploy.sh`: **pre**-check после определения DC (drift → WARN,
+  recreate в этом деплое устранит) и **post**-check после health-check —
+  fail-closed: drift → деплой ABORT с пояснением SZ-089.
+- Раскатано на SRV: `~/bin/lovii-deploy` + `~/bin/env-diff.sh`
+  (бэкап `lovii-deploy.bak-sz089` = rollback-процедура).
+
+**Живые прогоны (staging-core):**
+1. Первый прогон guard нашёл **реальный drift**: horizon/scheduler/3 poller'а
+   работали со старыми (пустыми) `TBANK_TERMINAL_*` после восстановления .env
+   в SZ-087 — пересоздавался только `app`. Вылечено `up -d` всего стека.
+2. Чистый post → `ENV-DIFF [post]: OK`.
+3. Canary-drift (новая переменная в .env без recreate) → `DRIFT ОБНАРУЖЕН:
+   app/horizon/scheduler: MISSING SZ089_DRIFT_CANARY` → откат → OK.
+4. **Живой деплой через CI** (run `37516291981`, commits `5629a726`→`3b7900e5`):
+   в логах `ENV-DIFF [pre]: OK` … `ENV-DIFF [post]: OK`, deploy ✅.
+
+**Гейты:** деплой-jobs зелёные; секреты в выводах отсутствуют (хэши с процессной
+солью). Session-док: `lovii-core/docs/sessions/097-env-drift-guard.md`.
+
+**Rollback:** `cp ~/bin/lovii-deploy.bak-sz089 ~/bin/lovii-deploy` — деплой
+возвращается к версии без guard; .env из `.env.bak-*` + `up -d` стека +
+ручной `env-diff post`.
+
+**Критерии арены:** выполнены 1–8 (diff/redacted/pre/recreate/post/fail/rollback/
+session+прогон). Ручное восстановление env из SZ-087 признано workaround —
+теперь постоянный механизм действует.

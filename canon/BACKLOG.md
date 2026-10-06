@@ -80,13 +80,12 @@
       R-3.4) / разводки ботов 04.10. UI честен. Карточка:
       [`SZ-087`](TASKS/SZ-087-staging-payments-not-configured.md). Источник:
       проход стендов 06.10.
-- [ ] **SZ-089 (P0-инфра, БЛОКЕР ПРОДА) CI env-diff / container env freshness** —
-      потеря env 05.10 (SZ-087) + устаревший env мока показали класс: правка
-      .env без recreate оставляет контейнер на старых значениях. Требование
-      арены: env-diff до/после deploy (имена/хэши, без секретов), fail-fast,
-      recreate-гарантия, rollback, прогон на staging. Карточка:
-      [`SZ-089`](TASKS/SZ-089-env-drift-guard.md). До закрытия — prod-релиз
-      волны 06.10 НЕ одобрен.
+- [ ] **SZ-089 (P0-инфра) CI env-diff / container env freshness — ИСПОЛНЕНА,
+      на приёмке арены** — env-diff pre/post в lovii-deploy (post fail-closed),
+      соль-хэши без секретов; живой прогон CI `37516291981` (pre-OK/post-OK),
+      canary-drift ловится; первый прогон поймал реальный drift workers.
+      Карточка: [`SZ-089`](TASKS/SZ-089-env-drift-guard.md). После вердикта
+      арены — последний блокер prod-релиза снят (release checklist F-6).
 - [ ] **SZ-088 (P1) Залипание счётчиков «+»/«−» в корзине/карточке товара** —
       серии кликов перестают менять счётчик при живом серверном состоянии;
       подозрение — cart.store sync (bumpProduct/debounce). Карточка:
