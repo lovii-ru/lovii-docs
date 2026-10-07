@@ -2073,3 +2073,28 @@
   единый AppHeader, типографика канона + настройка «Размер текста», возврат к канону демо.
   Сессии app 008–011. OTP dev-эндпоинт для тестов:
   `GET /api/v1/dev/otp/last-code?phone=…`.
+
+## 2026-10-08 — T-038: полный мок-стенд «банк + касса» (kassa-mock), оба чека канона end-to-end
+
+- По запросу владельца (пока он подключает боевую кассу) собран **kassa-mock**
+  (lovii-core/kassa-mock, нода без зависимостей, selftest 13/13): контракт
+  OFD Ferma по их документации — getToken / sell / sell_refund / report /
+  stats, асинхронная «печать» с генерацией ФД/ФП, callback с ретраями,
+  «чек покупателю» (/receipts/{uuid}), консоль /admin; негативные сценарии:
+  `fail-`/`hang-` external_id, MOCK_FERMA_DOWN (касса недоступна), дубль
+  external_id.
+- **FermaProvider переписан под реальный контракт Ferma** (черновой был по
+  памяти) + пере-авторизация при протухшем токене; FiscalCallbackController —
+  Ferma-формат (uuid/external_id, done/fail, payload), секрет заголовком или
+  ?secret= в URL (боевая Ferma не подписывает колбэки).
+- **Живой сквозняк на staging полностью автоматический:** заказ → оплата
+  (tbank-mock) → prepayment → касса напечатала (ФД/ФП) → callback → confirmed;
+  ready → full_payment → ФД → callback → confirmed. Оба чека money_flow §2.1
+  end-to-end. Тестовые данные вычищены.
+- Грабли зафиксированы в session 101: extras-compose живёт в git репо core
+  (зеркало security перетирается деплоем); horizon держит свой env; ретрай
+  чека при прикладном отказе кассы (дубль external_id) не автоматический.
+- Staging env: FISCALIZATION_PROVIDER=ferma, FERMA_API_URL=http://kassa-mock:3101.
+  Переключение на боевую кассу = смена FERMA_* env (код не меняется).
+- Коммиты: core 319c549e…f8e071e6 (+session 101 a2d37068); CI финальный 🟢.
+
