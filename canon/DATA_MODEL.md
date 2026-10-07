@@ -382,4 +382,62 @@ erDiagram
 }
 ```
 
+### 2.9. FiscalDocument
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "FiscalDocument",
+  "description": "Фискальный документ 54-ФЗ (T-038). Один платёж = чек «Предоплата 100%»; момент передачи заказа = чек «Полный расчёт»; отмена/возврат платежа = чек возврата. Правообладатель — агент, Лицензиат — поставщик (money_flow_public.md §2.1, Оферта присоединения §12.2.3). Провайдер по умолчанию: OFD Ferma (касса-партнёр терминала Т-Банка, Фаза 1).",
+  "required": ["order_id", "kind", "status"],
+  "properties": {
+    "order_id": {"type": "integer", "description": "Заказ"},
+    "payment_id": {"type": ["integer", "null"], "description": "Платёж (для prepayment/refund)"},
+    "kind": {
+      "type": "string",
+      "enum": ["prepayment", "full_payment", "refund"],
+      "description": "Вид фискального документа"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "sent", "confirmed", "failed"],
+      "description": "pending → sent (принят кассой) → confirmed (ФН/ОФД подтвердили); failed с retry_count"
+    },
+    "provider": {"type": "string", "description": "Ключ провайдера (ferma / mock / …)"},
+    "amount": {"type": "integer", "description": "Сумма чека в копейках"},
+    "items": {"type": "array", "description": "Позиции (name, price, quantity, vat, payment_object, agent_info, supplier_info)"},
+    "agent_sign": {"type": "string", "description": "Признак агента — конфиг, вердикт юриста (Фаза 1)"},
+    "supplier": {
+      "type": "object",
+      "description": "Поставщик = Лицензиат (partner)",
+      "properties": {
+        "name": {"type": "string"},
+        "inn": {"type": "string"},
+        "phones": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "taxation": {"type": "string", "description": "СНО Правообладателя — конфиг, вердикт юриста"},
+    "payments_split": {
+      "type": "object",
+      "description": "Формы оплаты: electronic / provision (баллы) — развилка владельца"
+    },
+    "fd_number": {"type": ["string", "null"], "description": "ФД"},
+    "fiscal_sign": {"type": ["string", "null"], "description": "ФП"},
+    "fiscal_at": {"type": ["string", "null"], "format": "date-time"},
+    "ofd_receipt_url": {"type": ["string", "null"]},
+    "error_text": {"type": ["string", "null"]},
+    "retry_count": {"type": "integer", "minimum": 0},
+    "external_id": {"type": ["string", "null"], "description": "ID документа у провайдера"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}
+```
+
+Идемпотентность: unique `(payment_id, kind)` для prepayment/refund и
+`(order_id, kind)` для full_payment. Связь с леджером: узел «внешний чек»
+по образцу `external:bank` — отчётная obligation, движения денег не создаёт,
+Σ-инвариант не меняет.
+
 ---

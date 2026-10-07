@@ -15,6 +15,11 @@
 
 ## Журнал
 
+- **SZ-089 (P0-инфра) CI env-diff / container env freshness** — закрыт 06.10:
+  env-diff pre/post в lovii-deploy (post fail-closed), живой прогон CI
+  `37516291981` (pre-OK/post-OK), canary-drift ловится; принята ареной,
+  prod-релиз 06.10 ночи. → карточка `archive/tasks/SZ-089-…`,
+  workspace/status.md 06.10.
 - **SZ-086 (P0) Маска телефона съедает цифру + дубль пользователей** — закрыт
   06.10: core `514318c4` (нормализация phone в auth-запросах, 4 формата → один
   user) + app `6c818153` (маска без потери цифры); в staging и проде
