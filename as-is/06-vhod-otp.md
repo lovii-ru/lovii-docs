@@ -1,8 +1,9 @@
 # 06. Вход и OTP — как есть
 
 > Срез: 2026-09-17, **обновлено 2026-09-19** (T-010: привязка промокода при
-> подтверждении номера) и **2026-10-04** (дельта 03–04.10: прод-OTP восстановлен,
-> боты развязаны, RES-014 §6-A — раздел ниже). Рабочая заметка (класс W),
+> подтверждении номера), **2026-10-04** (дельта 03–04.10: прод-OTP восстановлен,
+> боты развязаны, RES-014 §6-A — раздел ниже) и **2026-10-07** (дельта 05–07.10:
+> F-082 закрыт корнево, TG без SOCKS5 — раздел ниже). Рабочая заметка (класс W),
 > не канон. Формат — [README](README.md).
 
 ## Что это
@@ -46,7 +47,7 @@
 | Канал | Состояние | Детали |
 |---|---|---|
 | MAX | рабочий | транспорт `OTP_MAX_TRANSPORT` (bot_api на staging); отправка **user_id в query** `POST /messages?user_id=…` (MaxBotApiClient.php:17–20,56–69); бот «otp»; без привязки — сессия «паркуется» с binding_token + deeplink `max.ru/{username}?start=…` (SendOtpAction.php:128–148) |
-| Telegram | рабочий | бот @loviiru_bot; сообщение + кнопка «копировать код» + URL-кнопка binding-ссылки (TelegramSender.php:59–79); long-poll воркер `telegram:poll-updates` (docker-сервисы telegram-poller-otp/-support/-orders — docker-compose.prod.yml:141–209) |
+| Telegram | рабочий | бот @loviiru_bot; сообщение + кнопка «копировать код» + URL-кнопка binding-ссылки (TelegramSender.php:59–79); long-poll воркер `telegram:poll-updates`; в compose — только poller-otp, orders/support за профилем `telegram-extra` (F-082-фикс, core `c7a635ff`, обновлено 07.10) |
 | VK | рабочий (при токене) | канал включается только при `VK_COMMUNITY_TOKEN` (AllChannelsStrategy.php:36–38); deeplink `vk.me/{screen_name}?ref=…` (не ?start=); callback `POST /vk/callback`, confirmation-строка из env (VKCallbackHandler.php:72–81) — **авто-ротации нет, смена = ручная правка env** |
 | SMS | заглушка | LEGACY-логгер, «SMS не планируется» (SmsSender.php:13–27), в UI скрыт |
 | WhatsApp/call | заглушки | `coming_soon` в конфиге (otp.php:63–69) |
@@ -54,6 +55,24 @@
 Каналы отдаёт стратегия AllChannelsStrategy: базово `[MAX, Telegram]`, VK — при
 настроенном токене (:31–41). Выбор канала — экран AuthCallCoders (кэш списка
 5 мин — AuthCallCoders.vue:161–175).
+
+## Дельта 05–07.10 (F-082 корнево, TG без прокси)
+
+- **F-082 закрыт КОРНЕВО (07.10, Фаза 0 плана чеков):** TG 409 «terminated by
+  other getUpdates» — причина: три compose-поллера (otp/orders/support) на
+  ОДНОМ токене в .env обоих стендов. Фикс: core `c7a635ff` — единственный
+  long-poller это otp; poller-orders/support убраны из деплоя за профилем
+  `telegram-extra`; lovii-security `623369c` (SVC-таблица lovii-deploy, зеркала
+  compose, тест). Staging задеплоен; **на проде лишние поллеры остановлены
+  `docker stop` — ВРЕМЕННО, закрепить промоушеном staging→master вместе с
+  `e7eda3b6`.** После 10:45 UTC 07.10 — 0 ошибок 409.
+- **Telegram — напрямую по IPv4 без SOCKS5 (06.10):** провайдер прокси
+  83.171.233.222 мёртв; DNS отдаёт только AAAA → пин extra_hosts + NO_PROXY в
+  compose, фолбэк http_proxy убран из telegrambots.php. MAX-OTP жив
+  (NO_PROXY=…platform-api2.max.ru), тест delivery OK.
+- **OTP-боты по стендам (факт 07.10):** прод TG = `loviiru_bot`, staging =
+  `axiiomru_bot` (после F-082-фикса один poller otp на токен); MAX прод =
+  `_bot`, стейдж = `_2_bot`; VK прод — через релей vk-relay.
 
 ## Дельта 03–04.10 (прод-OTP и развязка ботов)
 
