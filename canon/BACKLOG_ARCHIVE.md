@@ -138,3 +138,4 @@
 - **I-5 (P1) Гейт витрины и заказов по верификации** — 10.09 (core `56db2ef`,
   PR #2, CI 🟢, live под флагом `STOREFRONT_VERIFICATION_GATE`): MerchantVisibility,
   shouldBeSearchable, guard в CheckoutBuilder. Session: core 023.
+| B2B-ВЫКАТКА-0810 — промоушен b2b staging→master (закрытие регистрации, чеки-500, filament-иконка) — 2026-10-08 — PR #11 + workflow_dispatch 37821287419, деплой ✅, прод-приёмка ✅ (регистрация 302→login, «Чеки» 200, всплывашки нет) — артефакт artifacts/2026-10-08-b2b-walkthrough/, session lovii-b2b/012 |
