@@ -142,3 +142,4 @@
 | B2B-МАРШРУТ-BOARD — /orders/board давал 500 «invalid bigint» — 2026-10-08 — коммит ed2fa05 (ViewOrder::resolveRecord guard → 404, тест) — session lovii-b2b/012 |
 | B2B-ЧЕКИ-ТОЧКА — колонка «Точка» пустая в реестре чеков — 2026-10-08 — коммит ed2fa05 (order.branch.name вместо несуществующего title) — session lovii-b2b/012 |
 | B2B-СЕГОДНЯ-UTC — «Заказы сегодня» и дневные ряды считались по UTC — 2026-10-08 — коммит ed2fa05 (ResolvesDisplayTimezone: tz точек, fallback Europe/Moscow) — session lovii-b2b/012 |
+| B2B-SZ037-DEADLETTER — 409 status_mismatch ретраился часами — 2026-10-08 — f389384 + PR #12 (прод, run 37837887569): skip+warning, тесты +2; сквозная приёмка заказ №16 (4 перехода) без ошибок — session lovii-b2b/012 |
