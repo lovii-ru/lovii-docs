@@ -139,3 +139,6 @@
   PR #2, CI 🟢, live под флагом `STOREFRONT_VERIFICATION_GATE`): MerchantVisibility,
   shouldBeSearchable, guard в CheckoutBuilder. Session: core 023.
 | B2B-ВЫКАТКА-0810 — промоушен b2b staging→master (закрытие регистрации, чеки-500, filament-иконка) — 2026-10-08 — PR #11 + workflow_dispatch 37821287419, деплой ✅, прод-приёмка ✅ (регистрация 302→login, «Чеки» 200, всплывашки нет) — артефакт artifacts/2026-10-08-b2b-walkthrough/, session lovii-b2b/012 |
+| B2B-МАРШРУТ-BOARD — /orders/board давал 500 «invalid bigint» — 2026-10-08 — коммит ed2fa05 (ViewOrder::resolveRecord guard → 404, тест) — session lovii-b2b/012 |
+| B2B-ЧЕКИ-ТОЧКА — колонка «Точка» пустая в реестре чеков — 2026-10-08 — коммит ed2fa05 (order.branch.name вместо несуществующего title) — session lovii-b2b/012 |
+| B2B-СЕГОДНЯ-UTC — «Заказы сегодня» и дневные ряды считались по UTC — 2026-10-08 — коммит ed2fa05 (ResolvesDisplayTimezone: tz точек, fallback Europe/Moscow) — session lovii-b2b/012 |
