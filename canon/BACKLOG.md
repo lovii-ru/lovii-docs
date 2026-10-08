@@ -76,6 +76,8 @@
       (воспроизведено 08.10, BelongsToTenant:99), `/panel/register` открыт
       вопреки решению о закрытии регистрации. Выкатка вручную владельцем:
       `gh workflow run ci.yml --repo lovii-tech/lovii-b2b --ref master`.
+      Разбор всех багов и план «что чинить / что не нужно»:
+      [`workspace/ПЛАН-2026-10-08-b2b-zarabotaet.md`](../workspace/ПЛАН-2026-10-08-b2b-zarabotaet.md).
       Источник: `lovii-b2b/docs/sessions/012-…`.
 - [ ] **0b. b2b: dead-letter для статус-событий sz037 (P1, обход 08.10)** —
       события статусов заказа в core при 409 `status_mismatch` ретраятся до
