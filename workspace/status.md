@@ -1,3 +1,17 @@
+## 2026-10-08 (вечер) — ручной ретрай чека + legal_name мока — В STAGING
+
+- core: `FiscalDocumentManager::retry()` (только failed → pending, 409 иначе),
+  internal-эндпоинт `POST /api/internal/v1/fiscal-documents/{id}/retry`,
+  **починен мёртвый retry_count** (инкремент в markFailed); session 102.
+- admin: row-action «Повторить» в реестре «Финансы → Фискальные чеки»
+  (failed-only, мост CoreApiClient, тосты об ошибках ядра).
+- kassa-mock: лента чека печатает поставщика коротким именем («ООО «Ромашка»»
+  → «Ромашка»), JSON /receipts — полное legal_name; selftest 13/13.
+- Гейты: core 1709/1709 🟢, admin 557/557 🟢 (pint/rector/phpstan).
+- Хвост п.6 из итогов сессии чеков закрыт; остальные хвосты — за владельцем
+  (развилки T-038, Ferma, промоушен, вебхук tbank/incoming, TG-токены).
+
+
 ## 2026-10-08 — Фаза 3 плана чеков: движок фискализации в core — В STAGING, сквозняк пройден
 
 - core `2a4ee607` (+session 100): миграция `fiscal_documents` (уник-индексы
