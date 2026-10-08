@@ -2286,14 +2286,21 @@
 
 ## 2026-10-09 — B3/D1/D2 закрыты (b2b c91941d+38e717e+7be849b, staging ✅)
 
-- **B3 结案**： «Ошибка при загрузке страницы»闪错 = push-devices 部件渲染失败
-  (filament::icon.icon)，时间戳逐一对应首渲染；今晨已修，18:00 后零错误，无独立问题。
-- **D2 修复**： Dockerfile deps 阶段 chown public（提交在 git 的 filament 资产原为
-  root 所有，entrypoint 的 www-data 无法覆盖 → 每次部署 Permission denied）。
-- **D1 修复+实锤**： REDIS_HOST=redis 借 lovii-core 网络解析，core 栈重建即全体
-  DNS 失败（07.10 08:56:56 staging / 08:59:40 prod，core-CI 08:11 触发）。现 b2b
-  自带 redis（别名 b2b-redis、appendonly、healthcheck、requirepass），REDIS_HOST
-  在 compose 覆盖。首次部署因空 redis 无密码 AUTH 失败被 healthcheck 拦下（防线
-  有效），补 requirepass 后部署 ✅；切换重置 b2b 会话一次（预期）。
-- **待办新增 (BACKLOG P2)**： push-devices/integration-health/gravatar-preview
-  blade 同样未编译 Tailwind；b2b 站点未配置 caddy access log（可观测性）。
+- **B3 закрыт**: «Ошибка при загрузке страницы» при первых рендерах =
+  падение отрисовки push-devices-виджета (filament::icon.icon), временные
+  метки лога совпадают с каждым первым заходом; утренний фикс убрал и это —
+  после 18:00 ноль ошибок, отдельной проблемы нет.
+- **D2 fix**: chown public в deps-стадии Dockerfile (закоммиченные
+  filament-ассеты были root-owned — entrypoint'овый www-data не мог их
+  обновить, Permission denied на каждый деплой).
+- **D1 fix + доказательство**: REDIS_HOST=redis резолвился через сеть
+  lovii-core; пересоздание core-стека роняло DNS redis для всех b2b-контейнеров
+  (07.10: staging core redis 08:56:56, prod 08:59:40 — ровно окна ошибок;
+  триггер core-CI 08:11). Теперь у b2b свой redis (b2b-redis, appendonly,
+  healthcheck, requirepass), REDIS_HOST перекрыт в compose. Первый деплой упал
+  на AUTH (у пустого redis не было пароля) — healthcheck деплоя корректно не
+  пустил; после requirepass деплой ✅. Смена redis сбросила b2b-сессии один раз
+  (партнёры перелогинятся; на проде так же при промоушене).
+- **Новые пункты BACKLOG (P2)**: push-devices/integration-health/
+  gravatar-preview blade — Tailwind не компилируется (как security до фикса);
+  у b2b-сайтов нет access-лога в caddy (наблюдаемость).
