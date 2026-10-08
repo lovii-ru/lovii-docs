@@ -1,3 +1,16 @@
+## 2026-10-08 (вечер) — SZ-091 каталог релизов РЕАЛИЗОВАН В STAGING + SZ-092
+
+- SZ-091 (вариант 1, volume+симлинк): entrypoint nginx строит releases/<ver> +
+  union (жёсткие ссылки) + current; хвост 3. После деплоя чанки прошлых релизов
+  отвечают 200 — класс инцидентов 07–08.10 устранён архитектурно. Приёмка
+  локально (два деплоя в volume) и на staging — 🟢. Грабли: (1) nginx-root на
+  current без union давал 404 старым чанкам; (2) APP_VERSION в compose
+  environment затирался пустой интерполяцией → «dev» (поймано живьём).
+- SZ-092: runtimeCaching SW опустошён (kuper-балласт, api-cache).
+- Оба в staging (83bc58d, 5ad877a, CI 🟢 после rerun-флейка localhost:3000);
+  прод обоих — по явному «го» владельца (обычный узкий промоушен app).
+- Карточка: canon/TASKS/SZ-091-release-catalog.md (обновлена фактами).
+
 ## 2026-10-08 (вечер) — ПРОД-РЕЛИЗ: T-038 чеки + F-082 + геокодер — В ПРОДЕ
 
 - Merge staging→master по 4 репо + workflow_dispatch: core 00c169a8, app

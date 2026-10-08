@@ -2,8 +2,8 @@
 
 > Источник: прод-инцидент SZ-090 (2026-10-07) и его рецидив (2026-10-08,
 > session-док lovii-app/docs/sessions/151-sz090-chunk-recovery-relapse.md).
-> «Го» владельца: 08.10 (workspace/status.md). Статус: **открыта, развилка
-> решена** — владелец выбрал вариант 1 (volume + симлинк) 08.10.
+> «Го» владельца: 08.10 (workspace/status.md). Статус: **реализована, В
+> STAGING (83bc58d+5ad877a, приёмка пройдена)**; прод — после явного «го».
 
 ## Проблема (аудит деплой-цепочки, 08.10)
 
@@ -45,6 +45,20 @@
    entrypoint.
 2. ~~CI раскладывает по SSH~~ — отклонено (dist выпадает из образа).
 3. ~~Multi-release контейнеры за Caddy~~ — отклонено (тяжёлая оркестрация).
+
+## Реализация (08.10, ветка feat/sz091-release-catalog)
+
+- `docker/nginx/10-release-sync.sh` — entrypoint nginx: immutable-копия dist
+  в `/srv/www/releases/<версия>/` (из image ENV APP_VERSION), union-каталог
+  на жёстких ссылках (новейший релиз + отсутствующие в нём файлы старых),
+  симлинк `current`, хвост KEEP_RELEASES=3. Поймано на приёмке: старый чанк
+  404-ился, т.к. nginx смотрел только в current — union решает это.
+- compose: named volume `app-releases:/srv/www`; NB: APP_VERSION в
+  `environment:` НЕ задавать — деплой pull-ит образ, пустая интерполяция
+  затирала версионное имя fallback'ом «dev» (поймано на staging).
+- SZ-092 попутно: runtimeCaching опустошён (kuper-балласт + api-cache).
+- Гейт 1066/1066 🟢; staging: releases/union/current живы (292 файла),
+  version.json = staging·5ad877a.
 
 ## Критерий приёмки
 
