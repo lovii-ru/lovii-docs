@@ -1,3 +1,17 @@
+## 2026-10-08 (вечер) — ПРОД-РЕЛИЗ: T-038 чеки + F-082 + геокодер — В ПРОДЕ
+
+- Merge staging→master по 4 репо + workflow_dispatch: core 00c169a8, app
+  4b26c72, b2b dce15c9, admin edd0ac8. Все 4 прод-CI ✅, deploy-production ✅
+  (core первый прогон упал на ghcr «unknown blob» — транзиент, rerun failed 🟢).
+- Прод после деплоя: app/scheduler/horizon/poller-otp пересозданы, лог чист;
+  поллер один (otp) — F-082 закреплён кодом, docker stop больше не нужен;
+  FISCALIZATION_ENABLED в проде нет = контур выключен (дефолт false),
+  kassa-mock на проде отсутствует (только staging). /recover.html в app.
+- Проверка: app version.json = 4b26c72 production; api/b2b/admin 200.
+- Перед релизом удалены 18 поглощённых веток (SZ-063/074/075, SZ-035,
+  SZ-007, T-024/T-025/T-032, b2b-фиксы 04.10 и пр.) — 0 веток вне staging.
+
+
 ## 2026-10-08 — PWA-инцидент закрыт: /recover.html в проде + телеметрия + SZ-091..093
 
 - Инцидент «Не удалось открыть раздел» погашен: фикс самолечения (bed3c30,
