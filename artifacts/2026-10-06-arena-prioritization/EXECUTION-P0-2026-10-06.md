@@ -142,7 +142,7 @@ fake-терминала, статус new) → `payments/fake/notify {outcome:su
 
 # ACCEPT — отработка вердикта арены («волна принята частично»), вечер 06.10
 
-Вердикт зафиксирован в [`audit-bundle/ZCODE-REQUEST-TO-ARENA-ACCEPT-P0-2026-10-06.md`](../../../audit-bundle/ZCODE-REQUEST-TO-ARENA-ACCEPT-P0-2026-10-06.md) (раздел «Ответ арены», пока текстом из чата — арена заменит своим коммитом). Отработка follow-up-реестра:
+Вердикт зафиксирован в [`audit-bundle/ZCODE-REQUEST-TO-ARENA-ACCEPT-P0-2026-10-06.md`](../../audit-bundle/ZCODE-REQUEST-TO-ARENA-ACCEPT-P0-2026-10-06.md) (раздел «Ответ арены», пока текстом из чата — арена заменит своим коммитом). Отработка follow-up-реестра:
 
 ## F-1 Легаси-усечённые номера — ✅ чисто
 - staging: 4 users, 4/4 канон `+7##########`; non-канон 0.

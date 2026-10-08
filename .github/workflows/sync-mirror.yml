@@ -14,6 +14,9 @@ on:
 
 jobs:
   push:
+    # Файл попадает в зеркало синком; на самом зеркале секрет MIRROR_SSH_KEY
+    # отсутствует (профиль lovii-ru изолирован) — там воркфлоу не нужен.
+    if: github.repository == 'bestdeejay-design/lovii_docs'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
