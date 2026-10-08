@@ -52,13 +52,13 @@
 - **SZ-051: чистка осиротевших медиа-ссылок** — команда `media:check-orphaned
   [--clear]` в staging 18.09; на staging очищено 4 битых из 514 ссылок
   (вердикт владельца «обнуляем»). → карточка SZ-051, core.
-- **№1 BACKLOG_REVIEW — минимум заказа** — `MinOrderPolicy` (600/500 ₽,
+- **№1 BACKLOG_REVIEW — минимум заказа** — `MinOrderPolicy` (600/500 ₽, <!-- fact-guard: allow: историческое упоминание, число сверено с PARAMS -->
   PARAMS §1.7), гвард в preview/place, `min_order_amount_effective` в
   ресурсах; core `9bf7992` + app `e147433`, принято владельцем 18.09. →
   PARAMS §1.7, session-доки core 033/036.
 - **№2 BACKLOG_REVIEW — домен подписки (SZ-052)** — таблицы
   `subscriptions`/`subscription_status_changes`, машина статусов, окно grace
-  48 ч, 599/199 ₽ (PARAMS §1.4); core `b21ac96`, принято 18.09. → PARAMS §1.4/1.6.
+  48 ч, 599/199 ₽ (PARAMS §1.4); core `b21ac96`, принято 18.09. → PARAMS §1.4/1.6. <!-- fact-guard: allow: историческое упоминание, число сверено с PARAMS -->
 - **№3 sub-billing (T-011/SZ-053)** — каскад Business → PAY → карта, cron
   03/09/15/21 МСК, grace 48 ч; в staging 18.09. → карточка archive/tasks/.
 - **T-009 клиентские пуши Accepted/Ready** — ЗАКРЫТА 29.09 (merge `ed3478b2`,
@@ -106,7 +106,7 @@
 - **VK: подтверждение Callback** — 09.09: `api-staging.lovii.ru/api/v1/vk/callback`
   подтверждён, handshake live, живой тест пройден (T-004, `53c5d01`).
 - **Финансовый контур — решения по верификации партнёров** — все 6 закрыты
-  13.09 (`FINANCIAL_CONTOUR.md` v0.5): 1 ₽ возвратный (PARAMS §5.1),
+  13.09 (`FINANCIAL_CONTOUR.md` v0.5): 1 ₽ возвратный (PARAMS §5.1), <!-- fact-guard: allow: историческое упоминание, число сверено с PARAMS -->
   спец-счёт ООО «АКСИОМА» (PARAMS §1.2), формулировка «верификация»,
   самозанятые — платформа статус не проверяет, счёт 14 дней/2 напоминания,
   экран ручной очереди — только в admin.
