@@ -2207,3 +2207,21 @@
   API отдаёт fiscal с обеими ссылками. Гейты всех 4 репо 🟢, CI ✅, деплой ✅.
 - Хвост (косметика): поставщик в чеке — legal_name целиком; сократить в моке.
 
+
+## 2026-10-08 — обход b2b + закрытие регистрации + фиксы (b2b 2b9d234, 646c1b1)
+
+- **Регистрация b2b ЗАКРЫТА** (решение владельца 08.10): /panel/register = 404,
+  ссылка с логина убрана; «номер не найден» → подсказка со ссылкой на клиентское
+  приложение (`config/client.php`, env `CLIENT_APP_URL`; staging =
+  app-staging.lovii.ru — добавлен в /opt .env с бэкапом). Один канал входа —
+  клиентское приложение. Компонент Registration сохранён («Добавить компанию»).
+- **Обход кабинета** (все разделы, staging): найдено и ЗАКРЫТО сразу —
+  «Чеки» 500 (tenant-scope FiscalDocument, $isScopedToTenant=false + smoke-тест)
+  и красная всплывашка после входа (`x-filament::icon.icon` → `x-filament::icon`
+  в push-devices). core-schema.sql тестов b2b перегенерирован (+fiscal_documents,
+  74 таблицы); PushDevicesWidgetTest поправлен под UNIQUE(endpoint).
+- **Открытое → canon/BACKLOG.md**: 409-ретраи sz037 (dead-letter, P1 §1.0);
+  board/ViewOrder маршрутный конфликт; флаки первого рендера виджетов;
+  Redis DNS 07.10 + рестарт стеков; «Заказы сегодня» vs «последние заказы»;
+  чистка доски. Источник: `lovii-b2b/docs/sessions/012-…`.
+- Гейты unit+lint 🟢; CI: 37813555228 ✅, 37816066033 — см. лог.
