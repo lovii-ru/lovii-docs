@@ -111,6 +111,14 @@
       core-миграция, затрагивающая таблицы b2b ⇒ в том же цикле
       перегенерировать дамп (`php artisan migrate --force` на локальном core
       → pg_dump --schema=public → reset-core-schema.sh). Детали: session 012.
+- [ ] **b2b: кастомные blade — Tailwind-классы не компилируются панелью (P2,
+      системная находка 08.10)** — Filament v5 компилирует утилиты только для
+      своих компонентов; страница «Безопасность» из-за этого была сплошным
+      текстом (каша). Переписана на компоненты (fi-section/callout/badge/
+      empty-state + inline-стили, a6d6563). Ждут того же лечения:
+      `push-devices.blade.php` (тот самый виджет — раньше чинили только
+      иконку), `integration-health.blade.php`, `gravatar-preview.blade.php`.
+      Либо так же компонентами, либо кастомная тема панели (сборка CSS в CI).
 - [ ] **b2b: деплой — filament:assets не может перезаписать public/js (P2)** —
       при деплое 08.10 `copy(...checkbox-list.js): Permission denied`:
       ассеты Filament публикуются с чужими правами, часть JS может оставаться
