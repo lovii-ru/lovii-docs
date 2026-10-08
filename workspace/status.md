@@ -2304,3 +2304,15 @@
 - **Новые пункты BACKLOG (P2)**: push-devices/integration-health/
   gravatar-preview blade — Tailwind не компилируется (как security до фикса);
   у b2b-сайтов нет access-лога в caddy (наблюдаемость).
+
+## 2026-10-09 — Промоушен №3: b2b полностью в проде (PR #13, run 37850302442)
+
+- В прод выкачаны: security-страница на компонентах Filament, собственный redis
+  кабинета (D1), права ассеты (D2) — ранее B1 dead-letter и волна B2/B4/B5.
+- Прод-приёмка: 4 контейнера healthy (b2b-redis PONG), healthz-ok,
+  /panel/register 302, /panel/login 200, ассеты www-data (деплой без
+  Permission denied), фиксы в коде продa подтверждены.
+- B2B-сессии прода сброшены сменой redis (2 юзера перелогинятся) — ожидаемо.
+- **ПЛАН-2026-10-08-b2b-zarabotaet закрыт полностью.** Остаток — P2 бэклога
+  (3 blade без компиляции Tailwind, caddy access log) и сквозной прогон
+  «заявка МСП → партнёр → заказ → доска → чек» при ближайшей приёмке.
