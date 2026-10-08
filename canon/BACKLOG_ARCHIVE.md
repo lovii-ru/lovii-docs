@@ -15,6 +15,8 @@
 
 ## Журнал
 
+- SZ-093 — UX обновления PWA (тост vs авто) — закрыт решением владельца 08.10 — оставлено агрессивное автообновление (skipWaiting+clientsClaim) как плата за «всегда свежий шелл»; риск спонтанного reload принят, после SZ-091 теряет смысл — источник: session 151 lovii-app, аудит PWA 08.10
+
 - **SZ-089 (P0-инфра) CI env-diff / container env freshness** — закрыт 06.10:
   env-diff pre/post в lovii-deploy (post fail-closed), живой прогон CI
   `37516291981` (pre-OK/post-OK), canary-drift ловится; принята ареной,
