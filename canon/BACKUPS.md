@@ -77,3 +77,19 @@ docker start lovii-core-staging-app-1 lovii-core-staging-horizon-1 \
 
 05.10: чтение дампа проверено (`pg_restore --list`, 113 TABLE DATA).
 Полное поднятие на стенде — планово, следующий шаг после C2.
+
+---
+
+# Третий носитель: домашняя станция gostiny-build (с 10.10.2026)
+
+- **Что:** CHUWI (`lovii@192.168.180.156`) ежедневно в 08:25 МСК стягивает с SRV
+  `~/backups/prod-db/` и staging-дампы (rsync over SSH, ключ `backup_pull`,
+  force-command rrsync — ключ умеет ТОЛЬКО читать каталог backups, root на SRV недоступен).
+- **Где:** `/opt/backups/prod-db/`, `/opt/backups/staging/`, лог `/opt/backups/pull.log`.
+- **Скрипт:** `/opt/backups/pull-from-srv.sh` на CHUWI (крон lovii). Retention —
+  зеркалит SRV (+14 дней).
+- Пул идёт ПОСЛЕ серверных бэкапов (prod 03:47 UTC, staging 04:17 UTC) — всегда
+  забирает уже готовые дампы. Yandex off-site (rclone) остаётся главным внешним
+  носителем; станция — быстрый локальный третий.
+- Тест 10.10: прод-дамп 405K и staging 103K сняты вручную и сверены; полный
+  первичный пул 1,9 ГБ прошёл успешно.
