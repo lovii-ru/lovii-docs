@@ -1,3 +1,10 @@
+## 2026-10-10 (вечер) — вебхук T-API incoming: адаптер формата банка в staging
+
+- Банк подключил вебхук «Новая операция по счёту» (письмо, «успешно добавили»); мониторинг банка пингует URL GET-ами (IP TBANK JSC), POST ещё не было.
+- Адаптер в IncomingPaymentWebhookController (core, merge 1f3278e3 → staging): формат выписки T-API + Bearer TBANK_INCOMING_BEARER + логирование сырого payload до авторизации; мок-ветка без изменений. Локальный гейт 🟢 (1720 тестов, +4 новых). Session 105.
+- ПРОД ВЫЛИТ (го владельца): PR #19 + #20 → master, деплой ✅, TBANK_INCOMING_BEARER вписан в env прода, вебхук проверен живьём (403 Invalid bearer на неверный токен). Сырые payload — в storage/logs/incoming-YYYY-MM-DD.log (отдельный info-канал: общий прод-лог = error, diagnostics туда не попала бы).
+- Ожидаем первый платёж по VER-2-LOKU4G1VOB → вебхук/поллинг закроют заявку в Verified.
+
 ## 2026-10-10 (ночь) — домашняя сборочная станция CHUWI: Ubuntu установлена, Docker активен, раннер ждёт токен
 
 - Мини-ПК CHUWI WN100 (N100/12ГБ/512ГБ) превращён в чистую Ubuntu Server 24.04.5
