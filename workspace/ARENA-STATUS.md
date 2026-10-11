@@ -100,3 +100,12 @@
 Снято ареною: avatar-RCE (Laravel validation блокирует php-расширения).
 Мерж 78fbe53 в main снапшота. Прод-сдерживание: tracked-бэкап удалён из
 дерева core (история/ротация — владелец).
+
+## B03 ХОТФИКС В STAGING + ПРОВЕРЕН ЖИВО (ночь 11.10/12)
+
+core security/b03-signature-password (session 109): Password исключён из
+подписываемых полей; legacy INCOMING при настроенном bearer отклоняется
+целиком; без bearer — подпись обязательна, пустой секрет = 403 (fail-closed).
+Regression +3. CI 🟢 checks+deploy. ЖИВАЯ ПРОБА: POST фейкового legacy
+payload на staging и prod → 403 (раньше — 200 + verified). Векторы B03
+закрыты на обоих стендах.
