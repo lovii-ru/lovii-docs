@@ -2698,3 +2698,14 @@ checkpoint/v0.5.0-4ed29025 оставлен как эталон.
 снимков (restore/import), Kassa getToken не пишет креды нигде. Приёмка: полный прогон
 core 32/32 · tbank PASSED · kassa 97/97 · drift 134/134; влито squash `a947921`; ветка удалена.
 Дальше: #25 (F-16—F-23 — точность Мультирасчётов).
+
+## 2026-10-12 (ночь, 6) — моки: #25 (PR #29) принят и влит — протокольная точность Мультирасчётов
+
+F-16—F-23 закрыты: multisplit Init требует PaymentRecipientId; E2C Init валидирует обязательные
+поля и ровно один канал выплаты (card/SBP/partner, provider-shaped ошибки, отказ до мутаций);
+CancelPayment — только CONFIRMED-выплата партнёру в открытой сделке, DealId обязателен и
+сверяется, TerminalKey (стенд | PAYOUT-точка) до мутаций, статусы `CREDIT_CANCELING →
+CREDIT_CANCELED`. Приёмка: прогон core 32/32 · tbank PASSED · kassa 97/97 · drift 134/134;
+влито squash `52c02ec`; ветка удалена. Решения по развилкам подтверждены координатором
+(Init-поля/DealId — по конспекту; PAYOUT-терминал — design мока). Хвост: TerminalKey в
+Payment/GetState/GetSbpMembers → в #5. **Фикс-волна #22–#25 завершена.** Дальше: #8.
