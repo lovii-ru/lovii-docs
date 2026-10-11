@@ -81,3 +81,12 @@ sudo ./svc.sh install && sudo ./svc.sh start
   были из-за Secure Boot (Disabled в BIOS решил) и предустановленной Astra Linux (затёрта).
 - Страдали медленной флешкой (~4 МБ/с) — образ Ubuntu Server 24.04.5: `~/Downloads/chuwi/`, SHA256 проверен.
 - Бэкап содержимого флешки владельца: `~/Documents/USB-DISK-backup`.
+
+## Гейт core на станции (с 11.10.2026)
+
+Полный локальный гейт lovii-core можно гонять на станции, не включая макбук:
+обёртка с мака `~/LOVII/tools/chuwi-core-tests.sh` (rsync дерева → `~/LOVII/lovii-core`
+на станции + прогон в контейнере `lovii-core-app-gate`, образ `lovii-core/app-dev`,
+сеть dev-стенда, `--user 1000:1000`). Роль `sail` в `pgsql-testing` создана под
+phpunit-пароль. Референс: полный гейт 1724 passed ≈ 2:15. Детали и пересоздание
+контейнера — в секретной копии `~/LOVII/CHUWI-BUILD-STATION.md` §Гейт.
