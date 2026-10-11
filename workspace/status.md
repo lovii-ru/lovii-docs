@@ -2709,3 +2709,13 @@ CREDIT_CANCELED`. Приёмка: прогон core 32/32 · tbank PASSED · kas
 влито squash `52c02ec`; ветка удалена. Решения по развилкам подтверждены координатором
 (Init-поля/DealId — по конспекту; PAYOUT-терминал — design мока). Хвост: TerminalKey в
 Payment/GetState/GetSbpMembers → в #5. **Фикс-волна #22–#25 завершена.** Дальше: #8.
+
+## 2026-10-12 (ночь, 7) — моки: #8 (PR #30) принят и влит — изоляция песочниц RFC-001/A-21
+
+F-11 request-local контекст (AsyncLocalStorage; state/creds/persist — фасады, гонок activeId нет),
+F-12 MOCK_TENANCY=off|namespaces|owned + owner-token (sha256), 401/404/410; F-13 явный target в
+export/import; F-14 атомарный реестр + TTL/лимиты, чужой state за default не выдать; F-15 квоты/
+retention/индексы (+фикс 500 после импорта старого снимка); F-33 compose-селфтест в одноразовой
+песочнице. Приёмка: ревью + прогон core 36/36 · tbank PASSED (47) · kassa 122/122 · drift 142/142;
+CI зелёный; влито squash `7762f5b`; ветка удалена. Нит: MOCK_TENANCY не принимает литералы
+режимов → issue #31. Остаток очереди: #5 → #31 → #20.
