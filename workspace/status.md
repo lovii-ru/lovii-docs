@@ -2647,3 +2647,13 @@ npm test на ветке зелёный. #15 закрыт.
 **#23** (F-01—F-04 — core hardening), **#24** (F-09/F-10 — редакция секретов и PAN), **#25** (F-16—F-23 —
 точность Мультирасчётов/выплат). Очередь далее: #8 (F-11—F-15 в комментарии) → #5 → #20.
 Канал арены: Issues read-only — отчёты в описании PR, вопросы через владельца.
+
+## 2026-10-12 (ночь, 2) — моки: фикс-волна пошла — #22 (PR #26) принят и влит
+
+F-07/F-08 закрыты: access-control управляющей поверхности (`checkControlAccess` в core: admin/operator,
+constant-time, fallback operator→admin, hosted fail-closed; новые `MOCK_OPERATOR_TOKEN`/`MOCK_HOSTED`),
+SSRF-политика (`=1` реально включается; guard в verify-merchant и очереди доставки; IPv4/IPv6/DNS/схемы;
+ENOTFOUND fail-closed). Приёмка координатора: ревью ключевых путей + локальный прогон core 21/21 ·
+tbank PASSED · kassa 82/82 · drift 134/134; влито squash `d4963d2`. Арена сдаёт последовательными PR
+из одной ветки (после мержа сбрасывает на свежий main). Решения по #5 (вкл. F-31) и #20 (report-only +
+`protocols/upstream-snapshot.json`) зафиксированы комментариями. Дальше: #23.
