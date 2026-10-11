@@ -1264,3 +1264,22 @@ ghcr.io/lovii-tech/<repo>-<svc>:${TAG}` — шим тегирования исч
 
 **Связанное:** `audit-bundle/EXECUTION-WAVE3-CLOSEOUT` (B6), TROUBLESHOOTING
 «деплой зелёный, а образ/сервис не тот».
+
+## F-084 · Этап B арены: 6×P1 безопасности платформы (2026-10-11/12)
+
+Аудит безопасности (rucorp/lovii-audit-snapshot, `безопасность.md`, коммит 78fbe53).
+Все 6 P1 подтверждены zcode-агентом по коду; вердикт «автоматические выплаты
+не включать до B09/B10» принят владельцем.
+
+| ID | Находка | Решение/статус |
+|---|---|---|
+| B01 | Первый бинд мессенджера: deeplink-открыватель получает коды чужого телефона | **Риск принят (вариант C, владелец 12.10)**; SMS-подтверждение бинда при выходе на обороты; комментарий в SendOtpAction |
+| B02 | OTP `1234`/dev-роут: дефолт bypass=true без env-гарда | ✅ fail-closed: дефолт false + production-гард в OtpService и контроллере (prod-проба 404) |
+| B03 | TBankSignature: payload-Password затирал секрет подписи → подделка INCOMING-верификации | ✅ хотфикс: Password не подписывается; legacy fail-closed; живая проба 403 (prod+staging) |
+| B04 | `.env.bak-mockdemo` tracked, секреты = продовые | ✅ история lovii-core переписана (filter-repo, force-push, ветки/теги удалены), снапшот v4 пересоздан; **ротация секретов — владелец, перед выплатами** |
+| B05 | PaymentChannel/BankTransit без canAccess, INTERNAL_ADMIN_SECRET в iframe URL | ✅ HasPageShield (default-deny, super_admin); model policies финресурсов — отдельная задача |
+| B06 | Списание баллов: validate вне транзакции, decrement без реповерки → конкурентный перерасход | ✅ репроверка под row-lock; тест SZ-045 переведён с минус-баланса |
+
+Сопутствующее: история git lovii-core переписана (SHA сменились, 34 ветки/теги
+удалены), снапшот арены пересоздан orphan'ом (v4). Гейт выплат: B09/B10
+(pending-guard/одноразовость, привязка реквизитов) — до доработки выплаты off.
