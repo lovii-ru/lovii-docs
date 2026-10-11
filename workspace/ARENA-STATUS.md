@@ -162,3 +162,16 @@ PayoutExecutionService, реквизиты, операторский конту�
 payouts, квоты/стоп-кран. Главный артефакт: `выплаты-launch-gate.md` —
 чек-лист «что должно быть TRUE для включения выплат». Это ТЗ для нашей
 доработки B09/B10 и гейт запуска выплат.
+
+## AUD-01/02 + PWA02 ГОТОВЫ И В STAGING (12.10 ночь, app session 155)
+
+🟢 CI checks+deploy, живая приёмка:
+- nginx: сниппет security-headers.conf во все локации; прод-проба staging —
+  все 5 заголовков на месте, geolocation=(self) (раньше — только nosniff).
+- PWA02: union-<версия> атомарно, проверка комплектности до переключения,
+  identity-healthcheck (cmp с эталонным dist), retention count+min-age+warn.
+  Пробы rollback/rebuild/fatal/retention в alpine. Грабля: на маке grep =
+  ugrep — пробы shell-скриптов гонять в alpine-контейнере. Первая попытка
+  деплоя честно упала на identity-гейте (защита сработала), вторая 🟢.
+Остаток бэклога: PWA04/05, S-скорость, EXPLAIN, model policies, ротация
+секретов + SMS-бинд + B09/B10 (перед выплатами).
