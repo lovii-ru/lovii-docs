@@ -2560,3 +2560,21 @@ P2: неатомарный union, retention=3 без бюджета, /health б�
 мёртвый код НЕ ускоряет скачивание (Rollup его уже вырезает), измерены байты.
 Параллельно: A-P08 в staging; A-P09 (переводы, канон Account→Wallet) — ветка
 fix/transfer-lock-order 39e01bc7, ждёт го владельца на staging.
+
+## 2026-10-11 (ночь, 6) — волна фиксов в staging: A-P09 + A-P01/02/03 + PWA01/03
+
+ALL 🟢 CI checks+deploy, прод не задет:
+- core fix/transfer-lock-order: A-P09 канон Account→Wallet + кошельки одним
+  lockForUpdate ORDER BY id (встречные переводы без deadlock);
+- core perf/cart-list-zones-batch: A-P02 withExists зон (N×EXISTS → 1);
+- b2b perf/order-board-bounded: A-P01 Completed-окно 200 (конфиг
+  orders.board_completed_limit) вместо всей истории в poll 15s;
+- b2b: A-P03 мост b2b→core — CreateCategory/EditCategory/Delete досылают
+  инвалидацию кэша витрины (новый internal-эндпоинт
+  /api/internal/v1/catalog/storefront-cache/invalidate; раньше 2ч устаревание);
+- app fix/pwa01-pwa03: PWA01 release-sync target-first (rollback A→B→A и
+  rebuild теперь работают; пробы в session 154) + PWA03 (cacheBustUrl в
+  query с сохранением hash, сброс purgedFor-капа успехом, бюджет
+  reload-петли 10 мин; инлайн-гейт синхронно). app 1077/1077 unit+type+build.
+Осталось из аудитов: PWA02/04/05 (поставка/таймауты/UX обновления),
+S-пункты скорости, индексы по EXPLAIN (на копии БД), этап B (безопасность).
