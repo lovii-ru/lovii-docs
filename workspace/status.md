@@ -1,3 +1,21 @@
+## 2026-10-12 (вечер) — наблюдаемость: Ф-2 + Ф-3 ЗАПУЩЕНЫ И РАБОТАЮТ
+
+- Ф-2 heartbeat агентов end-to-end: правило в ~/LOVII/AGENTS.md, registry
+  ~/LOVII/agents-registry → LaunchAgent ru.lovii.agents-heartbeat (rsync каждые
+  5 мин) → CHUWI ~/agents-registry → метрика lovii_agent_active в Prometheus ✅
+  (тест zcode-obs прошёл). Анти-подделка (будущее/наивное время) — в экспортере.
+- Ф-3: 6 правил алертов в Prometheus хаба (группа lovii-cicd, все healthy) —
+  сторожи экспортера/textfile, красный CI staging >15м, отставание app-стенда,
+  зависший агент >1ч. ⚠️ Канал уведомлений Alertmanager НЕ подключён (развилка) —
+  алерты видны только в UI :9093. Грабля: алерты дописывались вторым `groups:` —
+  прометей падал (mapping key already defined), срочно слито в один список.
+- Выгрузки арены собраны координатором → арена-репо artifacts/ (маскировка).
+  Находки: 4 ключа authorized_keys БЕЗ ограничений (полный shell на прод!),
+  Grafana = один admin, master lovii-core НЕ защищён — на решение владельца.
+- Арена: issue №6 (А-7 повторный аудит: пере-А-2 + пересчёт А-3/А-5 по artifacts/
+  + ревью Ф-2/Ф-3) готова к запуску владельцем (новая сессия по шаблону).
+- Пароль Grafana: PROD-SERVER-AND-MONITORING.md строка 29 (ротирован 12.10).
+
 ## 2026-10-12 (день) — наблюдаемость: Ф-1 В ПРОДЕ МОНИТОРИНГА
 
 - Экспортеры CI/CD + агентов подняты в compose хаба на CHUWI (lovii-pipeline-exporter,
