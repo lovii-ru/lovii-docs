@@ -1,3 +1,18 @@
+## 2026-10-12 — наблюдаемость CI/CD + агентов: Ф-0 выполнена, арена А-1 пройдена
+
+- План: `~/LOVII/НАБЛЮДАЕМОСТЬ-ПЛАН.md`; код: `bestdeejay-design/lovii-observability`
+  (private, каркас экспортеров pipeline/agents/stand-sha, фикс-волна по аудиту);
+  арена: `bestdeejay-design/lovii-arena-observability` (публичный, отчёт
+  `reports/A-1-f0-skeleton.md` — вердикт GO на Ф-1 после устранений).
+- 🔴→✅ инцидент P0: Grafana admin-пароль утёк в публичный арена-репо через копию
+  плана — ротирован (новый в PROD-SERVER-AND-MONITORING.md), история арена-репо
+  переписана. Урок: grep по секретам перед пушем в публичные репо.
+- Жду владельца: fine-grained read-only PAT (actions:read+contents:read, lovii-tech/*)
+  для экспортера на CHUWI; лишний репо `bestdeejay/lovii-arena-observability` —
+  владелец удалит сам (нет delete_repo у токена).
+- Дальше: Ф-1 (scrape + systemd на CHUWI + дашборд Grafana), развилка — cron
+  textfile-скрипта на проде.
+
 ## 2026-10-12 (ночь) — волна 2 гейта выплат G05–G08 (получатель) в staging
 
 - core, ветка `security/g05-g08-beneficiary` (session 111): пин получателя
