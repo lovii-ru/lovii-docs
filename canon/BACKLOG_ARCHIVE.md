@@ -156,3 +156,8 @@
 | B2B-ЧЕКИ-ТОЧКА — колонка «Точка» пустая в реестре чеков — 2026-10-08 — коммит ed2fa05 (order.branch.name вместо несуществующего title) — session lovii-b2b/012 |
 | B2B-СЕГОДНЯ-UTC — «Заказы сегодня» и дневные ряды считались по UTC — 2026-10-08 — коммит ed2fa05 (ResolvesDisplayTimezone: tz точек, fallback Europe/Moscow) — session lovii-b2b/012 |
 | B2B-SZ037-DEADLETTER — 409 status_mismatch ретраился часами — 2026-10-08 — f389384 + PR #12 (прод, run 37837887569): skip+warning, тесты +2; сквозная приёмка заказ №16 (4 перехода) без ошибок — session lovii-b2b/012 |
+
+- §6 аудита app «мелочи» (9 позиций) — закрыты 12.10 сверкой кода: батч
+  уже в staging с 11.09 (PR #3 feat/audit-6-minor-batch, Task 89, редизайн
+  адресного дровера); тяжёлые F-015/016/017 того же аудита закрыты
+  (sessions 152–153) —lovii-app staging `c13dbf6`, правок не потребовалось.
