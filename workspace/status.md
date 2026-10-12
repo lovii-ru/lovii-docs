@@ -1,3 +1,14 @@
+## 2026-10-12 (вечер 2) — G15/G18/G21 в staging (session 113)
+
+- core `security/g15-g21-approvals-anomalies-pep` (merge d17c827d, CI 🟢):
+  манифест maker-checker (prepare→approve другим→execute --batch, чексумма,
+  self-approve запрещён, инвалидация состава), аномалии first_payout/daily_cap
+  с ручным релизом по актору, целостность ПЭП + repair-команда. +9 тестов,
+  гейт full 🟢 1769. Прод-путь выплат теперь только через манифест.
+- Операторский цикл: payouts:prepare-batch → approve-batch → execute
+  --batch; release-hold; repair-pep-reports. UI манифестов (admin Filament) —
+  следующий шаг.
+
 ## 2026-10-12 (вечер) — ПРОД-РЕЛИЗ 12.10: все 4 репо
 
 - Выкачено в прод (merge staging→master + workflow_dispatch, деплой-джобы
