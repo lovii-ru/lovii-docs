@@ -2933,3 +2933,17 @@ smtp.yandex.ru:465 из прода достижим, API жив. Бэкап .env
 Тексты blade-писем проверены — финальные, правки не нужны. «Почтовые программы»
 Яндекса не требуют отдельного действия (SMTP-авторизация работает — staging тем
 и же кредами шлёт).
+
+## 2026-10-12 (ночь, 3) — UI манифестов выплат В STAGING 🟢 (core 114 + admin 013)
+
+Гейт выплат, кодовый шаг «UI манифестов (Filament)» из ARENA-STATUS выполнен:
+- **lovii-core** `209891b9` (feat/payout-manifests-internal-api → staging):
+  internal API prepare/approve/release-hold (G15/G18), ReleasePayoutHoldAction
+  вынесен из CLI, PayoutBatchPresenter в Application. Гейт полный ✅ (1775),
+  CI staging ✅.
+- **lovii-admin** `dd5d4a9` (feat/payout-manifests-ui → staging): «Финансы →
+  Манифесты выплат» — список/подготовка (maker)/утверждение другим (checker)/
+  состав с холдами/релиз anomaly_*. Read-only модели, мутации только через
+  core API. Гейт полный ✅ (562), CI staging ✅.
+- Исполнение — по-прежнему только CLI, стоп-кран G16 в силе; депозит в прод —
+  вручную, вместе с G15/G18/G21-хвостом.
