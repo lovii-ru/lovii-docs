@@ -1,3 +1,18 @@
+## 2026-10-12 (вечер) — ПРОД-РЕЛИЗ 12.10: все 4 репо
+
+- Выкачено в прод (merge staging→master + workflow_dispatch, деплой-джобы
+  волны-1-аудита 🟢): core 66e047e0 (безопасность этапа B, выплаты G09-G19,
+  чеки 54-ФЗ ВЫКЛЮЧЕНЫ, верификация, APP-фиксы, миграция payouts.beneficiary_*),
+  app f1c471c (AUD-01/02, PWA01-03, APP-1..8), b2b e6ae582 (реквизиты
+  верификации + 1 клик, A-P01/03), admin 50ac95e (B05 PageShield).
+- env прода ДО деплоя: PAYOUTS_EXECUTION_ENABLED=false (стоп-кран, конфиг
+  подтверждён config:show), OTP_DEV_BYPASS=false проверен.
+- Пост-деплой пробы: api/app/b2b/admin 200/302, 5 security-заголовков на
+  app.lovii.ru (geolocation=(self)), version.json 200, dev/otp 404 (B02),
+  tbank/incoming без bearer 403 (B03), контейнеры healthy, логи чистые.
+- Не включено (ждёт решений/внешних): крон поллера верификации, боевые
+  чеки (развилка Т-038), автовыплаты (стоп-кран, до закрытия гейта).
+
 ## 2026-10-12 (вечер) — наблюдаемость: Ф-2 + Ф-3 ЗАПУЩЕНЫ И РАБОТАЮТ
 
 - Ф-2 heartbeat агентов end-to-end: правило в ~/LOVII/AGENTS.md, registry
