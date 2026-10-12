@@ -1,3 +1,13 @@
+## 2026-10-12 (день) — наблюдаемость: Ф-1 В ПРОДЕ МОНИТОРИНГА
+
+- Экспортеры CI/CD + агентов подняты в compose хаба на CHUWI (lovii-pipeline-exporter,
+  lovii-agents-exporter, read-only PAT от владельца в exporter.env 600 вне git);
+  Prometheus job lovii-cicd — оба targets UP; дашборд Grafana «Lovii — CI/CD и стенды»
+  (uid lovii-cicd, :3002). Сессия 002 в lovii-observability.
+- Арена: issues №1–5 оформлены (регламент: своя ветка arena/<номер>-<slug>, не main);
+  lovii-observability открыт (public) — арене доступен; А-1 отчёт в reports/.
+- Дальше: Ф-2 heartbeat-протокол в AGENTS.md, Ф-3 алерты, развилка — textfile-SHA на проде.
+
 ## 2026-10-12 (день) — волна 3 гейта выплат G11/G12/G16/G19+G20 в staging
 
 - core session 112 (`security/g11-g19-payout-registry`, merge 233f1032,
