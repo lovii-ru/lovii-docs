@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ACTIVE_DIR = ROOT / "canon" / "TASKS"
 ARCHIVE_DIR = ROOT / "archive" / "tasks"
 
-ID_PATTERN = r"(?:SZ|T)-\d{3}(?:B)?"
+ID_PATTERN = r"(?:SZ|T|APP)-\d{1,3}(?:B)?"
 FILENAME_ID_RE = re.compile(rf"^(?P<id>{ID_PATTERN})(?=-|$)")
 H1_RE = re.compile(rf"^#\s+(?P<id>{ID_PATTERN})(?=$|[\s—–:-])", re.MULTILINE)
 STATUS_RE = re.compile(
