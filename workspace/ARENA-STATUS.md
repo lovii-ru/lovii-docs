@@ -224,3 +224,24 @@ G15-G24 (стоп-кран/лимиты/подтверждения).
 +11 тестов (PayoutBeneficiaryTest). Границы: maker-checker UI — G15;
 уникальный индекс карточек — возможный хвост в b2b-репо. Остаток гейта:
 G01, G02-G04, G11-G24.
+
+## ВОЛНА 3 ГЕЙТА ВЫПЛАТ (ЧАСТЬ): G11/G12/G16/G19 + G20 В STAGING (12.10, core session 112)
+
+🟢 гейт CHUWI full (1760 тестов), ветка security/g11-g19-payout-registry → merge 233f1032:
+- **G11**: статусная матрица текущего транспорта — успех Payment = COMPLETED
+  (CONFIRMED — легаси-мок, константа BANK_SUCCESS); Success=true с
+  промежуточным статусом → processing, БЕЗ ретрая (PaymentId известен).
+  Закрыт найденный по доке баг: код ждал несуществующий CONFIRMED.
+- **G12**: transient/permanent классификация строки; meta.attempts, предел
+  PAYOUTS_MAX_BANK_ATTEMPTS=3 → failed с причиной; цикл реестра не роняет
+  соседние строки; executePending отдаёт transient; CLI при failed>0 —
+  не-успех.
+- **G16**: стоп-кран PAYOUTS_EXECUTION_ENABLED=false → hold
+  execution_stopped, 0 вызовов банка; CLI внятно отказывает.
+- **G19**: type/limit валидация fail-closed (сервис + CLI).
+- **G20**: platform/overview переведён на *_kopecks (были несуществующие
+  поля — нули).
++12 тестов (PayoutRegistryTest). Канальный контекст: продукт выплат =
+Мультирасчёты (решение владельца); доступ к nominal-accounts ждёт банк
+(письмо 04.10, scope+mTLS); E2C — отвод, черновик письма отменён. Полная
+матрица статусов и G13 (сверка с выпиской) — после открытия доступа.
