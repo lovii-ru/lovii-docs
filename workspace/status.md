@@ -2841,3 +2841,12 @@ check:drift → 221 инвариант, docs/integration/atol.md, compose/CI :31
 Приёмка: core 38 · tbank PASSED · kassa 129 · yookassa 227 · atol 202 · upstream · drift 221/221;
 влито squash `ad25b0e`; ветка удалена. Контур: банки 2/5 (tbank, ЮKassa), кассы 2/4 (Ferma, АТОЛ).
 Дальше: #36 (major-остаток) → #37 → второй банк.
+
+## 2026-10-12 (вечер) — моки: #36 (PR #39) принят — major-остаток реестра закрыт
+
+F-05 (валидация часов до записи + восстановление), F-06 (chaos abortStatus в tbank/kassa + black-box),
+F-24 (строгий копеечный парсер на всех Amount-эндпоинтах), F-26 (acqapi: Basic по фактическим кредам,
+opaque bearer sha256+scope+TTL 1ч), F-27 (валидация схемы регистрации точки), F-34 (root compose
+loopback по умолчанию + env override + CI-проверка). Приёмка: core 40 · tbank PASSED · kassa 134 ·
+yookassa 227 · atol 202 · upstream · drift 221/221; влито squash `fb732c9`. Дальше: #37 (minors),
+затем второй банк (Альфа/Сбер/ВТБ).
