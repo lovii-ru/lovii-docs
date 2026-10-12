@@ -50,6 +50,17 @@ DECISIONS, FINDINGS; при изменении доступов/секретов
 - **Аудиты срезов 2–4 (11.10) тоже закрыли проблемы безопасности:** 4×P1 платежей
   (идемпотентность, гард джобы, Confirm-гейт, GetState→503), AUD-01/02
   nginx security-заголовки (все 5 + geolocation=(self) — в релизе 12.10).
+- **Выплаты — security-контроли G15/G18/G21 (session 113, staging, 12.10 12:51 МСК):**
+  G15 — исполнение только по манифесту prepare→approve другим актором→execute --batch;
+  self-approve запрещён, состав/чексумма и актуальность получателей перепроверяются,
+  изменение строки инвалидирует approval; G18 — first-payout/daily-cap аномалии
+  переводят выплату в hold, ручной release допускает только актор с причиной; G21 —
+  проверка целостности подписанного ПЭП перед выплатой + ремонт отсутствующих отчётов.
+  Пороговые значения аномалий — за владельцем, по умолчанию выключены; UI манифестов
+  (admin Filament) ещё не реализован. Гейт CHUWI full: 1769 тестов. Источники: [session 113](https://github.com/lovii-tech/lovii-core/blob/staging/docs/sessions/113-g15-g21-approvals-anomalies-pep.md),
+  [merge d17c827d](https://github.com/lovii-tech/lovii-core/commit/d17c827d),
+  [изменение c39a0591](https://github.com/lovii-tech/lovii-core/commit/c39a0591),
+  [`workspace/status.md`](../workspace/status.md), [`workspace/ARENA-STATUS.md`](../workspace/ARENA-STATUS.md).
 - **Сборочная станция CHUWI `gostiny-build` (10.10):** домашний мини-ПК,
   Ubuntu Server 24.04.5, Docker 29.1.3, Actions-раннер v2.337.0 (systemd,
   лейбл `gostiny-ci-build` — **только сборки/гейты, деплой — прод-раннеры
@@ -57,9 +68,14 @@ DECISIONS, FINDINGS; при изменении доступов/секретов
   `chuwi-core-tests.sh` (~2:15, полный набор). Канон
   `canon/CHUWI_BUILD_STATION.md` + секретная дока на самой станции.
   Третий носитель бэкапов: rsync-pull, retention 14.
-- **Моки внешних сервисов публичны** (`rucorp/mock-services`, v0.5.0 в GHCR;
-  Stage 2 — ЮKassa → АТОЛ): профили банков/касс + X-Mock-Scenario, изоляция
-  песочниц (#8). Используются ареной и staging-контуром.
+- **Моки внешних сервисов публичны** (`rucorp/mock-services`, v0.5.0 в GHCR):
+  ЮKassa #33 и АТОЛ direct v4 #34 приняты ([PR #35](https://github.com/rucorp/mock-services/pull/35),
+  `a4b62d0`; [PR #38](https://github.com/rucorp/mock-services/pull/38), `ad25b0e`);
+  major-остаток #36 закрыт ([PR #39](https://github.com/rucorp/mock-services/pull/39),
+  `fb732c9`), #37/minors принят ([PR #40](https://github.com/rucorp/mock-services/pull/40),
+  `037c47f6`), реестр #15 закрыт 38/38. Контур: банки 2/5 (Т-Банк, ЮKassa),
+  кассы 2/4 (Ferma, АТОЛ); следующий банк — Альфа, [issue #41](https://github.com/rucorp/mock-services/issues/41) открыт.
+  Источник текущего состояния — [`workspace/status.md`](../workspace/status.md).
 - **Открытые хвосты безопасности (обновление списка 05.10):** ротация
   MAX/TG/VK + webhook secret (B04) — главный; SMS-бинд (F-084) — до
   автовыплат; TG-токены orders/support (выдать в @BotFather → вернуть
