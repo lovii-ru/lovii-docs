@@ -2776,3 +2776,14 @@ DoD: /v3 REST, Basic Auth, Idempotence-Key, decimal-суммы, статусы p
 succeeded/canceled, вебхуки-события без подписи, тестовые карты, ядро-паттерн, selftest, доки,
 compose), следом касса — **АТОЛ Онлайн direct v4** (issue #34; v5/маркировка — следующим шагом).
 #6 и #13 обновлены. Дальше по одному: Альфа/Сбер/ВТБ + Первый ОФД/Такском/Контур.
+
+## 2026-10-12 (день) — моки: #33 (PR #35) принят — первый внешний адаптер ЮKassa в main
+
+ЮKassa-мок (~2100 строк): /v3 REST, Basic Auth, Idempotence-Key (scope+hash, replay/конфликт по
+офиц. текстам), статусы pending→waiting_for_capture→succeeded|canceled, capture/cancel/refunds,
+вебхуки-события (ACK 200, ретраи/дубли), confirmation-страница с 16 картами, decimal-суммы; ядро
+переиспользовано полностью (часы/сценарии/журнал/очередь/control-plane/песочницы; chaos — правильно
+через abortStatus). selftest 227; CI + compose (:3102) зелёные. Приёмка: core 38 · tbank PASSED ·
+kassa 129 · yookassa 227 · upstream 11 · drift 142; влито squash `a4b62d0`; ветка удалена. Рулинги:
+verify-merchant для ЮKassa не требуется; форки 405/415-пустые и capture=true приняты. Открыт остаток
+реестра: #36 (major: F-05/06/24/26/27/34), #37 (minors). Дальше: #34 (АТОЛ v4).
