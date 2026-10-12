@@ -2831,3 +2831,13 @@ compose), следом касса — **АТОЛ Онлайн direct v4** (issue
 kassa 129 · yookassa 227 · upstream 11 · drift 142; влито squash `a4b62d0`; ветка удалена. Рулинги:
 verify-merchant для ЮKassa не требуется; форки 405/415-пустые и capture=true приняты. Открыт остаток
 реестра: #36 (major: F-05/06/24/26/27/34), #37 (minors). Дальше: #34 (АТОЛ v4).
+
+## 2026-10-12 (день, 2) — моки: #34 (PR #38) принят — касса-адаптер АТОЛ в main; 4 сервиса в контуре
+
+АТОЛ direct v4: getToken (24ч), 6 операций, дедуп external_id (тот же UUID), report wait→done|fail,
+callback (идемпотентный), валидация ФФД 1.05, decimal-рубли; публичные тестовые реквизиты — дефолты;
+ядро переиспользовано; chaos с abortStatus. Сверх DoD: OpenAPI, protocols/atol-online.json,
+check:drift → 221 инвариант, docs/integration/atol.md, compose/CI :3103, hosted-секция (202 проверки).
+Приёмка: core 38 · tbank PASSED · kassa 129 · yookassa 227 · atol 202 · upstream · drift 221/221;
+влито squash `ad25b0e`; ветка удалена. Контур: банки 2/5 (tbank, ЮKassa), кассы 2/4 (Ferma, АТОЛ).
+Дальше: #36 (major-остаток) → #37 → второй банк.
