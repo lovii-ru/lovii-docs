@@ -8,23 +8,26 @@
 ## Состав продуктового релиза (утверждён, менять только решением владельца)
 
 Рантайм и код:
-- `services/` — 9 адаптеров (tbank-mock, kassa-mock/Ferma, yookassa-mock, atol-mock,
-  alfa-mock, sber-mock, vtb-mock, first-ofd-mock, kontur-ofd-mock);
-  в каждом: server.js + selftest.js + README.md
+- `services/` — **10 адаптеров** (tbank-mock, kassa-mock/Ferma, yookassa-mock, atol-mock,
+  alfa-mock, sber-mock, vtb-mock, first-ofd-mock, kontur-ofd-mock, **taxcom-mock** — Такском
+  в 1.0 решением владельца 2026-10-15); в каждом: server.js + selftest.js + README.md
 - `packages/core/` — общее ядро (index.js + selftest.js)
 - `protocols/` — JSON-манифесты протоколов (нужны selftest'ам и check:drift)
 - `scripts/docker-healthcheck.js` — единственный скрипт, идущий в образ
 - `package.json` (zero dependencies)
 
 Compose-файлы:
-- `docker-compose.yml` — локальная разработка (8 сервисов, из исходников)
-- `docker-compose.include.yml` — полный стенд, 9 сервисов, профиль `mock`, digest-пин
+- `docker-compose.yml` — локальная разработка (10 сервисов, из исходников)
+- `docker-compose.include.yml` — полный стенд, 10 сервисов, профиль `mock`, digest-пин
 - `docker-compose.staging.yml` — лёгкий стенд «банк + касса» (tbank :3100 + Ferma :3101), digest-пин
 
 Документация:
 - `README.md` — быстрый старт, матрица возможностей, дорожная карта
 - `docs/integration/` — гайды «интеграция за 10 минут» по каждому провайдеру
 - `docs/openapi/` — OpenAPI 3.1 спецификации
+- **Док-сайт (запрос владельца 2026-10-15):** `index.html` + `_sidebar.md` + `.nojekyll` +
+  `site/vendor/` (docsify, вендоренный) — публичная документация доступна и в репозитории,
+  и на GitHub Pages; обкатан на dev-репо (PR #123), переносится 1-в-1; Pages включаются на продукте.
 - `LICENSE` (Apache-2.0), `NOTICE`
 
 ## Что НЕ входит (исключено из продуктового релиза навсегда)
