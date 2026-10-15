@@ -3367,3 +3367,13 @@ StoreProduct.vue `.product__nutrition`. Сейчас не трогаем.
 - **SZ: волна #121 — пробный проход 44/44 ✅** на `b569db31` (11 серверных ног; базлайн поле-в-поле с приёмкой; расхождений с предрегистрацией нет; находок владельцу нет). Отчёт — в docs-репо (issue #1), PR #2 влит (`86b4889a`); публичный PR #125 закрыт (материалы переехали по #124), ветка-остаток удалена.
 - Наблюдения SZ (не дефекты): анонимный `/sandboxes` в hosted → 401 (control-gate); non-hosted без admin-токена — открытая консоль (BC DX); `?sandbox=` — только селектор.
 - Дальше: Арена — пересборка документации (по слову владельца); затем релиз 0.8.
+
+### 2026-10-15 (ночь) — контрольная сборка кандидата продукта mock-services (сессия acode)
+
+- Вечер: завершение ревизии SZ — PR #135 влит (`0137c65`; CI 23 мин ✅, прогон док-сайта 29 мин ✅ после очереди self-hosted). Открытых PR в rucorp/mock-services больше нет.
+- Принят хендофф ночной смены (`HANDOFF-2026-10-15-mock-services-night.md`): цель — контрольная сборка продуктового релиза по утверждённому составу.
+- Аудит состава/утечек против дерева `main`: новых утечек нет; остаются только санкционированные классы (NOTICE, история CHANGELOG, креды `loviitest`/`mockpass123`, комментарии серверов, коды задач — по CLEANUP-PLAN «осознанно не делается»).
+- Прогоны (независимо, координатор): `npm test` **EXIT=0** — core 84 · tbank ✅ · kassa 176 · yookassa 250 · atol 228 · alfa 377 · sber 71 · vtb 85 · first-ofd 108 · kontur 109 · taxcom 106; links 33 ✅ · site 32 ✅ · tables 71/27 ✅ · env ✅ · drift 827/827 ✅. Сайт: `site-build npm test` — OK (оба base, legacy routes).
+- Собрана контрольная сборка: `~/LOVII/mock-services-release-candidate-2026-10-15/` + `.zip` (2.33 МБ; sha256 `6a11e368…`; 88 файлов + 120 файлов статики `dist/`). Отличия от одобренного образца 0.7.0 (+site-build/статика, product-доки, Такском; −`lovii.md`, `upstream-snapshot`; сохранена repo-раскладка) — **на утверждении владельца**.
+- Открытые решения владельцу: Dockerfile↔compose (`build: .`); судьба CONTRIBUTING/SECURITY/AGENTS/CHANGELOG (ссылки + страницы сайта); адаптация package.json/README (§2.2 спеки); `.nojekyll`/`.dockerignore`; устаревший npm `files`.
+- Канон: спека `mock-services-product-release.md` обновлена (сайт = VitePress + `dist/`; состояние освежено), артефакт `artifacts/2026-10-15-mock-services-release-candidate/` + строка REGISTRY; коммит и пуш в hub.
