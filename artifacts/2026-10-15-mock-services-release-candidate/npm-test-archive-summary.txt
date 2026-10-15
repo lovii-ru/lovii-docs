@@ -1,0 +1,18 @@
+mock-services — npm test ВНУТРИ распакованного архива (полный слепок, 2026-10-15, ночь)
+результат: EXIT=0
+ИТОГ: 84 passed, 0 failed
+ИТОГ: 176 passed, 0 failed
+ИТОГ: 250 passed, 0 failed · вебхуков доставлено: 26
+ИТОГ: 228 passed, 0 failed · callback-доставок: 8
+ИТОГ: 377 passed, 0 failed · callback-доставок: 32
+ИТОГ: 71 passed, 0 failed · callback requests: 21
+ИТОГ: 85 passed, 0 failed · callback requests: 8
+ИТОГ: 108 passed, 0 failed · callback requests: 18
+kontur-ofd: 109 passed, 0 failed
+taxcom: 106 passed, 0 failed
+docs links OK: 33 файлов, битых ссылок нет, сноски согласованы
+site OK: 32 документов в навигации, VitePress изолирован в site-build/, Pages workflow SHA-pinned
+tables OK: 71 таблиц в 27 файлах, все целы, реестр актуален
+env OK: 10 сервисов, 3 compose-файла; сверено 307 чтений env с README, 464 ключей environment, 21 published-портов, 85 литеральных дефолтов; SECURITY.md в порядке
+Проверено инвариантов контракта: 827, пройдено: 827, расхождений: 0
+boot: npm run start:tbank (MOCK_PORT=3911) → /health 200; SIGTERM → exit 0

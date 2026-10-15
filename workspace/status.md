@@ -3383,3 +3383,10 @@ StoreProduct.vue `.product__nutrition`. Сейчас не трогаем.
 - Контур мониторинга: CHUWI-хаб (Kuma 2.5.6 :3001 + Prometheus/Alertmanager→TG/Grafana :3002 + notify-relay MAX/TG/VK), прод — только экспортеры. Карта, каналы и диагностика — `artifacts/RES-017-monitoring-alerts-mute-2026-10-15.md`.
 - Причина шума: флап сети CHUWI→прод (EHOSTUNREACH пачками ~17:50–20:54 МСК) + повторяющиеся LoviiAgentStale (5) в TG; MAX с CHUWI не доставлялся.
 - Временно заглушено (~21:06–21:11 МСК): Alertmanager silence `8763d940-02cc-4028-bd56-5731fbd60e52` (авто до 16.10 21:10 МСК), Kuma — связки уведомлений отвязаны (бэкап + restore-файл на CHUWI). Мониторинг/метрики продолжают работать; напоминание о возврате поставлено.
+
+### 2026-10-15 (ночь, 2) — решения владельца: Dockerfile, доки остаются, автономность; образец архива пересобран
+
+- Решения: `Dockerfile` (+`.dockerignore`) — в составе; `CONTRIBUTING/SECURITY/AGENTS/CHANGELOG` — остаются в продукте (содержимое проверено: утечек нет, только санкционированные упоминания); автономность — продукт = репозиторий целиком, в сборке весь `scripts/`, package.json без урезки; продуктовый репо подтверждён (`rucorp/mock-services`, отдельный не создаём).
+- **Образец релизного архива:** `~/LOVII/mock-services-release-sample-2026-10-15.zip` — полный слепок репо @`0137c65` (109 файлов) + `dist/` (120); sha256 `266c4d6f…`; `npm test` ВНУТРИ распакованного архива — **EXIT=0** (core 84 · tbank ✅ · kassa 176 · yookassa 250 · atol 228 · alfa 377 · sber 71 · vtb 85 · first-ofd 108 · kontur 109 · taxcom 106; links/site/tables/env ✅; drift 827/827); бут-проба `start:tbank` :3911 — health 200, SIGTERM → 0. v1-кандидат (subset) — историческая версия.
+- **Main после #135 полностью зелёный:** CI 21 мин ✅, док-сайт 17,5 мин ✅, Pages ✅ (сторож, 21:12).
+- Канон: спека (Dockerfile; раздел «не входит»; состояние), артефакт и REGISTRY обновлены; коммит/пуш в hub.
