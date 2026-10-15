@@ -82,6 +82,19 @@ sudo ./svc.sh install && sudo ./svc.sh start
 - Страдали медленной флешкой (~4 МБ/с) — образ Ubuntu Server 24.04.5: `~/Downloads/chuwi/`, SHA256 проверен.
 - Бэкап содержимого флешки владельца: `~/Documents/USB-DISK-backup`.
 
+## Мониторинг и оповещения (с 11–12.10; апдейт 15.10.2026)
+
+- Хаб `~/monitoring/` на станции: Uptime Kuma v2.5.6 (:3001, 9 мониторов прод/staging/бэкапы/dev),
+  Prometheus (:9090) + Alertmanager (:9093, receiver `tg-lovii` → Telegram) + Grafana (:3002);
+  экспортеры node/cadvisor тут (:9100/:8083) и на проде (`/opt/monitoring`, только экспортеры);
+  метрики прода — SSH-туннель `mon-tunnel.service` (172.17.0.1:9101/8084).
+- Уведомления: Kuma → `notify-relay.service` (:3010, `POST /kuma` → MAX+TG+VK) + нативный MAX;
+  Alertmanager → Telegram. Карта и диагностика: `lovii_docs/artifacts/RES-017-monitoring-alerts-mute-2026-10-15.md`.
+- ⚠️ 15.10.2026 ~21:10 МСК все оповещения в мессенджеры временно отключены (запрос владельца):
+  silence `8763d940-02cc-4028-bd56-5731fbd60e52` (до 16.10 21:10, автоистечение) +
+  отвязка Kuma-связок (restore: `~/monitoring/kuma-notif-RESTORE-2026-10-15.txt`). Мониторинг работает.
+- Грабля: флаг Active уведомления в Kuma 2.5.6 на отправку НЕ влияет.
+
 ## Гейт core на станции (с 11.10.2026)
 
 Полный локальный гейт lovii-core можно гонять на станции, не включая макбук:

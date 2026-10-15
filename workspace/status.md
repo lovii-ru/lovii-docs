@@ -3377,3 +3377,9 @@ StoreProduct.vue `.product__nutrition`. Сейчас не трогаем.
 - Собрана контрольная сборка: `~/LOVII/mock-services-release-candidate-2026-10-15/` + `.zip` (2.33 МБ; sha256 `6a11e368…`; 88 файлов + 120 файлов статики `dist/`). Отличия от одобренного образца 0.7.0 (+site-build/статика, product-доки, Такском; −`lovii.md`, `upstream-snapshot`; сохранена repo-раскладка) — **на утверждении владельца**.
 - Открытые решения владельцу: Dockerfile↔compose (`build: .`); судьба CONTRIBUTING/SECURITY/AGENTS/CHANGELOG (ссылки + страницы сайта); адаптация package.json/README (§2.2 спеки); `.nojekyll`/`.dockerignore`; устаревший npm `files`.
 - Канон: спека `mock-services-product-release.md` обновлена (сайт = VitePress + `dist/`; состояние освежено), артефакт `artifacts/2026-10-15-mock-services-release-candidate/` + строка REGISTRY; коммит и пуш в hub.
+
+### 2026-10-15 (ночь, 2) — мониторинг найден; оповещения в мессенджеры временно отключены (запрос владельца)
+
+- Контур мониторинга: CHUWI-хаб (Kuma 2.5.6 :3001 + Prometheus/Alertmanager→TG/Grafana :3002 + notify-relay MAX/TG/VK), прод — только экспортеры. Карта, каналы и диагностика — `artifacts/RES-017-monitoring-alerts-mute-2026-10-15.md`.
+- Причина шума: флап сети CHUWI→прод (EHOSTUNREACH пачками ~17:50–20:54 МСК) + повторяющиеся LoviiAgentStale (5) в TG; MAX с CHUWI не доставлялся.
+- Временно заглушено (~21:06–21:11 МСК): Alertmanager silence `8763d940-02cc-4028-bd56-5731fbd60e52` (авто до 16.10 21:10 МСК), Kuma — связки уведомлений отвязаны (бэкап + restore-файл на CHUWI). Мониторинг/метрики продолжают работать; напоминание о возврате поставлено.
