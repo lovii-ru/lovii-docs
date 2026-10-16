@@ -1,3 +1,14 @@
+## 2026-10-16 (вечер) — T-038: чеки починены на внешнем kassa-mock (session 118)
+
+- Причина падений с 13.10: новый мок (mock-services 0.8.0) требует payments[].sum>0,
+  core слал строку баллов с provision=0. Фикс FermaFiscalProvider (нулевая строка
+  не уходит в кассу), core staging 8934336a, гейт 1797 🟢.
+- CI-раннер падал по сети → деплой вручную (hotfix-слой образа + docker run,
+  caddy-лейблы восстановлены). Чеки 17-19 перезапущены → confirmed (ФД 50001-03).
+- ⚠️ Грабли session 118: compose staging-ветки конфликтует с реальным деплоем
+  (порты 0.0.0.0:80 vs gateway-caddy, образ lovii-core/app-dev vs локальный) —
+  следующий CI-деплой staging может уронить стенд. CI 38934852987 ещё красный (сеть).
+
 ## 2026-10-12 (вечер 2) — G15/G18/G21 в staging (session 113)
 
 - core `security/g15-g21-approvals-anomalies-pep` (merge d17c827d, CI 🟢):
