@@ -108,7 +108,7 @@
       **вскрыл**, а не создал. В app чек показывается только после `confirmed`
       (`4fbb4504`) — отсюда «чеков в заказе нет».
       Разбор: `lovii-core/docs/sessions/117`; готовый минимальный фикс — пробел **I6**
-      в [`mock-services-product-release.md`](../mock-services-product-release.md).
+      в `mock-services-product-release.md` (репозиторий `mock-services-docs`).
       **Критерий приёмки:** тест «`bonus_spent = 0` → в чеке одна строка оплаты;
       `> 0` → две» + повтор сквозного цикла на стенде: новый заказ → чек `prepayment`
       = `confirmed`, в логах нет `fiscalization.send.alert`.

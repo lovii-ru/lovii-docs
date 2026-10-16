@@ -106,8 +106,8 @@ id 18 (`prepayment`) и 19 (`full_payment`) → `failed`, ошибка «Чек 
 нет `fiscalization.send.alert`, заказ виден с чеком в app.
 
 Готовый минимальный фикс (не отправлять строку оплаты с `sum = 0`) и план проверки —
-пробел **I6** в `../../mock-services-product-release.md`. Зона платёжно-фискальная,
-исполнитель — zcode.
+пробел **I6** в `mock-services-product-release.md` (репозиторий `mock-services-docs`,
+внутренняя ИС мока). Зона платёжно-фискальная, исполнитель — zcode.
 
 ## Остаток (открыто)
 
