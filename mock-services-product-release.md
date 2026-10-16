@@ -116,6 +116,29 @@
 | I6 | **Чек предоплаты отклоняется кассой у заказа без списания баллов** (баг ядра, не мока) | на стенде (order 18): `fiscal_documents` id 17 → `status=failed`, `retry_count=2`, `error_text="Ferma rejected document: Чек не прошёл проверку кассы: receipt.payments[1].sum"`. Причина: `FermaFiscalProvider.php:141-145` **всегда** шлёт вторую строку оплаты `type=4` c `sum=payments_split['provision'] ?? 0`, а `FiscalDocumentManager` даёт `provision=0` без баллов → контракт кассы требует `sum>0`; `fiscal:retry-pending` будет ретраить вечно | фикс ядра (не отправлять строку с `sum=0`) + раздел «известные ограничения фискализации» в гайде I1 |
 | I7 | **Образ несёт ENV-дефолты, ломающие fail-closed env-drift guard потребителя** | образ 0.8.0 объявляет `NODE_ENV=production`, `MOCK_HOST=0.0.0.0`; их не было в мапе `environment:` → `deploy-staging` падал с `ABORT: env-drift post (SZ-089)`; после объявления ключей в мапе env деплой зелёный (sha=0457110, 2026-10-16T15:03Z) | раздел «объявляй дефолты образа в мапе env» в гайде I1 |
 
+**Готовый минимальный фикс I6 (проверено чтением кода, не применён — платёжно-фискальная
+зона `lovii-core` закрыта для не-zcode агентов).** В
+`app/Domain/Fiscalization/Providers/FermaFiscalProvider.php` строки 141-145 строка оплаты
+`type=4` шлётся безусловно. Минимальная правка — не добавлять её при нулевой сумме:
+
+```php
+$payments = [
+    // 1 = безналичными (эквайринг), 4 = иная форма (баллы).
+    ['type' => 1, 'sum' => $document->payments_split['electronic'] ?? $document->amount],
+];
+$provision = (int) ($document->payments_split['provision'] ?? 0);
+if ($provision > 0) {
+    $payments[] = ['type' => 4, 'sum' => $provision];
+}
+```
+
+далее в `receipt` — `'payments' => $payments,`. `FiscalDocumentManager::paymentsSplit`
+(строки 255-266) править не нужно: он уже отдаёт `provision = bonus_spent`. Проверка
+для исполнителя: тест «`bonus_spent = 0` → в `payments` одна строка; `> 0` → две», затем
+повтор сквозного цикла (заказ → `payment` → `fiscal_documents` переходит из `failed`);
+задокументированный чек `fiscal_documents` id 17 после фикса вручную не ретраить — он
+относится к остатку теста (заказ 18).
+
 Наблюдение (не пробел продукта, ядро): вебхук-обработчик ядра трактует `OrderId`
 уведомления как `orders.id` (bigint) — синтетический нечисловой `OrderId` даёт 500
 (`invalid input syntax for type bigint`). Для реальных заказов ядра корректно.
