@@ -109,6 +109,51 @@ id 18 (`prepayment`) и 19 (`full_payment`) → `failed`, ошибка «Чек 
 пробел **I6** в `mock-services-product-release.md` (репозиторий `mock-services-docs`,
 внутренняя ИС мока). Зона платёжно-фискальная, исполнитель — zcode.
 
+## Отчёт исполнителя — оплата баллами (17.10, ветка `arena/t038-points-money`)
+
+**Реализация (lovii-core, ветка `arena/t038-points-money`, uncommitted).**
+Модель денег при оплате баллами: `R = order.total + bonus_spent`; комиссия
+платформы 10% от R; доля МСП 90% от R; эквайринг — только на карточную часть,
+поглощается комиссией платформы; фискальный чек идентичен для всех вариантов
+(полная сумма, без маркеров баллов). Продуктовые правила — `BRD.md` §7.7,
+числовая модель — `PARAMS.md` §1.10.
+
+**Гейт CI (полный, зелёный):** pint + rector + phpstan + type coverage
+98,6% + 1808 passed (6846 assertions) + OpenAPI valid (47 paths, 49 schemas).
+
+**Принятые решения владельца (17.10):** варианты A/B/E/F/G = да; вариант C′
+(`order.total` не переопределяется, сплит считает R явно). Открытые `[VERIFY]`
+(смешанный `payment_object` commodity+service; AgentSign / данные поставщика в
+чеке) закрывает владелец.
+
+**Состав изменений (lovii-core, ветка `arena/t038-points-money`, коммит
+`8e716595`).** Новые файлы: `ApplyConfirmedPaymentAction` (контура
+CONFIRMED извлечена из `HandleTBankNotificationAction`, чтобы вебхук банка
+и балловый путь шли идентичным потоком: заказ → Submitted, начисление
+кэшбека, распределение пула 40/40/20, чек №1 «Предоплата 100%»);
+`CreatePointsPaymentAction` (идемпотентный синтетический
+`Payment(provider='points', method='points', amount=0, status=confirmed,
+provider_payment_id='points-{order_id}')`);
+`ReversePointsOrderPoolOnCancellation` (разворот сплита на
+`OrderStatusChanged` → Cancelled/Failed); тест
+`tests/Feature/Payment/PointsPaymentTest`. Изменены:
+`DistributeOrderPoolAction`, `ReverseOrderPoolAction`,
+`HandleTBankNotificationAction`, `LedgerEntryType` (`points_payment`),
+`SplitRole` (`points_inbox`), `SubmitOrderJob` (запуск балловой оплаты при
+`order.total == 0 && bonus_spent > 0`), `DistributeOrderPoolTest`,
+`ListenerRegistrationTest`, `SubmitOrderJobTest`.
+
+**Отклонение от делегированной спецификации.**
+`ReversePointsOrderPoolOnCancellation` не вызывает
+`LoyaltyService::refundSpendForOrder`: существующие
+`ReturnSpentPointsOnOrderCancellation` и `OrderStatusMachine` уже
+возвращают потраченные баллы in-transaction, поэтому новый listener
+только разворачивает сплит в леджере.
+
+**Статус: путь «заказ оплачен целиком баллами» — реализован и верифицирован
+на ветке `arena/t038-points-money` (полный гейт CI зелёный, см. выше).
+Ветка не влита в staging/master; приёмка — за владельцем.**
+
 ## Остаток (открыто)
 
 1. Развилки владельца: момент «Полного расчёта» (ready — дефолт спеки),
