@@ -51,7 +51,11 @@
 - [x] архив+удаление: gostiny-example, gostiny-php, wireguard sasisa.*,
       gateway bak-secret → /root/archive-20261018/ (600);
 - [x] builder prune (−28.7G), dangling images, диск 55%→45%;
-- [ ] volumes-ревизия (163 тома, ~38G reclaimable) — по списку с владельцем;
+- [x] volumes-ревизия (18.10 ночью): 129 dangling-томов = одноразовые PG-data от
+      CI-прогонов → удалены, **−37,8G**; живые lovii-* тома (18 шт.) целы, pg
+      accepting, стенды отвечают. Остаток: ~42G — dind-кэши остановленных
+      прод-раннеров (ci-runners_dind-* + buildx state), освободится при полном
+      удалении раннеров — решение за владельцем (раннеры сейчас on CHUWI);
 - [ ] image prune -a — после подтверждения, что откатные образы не нужны локально;
 - [ ] apt upgrade + ребут — в окно вместе с решением по прод-раннерам;
 - [ ] тикет хостеру (DPI) — пруфы в `lovii-prod-network-degradation-2026-10-17`.
