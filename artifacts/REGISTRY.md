@@ -92,3 +92,4 @@ session-доки репозиториев. Пакет регистрируетс
 - `canon/PUSH_NOTIFICATIONS_SPEC.md` — спецификация пушей (SZ-033).
 - `canon/SCREEN_MAP.md` — карта экранов и статусы концептов.
 - `canon/BRD.md`, `canon/PRD.md`, `canon/PARAMS.md`, `canon/FINANCIAL_CONTOUR.md` — бизнес/финканон.
+| RES-018 | Показ промо-механик на витрине (бейджи, штампы, тексты лент) | 2026-10-19 | [2026-10-19-promo-surface-display/RES-018-promo-surface-display.md](2026-10-19-promo-surface-display/RES-018-promo-surface-display.md) |
